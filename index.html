@@ -111,6 +111,30 @@
   table.calendar .act { color: var(--ink-soft); }
 
   footer.page { max-width: 880px; margin: 60px auto 0; padding: 20px 24px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-soft); text-align: center; }
+
+  .scroll-hint { display: none; font-size: 11.5px; color: var(--ink-soft); padding: 8px 12px 0; margin: 0; }
+
+  @media (max-width: 640px) {
+    body { font-size: 14.5px; }
+    .wrap { padding: 0 16px 70px; }
+    header.top { padding: 40px 16px 32px; }
+    header.top .logo { height: 52px; margin-bottom: 20px; }
+    header.top .meta { font-size: 13px; }
+
+    .week-card { flex-wrap: wrap; padding: 14px 16px; gap: 10px 14px; }
+    .week-card .go { margin-left: 56px; font-size: 12.5px; }
+
+    table.calendar { min-width: 620px; font-size: 12px; }
+    .scroll-hint { display: block; }
+
+    .lab-row { padding: 10px 14px; font-size: 12.5px; }
+  }
+
+  @media (max-width: 420px) {
+    header.top h1 { font-size: 24px; }
+    .week-card .num { width: 34px; height: 34px; font-size: 12.5px; }
+    .week-card .title { font-size: 14px; }
+  }
 </style>
 
 <header class="top">
@@ -165,6 +189,7 @@
     <div class="section-head"><h2>Calendario</h2><span class="count">Periodo 2026-2</span></div>
     <p class="section-note">Evaluación: 10% laboratorio de desafíos AWS Academy (por módulo con lab) · 20% rúbrica de la unidad (se libera la semana del parcial) · 70% examen práctico en vivo.</p>
     <div class="tbl-wrap">
+      <p class="scroll-hint">↔ Desliza para ver la tabla completa</p>
       <table class="calendar">
         <thead>
           <tr><th>Semana</th><th>Fechas</th><th>Unidad</th><th>Tema</th><th>Actividad / Evaluación</th></tr>
