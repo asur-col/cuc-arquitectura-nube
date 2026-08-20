@@ -1,10 +1,36 @@
-# CUC - Arquitectura en la Nube ☁️
+<p align="center">
+  <img src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa (CUC)" height="110">
+</p>
 
-Repositorio del curso **Arquitectura en la Nube** — CUC.
+<h1 align="center">Arquitectura en la Nube</h1>
 
-- 📺 **Video clases**: hospedadas en OneDrive (streaming, sin descarga).
-- 🧪 **Laboratorios**: carpeta [`/laboratorios`](laboratorios/) de este repositorio.
-- 📂 **Carpeta completa en OneDrive**: [Laboratorios](https://1drv.ms/f/c/34997999a15ac288/IgAeb43XQbCHTK5i7_bC-9PpATZw5J2IlZGuh69E0TSextI?e=m6uI9V)
+<p align="center">
+  <strong>Video clases y laboratorios</strong>
+</p>
+
+<p align="center">
+  <img src="assets/barra-acento.svg" width="80%" height="6" alt="">
+</p>
+
+<p align="center">
+  <strong>[Nombre del docente]</strong><br>
+  Universidad de la Costa (CUC) · [Programa]<br>
+  Barranquilla, Colombia
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Video%20clases-19-A6192E?style=for-the-badge" alt="19 video clases">
+  <img src="https://img.shields.io/badge/Laboratorios-7-D4AF37?style=for-the-badge" alt="7 laboratorios">
+  <img src="https://img.shields.io/badge/Videos-OneDrive-A6192E?style=for-the-badge&logo=microsoftonedrive&logoColor=white" alt="Videos en OneDrive">
+  <img src="https://img.shields.io/badge/Plataforma-Azure-D4AF37?style=for-the-badge" alt="Azure">
+</p>
+
+---
+
+## 📂 Acceso rápido
+
+- 🎥 **[Carpeta de videos en OneDrive](https://1drv.ms/f/c/34997999a15ac288/IgAeb43XQbCHTK5i7_bC-9PpATZw5J2IlZGuh69E0TSextI?e=m6uI9V)** — streaming directo, sin descarga
+- 🧪 **[Laboratorios](laboratorios/)** — código, scripts y guías en este repositorio
 
 ---
 
@@ -77,7 +103,9 @@ Repositorio del curso **Arquitectura en la Nube** — CUC.
 
 ```
 cuc-arquitectura-nube/
-├── README.md                 ← Este archivo (índice por video clase)
+├── README.md                 ← Portada e índice por video clase
+├── assets/
+│   └── barra-acento.svg      ← Barra de acento institucional (vino → dorado)
 └── laboratorios/
     ├── lab-01/               ← Introducción a Azure
     ├── lab-02/               ← Azure App Service
@@ -91,5 +119,14 @@ cuc-arquitectura-nube/
 ## 📝 Notas
 
 - Los videos se reproducen directamente desde OneDrive, no es necesario descargarlos.
-- La [carpeta de Laboratorios en OneDrive](https://1drv.ms/f/c/34997999a15ac288/IgAeb43XQbCHTK5i7_bC-9PpATZw5J2IlZGuh69E0TSextI?e=m6uI9V) contiene todos los videos; los enlaces individuales son opcionales para acceso directo.
 - Los laboratorios se pueden clonar con `git clone` o descargar como ZIP desde el botón **Code**.
+
+---
+
+<p align="center">
+  <img src="assets/barra-acento.svg" width="80%" height="6" alt="">
+</p>
+
+<p align="center">
+  <sub>[Nombre del docente] | Arquitectura en la Nube — [Periodo] · Universidad de la Costa (CUC)</sub>
+</p>
