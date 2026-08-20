@@ -49,6 +49,7 @@
     padding: 54px 24px 40px; text-align: center; margin-bottom: 8px;
   }
   header.top .logo { height: 64px; width: auto; margin: 0 auto 26px; display: block; }
+  header.top .eyebrow { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: var(--dorado); font-weight: 700; margin: 0 0 6px; }
   header.top h1 { color: var(--vino); font-size: clamp(28px, 4vw, 38px); margin: 0 0 8px; }
   header.top .sub { color: var(--ink-soft); font-size: 16px; margin: 0 0 20px; }
   .accent-bar { width: 200px; height: 4px; margin: 0 auto 20px; border-radius: 2px;
@@ -97,11 +98,26 @@
   .lab-row .name { color: var(--ink); font-weight: 500; }
   .lab-row .size { margin-left: auto; color: var(--ink-soft); font-family: 'IBM Plex Mono'; font-size: 11.5px; }
 
+
+  .tbl-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+  table.calendar { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px; }
+  table.calendar th { background: var(--vino); color: #fff; text-align: left; padding: 10px 12px; font-weight: 600; white-space: nowrap; }
+  table.calendar td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.calendar tr:last-child td { border-bottom: none; }
+  table.calendar tr:nth-child(even) td { background: var(--surface-2); }
+  table.calendar tr.receso td { background: var(--dorado-tint); font-style: italic; color: var(--ink-soft); }
+  table.calendar .sem { font-family: 'IBM Plex Mono'; font-weight: 700; color: var(--vino); white-space: nowrap; }
+  table.calendar .fechas, table.calendar .unidad { white-space: nowrap; color: var(--ink-soft); }
+  table.calendar .act { color: var(--ink-soft); }
+
   footer.page { max-width: 880px; margin: 60px auto 0; padding: 20px 24px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-soft); text-align: center; }
 </style>
 
 <header class="top">
-  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"sub">Material del curso — Ingeniería de Sistemas</p>
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" />
+  <p class="eyebrow">Curso</p>
+  <h1>Arquitectura en la Nube</h1>
+  <p class="sub">Material del curso — Ingeniería de Sistemas</p>
   <div class="accent-bar"></div>
   <p class="meta"><b>Ing. Rodolfo Cañas Cervantes</b><br>Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>Periodo 2026-2 · Barranquilla, Colombia</p>
 </header>
@@ -110,21 +126,21 @@
   <section>
     <div class="section-head"><h2>Semanas</h2><span class="count">2 de 13 publicadas</span></div>
     <div class="card-grid">
-      <a class="week-card" href="2026-2-S01S02-arquitectura-nube-fundamentos-y-seguridad.pptx">
+      <a class="week-card" href="2026-2-S01S02-arquitectura-nube-fundamentos-y-seguridad.pdf" target="_blank">
         <div class="num">1–2</div>
         <div>
           <div class="title">Fundamentos y Seguridad de la Computación en la Nube</div>
-          <div class="desc">Modelos de servicio, modelos de despliegue, seguridad de acceso · pendiente de pasar a HTML</div>
+          <div class="desc">Modelos de servicio, modelos de despliegue, seguridad de acceso</div>
         </div>
-        <div class="go">Descargar .pptx →</div>
+        <div class="go">Ver PDF →</div>
       </a>
-      <a class="week-card" href="2026-2-S03-arquitectura-nube-almacenamiento.html">
+      <a class="week-card" href="2026-2-S03-arquitectura-nube-almacenamiento.pdf" target="_blank">
         <div class="num">3</div>
         <div>
           <div class="title">Almacenamiento en la Nube</div>
           <div class="desc">Objetos, bloques y archivos — equivalencia multicloud</div>
         </div>
-        <div class="go">Ver presentación →</div>
+        <div class="go">Ver PDF →</div>
       </a>
       <div class="week-card pending">
         <div class="num">4</div>
@@ -146,6 +162,132 @@
   </section>
 
   <section>
+    <div class="section-head"><h2>Calendario</h2><span class="count">Periodo 2026-2</span></div>
+    <p class="section-note">Evaluación: 10% laboratorio de desafíos AWS Academy (por módulo con lab) · 20% rúbrica de la unidad (se libera la semana del parcial) · 70% examen práctico en vivo.</p>
+    <div class="tbl-wrap">
+      <table class="calendar">
+        <thead>
+          <tr><th>Semana</th><th>Fechas</th><th>Unidad</th><th>Tema</th><th>Actividad / Evaluación</th></tr>
+        </thead>
+        <tbody>
+      <tr>
+        <td class="sem">1</td>
+        <td class="fechas">3–9 ago</td>
+        <td class="unidad">U1</td>
+        <td>Fundamentos de la nube: qué es, modelos de servicio (IaaS/PaaS/SaaS/Serverless), marco de buenas prácticas, proveedores</td>
+        <td class="act">Inicio de clases</td>
+      </tr>
+      <tr>
+        <td class="sem">2</td>
+        <td class="fechas">10–16 ago</td>
+        <td class="unidad">U1</td>
+        <td>Modelos de despliegue (pública/privada/híbrida/multi-nube) + identidad y acceso</td>
+        <td class="act">—</td>
+      </tr>
+      <tr>
+        <td class="sem">3</td>
+        <td class="fechas">17–23 ago</td>
+        <td class="unidad">U1</td>
+        <td>Almacenamiento en la nube: objetos, bloques, archivos</td>
+        <td class="act">10%: Lab AWS — sitio web estático (S3)</td>
+      </tr>
+      <tr>
+        <td class="sem">4</td>
+        <td class="fechas">24–30 ago</td>
+        <td class="unidad">U1</td>
+        <td>Redes en la nube: redes virtuales, subredes, grupos de seguridad</td>
+        <td class="act">10%: Lab AWS — red VPC</td>
+      </tr>
+      <tr>
+        <td class="sem">5</td>
+        <td class="fechas">31 ago–6 sep</td>
+        <td class="unidad">U1</td>
+        <td>Repaso Unidad 1</td>
+        <td class="act">Parcial 1 — 20% rúbrica + 70% examen práctico</td>
+      </tr>
+      <tr>
+        <td class="sem">6</td>
+        <td class="fechas">7–13 sep</td>
+        <td class="unidad">U2</td>
+        <td>Cómputo en la nube: instancias virtuales, tipos, escalado</td>
+        <td class="act">—</td>
+      </tr>
+      <tr>
+        <td class="sem">7</td>
+        <td class="fechas">14–20 sep</td>
+        <td class="unidad">U2</td>
+        <td>Bases de datos administradas y estrategias de backup</td>
+        <td class="act">10%: Lab AWS — migración a RDS</td>
+      </tr>
+      <tr>
+        <td class="sem">8</td>
+        <td class="fechas">21–27 sep</td>
+        <td class="unidad">U2</td>
+        <td>Identidad avanzada: roles, políticas, mínimo privilegio</td>
+        <td class="act">—</td>
+      </tr>
+      <tr>
+        <td class="sem">9</td>
+        <td class="fechas">28 sep–4 oct</td>
+        <td class="unidad">U2</td>
+        <td>Elasticidad, alta disponibilidad y monitorización</td>
+        <td class="act">10%: Lab AWS — entorno escalable/HA</td>
+      </tr>
+      <tr class="receso">
+        <td class="sem">Receso</td>
+        <td class="fechas">5–11 oct</td>
+        <td class="unidad">—</td>
+        <td>Sin clase</td>
+        <td class="act"></td>
+      </tr>
+      <tr>
+        <td class="sem">10</td>
+        <td class="fechas">12–18 oct</td>
+        <td class="unidad">U2</td>
+        <td>Automatización de infraestructura (IaC) — repaso Unidad 2</td>
+        <td class="act">Parcial 2 — 20% rúbrica + 70% examen · 10%: lab IaC</td>
+      </tr>
+      <tr>
+        <td class="sem">11</td>
+        <td class="fechas">19–25 oct</td>
+        <td class="unidad">U3</td>
+        <td>Caché y distribución de contenido en la nube</td>
+        <td class="act">—</td>
+      </tr>
+      <tr>
+        <td class="sem">12</td>
+        <td class="fechas">26 oct–1 nov</td>
+        <td class="unidad">U3</td>
+        <td>Arquitecturas desacopladas: mensajería, colas, pub/sub</td>
+        <td class="act">Último día de retiro: 1 nov</td>
+      </tr>
+      <tr>
+        <td class="sem">13</td>
+        <td class="fechas">2–8 nov</td>
+        <td class="unidad">U3</td>
+        <td>Serverless y microservicios: FaaS, gestión de APIs</td>
+        <td class="act">10%: Lab AWS — arquitectura serverless</td>
+      </tr>
+      <tr>
+        <td class="sem">14</td>
+        <td class="fechas">9–15 nov</td>
+        <td class="unidad">U3</td>
+        <td>Patrones de ingeniería de datos</td>
+        <td class="act">—</td>
+      </tr>
+      <tr>
+        <td class="sem">15–16</td>
+        <td class="fechas">16–29 nov</td>
+        <td class="unidad">U3</td>
+        <td>Planificación de recuperación ante desastres (DR) + repaso general</td>
+        <td class="act">Parcial 3 — 20% rúbrica + 70% examen. Fin de clases: 30 nov</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
     <div class="section-head"><h2>Laboratorios complementarios</h2><span class="count">19 videos · Azure</span></div>
     <p class="section-note">Refuerzo práctico opcional, no reemplazan el lab oficial del curso (AWS Academy) ni están mapeados 1:1 a las semanas — se ofrecen como exposición adicional a otro proveedor.</p>
     <a class="week-card" href="https://1drv.ms/f/c/34997999a15ac288/IgAeb43XQbCHTK5i7_bC-9PpATZw5J2IlZGuh69E0TSextI" target="_blank">
@@ -160,5 +302,5 @@
 </div>
 
 <footer class="page">
-  Arquitectura en la Nube · Universidad de la Costa (CUC) · Página generada como prueba — pendiente de publicar en GitHub Pages
+  Arquitectura en la Nube · Universidad de la Costa (CUC) · Periodo 2026-2
 </footer>
