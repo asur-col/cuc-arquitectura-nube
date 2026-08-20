@@ -1,0 +1,166 @@
+<title>Arquitectura en la Nube</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #FBF8F3;
+    --surface: #FFFFFF;
+    --surface-2: #F4EEE3;
+    --ink: #2A2A2A;
+    --ink-soft: #6B6259;
+    --vino: #A6192E;
+    --vino-strong: #7E1223;
+    --vino-tint: #FBEBEC;
+    --dorado: #A9791C;
+    --dorado-tint: #FBF3DE;
+    --line: #E5DCCB;
+    --shadow: 0 1px 2px rgba(42,26,20,.04), 0 6px 20px rgba(42,26,20,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1613; --surface: #24201B; --surface-2: #2C2620;
+      --ink: #EFE7D9; --ink-soft: #B3A896;
+      --vino: #E2536B; --vino-strong: #F0748A; --vino-tint: #3A1E22;
+      --dorado: #E4BC5C; --dorado-tint: #3B321C; --line: #3D362B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1613; --surface: #24201B; --surface-2: #2C2620;
+    --ink: #EFE7D9; --ink-soft: #B3A896;
+    --vino: #E2536B; --vino-strong: #F0748A; --vino-tint: #3A1E22;
+    --dorado: #E4BC5C; --dorado-tint: #3B321C; --line: #3D362B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15.5px; line-height: 1.6;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; color: var(--ink); }
+  a { color: var(--vino); }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px 90px; }
+
+  header.top {
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    padding: 54px 24px 40px; text-align: center; margin-bottom: 8px;
+  }
+  header.top .logo { height: 64px; width: auto; margin: 0 auto 26px; display: block; }
+  header.top h1 { color: var(--vino); font-size: clamp(28px, 4vw, 38px); margin: 0 0 8px; }
+  header.top .sub { color: var(--ink-soft); font-size: 16px; margin: 0 0 20px; }
+  .accent-bar { width: 200px; height: 4px; margin: 0 auto 20px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--vino), var(--dorado)); }
+  header.top .meta { font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; }
+  header.top .meta b { color: var(--ink); font-size: 15px; }
+
+  section { margin-top: 44px; }
+  .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+  .section-head h2 { font-size: 20px; margin: 0; }
+  .section-head .count { font-size: 12.5px; color: var(--ink-soft); font-family: 'IBM Plex Mono'; }
+  .section-note { font-size: 13.5px; color: var(--ink-soft); margin: -8px 0 18px; max-width: 62ch; }
+
+  .card-grid { display: grid; gap: 10px; }
+
+  .week-card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 18px; text-decoration: none; color: inherit; box-shadow: var(--shadow);
+    transition: border-color .15s;
+  }
+  .week-card:hover { border-color: var(--vino); }
+  .week-card .num {
+    width: 40px; height: 40px; border-radius: 10px; background: var(--vino-tint); color: var(--vino);
+    display: grid; place-items: center; font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .week-card .title { font-weight: 600; font-size: 15px; color: var(--ink); }
+  .week-card .desc { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+  .week-card .go { margin-left: auto; color: var(--ink-soft); font-size: 13px; white-space: nowrap; }
+
+  .week-card.pending { opacity: .55; }
+  .week-card.pending .num { background: var(--surface-2); color: var(--ink-soft); }
+  .week-card.pending .go { font-style: italic; }
+
+  .lab-list { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .lab-row {
+    display: flex; align-items: center; gap: 12px; padding: 11px 18px;
+    border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; font-size: 13.5px;
+  }
+  .lab-row:last-child { border-bottom: none; }
+  .lab-row:hover { background: var(--dorado-tint); }
+  .lab-row .play {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--dorado-tint); color: var(--dorado);
+    display: grid; place-items: center; font-size: 10px; flex-shrink: 0;
+  }
+  .lab-row .name { color: var(--ink); font-weight: 500; }
+  .lab-row .size { margin-left: auto; color: var(--ink-soft); font-family: 'IBM Plex Mono'; font-size: 11.5px; }
+
+  footer.page { max-width: 880px; margin: 60px auto 0; padding: 20px 24px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-soft); text-align: center; }
+</style>
+
+<header class="top">
+  <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeoAAACkCAYAAABYSG2SAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAO3RFWHRDb21tZW50AHhyOmQ6REFHQURWcHkxY3c6MixqOjM0ODg0NjAxODI5NzI4OTcxNTMsdDoyNDAzMjAxM/UxDPEAAATvaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9J2Fkb2JlOm5zOm1ldGEvJz4KICAgICAgICA8cmRmOlJERiB4bWxuczpyZGY9J2h0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMnPgoKICAgICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0nJwogICAgICAgIHhtbG5zOmRjPSdodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyc+CiAgICAgICAgPGRjOnRpdGxlPgogICAgICAgIDxyZGY6QWx0PgogICAgICAgIDxyZGY6bGkgeG1sOmxhbmc9J3gtZGVmYXVsdCc+RGlzZcOxbyBzaW4gdMOtdHVsbyAtIDE8L3JkZjpsaT4KICAgICAgICA8L3JkZjpBbHQ+CiAgICAgICAgPC9kYzp0aXRsZT4KICAgICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KCiAgICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICAgICAgICB4bWxuczpBdHRyaWI9J2h0dHA6Ly9ucy5hdHRyaWJ1dGlvbi5jb20vYWRzLzEuMC8nPgogICAgICAgIDxBdHRyaWI6QWRzPgogICAgICAgIDxyZGY6U2VxPgogICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0nUmVzb3VyY2UnPgogICAgICAgIDxBdHRyaWI6Q3JlYXRlZD4yMDI0LTAzLTIwPC9BdHRyaWI6Q3JlYXRlZD4KICAgICAgICA8QXR0cmliOkV4dElkPmMzMWZjODc5LWM3YjQtNGQwMC1hNWU5LWFlYWUxZWY5YjA0YTwvQXR0cmliOkV4dElkPgogICAgICAgIDxBdHRyaWI6RmJJZD41MjUyNjU5MTQxNzk1ODA8L0F0dHJpYjpGYklkPgogICAgICAgIDxBdHRyaWI6VG91Y2hUeXBlPjI8L0F0dHJpYjpUb3VjaFR5cGU+CiAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgPC9yZGY6U2VxPgogICAgICAgIDwvQXR0cmliOkFkcz4KICAgICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KCiAgICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICAgICAgICB4bWxuczpwZGY9J2h0dHA6Ly9ucy5hZG9iZS5jb20vcGRmLzEuMy8nPgogICAgICAgIDxwZGY6QXV0aG9yPkpvcmdlIFBhcmVkZXM8L3BkZjpBdXRob3I+CiAgICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CgogICAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PScnCiAgICAgICAgeG1sbnM6eG1wPSdodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvJz4KICAgICAgICA8eG1wOkNyZWF0b3JUb29sPkNhbnZhPC94bXA6Q3JlYXRvclRvb2w+CiAgICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgICAgICAgCiAgICAgICAgPC9yZGY6UkRGPgogICAgICAgIDwveDp4bXBtZXRhPi3JciwAAHnkSURBVHic7J15nF1Vle+/69x7z51rSiojJCEMSQjzGAEhjMokikalW+Wp7fDsbrW11VaxCe3wWn367Nbud... (truncated for brevity)
+  <h1>Arquitectura en la Nube</h1>
+  <p class="sub">Material del curso — Ingeniería de Sistemas</p>
+  <div class="accent-bar"></div>
+  <p class="meta"><b>Ing. Rodolfo Cañas Cervantes</b><br>Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>Periodo 2026-2 · Barranquilla, Colombia</p>
+</header>
+
+<div class="wrap">
+  <section>
+    <div class="section-head"><h2>Semanas</h2><span class="count">2 de 13 publicadas</span></div>
+    <div class="card-grid">
+      <a class="week-card" href="2026-2-S01S02-arquitectura-nube-fundamentos-y-seguridad.pptx">
+        <div class="num">1–2</div>
+        <div>
+          <div class="title">Fundamentos y Seguridad de la Computación en la Nube</div>
+          <div class="desc">Modelos de servicio, modelos de despliegue, seguridad de acceso · pendiente de pasar a HTML</div>
+        </div>
+        <div class="go">Descargar .pptx →</div>
+      </a>
+      <a class="week-card" href="2026-2-S03-arquitectura-nube-almacenamiento.html">
+        <div class="num">3</div>
+        <div>
+          <div class="title">Almacenamiento en la Nube</div>
+          <div class="desc">Objetos, bloques y archivos — equivalencia multicloud</div>
+        </div>
+        <div class="go">Ver presentación →</div>
+      </a>
+      <div class="week-card pending">
+        <div class="num">4</div>
+        <div>
+          <div class="title">Redes en la nube</div>
+          <div class="desc">Redes virtuales, subredes, grupos de seguridad</div>
+        </div>
+        <div class="go">Próximamente</div>
+      </div>
+      <div class="week-card pending">
+        <div class="num">6+</div>
+        <div>
+          <div class="title">Resto del curso</div>
+          <div class="desc">Semanas 6 a 15-16 — se publican a medida que se terminan</div>
+        </div>
+        <div class="go">Próximamente</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Laboratorios complementarios</h2><span class="count">19 videos · Azure</span></div>
+    <p class="section-note">Refuerzo práctico opcional, no reemplazan el lab oficial del curso (AWS Academy) ni están mapeados 1:1 a las semanas — se ofrecen como exposición adicional a otro proveedor.</p>
+    <a class="week-card" href="https://1drv.ms/f/c/34997999a15ac288/IgAeb43XQbCHTK5i7_bC-9PpATZw5J2IlZGuh69E0TSextI" target="_blank">
+      <div class="num">📁</div>
+      <div>
+        <div class="title">Carpeta completa en OneDrive</div>
+        <div class="desc">19 videos (Lab 01 a Lab 07) — navega y elige el que necesites</div>
+      </div>
+      <div class="go">Abrir carpeta →</div>
+    </a>
+  </section>
+</div>
+
+<footer class="page">
+  Arquitectura en la Nube · Universidad de la Costa (CUC) · Página generada como prueba — pendiente de publicar en GitHub Pages
+</footer>
