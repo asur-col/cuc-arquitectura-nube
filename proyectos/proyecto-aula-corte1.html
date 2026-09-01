@@ -165,7 +165,7 @@
     <li><b>Crecimiento de datos proyectado</b>: datos históricos (reportes, respaldos, documentos escaneados) crecen ~15% anual; bases de datos transaccionales ~8% anual.</li>
     <li><b>Licenciamiento</b>: SQL Server licenciado por core físico (licencia perpetua, ya pagada) — el cliente pregunta si conviene mantenerla o migrar a un motor con licenciamiento distinto; basta con mencionar la disyuntiva, no resolverla a fondo (excede el alcance de Unidad 1).</li>
     <li><b>Nivel de servicio exigido</b>: SAP PRD y sus bases de datos no toleran interrupción no planeada mayor a <b>15 minutos</b> en horario laboral. Todo lo demás (DEV, QAS, CTG, el job nocturno, el sitio fuera de campañas) tolera horas sin impacto real.</li>
-    <li><b>Antecedente que el cliente menciona sin que se lo pregunten</b>: un proveedor externo anterior le ejecutó una migración "lift-and-shift" pura, y el costo mensual en la nube terminó entre 20% y 60% más alto que el datacenter propio — patrón documentado en la industria, no un caso aislado (ver Anexos). El cliente no quiere pagar dos veces por el mismo error.</li>
+    <li><b>Antecedente que el cliente menciona sin que se lo pregunten</b>: un proveedor externo anterior le ejecutó una migración "lift-and-shift" pura, y el costo mensual en la nube terminó entre 20% y 60% más alto que el datacenter propio — patrón documentado en la industria, no un caso aislado. El cliente no quiere pagar dos veces por el mismo error.</li>
   </ul>
 
   <h3>Segmentación de red actual</h3>
@@ -473,13 +473,6 @@
     <li><b>Mínimo 3 controles adicionales</b>, cada uno ligado a un desafío específico del caso.</li>
     <li><b>Plan de respuesta a incidentes básico</b> para una cuenta IAM administrativa comprometida.</li>
   </ul>
-
-  <h3>Anexos</h3>
-  <ul>
-    <li>Glosario de términos AWS usados.</li>
-    <li>Referencias oficiales de AWS (aws.amazon.com/architecture, docs de IAM/S3/VPC/EC2/RDS, material del curso).</li>
-    <li>Fuentes de las cifras del Capítulo 0: ver enlaces citados arriba.</li>
-  </ul>
 </section>
 
 <!-- ============ 5. RUBRICA ============ -->
@@ -535,9 +528,8 @@
 <section id="s6">
   <h2><span class="paso">6</span> Entregables</h2>
   <ol>
-    <li><b>Documento</b> en PDF con los seis capítulos (0 a 5) y anexos (máximo 20 páginas sin contar anexos).</li>
-    <li><b>Diagramas de arquitectura</b> (general del capítulo 1 + detallado de red del capítulo 4) en formato editable (draw.io o similar), adjuntando los archivos fuente.</li>
-    <li><b>Tabla comparativa de rutas (Cap. 0)</b>, <b>tabla de clasificación</b>, <b>matriz de roles IAM</b> y <b>tabla de enrutamiento</b> — pueden ir como anexos en hoja de cálculo o Markdown.</li>
+    <li><b>Documento</b> en PDF con los seis capítulos (0 a 5), máximo 20 páginas.</li>
+    <li><b>Diagramas de arquitectura</b> (general del capítulo 1 + detallado de red del capítulo 4) <b>incluidos dentro del documento</b> — no basta con mencionarlos, deben verse. Entregar el archivo fuente editable (draw.io o similar) por separado es opcional.</li>
   </ol>
 </section>
 
