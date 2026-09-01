@@ -656,7 +656,7 @@
           <p style="font-size:14px;color:#6b6b6b;">bloques por red dedicada</p>
         </div>
         <svg viewBox="0 0 60 24" style="width:56px;height:22px;flex:0 0 56px;"><line x1="4" y1="12" x2="46" y2="12" stroke="#D4AF37" stroke-width="5"/><polygon points="60,12 44,4 44,20" fill="#D4AF37"/></svg>
-        <div style="flex:1;background:var(--vino-tint);border-radius:12px;padding:16px 20px;font-size:16px;"><b style="color:var(--vino);">Bloques:</b> Amazon EBS · Azure Managed Disks · Persistent Disk · OCI Block Volume</div>
+        <div style="flex:1;background:var(--vino-tint);border-radius:12px;padding:16px 20px;font-size:16px;"><b style="color:var(--vino);">Bloques:</b> Amazon EBS — el disco de red de AWS, equivalente a un LUN de SAN</div>
       </div>
       <div style="display:flex;align-items:center;gap:20px;">
         <div style="flex:0 0 300px;background:#fff;border:2.5px solid var(--vino);border-radius:12px;padding:16px 20px;">
@@ -664,7 +664,7 @@
           <p style="font-size:14px;color:#6b6b6b;">archivos por Ethernet</p>
         </div>
         <svg viewBox="0 0 60 24" style="width:56px;height:22px;flex:0 0 56px;"><line x1="4" y1="12" x2="46" y2="12" stroke="#D4AF37" stroke-width="5"/><polygon points="60,12 44,4 44,20" fill="#D4AF37"/></svg>
-        <div style="flex:1;background:var(--vino-tint);border-radius:12px;padding:16px 20px;font-size:16px;"><b style="color:var(--vino);">Archivos:</b> Amazon EFS · Azure Files · Filestore · OCI File Storage</div>
+        <div style="flex:1;background:var(--vino-tint);border-radius:12px;padding:16px 20px;font-size:16px;"><b style="color:var(--vino);">Archivos:</b> Amazon EFS — un sistema de archivos NFS administrado</div>
       </div>
       <div style="display:flex;align-items:center;gap:20px;">
         <div style="flex:0 0 300px;background:#fff;border:2.5px dashed var(--dorado);border-radius:12px;padding:16px 20px;">
@@ -672,7 +672,7 @@
           <p style="font-size:14px;color:#6b6b6b;">no existía on-premise</p>
         </div>
         <svg viewBox="0 0 60 24" style="width:56px;height:22px;flex:0 0 56px;"><line x1="4" y1="12" x2="46" y2="12" stroke="#D4AF37" stroke-width="5"/><polygon points="60,12 44,4 44,20" fill="#D4AF37"/></svg>
-        <div style="flex:1;background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:12px;padding:16px 20px;font-size:16px;"><b style="color:var(--vino);">Objetos:</b> Amazon S3 · Azure Blob · Cloud Storage · OCI Object Storage — <b style="color:var(--vino);">nativo de la nube</b></div>
+        <div style="flex:1;background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:12px;padding:16px 20px;font-size:16px;"><b style="color:var(--vino);">Objetos:</b> Amazon S3 — el servicio que popularizó el modelo de objetos, <b style="color:var(--vino);">nativo de la nube</b></div>
       </div>
     </div>
     <div class="fact" style="margin-top:22px;text-align:center;">La nube no inventó todo: <b>bloques y archivos son SAN y NAS como servicio</b> — los objetos sí son un modelo nuevo.</div>
@@ -681,41 +681,26 @@
   <!-- ============ 12 · PROVEEDORES ============ -->
   <section class="slide">
     <div class="s-head">
-      <h2>Mismo concepto, distinto nombre</h2>
+      <h2>Caso de decisión: ¿qué tipo de storage para backups?</h2>
       <div class="rule"></div>
       <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
-    <table class="cmp" style="margin-top:14px;font-size:17px;">
-      <tr>
-        <th style="width:120px;"></th>
-        <th style="text-align:center;"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" style="height:34px;vertical-align:middle;background:#fff;padding:2px 8px;border-radius:6px;"></th>
-        <th style="text-align:center;"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" alt="Microsoft Azure" style="height:34px;vertical-align:middle;background:#fff;padding:2px 8px;border-radius:6px;"></th>
-        <th style="text-align:center;"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud" style="height:34px;vertical-align:middle;background:#fff;padding:2px 8px;border-radius:6px;"></th>
-        <th style="text-align:center;"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Oracle_logo.svg" alt="Oracle Cloud" style="height:34px;vertical-align:middle;background:#fff;padding:2px 8px;border-radius:6px;"></th>
-      </tr>
-      <tr>
-        <td>Objetos</td>
-        <td style="text-align:center;"><b>Amazon S3</b></td>
-        <td style="text-align:center;"><b>Azure Blob Storage</b></td>
-        <td style="text-align:center;"><b>Cloud Storage</b></td>
-        <td style="text-align:center;"><b>OCI Object Storage</b></td>
-      </tr>
-      <tr>
-        <td>Bloques</td>
-        <td style="text-align:center;"><b>Amazon EBS</b></td>
-        <td style="text-align:center;"><b>Azure Managed Disks</b></td>
-        <td style="text-align:center;"><b>Persistent Disk</b></td>
-        <td style="text-align:center;"><b>OCI Block Volume</b></td>
-      </tr>
-      <tr>
-        <td>Archivos</td>
-        <td style="text-align:center;"><b>Amazon EFS</b></td>
-        <td style="text-align:center;"><b>Azure Files</b></td>
-        <td style="text-align:center;"><b>Filestore</b></td>
-        <td style="text-align:center;"><b>OCI File Storage</b></td>
-      </tr>
-    </table>
-    <div class="fact" style="margin-top:22px;text-align:center;">Los tres modelos existen en <b>todos los proveedores principales</b> — cambia el nombre, no el patrón de acceso.</div>
+    <div style="display:flex;gap:24px;margin-top:18px;align-items:flex-start;">
+      <div style="flex:1;background:var(--vino-tint);border-radius:14px;border-top:8px solid var(--vino);padding:18px 22px;">
+        <h3 style="color:var(--vino);font-size:20px;margin-bottom:10px;">Escenario</h3>
+        <p style="font-size:15.5px;line-height:1.6;">Una aplicación genera <b style="color:var(--vino);">2 TB de logs diarios</b> que se deben retener 90 días por regulación, pero casi nunca se consultan después del día 7.</p>
+        <p style="font-size:15.5px;line-height:1.6;margin-top:8px;">¿Qué servicio AWS usarías?</p>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+        <div class="chip" style="margin:0;"><b style="color:var(--vino);">S3 Standard:</b> lectura inmediata, costo alto/GB — útil si siempre se consultan.</div>
+        <div class="chip" style="margin:0;"><b style="color:var(--vino);">S3 Standard-IA:</b> lectura inmediata, costo menor/GB, mínimo de almacenamiento 30 días — bien para los primeros 30 días.</div>
+        <div class="chip" style="margin:0;"><b style="color:var(--vino);">S3 Glacier Flexible Retrieval:</b> lectura en minutos a horas, costo mínimo/GB — ideal para el resto del período de retención.</div>
+        <div class="chip" style="margin:0;"><b style="color:var(--vino);">Patrón recomendado:</b> transición automática con <i>S3 Lifecycle</i> — Standard → IA a los 30 días → Glacier a los 60.</div>
+      </div>
+    </div>
+    <div class="fact" style="margin-top:20px;text-align:center;">
+      El modelo de objetos se creó en la nube; los tiers de almacenamiento son la respuesta a una pregunta que <b style="color:var(--vino);">no existía en el datacenter</b>: ¿cuánto cuesta mantener un dato que casi nunca se lee?
+    </div>
   </section>
 
   <!-- ============ 13 · TIERING ============ -->
@@ -764,48 +749,39 @@
   <!-- ============ 14 · TIERS POR PROVEEDOR ============ -->
   <section class="slide">
     <div class="s-head">
-      <h2>Los tiers en cada nube</h2>
+      <h2>Políticas de ciclo de vida: el automatismo que mueve los datos</h2>
       <div class="rule"></div>
       <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
-    <table class="cmp" style="margin-top:12px;font-size:15px;">
-      <tr>
-        <th style="width:100px;"></th>
-        <th>AWS — S3</th>
-        <th>Azure — Blob</th>
-        <th>Google Cloud</th>
-        <th>Oracle — OCI</th>
-      </tr>
-      <tr>
-        <td>Caliente</td>
-        <td><b>S3 Standard</b></td>
-        <td><b>Hot</b></td>
-        <td><b>Standard</b> · sin mínimo</td>
-        <td><b>Standard</b> · sin mínimo</td>
-      </tr>
-      <tr>
-        <td>Tibio</td>
-        <td><b>S3 Standard-IA</b> · mín. 30 días</td>
-        <td><b>Cool</b> · mín. 30 días</td>
-        <td><b>Nearline</b> · mín. 30 días</td>
-        <td><b>Infrequent Access</b> · mín. 31 días</td>
-      </tr>
-      <tr>
-        <td>Frío</td>
-        <td><b>S3 Glacier</b> Flexible Retrieval</td>
-        <td><b>Cold</b> · mín. 90 días</td>
-        <td><b>Coldline</b> · mín. 90 días</td>
-        <td style="color:#9a9a9a;">—</td>
-      </tr>
-      <tr>
-        <td>Archivo</td>
-        <td><b>Glacier Deep Archive</b> · mín. 180 d, horas</td>
-        <td><b>Archive</b> · mín. 180 d, offline</td>
-        <td><b>Archive</b> · mín. 365 días</td>
-        <td><b>Archive</b> · mín. 90 d, restaurar ≈ 1 h</td>
-      </tr>
-    </table>
-    <div class="fact" style="margin-top:16px;"><b>¿Patrón de acceso impredecible?</b> AWS S3 Intelligent-Tiering mueve los objetos entre niveles automáticamente según el uso real, sin cargos de recuperación.</div>
+    <div style="display:flex;gap:24px;margin-top:18px;align-items:flex-start;">
+      <div style="flex:0 0 520px;">
+        <svg viewBox="0 0 520 320" style="width:100%;height:auto;display:block;">
+          <rect x="40" y="40" width="100" height="60" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2.5"/>
+          <text x="90" y="68" text-anchor="middle" font-size="13" fill="#A6192E" font-weight="bold">Standard</text>
+          <text x="90" y="86" text-anchor="middle" font-size="11" fill="#6b6b6b">0-30 días</text>
+          <rect x="210" y="40" width="100" height="60" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="2.5"/>
+          <text x="260" y="68" text-anchor="middle" font-size="13" fill="#A6192E" font-weight="bold">Standard-IA</text>
+          <text x="260" y="86" text-anchor="middle" font-size="11" fill="#6b6b6b">30-90 días</text>
+          <rect x="380" y="40" width="100" height="60" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2.5" stroke-dasharray="6 4"/>
+          <text x="430" y="68" text-anchor="middle" font-size="13" fill="#A6192E" font-weight="bold">Glacier</text>
+          <text x="430" y="86" text-anchor="middle" font-size="11" fill="#6b6b6b">90+ días</text>
+          <line x1="140" y1="70" x2="210" y2="70" stroke="#D4AF37" stroke-width="3" marker-end="url(#a14)"/>
+          <line x1="310" y1="70" x2="380" y2="70" stroke="#D4AF37" stroke-width="3" marker-end="url(#a14)"/>
+          <defs><marker id="a14" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#D4AF37"/></marker></defs>
+          <rect x="40" y="160" width="440" height="120" rx="10" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/>
+          <text x="60" y="190" font-size="14" fill="#A6192E" font-weight="bold">Regla S3 Lifecycle (ejemplo):</text>
+          <text x="60" y="216" font-size="12" fill="#2A2A2A" font-family="monospace">TransitionToIA  ← 30 días después de la creación</text>
+          <text x="60" y="238" font-size="12" fill="#2A2A2A" font-family="monospace">TransitionToGlacier ← 90 días después de la creación</text>
+          <text x="60" y="260" font-size="12" fill="#2A2A2A" font-family="monospace">Expiration  ← 2555 días (7 años, fin de retención)</text>
+        </svg>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+        <div class="chip" style="margin:0;"><b style="color:var(--vino);">Sin política de ciclo de vida:</b> todos los datos viven en Standard hasta que alguien los borre — el costo escala linealmente con el volumen.</div>
+        <div class="chip" style="margin:0;"><b style="color:var(--vino);">Con política:</b> el storage se mueve solo entre tiers según la antigüedad — sin código de aplicación, sin tickets manuales.</div>
+        <div class="chip" style="margin:0;"><b style="color:var(--vino);">Lo que se automatiza:</b> transición entre clases + expiración final; lo que <b>no</b>: lectura inmediata desde Glacier (tarda minutos u horas según tier).</div>
+        <div class="chip" style="margin:0;"><b style="color:var(--vino);">Caso típico:</b> backups diarios de base de datos → Standard 30 días, IA los siguientes 60, Glacier después — costo se reduce ~80% versus mantener todo en Standard.</div>
+      </div>
+    </div>
   </section>
 
   <!-- ============ 15 · CÓMO ELEGIR ============ -->

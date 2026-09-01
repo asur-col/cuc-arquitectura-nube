@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitectura en la Nube — Semana 5 · Seguridad y cumplimiento en la nube</title>
+<style>
+  :root{
+    --vino:#A6192E;
+    --dorado:#D4AF37;
+    --texto:#2A2A2A;
+    --vino-tint:#f9eef0;
+    --dorado-tint:#fbf6e7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#fff;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--texto);}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+  #stage{width:1280px;height:720px;position:relative;flex:0 0 auto;transform-origin:center center;box-shadow:0 0 0 1px #ddd,0 8px 30px rgba(0,0,0,.12);background:#fff;}
+  .slide{position:absolute;inset:0;background:#fff;display:none;padding:44px 56px 64px;}
+  .slide.active{display:block;}
+
+  .s-head{position:relative;margin-bottom:14px;padding-right:120px;}
+  .s-head h2{font-size:32px;font-weight:700;color:var(--vino);line-height:1.12;}
+  .s-head .rule{width:120px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin-top:8px;}
+  .s-head .sub{font-size:16px;color:#555;line-height:1.4;margin-top:8px;}
+  .logo-corner{position:absolute;top:0;right:0;height:52px;}
+  .s-foot{position:absolute;left:56px;right:56px;bottom:18px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#6b6b6b;border-top:2px solid var(--dorado);padding-top:8px;}
+  .s-foot .pg{font-weight:700;color:var(--vino);}
+
+  .cover{display:none;text-align:center;padding-top:52px;}
+  .cover.active{display:block;}
+  .cover .topline-g{position:absolute;top:0;left:0;right:0;height:4px;background:var(--dorado);}
+  .cover .topline-v{position:absolute;top:4px;left:0;right:0;height:7px;background:var(--vino);}
+  .cover img.logo-main{height:128px;margin-bottom:26px;}
+  .cover h1{font-size:44px;color:var(--vino);font-weight:700;letter-spacing:.5px;line-height:1.18;}
+  .cover h3{font-size:21px;font-weight:400;color:var(--texto);margin-top:14px;}
+  .cover .bar{width:250px;height:6px;border-radius:3px;margin:26px auto 26px;background:var(--dorado);}
+  .cover .author{font-size:17px;line-height:1.6;}
+  .cover .author b{color:var(--vino);}
+
+  .chips{display:flex;flex-direction:column;gap:16px;}
+  .chip{background:var(--vino-tint);border-left:6px solid var(--dorado);border-radius:8px;padding:14px 18px;font-size:17px;line-height:1.35;}
+  .chip b{color:var(--vino);}
+  .fact{margin-top:18px;background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:8px;padding:12px 18px;font-size:16px;}
+  .fact b{color:var(--vino);}
+
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;font-family:inherit;z-index:10;}
+  #nav button{width:38px;height:38px;border:none;border-radius:50%;background:var(--vino);color:#fff;font-size:18px;cursor:pointer;}
+  #nav button:hover{background:#7d1223;}
+  #nav #counter{font-size:14px;color:var(--texto);min-width:56px;text-align:center;}
+  #progress{position:fixed;top:0;left:0;height:4px;background:var(--dorado);width:0;z-index:10;transition:width .25s;}
+
+  @media print{
+    body{display:block;}
+    #stage{transform:none!important;box-shadow:none;}
+    .slide{display:block!important;position:relative;page-break-after:always;}
+    #nav,#progress{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="stage">
+
+  <!-- ============ 1 · PORTADA ============ -->
+  <section class="slide cover active">
+    <div class="topline-g"></div><div class="topline-v"></div>
+    <img class="logo-main" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
+    <h1>Seguridad y cumplimiento<br>en la nube</h1>
+    <h3>Cierre de Unidad 1 — antes del Parcial 1</h3>
+    <div class="bar"></div>
+    <div class="author">
+      <b>Ing. Rodolfo Cañas Cervantes</b><br>
+      Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>
+      Semana 5 · Periodo 2026-2 · Barranquilla, Colombia
+    </div>
+  </section>
+
+  <!-- ============ 2 · MODELO DE RESPONSABILIDAD COMPARTIDA ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Modelo de responsabilidad compartida</h2>
+      <div class="rule"></div>
+      <div class="sub">Quién asegura qué — la división cambia según el modelo de servicio (IaaS / PaaS / SaaS).</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <svg viewBox="0 0 1100 320" style="width:100%;height:auto;display:block;margin-top:14px;">
+      <!-- Franja superior: proveedor -->
+      <rect x="60" y="40" width="980" height="110" rx="10" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.5"/>
+      <text x="80" y="72" font-size="17" fill="#A6192E" font-weight="bold">Lo que asegura EL PROVEEDOR</text>
+      <text x="80" y="100" font-size="14" fill="#2A2A2A">Centros de datos · hardware · virtualización · red física · refrigeración · energía</text>
+      <text x="80" y="122" font-size="14" fill="#2A2A2A">Cumplimiento de la nube en sí misma (edificios, personal, redundancia)</text>
+
+      <!-- Franja inferior: cliente -->
+      <rect x="60" y="170" width="980" height="110" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2.5"/>
+      <text x="80" y="202" font-size="17" fill="#A6192E" font-weight="bold">Lo que aseguras TÚ</text>
+      <text x="80" y="230" font-size="14" fill="#2A2A2A">Datos · identidad y accesos (IAM) · configuración de red y firewalls</text>
+      <text x="80" y="252" font-size="14" fill="#2A2A2A">Sistema operativo del huésped (en IaaS) · aplicación · cifrado de tu lado</text>
+
+      <!-- Flecha indicando que el reparto cambia -->
+      <text x="570" y="305" text-anchor="middle" font-size="13" fill="#6b6b6b">el reparto se desplaza según el modelo: <tspan font-weight="bold" fill="#A6192E">en IaaS aseguras más, en SaaS menos</tspan></text>
+    </svg>
+    <div class="fact" style="margin-top:10px;text-align:center;">
+      El modelo es el mismo en cualquier proveedor; en este curso se practica sobre AWS Academy.
+    </div>
+  </section>
+
+  <!-- ============ 3 · YA CONSTRUISTE SEGURIDAD SIN LLAMARLO ASÍ ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Ya construiste seguridad sin llamarlo así</h2>
+      <div class="rule"></div>
+      <div class="sub">Recapitulación: tres conceptos ya vistos, ahora nombrados como controles de seguridad.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div style="display:flex;align-items:stretch;gap:0;margin-top:36px;">
+      <!-- Línea de tiempo horizontal -->
+      <svg viewBox="0 0 1080 280" style="width:100%;height:auto;">
+        <line x1="80" y1="180" x2="1000" y2="180" stroke="#D4AF37" stroke-width="4"/>
+        <!-- Semana 2 -->
+        <circle cx="220" cy="180" r="22" fill="#A6192E"/>
+        <text x="220" y="186" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">S2</text>
+        <rect x="100" y="40" width="240" height="110" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+        <text x="220" y="68" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="bold">Control de identidad</text>
+        <text x="220" y="92" text-anchor="middle" font-size="12.5" fill="#2A2A2A">IAM · MFA</text>
+        <text x="220" y="110" text-anchor="middle" font-size="12.5" fill="#2A2A2A">mínimo privilegio</text>
+        <text x="220" y="128" text-anchor="middle" font-size="11.5" fill="#6b6b6b" font-style="italic">"¿quién eres y qué puedes hacer?"</text>
+
+        <!-- Semana 3 -->
+        <circle cx="540" cy="180" r="22" fill="#A6192E"/>
+        <text x="540" y="186" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">S3</text>
+        <rect x="420" y="40" width="240" height="110" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+        <text x="540" y="68" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="bold">Control de datos</text>
+        <text x="540" y="92" text-anchor="middle" font-size="12.5" fill="#2A2A2A">Cifrado de S3</text>
+        <text x="540" y="110" text-anchor="middle" font-size="12.5" fill="#2A2A2A">Cifrado de EBS</text>
+        <text x="540" y="128" text-anchor="middle" font-size="11.5" fill="#6b6b6b" font-style="italic">"¿el dato está protegido en reposo?"</text>
+
+        <!-- Semana 4 -->
+        <circle cx="860" cy="180" r="22" fill="#A6192E"/>
+        <text x="860" y="186" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">S4</text>
+        <rect x="740" y="40" width="240" height="110" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+        <text x="860" y="68" text-anchor="middle" font-size="15" fill="#A6192E" font-weight="bold">Control de red</text>
+        <text x="860" y="92" text-anchor="middle" font-size="12.5" fill="#2A2A2A">Security Groups</text>
+        <text x="860" y="110" text-anchor="middle" font-size="12.5" fill="#2A2A2A">NACLs · subred privada</text>
+        <text x="860" y="128" text-anchor="middle" font-size="11.5" fill="#6b6b6b" font-style="italic">"¿quién puede hablar con quién?"</text>
+
+        <!-- Etiquetas inferiores -->
+        <text x="220" y="240" text-anchor="middle" font-size="12" fill="#6b6b6b">Semana 2</text>
+        <text x="540" y="240" text-anchor="middle" font-size="12" fill="#6b6b6b">Semana 3</text>
+        <text x="860" y="240" text-anchor="middle" font-size="12" fill="#6b6b6b">Semana 4</text>
+      </svg>
+    </div>
+    <div style="margin-top:14px;background:var(--vino);color:#fff;border-radius:10px;padding:14px 22px;font-size:16.5px;text-align:center;line-height:1.45;">
+      Hoy los reunimos bajo un solo marco: <b style="color:var(--dorado);">defensa en profundidad</b> — cada capa contiene el daño si la anterior falla.
+    </div>
+  </section>
+
+  <!-- ============ 4 · DEFENSA EN PROFUNDIDAD ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Defensa en profundidad</h2>
+      <div class="rule"></div>
+      <div class="sub">Ninguna capa sola basta — si una falla, la siguiente debe contener el daño.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <svg viewBox="0 0 1100 460" style="width:100%;height:auto;display:block;margin-top:14px;">
+      <!-- 5 capas concéntricas -->
+      <rect x="100" y="60" width="900" height="340" rx="20" fill="#fbf6e7" stroke="#D4AF37" stroke-width="3"/>
+      <text x="550" y="50" text-anchor="middle" font-size="14" fill="#6b6b6b">perímetro de red</text>
+
+      <rect x="160" y="100" width="780" height="260" rx="16" fill="#fff" stroke="#A6192E" stroke-width="2.5"/>
+      <text x="550" y="90" text-anchor="middle" font-size="13" fill="#A6192E">red interna</text>
+
+      <rect x="220" y="140" width="660" height="180" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.5"/>
+      <text x="550" y="132" text-anchor="middle" font-size="13" fill="#A6192E">identidad</text>
+
+      <rect x="280" y="180" width="540" height="100" rx="12" fill="#fff" stroke="#A6192E" stroke-width="2.5"/>
+      <text x="550" y="172" text-anchor="middle" font-size="13" fill="#A6192E">aplicación</text>
+
+      <rect x="340" y="220" width="420" height="40" rx="10" fill="#A6192E"/>
+      <text x="550" y="246" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">datos cifrados</text>
+
+      <!-- Etiquetas laterales -->
+      <text x="86" y="230" text-anchor="end" font-size="12" fill="#6b6b6b">Internet Gateway · NACL</text>
+      <text x="86" y="248" text-anchor="end" font-size="12" fill="#6b6b6b">↓ filtrar entradas</text>
+
+      <text x="1014" y="230" text-anchor="start" font-size="12" fill="#6b6b6b">Security Groups</text>
+      <text x="1014" y="248" text-anchor="start" font-size="12" fill="#6b6b6b">↑ filtrar por instancia</text>
+
+      <text x="86" y="395" text-anchor="end" font-size="12" fill="#6b6b6b">IAM · MFA ·</text>
+      <text x="86" y="412" text-anchor="end" font-size="12" fill="#6b6b6b">mínimo privilegio</text>
+
+      <text x="1014" y="395" text-anchor="start" font-size="12" fill="#6b6b6b">cifrado en tránsito</text>
+      <text x="1014" y="412" text-anchor="start" font-size="12" fill="#6b6b6b">+ en reposo</text>
+    </svg>
+    <div class="fact" style="margin-top:8px;text-align:center;">
+      Cada capa asume que la exterior ya fue vulnerada — el ataque se detiene en la siguiente.
+    </div>
+  </section>
+
+  <!-- ============ 5 · CIFRADO: EN TRÁNSITO VS EN REPOSO ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Cifrado: en tránsito vs. en reposo</h2>
+      <div class="rule"></div>
+      <div class="sub">El dato tiene dos vidas — protegerlo en ambas.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div style="display:flex;gap:24px;margin-top:22px;">
+      <!-- En tránsito -->
+      <div style="flex:1;background:#fbf6e7;border-radius:14px;padding:22px 24px;border-top:8px solid var(--dorado);">
+        <h3 style="color:var(--vino);font-size:22px;margin-bottom:10px;">En tránsito</h3>
+        <p style="font-size:16px;line-height:1.55;"><b>Protege el dato mientras viaja</b> por la red — entre el usuario y la nube, entre servicios internos.</p>
+        <div style="margin-top:14px;background:#fff;border-radius:8px;padding:12px 14px;font-size:14.5px;line-height:1.5;">
+          <b style="color:var(--vino);">Mecanismo estándar:</b> HTTPS / TLS (el candado del navegador).<br>
+          <b style="color:var(--vino);">En AWS:</b> todo endpoint público usa TLS; dentro de la VPC el tráfico también puede ir cifrado punto a punto.
+        </div>
+      </div>
+      <!-- En reposo -->
+      <div style="flex:1;background:#f9eef0;border-radius:14px;padding:22px 24px;border-top:8px solid var(--vino);">
+        <h3 style="color:var(--vino);font-size:22px;margin-bottom:10px;">En reposo</h3>
+        <p style="font-size:16px;line-height:1.55;"><b>Protege el dato guardado</b> — en disco, en object storage, en backups.</p>
+        <div style="margin-top:14px;background:#fff;border-radius:8px;padding:12px 14px;font-size:14.5px;line-height:1.5;">
+          <b style="color:var(--vino);">Mecanismo estándar:</b> AES-256 con claves gestionadas por el proveedor (KMS).<br>
+          <b style="color:var(--vino);">En AWS:</b> S3 y EBS cifran por defecto; las claves pueden ser gestionadas por AWS o por ti.
+        </div>
+      </div>
+    </div>
+    <!-- Caso aplicado -->
+    <div style="margin-top:24px;background:var(--vino);color:#fff;border-radius:12px;padding:16px 24px;display:flex;align-items:center;gap:18px;">
+      <div style="flex:0 0 70px;text-align:center;font-size:34px;">📦</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;letter-spacing:2px;color:var(--dorado);font-weight:700;margin-bottom:4px;">CASO APLICADO · CORPORACIÓN INDUSTRIAL DEL CARIBE</div>
+        <div style="font-size:16px;line-height:1.5;">Sus bases de datos SAP viajan cifradas (TLS) hacia la nube y se guardan cifradas en reposo (KMS) — las dos vidas del dato, las dos protegidas.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6 · IDENTIDAD, OTRA VEZ, MÁS A FONDO ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Identidad, otra vez, más a fondo</h2>
+      <div class="rule"></div>
+      <div class="sub">Mínimo privilegio + políticas explícitas + MFA obligatorio.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="cols" style="margin-top:16px;align-items:flex-start;gap:30px;">
+      <div style="flex:1;">
+        <div style="font-size:17px;font-weight:700;color:var(--vino);margin-bottom:10px;">Las 3 reglas que siempre se cumplen</div>
+        <div class="chips">
+          <div class="chip"><b>Mínimo privilegio:</b> cada identidad recibe solo los permisos que necesita para su tarea — nada más. Se revisa periódicamente.</div>
+          <div class="chip"><b>Políticas explícitas Allow / Deny:</b> en AWS IAM todo se escribe como JSON; si no hay Allow explícito, el acceso está denegado. <b>Deny explícito siempre gana</b> sobre cualquier Allow.</div>
+          <div class="chip"><b>MFA obligatorio para privilegio alto:</b> cualquier rol con permisos de administración, eliminación o acceso a datos sensibles exige segundo factor — sin excepción.</div>
+        </div>
+      </div>
+      <div style="flex:0 0 440px;">
+        <div style="background:#2A2A2A;color:#f5f0e6;border-radius:10px;padding:16px 18px;font-family:Consolas,Courier New,monospace;font-size:13px;line-height:1.55;">
+          <div style="color:var(--dorado);margin-bottom:6px;">// Ejemplo: política que permite SOLO lectura en un bucket</div>
+          <div><span style="color:#9cdcfe;">{</span></div>
+          <div>&nbsp;&nbsp;<span style="color:#9cdcfe;">"Effect"</span>: <span style="color:#ce9178;">"Allow"</span>,</div>
+          <div>&nbsp;&nbsp;<nbsp;<span style="color:#9cdcfe;">"Action"</span>: <span style="color:#ce9178;">"s3:GetObject"</span>,</div>
+          <div>&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">"Resource"</span>: <span style="color:#ce9178;">"arn:aws:s3:::reportes/*"</span></div>
+          <div><span style="color:#9cdcfe;">}</span></div>
+          <div style="color:var(--dorado);margin-top:10px;">// Deny gana sobre Allow — para excluir una carpeta sensible:</div>
+          <div><span style="color:#9cdcfe;">{</span></div>
+          <div>&nbsp;&nbsp;<span style="color:#9cdcfe;">"Effect"</span>: <span style="color:#ce9178;">"Deny"</span>,</div>
+          <div>&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">"Action"</span>: <span style="color:#ce9178;">"s3:*"</span>,</div>
+          <div>&nbsp;&nbsp;&nbsp;<span style="color:#9cdcfe;">"Resource"</span>: <span style="color:#ce9178;">"arn:aws:s3:::reportes/confidencial/*"</span></div>
+          <div><span style="color:#9cdcfe;">}</span></div>
+        </div>
+        <div class="fact" style="margin-top:14px;">
+          <b>IAM</b> (AWS Identity and Access Management) es el servicio que ya usaste en el lab — el mismo concepto aplica a cualquier nube con otro nombre comercial.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7 · VISIBILIDAD: SI NO LO REGISTRAS, NO LO PUEDES INVESTIGAR ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Visibilidad: si no lo registras, no lo puedes investigar</h2>
+      <div class="rule"></div>
+      <div class="sub">Logging centralizado + alertas por actividad anómala — la base de toda auditoría forense.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div style="display:flex;gap:24px;margin-top:18px;align-items:flex-start;">
+      <div style="flex:0 0 460px;">
+        <svg viewBox="0 0 460 320" style="width:100%;height:auto;display:block;">
+          <rect x="30" y="50" width="100" height="60" rx="8" fill="#fff" stroke="#A6192E" stroke-width="2"/>
+          <text x="80" y="80" text-anchor="middle" font-size="12" fill="#A6192E" font-weight="bold">Usuario</text>
+          <text x="80" y="98" text-anchor="middle" font-size="10.5" fill="#6b6b6b">identidad AWS</text>
+
+          <rect x="170" y="50" width="120" height="60" rx="8" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/>
+          <text x="230" y="80" text-anchor="middle" font-size="12" fill="#A6192E" font-weight="bold">CloudTrail</text>
+          <text x="230" y="98" text-anchor="middle" font-size="10.5" fill="#6b6b6b">quién hizo qué</text>
+
+          <rect x="170" y="170" width="120" height="60" rx="8" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/>
+          <text x="230" y="200" text-anchor="middle" font-size="12" fill="#A6192E" font-weight="bold">GuardDuty</text>
+          <text x="230" y="218" text-anchor="middle" font-size="10.5" fill="#6b6b6b">detección de anomalías</text>
+
+          <rect x="170" y="250" width="120" height="60" rx="8" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/>
+          <text x="230" y="280" text-anchor="middle" font-size="12" fill="#A6192E" font-weight="bold">CloudWatch</text>
+          <text x="230" y="298" text-anchor="middle" font-size="10.5" fill="#6b6b6b">métricas + alarmas</text>
+
+          <line x1="130" y1="80" x2="170" y2="80" stroke="#2A2A2A" stroke-width="2.5"/>
+          <polygon points="170,80 162,75 162,85" fill="#2A2A2A"/>
+          <line x1="230" y1="110" x2="230" y2="170" stroke="#2A2A2A" stroke-width="2"/>
+          <polygon points="230,170 225,162 235,162" fill="#2A2A2A"/>
+        </svg>
+        <div class="fact" style="margin-top:8px;text-align:center;font-size:13.5px;">
+          Ejemplo concreto en AWS (la plataforma del lab): estos 3 servicios cubren la tríada <b>registrar · detectar · alertar</b>.
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+        <div class="chip" style="margin:0;"><b>CloudTrail</b> — registra cada llamada a la API de AWS: <i>quién</i> hizo <i>qué</i>, <i>cuándo</i> y <i>desde dónde</i>. La base de cualquier investigación forense.</div>
+        <div class="chip" style="margin:0;"><b>GuardDuty</b> — analiza los logs continuamente y levanta alertas cuando aparece actividad anómala (intentos de acceso desde IPs raras, llamadas a APIs que nunca se habían hecho).</div>
+        <div class="chip" style="margin:0;"><b>CloudWatch</b> — métricas de rendimiento (CPU, latencia, errores) y alarmas que disparan notificaciones o acciones cuando se cruza un umbral.</div>
+        <div class="chip" style="margin:0;"><b>Regla operativa:</b> si un incidente no aparece en los logs, no se puede investigar — y a veces ni siquiera se sabe que ocurrió.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8 · CUMPLIMIENTO: POR QUÉ NO ES SOLO CHECKLIST TÉCNICO ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Cumplimiento: por qué no es solo checklist técnico</h2>
+      <div class="rule"></div>
+      <div class="sub">Mover los datos a la nube no exime a la empresa de las leyes que aplican en su jurisdicción.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div style="display:flex;gap:24px;margin-top:24px;align-items:flex-start;">
+      <div style="flex:0 0 380px;">
+        <div style="background:#fff;border:3px solid var(--vino);border-radius:14px;padding:24px 26px;">
+          <div style="font-size:13px;letter-spacing:2px;color:var(--dorado);font-weight:700;margin-bottom:10px;">EJEMPLO LOCAL · COLOMBIA</div>
+          <h3 style="color:var(--vino);font-size:26px;margin-bottom:10px;line-height:1.15;">Ley 1581 de 2012</h3>
+          <p style="font-size:15px;line-height:1.55;color:#555;">Habeas data — toda empresa que trate datos personales en Colombia debe:</p>
+          <ul style="font-size:15px;line-height:1.7;margin:10px 0 0 22px;color:#2A2A2A;">
+            <li>Recolectar solo lo necesario</li>
+            <li>Informar al titular el uso</li>
+            <li>Permitir al titular actualizar o eliminar</li>
+            <li>Asegurar el dato donde esté</li>
+          </ul>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px;">
+        <div style="font-size:18px;font-weight:700;color:var(--vino);">El error común</div>
+        <div style="background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:10px;padding:14px 16px;font-size:15.5px;line-height:1.55;">
+          "<i>Subimos los datos a AWS / Azure / GCP y con eso ya cumplimos</i>" → <b style="color:var(--vino);">FALSO.</b> La jurisdicción del dato sigue siendo donde está el titular. Si el cliente es colombiano, la ley colombiana sigue aplicando — la nube no la borra.
+        </div>
+        <div class="chips">
+          <div class="chip"><b>Para el ingeniero:</b> diseñar con cifrado en reposo + en tránsito, logging activo y control de accesos — eso facilita cumplir cualquier auditoría.</div>
+          <div class="chip"><b>Para el equipo legal / gerencia:</b> revisar qué leyes aplican a los datos de los clientes antes de elegir región del datacenter y antes de firmar contratos de procesamiento con el proveedor.</div>
+          <div class="chip"><b>Lo que cambia entre nubes:</b> la región donde se guardan los datos y los mecanismos de auditoría que el proveedor expone — el cumplimiento legal es siempre responsabilidad de quien usa la nube.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9 · WELL-ARCHITECTED: PILAR DE SEGURIDAD ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>El pilar de seguridad del Well-Architected Framework</h2>
+      <div class="rule"></div>
+      <div class="sub">AWS Well-Architected = 6 pilares; seguridad es el que vimos hoy en profundidad.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div style="margin-top:16px;font-size:17px;color:#555;line-height:1.4;">
+      El framework se introdujo en la semana 1; hoy profundizamos el pilar de seguridad.
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:20px;">
+      <div style="background:var(--vino-tint);border-radius:12px;padding:14px;text-align:center;border-top:6px solid var(--vino);">
+        <div style="font-size:15px;font-weight:700;color:var(--vino);">Identidad fuerte</div>
+        <div style="font-size:13px;color:#555;margin-top:4px;line-height:1.4;">MFA, mínimo privilegio, identidades federadas</div>
+      </div>
+      <div style="background:var(--vino-tint);border-radius:12px;padding:14px;text-align:center;border-top:6px solid var(--vino);">
+        <div style="font-size:15px;font-weight:700;color:var(--vino);">Trazabilidad</div>
+        <div style="font-size:13px;color:#555;margin-top:4px;line-height:1.4;">Logs centralizados, auditoría, alertas</div>
+      </div>
+      <div style="background:var(--vino-tint);border-radius:12px;padding:14px;text-align:center;border-top:6px solid var(--vino);">
+        <div style="font-size:15px;font-weight:700;color:var(--vino);">Protección en todas las capas</div>
+        <div style="font-size:13px;color:#555;margin-top:4px;line-height:1.4;">Defensa en profundidad, cifrado</div>
+      </div>
+      <div style="background:var(--vino-tint);border-radius:12px;padding:14px;text-align:center;border-top:6px solid var(--vino);">
+        <div style="font-size:15px;font-weight:700;color:var(--vino);">Automatizar buenas prácticas</div>
+        <div style="font-size:13px;color:#555;margin-top:4px;line-height:1.4;">Políticas como código, guardrails</div>
+      </div>
+      <div style="background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:12px;padding:14px;text-align:center;border-top:6px solid var(--dorado);">
+        <div style="font-size:15px;font-weight:700;color:var(--vino);">Prepararse para incidentes</div>
+        <div style="font-size:13px;color:#555;margin-top:4px;line-height:1.4;">Runbooks, simulacros, respuesta definida</div>
+      </div>
+    </div>
+    <div class="fact" style="margin-top:18px;text-align:center;">
+      Los 5 principios del pilar de seguridad se cumplen, en la práctica, con lo que ya aprendiste: <b style="color:var(--vino);">IAM, Security Groups, cifrado y CloudTrail</b>.
+    </div>
+  </section>
+
+  <!-- ============ 10 · CASO APLICADO: CORPORACIÓN INDUSTRIAL DEL CARIBE ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Caso aplicado: Corporación Industrial del Caribe</h2>
+      <div class="rule"></div>
+      <div class="sub">Su arquitectura on-premise actual tiene 3 riesgos concretos — qué cambiaría al migrar con lo visto hoy.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <table class="cmp" style="margin-top:18px;font-size:14.5px;">
+      <tr>
+        <th style="width:200px;">Riesgo on-premise</th>
+        <th>Qué cambia con la migración a la nube</th>
+      </tr>
+      <tr>
+        <td>Sin segmentación real entre DMZ y LAN — un atacante que entra a la red interna ve todo.</td>
+        <td><b style="color:var(--vino);">Subred pública + subred privada</b> en VPC, separadas por tablas de rutas — la base de datos nunca queda expuesta a internet.</td>
+      </tr>
+      <tr>
+        <td>Backups sin cifrar — un disco robado del datacenter expone toda la historia clínica / datos de clientes.</td>
+        <td><b style="color:var(--vino);">Cifrado en reposo</b> por defecto en S3 y EBS (AES-256) — el dato robado es ilegible sin la clave.</td>
+      </tr>
+      <tr>
+        <td>Un solo administrador con acceso total — si su contraseña se filtra, todo se pierde.</td>
+        <td><b style="color:var(--vino);">MFA + mínimo privilegio + Deny explícito</b> en IAM — un admin no tiene que ser root, cada quien recibe solo lo que necesita.</td>
+      </tr>
+    </table>
+    <div style="margin-top:22px;background:var(--vino);color:#fff;border-radius:10px;padding:14px 24px;font-size:16.5px;text-align:center;line-height:1.5;">
+      Puente directo al Proyecto de Aula: la <b style="color:var(--dorado);">documentación de planificación</b> que entregan el 12 de septiembre debe nombrar estos 3 riesgos y proponer cómo cada control los cubre.
+    </div>
+  </section>
+
+  <!-- ============ 11 · CIERRE DE UNIDAD 1 ============ -->
+  <section class="slide">
+    <div class="s-head">
+      <h2>Cierre de Unidad 1</h2>
+      <div class="rule"></div>
+      <div class="sub">Qué sigue — y qué entregamos antes del Parcial 1.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div style="display:flex;gap:24px;margin-top:24px;align-items:flex-start;">
+      <div style="flex:1;">
+        <div style="font-size:17px;font-weight:700;color:var(--vino);margin-bottom:10px;">Semana 6 · Parcial 1</div>
+        <div style="background:var(--vino-tint);border-radius:12px;padding:16px 18px;font-size:15.5px;line-height:1.6;">
+          <b>20% de la rúbrica.</b> Se libera esa semana + 70% examen práctico en vivo. Cubre todo lo visto en S01–S05: fundamentos, despliegue, identidad, almacenamiento, redes y seguridad.
+        </div>
+        <div style="margin-top:18px;font-size:17px;font-weight:700;color:var(--vino);margin-bottom:10px;">Lo que entregamos entre hoy y el parcial</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:8px;padding:10px 14px;font-size:15px;line-height:1.45;">
+            <b style="color:var(--vino);">12 de septiembre</b> — documento de planificación del Proyecto de Aula (Corporación Industrial del Caribe).
+          </div>
+          <div style="background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:8px;padding:10px 14px;font-size:15px;line-height:1.45;">
+            Laboratorios AWS completados (sitio estático en S3 + red VPC, según calendario).
+          </div>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:17px;font-weight:700;color:var(--vino);margin-bottom:10px;">Mensaje para llevar</div>
+        <div style="background:#fbf6e7;border-left:6px solid var(--dorado);border-radius:8px;padding:16px 18px;font-size:15.5px;line-height:1.6;">
+          En la nube la seguridad <b style="color:var(--vino);">no es un producto que se compra y se instala</b>: es una <b style="color:var(--vino);">disciplina de diseño</b> que se aplica en cada decisión — qué datos subes, qué región, quién accede, qué se registra, cómo respondes.
+        </div>
+        <div style="margin-top:14px;background:#fff;border:2px solid var(--vino);border-radius:12px;padding:16px 18px;font-size:15px;line-height:1.55;">
+          <b style="color:var(--vino);">Repaso antes del parcial:</b> releer las notas de S01 a S05 + repasar los laboratorios. Los servicios que aparecieron nombrados en clase son los que entran: <b>EC2, S3, VPC, IAM, Security Groups, NACL, NAT Gateway, CloudTrail</b>.
+        </div>
+        <div style="margin-top:18px;text-align:center;font-size:18px;font-weight:700;color:var(--vino);">
+          Nos vemos en el Parcial 1 — y luego empezamos Unidad 2.
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div id="nav">
+  <button onclick="prev()">‹</button>
+  <span id="counter">1 / 11</span>
+  <button onclick="next()">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let current = 0;
+
+  function show(i){
+    slides.forEach((s,idx)=>{ s.classList.toggle('active', idx===i); });
+    current = i;
+    counter.textContent = `${i+1} / ${slides.length}`;
+    progress.style.width = `${((i+1)/slides.length)*100}%`;
+  }
+  function next(){ if(current<slides.length-1) show(current+1); }
+  function prev(){ if(current>0) show(current-1); }
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown') next();
+    if(e.key==='ArrowLeft'||e.key==='PageUp') prev();
+  });
+</script>
+
+</body>
+</html>

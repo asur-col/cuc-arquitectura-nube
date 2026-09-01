@@ -424,7 +424,7 @@
           <text x="443" y="214" text-anchor="middle" font-size="11.5" fill="#2A2A2A">app interna · BD</text>
           <text x="472" y="238" text-anchor="middle" font-size="11" fill="#A6192E">sin IP pública</text>
           <text x="331" y="292" text-anchor="middle" font-size="13" fill="#6b6b6b">las subredes son porciones del rango de la VPC — una por zona de disponibilidad</text>
-          <text x="330" y="320" text-anchor="middle" font-size="13.5" fill="#2A2A2A"><tspan font-weight="bold" fill="#A6192E">AWS:</tspan> VPC &#160;·&#160; <tspan font-weight="bold" fill="#0078D4">Azure:</tspan> VNet &#160;·&#160; <tspan font-weight="bold" fill="#4285F4">GCP:</tspan> VPC — el mismo concepto bajo tres nombres</text>
+          <text x="330" y="320" text-anchor="middle" font-size="13" fill="#6b6b6b">VPC = la red privada aislada de la cuenta AWS — mismo concepto (red lógica aislada por rangos privados) que existe en toda nube</text>
         </svg>
       </div>
       <div class="side">
@@ -432,7 +432,7 @@
           <div class="chip">Una VPC es una red privada lógica dentro de la nube: se reserva un rango del estándar RFC 1918 — por ejemplo <span class="mono"><b>10.0.0.0/16</b></span> — de uso exclusivo de la cuenta</div>
           <div class="chip">Al ser rangos privados, <b>millones de clientes</b> pueden usar el mismo 10.0.x.x sin conflicto — exactamente el mismo principio que en una red doméstica</div>
           <div class="chip">Por defecto, todos los recursos dentro de la VPC se comunican entre sí mediante IP privada, aunque pertenezcan a subredes distintas</div>
-          <div class="chip">Equivalencia multicloud: AWS VPC · Azure VNet · GCP VPC — mismo modelo de dominio</div>
+          <div class="chip">El nombre VPC es el de AWS; el concepto (red privada lógica con rangos RFC 1918) es estándar en toda la industria — varía solo el nombre comercial.</div>
         </div>
       </div>
     </div>
@@ -475,7 +475,7 @@
     <div style="margin-top:20px;background:var(--vino);color:#fff;border-radius:10px;padding:14px 24px;font-size:17.5px;text-align:center;line-height:1.45;">
       La etiqueta "pública" o "privada" no es una propiedad del nombre de la subred: es consecuencia directa de lo que contenga su <b style="color:var(--dorado);">tabla de rutas</b>.
     </div>
-    <div class="fact" style="margin-top:14px;"><b>Matices multicloud:</b> en Azure las subredes son regionales (no se anclan a una zona) y el concepto equivalente se gestiona con rutas definidas por el usuario; en GCP el modelo es análogo.</div>
+    <div class="fact" style="margin-top:14px;"><b>En AWS</b> cada subred vive dentro de una sola zona de disponibilidad — esto es lo que permite lanzar recursos redundantes entre zonas para alta disponibilidad.</div>
   </section>
 
   <!-- ============ IGW VS NAT GATEWAY (rediseño tarjetas) ============ -->
@@ -585,7 +585,7 @@
         <p style="font-size:15.5px;line-height:1.55;margin-top:10px;">Casos de uso: reglas de firewall de terceros basadas en IP, registros DNS estables, servicios expuestos directamente a internet</p>
       </div>
       <div style="flex:1;display:flex;flex-direction:column;gap:14px;justify-content:center;">
-        <div class="chip" style="margin:0;"><b>Equivalencias multicloud:</b> Azure — Dirección IP pública (SKU Estándar, estática) · Google Cloud — Dirección IP externa estática</div>
+        <div class="chip" style="margin:0;"><b>Identidad de la dirección:</b> la Elastic IP pertenece a la <b>cuenta AWS</b>, no al recurso — por eso puede moverse entre instancias o desligarse en minutos.</div>
         <div class="chip" style="margin:0;"><b>Recurso con costo:</b> desde febrero de 2024 toda IPv4 pública en AWS se factura (~US$ 0,005/hora) — las direcciones se reservan con intención, no por omisión</div>
         <div class="chip" style="margin:0;"><b>Y los recursos en subred privada:</b> nunca reciben IP pública propia; su tráfico hacia internet sale asociado a la IP del NAT Gateway</div>
       </div>
@@ -630,7 +630,7 @@
           <div class="chip">Solo admite reglas de tipo <b>allow</b>: todo lo no permitido explícitamente queda denegado por omisión</div>
           <div class="chip">Se evalúan <b>todas las reglas</b> antes de decidir — no existe orden de prioridad entre ellas</div>
         </div>
-        <div class="fact">Equivalente en Azure: los NSG son igualmente stateful y se aplican a subred o a tarjeta de red; en GCP, las firewall rules operan sobre etiquetas de red.</div>
+        <div class="fact">Security Groups operan a nivel de <b>instancia</b> (la tarjeta de red). Existe también la <b>NACL</b>, que filtra a nivel de <b>subred</b> — la siguiente slide cubre ese matiz.</div>
       </div>
     </div>
   </section>
