@@ -31,7 +31,19 @@
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65}
-  .wrap{max-width:1040px;margin:0 auto;padding:0 20px 80px}
+  .layout{display:flex;align-items:flex-start;max-width:1400px;margin:0 auto;gap:0}
+  .wrap{flex:1 1 auto;min-width:0;max-width:1140px;margin:0 auto;padding:0 20px 80px}
+  .sidenav{position:sticky;top:0;flex:0 0 220px;padding:32px 12px 32px 20px;display:flex;flex-direction:column;gap:4px;align-self:flex-start;max-height:100vh;overflow-y:auto}
+  .sidenav a{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-decoration:none;padding:8px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+  .sidenav a:hover{color:var(--vino);background:var(--surface-2)}
+  .sidenav a.active{color:var(--vino-strong);border-left-color:var(--vino);background:var(--vino-tint);font-weight:600}
+  @media(max-width:960px){
+    .layout{display:block}
+    .sidenav{position:static;flex-direction:row;flex-wrap:wrap;max-height:none;overflow-y:visible;padding:14px 20px 6px;gap:8px}
+    .sidenav a{border:1px solid var(--line);border-left:1px solid var(--line);background:var(--surface-2);border-radius:20px;padding:6px 13px}
+    .sidenav a.active{border-color:var(--vino)}
+    .wrap{max-width:100%}
+  }
   header.top{padding:44px 20px 30px;text-align:center;background:var(--surface-2);border-bottom:1px solid var(--line)}
   header.top img.logo{height:52px;margin-bottom:14px}
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--vino);margin:0 0 6px;font-weight:500}
@@ -61,9 +73,6 @@
   figure.diagram{margin:22px 0;padding:18px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
   figure.diagram svg{min-width:820px;width:100%;height:auto;display:block}
   figcaption{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:10px;letter-spacing:.03em}
-  .toc{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
-  .toc a{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:20px;padding:6px 13px;text-decoration:none}
-  .toc a:hover{border-color:var(--vino);color:var(--vino)}
   .rubrica td:first-child, .rubrica th:first-child{font-family:var(--mono);text-align:center;width:28px}
   .rubrica td.crit{font-weight:600;color:var(--vino-strong)}
   footer{margin-top:34px;padding:26px 20px;text-align:center;color:var(--ink-soft);font-family:var(--mono);font-size:12px;border-top:1px solid var(--line)}
@@ -83,18 +92,19 @@
     <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
     <b>Modalidad:</b> equipo de máximo 2 estudiantes &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Unidad evaluada:</b> Unidad 1 completa
   </p>
-  <nav class="toc">
-    <a href="#s1">1. Info general</a>
-    <a href="#s2">2. Caso de estudio</a>
-    <a href="#s3">3. Objetivo</a>
-    <a href="#s4">4. Contenido mínimo</a>
-    <a href="#s5">5. Rúbrica</a>
-    <a href="#s6">6. Entregables</a>
-    <a href="#s7">7. Condiciones</a>
-    <a href="#s8">8. Recomendaciones</a>
-  </nav>
 </header>
 
+<div class="layout">
+<nav class="sidenav">
+  <a href="#s1">1. Info general</a>
+  <a href="#s2">2. Caso de estudio</a>
+  <a href="#s3">3. Objetivo</a>
+  <a href="#s4">4. Contenido mínimo</a>
+  <a href="#s5">5. Rúbrica</a>
+  <a href="#s6">6. Entregables</a>
+  <a href="#s7">7. Condiciones</a>
+  <a href="#s8">8. Recomendaciones</a>
+</nav>
 <div class="wrap">
 
 <section>
@@ -112,7 +122,7 @@
     <tr><td>Unidad evaluada</td><td>Unidad 1 completa</td></tr>
     <tr><td>Modalidad</td><td><b>Máximo 2 estudiantes</b> (se permite individual)</td></tr>
     <tr><td>Ponderación</td><td>20% del corte (rúbrica)</td></tr>
-    <tr><td>Medio de entrega</td><td>[Definir: aula virtual / correo / repositorio]</td></tr>
+    <tr><td>Medio de entrega</td><td>Microsoft Teams</td></tr>
     <tr><td>Nomenclatura del archivo</td><td><code>ProyectoC1_Equipo#_Apellidos.pdf</code></td></tr>
   </table></div>
 </section>
@@ -552,10 +562,25 @@
     <li>Revisen la coherencia entre capítulos antes de entregar: es un error frecuente decidir una ruta en el Capítulo 0 y luego, sin darse cuenta, diseñar el resto como si hubieran elegido otra.</li>
   </ul>
 </section>
+</div>
+</div>
 
 <footer>
   Arquitectura en la Nube · Universidad de la Costa (CUC) · Periodo 2026-2 · Proyecto de Aula — Primer Corte
 </footer>
-</div>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.sidenav a'));
+  var sections = links.map(function(a){ return document.getElementById(a.getAttribute('href').slice(1)); });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = 0;
+    sections.forEach(function(s, i){ if (s && s.offsetTop <= pos) current = i; });
+    links.forEach(function(a, i){ a.classList.toggle('active', i === current); });
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
 </body>
 </html>
