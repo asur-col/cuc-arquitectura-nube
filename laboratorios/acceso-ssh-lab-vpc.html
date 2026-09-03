@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceso SSH al Lab de red VPC — PEM/PPK · Arquitectura en la Nube · CUC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --ok:#2f7d4f; --ok-tint:#e9f5ee;
+    --line:#E5DCCB; --code-bg:#F1EADA; --code-ink:#4A4030;
+    --shadow:0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    --mono:'IBM Plex Mono',monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#181411; --surface:#221D18; --surface-2:#2B2520;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C;
+      --ok:#5fbf8a; --ok-tint:#1c3327;
+      --line:#3D352A; --code-bg:#1F1914; --code-ink:#E4D9C3;
+      --shadow:0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+    }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;text-wrap:balance;color:var(--ink);}
+  a{color:var(--vino);}
+  code,.mono{font-family:var(--mono);font-size:.92em;background:var(--code-bg);color:var(--code-ink);padding:1px 5px;border-radius:4px;}
+  pre{font-family:var(--mono);font-size:13.5px;background:var(--code-bg);color:var(--code-ink);padding:14px 16px;border-radius:8px;overflow-x:auto;line-height:1.5;}
+  pre code{background:none;padding:0;}
+
+  .wrap{max-width:820px;margin:0 auto;padding:0 24px 90px;}
+  header.top{background:var(--surface);border-bottom:1px solid var(--line);padding:44px 24px 34px;text-align:center;}
+  header.top img.logo{height:56px;margin:0 auto 20px;display:block;}
+  header.top .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--dorado);font-weight:700;margin:0 0 6px;}
+  header.top h1{color:var(--vino);font-size:clamp(24px,4vw,32px);margin:0 0 8px;}
+  header.top .sub{color:var(--ink-soft);font-size:15px;margin:0 0 14px;}
+  .accent-bar{width:160px;height:4px;margin:0 auto 16px;border-radius:2px;background:linear-gradient(90deg,var(--vino),var(--dorado));}
+  header.top .meta{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+  header.top .meta b{color:var(--ink);}
+
+  section{margin-top:40px;}
+  h2{font-size:22px;border-bottom:2px solid var(--line);padding-bottom:8px;margin-bottom:16px;}
+  h2 .paso{display:inline-block;background:var(--vino);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;margin-right:10px;vertical-align:middle;}
+  h3{font-size:17px;color:var(--vino-strong);margin:22px 0 8px;}
+
+  .tip,.warn,.danger{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px;}
+  .tip{border-color:var(--ok);background:var(--ok-tint);}
+  .tip::before{content:"💡 RECOMENDADO — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok);}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint);}
+  .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado);}
+  .danger{border-color:var(--vino);background:var(--vino-tint);}
+  .danger::before{content:"☠ CAUSA MÁS FRECUENTE — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino);}
+
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
+  th{background:var(--vino);color:#fff;font-weight:600;}
+  tr:nth-child(even) td{background:var(--surface-2);}
+  tr:last-child td{border-bottom:none;}
+
+  ol.steps{padding-left:0;list-style:none;counter-reset:step;}
+  ol.steps>li{counter-increment:step;position:relative;padding:6px 0 6px 42px;margin-bottom:10px;}
+  ol.steps>li::before{content:counter(step);position:absolute;left:0;top:6px;width:28px;height:28px;border-radius:50%;background:var(--vino-tint);color:var(--vino);font-family:var(--mono);font-weight:700;font-size:13px;display:grid;place-items:center;}
+
+  footer.page{max-width:820px;margin:60px auto 0;padding:20px 24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);text-align:center;}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" onerror="this.style.display='none'">
+  <p class="eyebrow">Guía de soporte · Semana 4</p>
+  <h1>Acceso SSH al Lab de red VPC — PEM y PPK</h1>
+  <p class="sub">Qué hacer si PuTTY dice que tu llave está dañada, sin necesidad de repetir el lab</p>
+  <div class="accent-bar"></div>
+  <p class="meta"><b>Arquitectura en la Nube</b> · Universidad de la Costa (CUC) · Ingeniería de Sistemas · 2026-2</p>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2><span class="paso">0</span>Por qué pasa esto</h2>
+  <p>El <a href="https://awsacademy.instructure.com/courses/181773/modules/items/17915781" target="_blank">Lab AWS — red VPC</a> de esta semana te entrega la llave privada de tu instancia en formato <code>.pem</code> (el formato estándar de OpenSSH). <b>PuTTY no sabe leer archivos <code>.pem</code> directamente</b> — solo entiende su propio formato <code>.ppk</code>. Si intentas cargar el <code>.pem</code> tal cual en PuTTY, o lo conviertes mal, PuTTY te va a decir que la llave está dañada o que no es válida. No es un problema del lab ni de tu cuenta de AWS: es un paso de conversión que falta.</p>
+  <p>Tienes dos caminos. El primero es más simple y evita el problema de raíz.</p>
+</section>
+
+<section>
+  <h2><span class="paso">1</span>Camino recomendado: usar el SSH que ya trae Windows</h2>
+  <div class="tip">Windows 10 (desde la versión 1803) y Windows 11 traen un cliente OpenSSH integrado — el mismo que usan Mac y Linux. No necesitas PuTTY ni convertir nada.</div>
+  <ol class="steps">
+    <li>Descarga el archivo <code>.pem</code> desde el Lab AWS (Vocareum) tal como lo entrega, sin renombrarlo ni abrirlo con un editor de texto.</li>
+    <li>Abre <b>PowerShell</b> o <b>Windows Terminal</b> (no CMD clásico, aunque también funciona) en la carpeta donde descargaste el archivo.</li>
+    <li>Restringe los permisos del archivo (Windows es más estricto que Linux con esto):
+      <pre><code>icacls.exe .\tu-llave.pem /reset
+icacls.exe .\tu-llave.pem /grant:r "$($env:username):(R)"
+icacls.exe .\tu-llave.pem /inheritance:r</code></pre>
+    </li>
+    <li>Conéctate con el comando SSH normal, usando la IP pública de tu instancia (la encuentras en la consola EC2 del lab) y el usuario que indique la guía del lab (normalmente <code>ec2-user</code> para Amazon Linux, <code>ubuntu</code> para Ubuntu):
+      <pre><code>ssh -i .\tu-llave.pem ec2-user@&lt;IP-PUBLICA&gt;</code></pre>
+    </li>
+  </ol>
+  <div class="warn">Si el paso 3 no lo haces, SSH va a rechazar la llave por "permisos demasiado abiertos" — es un error distinto al de PuTTY, pero también se puede confundir con "la llave está dañada".</div>
+</section>
+
+<section>
+  <h2><span class="paso">2</span>Si de verdad necesitas seguir usando PuTTY</h2>
+  <ol class="steps">
+    <li>Descarga <b>PuTTYgen</b> (viene junto con PuTTY, o por separado en <a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">la página oficial</a>) y ábrelo.</li>
+    <li>Clic en <b>"Load"</b> (no en "Generate"). En el diálogo de abrir archivo, cambia el filtro de <code>"PuTTY Private Key Files (*.ppk)"</code> a <b>"All Files (*.*)"</b> — si no cambias el filtro, ni siquiera vas a ver tu archivo <code>.pem</code> en la lista.</li>
+    <li>Selecciona tu archivo <code>.pem</code> y ábrelo. PuTTYgen debe mostrar un mensaje de "Successfully imported foreign key" — si en vez de eso da error, el archivo <code>.pem</code> que descargaste está incompleto o corrupto (vuelve a descargarlo desde Vocareum).</li>
+    <li>Clic en <b>"Save private key"</b>. Te va a preguntar si quieres guardar sin passphrase — para el lab, dile que sí.</li>
+    <li>Guarda el archivo con extensión <code>.ppk</code> (ej. <code>tu-llave.ppk</code>) — este es el archivo que sí vas a poder usar directamente en PuTTY, no el <code>.pem</code> original.</li>
+    <li>En PuTTY, ve a <b>Connection → SSH → Auth → Credentials</b> (en versiones más viejas: <b>Connection → SSH → Auth</b>) y en "Private key file for authentication" selecciona el <code>.ppk</code> que acabas de crear.</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="paso">3</span>Por qué el PPK sale "dañado" — causas más comunes</h2>
+  <table>
+    <tr><th>Lo que hiciste</th><th>Por qué falla</th></tr>
+    <tr><td>Cargar el <code>.pem</code> directo en PuTTY (no en PuTTYgen)</td><td>PuTTY nunca entiende <code>.pem</code>, sin importar el nombre del archivo</td></tr>
+    <tr><td>Abrir el <code>.pem</code> en Bloc de notas y copiar/pegar el contenido</td><td>Cambia los saltos de línea y la codificación — el archivo deja de ser una llave válida</td></tr>
+    <tr><td>En PuTTYgen, dejar el filtro en "*.ppk" al hacer Load</td><td>No se ve el archivo <code>.pem</code>, y a veces se termina pegando el contenido a mano por error</td></tr>
+    <tr><td>Descargar el <code>.pem</code> varias veces y usar una copia vieja (<code>llave(1).pem</code>, <code>llave(2).pem</code>)</td><td>Cada vez que se reinicia el lab en Vocareum, la llave puede cambiar — la copia vieja ya no corresponde a la instancia actual</td></tr>
+    <tr><td>Usuario incorrecto al conectar (<code>root</code>, <code>admin</code>, etc.)</td><td>No es un problema de la llave, pero da un error parecido — usa el usuario que indique la guía del lab según el sistema operativo de la instancia</td></tr>
+  </table>
+  <div class="danger">La causa más frecuente de lejos es la primera: cargar el <code>.pem</code> sin pasar por PuTTYgen. Si tu llave "no sirve", empieza por ahí antes de volver a descargar nada del lab.</div>
+</section>
+
+</div>
+
+<footer class="page">
+  Arquitectura en la Nube · Universidad de la Costa (CUC) · Periodo 2026-2 · Guía de soporte
+</footer>
+</body>
+</html>
