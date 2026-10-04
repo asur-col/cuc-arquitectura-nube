@@ -43,8 +43,8 @@ python3 herramientas/publicar_semana.py 09                                # acti
 - Caché de audio/clips en `.cache-video/` (ignorada por git): editar un guion solo resintetiza esa diapositiva.
 - Publicar una semana = generar PDF + videos y luego `publicar_semana.py NN`, commit y push.
 
-## Estado (actualizar al avanzar) — ver también `NOTAS-PRODUCCION.md`
-Ver `NOTAS-PRODUCCION.md` para el estado detallado por semana y pendientes.
+## Estado y plan para continuar
+**Lee `NOTAS-PRODUCCION.md`**: estado por semana, pendientes (S01 y S16 incompletas en `borradores/`), datos a contrastar con las guías de AWS Academy y pasos para generar PDF/videos en local. Los videos NO se generan en la nube.
 
 ## Convenciones
 - Commits en español, descriptivos ("Publica S09 …", "Corrige …").
