@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- PLANTILLA: copiar a la raíz del repo (las rutas assets/ son relativas a la raíz) -->
+<title>Arquitectura en la Nube — Semana NN · TÍTULO DEL CALENDARIO</title>
+<style>
+  :root{
+    --vino:#A6192E;
+    --dorado:#D4AF37;
+    --texto:#2A2A2A;
+    --vino-tint:#f9eef0;
+    --dorado-tint:#fbf6e7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#fff;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--texto);}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+  #stage{width:1280px;height:720px;position:relative;flex:0 0 auto;transform-origin:center center;box-shadow:0 0 0 1px #ddd,0 8px 30px rgba(0,0,0,.12);background:#fff;}
+  .slide{position:absolute;inset:0;background:#fff;display:none;padding:36px 50px 54px;}
+  .slide.active{display:block;}
+
+  .s-head{position:relative;margin-bottom:10px;padding-right:110px;}
+  .s-head .kicker{font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--dorado);margin-bottom:2px;}
+  .s-head h2{font-size:27px;font-weight:700;color:var(--vino);line-height:1.14;}
+  .s-head .rule{width:110px;height:4px;border-radius:3px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin-top:7px;}
+  .s-head .sub{font-size:14.5px;color:#555;line-height:1.35;margin-top:6px;}
+  .logo-corner{position:absolute;top:0;right:0;height:46px;}
+  .s-body{margin-top:12px;}
+  .s-foot{position:absolute;left:50px;right:50px;bottom:12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#6b6b6b;border-top:2px solid var(--dorado);padding-top:6px;gap:14px;}
+  .s-foot .src{font-style:italic;text-align:center;flex:1;}
+  .s-foot .pg{font-weight:700;color:var(--vino);}
+
+  .cover{display:none;text-align:center;padding-top:44px;}
+  .cover.active{display:block;}
+  .cover .topline-g{position:absolute;top:0;left:0;right:0;height:4px;background:var(--dorado);}
+  .cover .topline-v{position:absolute;top:4px;left:0;right:0;height:7px;background:var(--vino);}
+  .cover img.logo-main{height:112px;margin-bottom:18px;}
+  .cover .cover-kicker{font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dorado);margin-bottom:10px;}
+  .cover h1{font-size:40px;color:var(--vino);font-weight:700;letter-spacing:.3px;line-height:1.16;max-width:1050px;margin:0 auto;}
+  .cover h3{font-size:19px;font-weight:400;color:var(--texto);margin-top:12px;}
+  .cover .bar{width:240px;height:6px;border-radius:3px;margin:20px auto;background:var(--dorado);}
+  .cover .author{font-size:16px;line-height:1.55;}
+  .cover .author b{color:var(--vino);}
+  .cover .cover-sub{margin-top:18px;font-size:14.5px;color:#555;max-width:900px;margin-left:auto;margin-right:auto;line-height:1.45;}
+
+  /* ---- utilidades de composición ---- */
+  .cols{display:flex;gap:18px;align-items:stretch;}
+  .col{flex:1;min-width:0;}
+  .card{background:var(--vino-tint);border-left:6px solid var(--dorado);border-radius:10px;padding:13px 16px;font-size:14.5px;line-height:1.4;}
+  .card b{color:var(--vino);}
+  .card.dark{background:var(--vino);color:#fff;border-left-color:var(--dorado);}
+  .card.dark b{color:var(--dorado);}
+  .card.gold{background:var(--dorado-tint);border:1.5px solid var(--dorado);border-left:6px solid var(--dorado);}
+  .card.white{background:#fff;border:1.5px solid #ddd;border-left:6px solid var(--vino);}
+  .card h4{font-size:15px;color:var(--vino);margin-bottom:5px;}
+  .card.dark h4{color:var(--dorado);}
+  .card ul{margin-left:16px;}
+  .card li{margin-bottom:3px;}
+  .kpi{display:flex;gap:14px;}
+  .kpi .k{flex:1;text-align:center;background:#fff;border:2px solid var(--vino);border-radius:12px;padding:12px 8px;}
+  .kpi .k .n{font-size:30px;font-weight:800;color:var(--vino);line-height:1.05;}
+  .kpi .k .l{font-size:12.5px;color:#555;margin-top:5px;line-height:1.3;}
+  .kpi .k.gold{border-color:var(--dorado);}
+  .kpi .k.gold .n{color:#8a6d1d;}
+  .pill{display:inline-block;background:var(--dorado);color:#3a2c00;font-size:12.5px;font-weight:700;border-radius:999px;padding:3px 12px;margin:0 6px 6px 0;}
+  .pill.vino{background:var(--vino);color:#fff;}
+  .note{margin-top:10px;background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.4;}
+  .note b{color:var(--vino);}
+  .warn{margin-top:10px;background:#fff4f4;border:1.5px solid var(--vino);border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.4;}
+  .warn b{color:var(--vino);}
+  .dgm{display:block;width:100%;height:auto;}
+  .lab-box{background:linear-gradient(90deg,var(--vino),#7d1223);color:#fff;border-radius:12px;padding:14px 20px;font-size:15px;line-height:1.5;}
+  .lab-box b{color:var(--dorado);}
+  .step{display:flex;gap:12px;align-items:flex-start;margin-bottom:9px;}
+  .step .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--vino);color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;}
+  .step .txt{flex:1;font-size:14.5px;line-height:1.4;padding-top:2px;}
+  .step .txt b{color:var(--vino);}
+  .iconrow{display:flex;gap:14px;align-items:center;}
+  .iconrow .txt{flex:1;font-size:14.5px;line-height:1.4;}
+  .iconrow .txt b{color:var(--vino);}
+
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;font-family:inherit;z-index:10;}
+  #nav button{width:38px;height:38px;border:none;border-radius:50%;background:var(--vino);color:#fff;font-size:18px;cursor:pointer;}
+  #nav button:hover{background:#7d1223;}
+  #nav #counter{font-size:14px;color:var(--texto);min-width:56px;text-align:center;}
+  #progress{position:fixed;top:0;left:0;height:4px;background:var(--dorado);width:0;z-index:10;transition:width .25s;}
+
+  /* guion de narración: nunca se muestra; lo leen herramientas/ para video y guiones/ */
+  .guion{display:none!important;}
+  /* tabla compacta */
+  table.t{width:100%;border-collapse:collapse;font-size:13.5px;}
+  table.t th{background:var(--vino);color:#fff;text-align:left;padding:7px 10px;}
+  table.t td{padding:6px 10px;border-bottom:1px solid #e5e5e5;vertical-align:top;}
+  table.t tr:nth-child(even) td{background:#faf7f2;}
+  /* divisoria de parte (corte de video) */
+  .cover .parte-num{font-size:96px;font-weight:800;color:var(--dorado);line-height:1;margin-top:6px;}
+
+  @media print{
+    body{display:block;}
+    #stage{transform:none!important;box-shadow:none;}
+    .slide{display:block!important;position:relative;page-break-after:always;}
+    #nav,#progress{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="stage">
+
+<!-- ================= PARTE 1 ================= -->
+  <section class="slide cover active" data-parte="1">
+    <div class="topline-g"></div><div class="topline-v"></div>
+    <img class="logo-main" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
+    <div class="cover-kicker">Semana NN · TÍTULO DEL CALENDARIO</div>
+    <h1>Subtema de la Parte 1</h1>
+    <h3>Parte 1 de 4 · Unidad N</h3>
+    <div class="bar"></div>
+    <div class="author">
+      <b>Ing. Rodolfo Cañas Cervantes</b><br>
+      Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>
+      Semana NN · Periodo 2026-2 · Barranquilla, Colombia
+    </div>
+    <div class="cover-sub">Una frase que anuncia qué se aprende en esta parte.</div>
+    <aside class="guion">Bienvenidos a la semana NN de Arquitectura en la Nube. En esta primera parte ...</aside>
+  </section>
+
+  <section class="slide" data-parte="1">
+    <div class="s-head">
+      <div class="kicker">Encuadre</div>
+      <h2>Una VPC de dos zonas: la topología de referencia</h2>
+      <div class="rule"></div>
+      <div class="sub">El tráfico entra por un solo punto, se reparte entre zonas y la base de datos nunca queda expuesta a Internet.</div>
+      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="VPC en dos zonas con subredes públicas y privadas">
+        <defs>
+          <marker id="arrV" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker>
+          <marker id="arrG" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker>
+        </defs>
+        <!-- usuarios e Internet -->
+        <image href="assets/iconos/aws/general/users.png" x="22" y="210" width="64" height="64"/>
+        <text x="54" y="292" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#2A2A2A">Usuarios</text>
+        <line x1="92" y1="242" x2="150" y2="242" stroke="#A6192E" stroke-width="2.5" marker-end="url(#arrV)"/>
+        <!-- región / VPC -->
+        <rect x="160" y="8" width="1010" height="504" rx="14" fill="#ffffff" stroke="#6b6b6b" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="176" y="30" font-size="13" font-weight="bold" fill="#6b6b6b">REGIÓN</text>
+        <rect x="236" y="40" width="920" height="460" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.4"/>
+        <text x="252" y="62" font-size="14" font-weight="bold" fill="#8a6d1d">VPC 10.0.0.0/16</text>
+        <!-- IGW en el borde -->
+        <image href="assets/iconos/aws/network/internet-gateway.png" x="204" y="210" width="64" height="64"/>
+        <text x="236" y="292" text-anchor="middle" font-size="12" font-weight="bold" fill="#A6192E">IGW</text>
+        <!-- ALB -->
+        <image href="assets/iconos/aws/network/elb-application-load-balancer.png" x="300" y="210" width="64" height="64"/>
+        <text x="332" y="292" text-anchor="middle" font-size="12" font-weight="bold" fill="#A6192E">Balanceador</text>
+        <line x1="270" y1="242" x2="294" y2="242" stroke="#A6192E" stroke-width="2.5" marker-end="url(#arrV)"/>
+        <!-- dos zonas -->
+        <g>
+          <rect x="400" y="76" width="736" height="200" rx="10" fill="none" stroke="#A6192E" stroke-width="1.6" stroke-dasharray="5 4"/>
+          <text x="414" y="96" font-size="12.5" font-weight="bold" fill="#A6192E">ZONA DE DISPONIBILIDAD A</text>
+          <rect x="414" y="106" width="300" height="156" rx="8" fill="#eaf5ea" stroke="#3b8a3b" stroke-width="1.6"/>
+          <text x="426" y="126" font-size="12" font-weight="bold" fill="#2f6f2f">Subred pública 10.0.1.0/24</text>
+          <image href="assets/iconos/aws/compute/ec2.png" x="440" y="150" width="56" height="56"/>
+          <text x="468" y="222" text-anchor="middle" font-size="11.5" fill="#2A2A2A">Servidor web</text>
+          <image href="assets/iconos/aws/network/nat-gateway.png" x="600" y="150" width="56" height="56"/>
+          <text x="628" y="222" text-anchor="middle" font-size="11.5" fill="#2A2A2A">NAT Gateway</text>
+          <rect x="734" y="106" width="388" height="156" rx="8" fill="#eaf0fa" stroke="#2f5d9a" stroke-width="1.6"/>
+          <text x="746" y="126" font-size="12" font-weight="bold" fill="#2f5d9a">Subred privada 10.0.3.0/24</text>
+          <image href="assets/iconos/aws/database/rds.png" x="900" y="150" width="56" height="56"/>
+          <text x="928" y="222" text-anchor="middle" font-size="11.5" fill="#2A2A2A">BD principal</text>
+        </g>
+        <g>
+          <rect x="400" y="290" width="736" height="200" rx="10" fill="none" stroke="#A6192E" stroke-width="1.6" stroke-dasharray="5 4"/>
+          <text x="414" y="310" font-size="12.5" font-weight="bold" fill="#A6192E">ZONA DE DISPONIBILIDAD B</text>
+          <rect x="414" y="320" width="300" height="156" rx="8" fill="#eaf5ea" stroke="#3b8a3b" stroke-width="1.6"/>
+          <text x="426" y="340" font-size="12" font-weight="bold" fill="#2f6f2f">Subred pública 10.0.2.0/24</text>
+          <image href="assets/iconos/aws/compute/ec2.png" x="440" y="364" width="56" height="56"/>
+          <text x="468" y="436" text-anchor="middle" font-size="11.5" fill="#2A2A2A">Servidor web</text>
+          <rect x="734" y="320" width="388" height="156" rx="8" fill="#eaf0fa" stroke="#2f5d9a" stroke-width="1.6"/>
+          <text x="746" y="340" font-size="12" font-weight="bold" fill="#2f5d9a">Subred privada 10.0.4.0/24</text>
+          <image href="assets/iconos/aws/database/rds.png" x="900" y="364" width="56" height="56"/>
+          <text x="928" y="436" text-anchor="middle" font-size="11.5" fill="#2A2A2A">BD en espera</text>
+        </g>
+        <!-- flujos -->
+        <path d="M366,236 C384,236 384,178 434,178" fill="none" stroke="#A6192E" stroke-width="2.2" marker-end="url(#arrV)"/>
+        <path d="M366,250 C384,250 384,392 434,392" fill="none" stroke="#A6192E" stroke-width="2.2" marker-end="url(#arrV)"/>
+        <path d="M496,190 L520,190 L520,244 L870,244 L870,190 L892,190" fill="none" stroke="#2f5d9a" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrG)"/>
+        <text x="800" y="258" text-anchor="middle" font-size="11" fill="#2f5d9a">SQL :3306 (solo desde la web)</text>
+        <path d="M928,210 L928,358" stroke="#D4AF37" stroke-width="3" stroke-dasharray="3 4"/>
+        <text x="940" y="312" font-size="11" font-style="italic" fill="#8a6d1d">réplica síncrona</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana NN · Parte 1 de 4</span>
+      <span class="src">Fuente: adaptado de AWS Architecture Center — íconos AWS Architecture Icons</span>
+      <span class="pg">2 / 15</span>
+    </div>
+    <aside class="guion">Texto que se narra en esta diapositiva: 110 a 170 palabras, tono de clase, segunda persona, explica el diagrama de izquierda a derecha.</aside>
+  </section>
+
+<!-- ================= PARTE 2 (repite: portada data-parte="2" + diapositivas) ================= -->
+
+<!-- FIN-DIAPOSITIVAS: insertar nuevas secciones justo antes de esta línea -->
+
+</div>
+
+<div id="nav">
+  <button onclick="prev()">‹</button>
+  <span id="counter">1 / 1</span>
+  <button onclick="next()">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let current = 0;
+
+  function show(i){
+    slides.forEach((s,idx)=>{ s.classList.toggle('active', idx===i); });
+    current = i;
+    counter.textContent = `${i+1} / ${slides.length}`;
+    progress.style.width = `${((i+1)/slides.length)*100}%`;
+    if(location.hash !== '#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  function next(){ if(current<slides.length-1) show(current+1); }
+  function prev(){ if(current>0) show(current-1); }
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown') next();
+    if(e.key==='ArrowLeft'||e.key==='PageUp') prev();
+  });
+  // escala el escenario 1280x720 a la ventana
+  function fit(){
+    const st=document.getElementById('stage');
+    const k=Math.min(window.innerWidth/1280, window.innerHeight/720);
+    st.style.transform = k<1 ? `scale(${k})` : 'none';
+  }
+  window.addEventListener('resize', fit); fit();
+  const h=parseInt(location.hash.slice(1)); show(h>0&&h<=slides.length ? h-1 : 0);
+</script>
+
+</body>
+</html>
