@@ -100,7 +100,7 @@
   <a href="#s2">2. Caso de estudio</a>
   <a href="#s3">3. Objetivo</a>
   <a href="#s4">4. Requisitos</a>
-  <a href="#s5">5. Rúbrica</a>
+  <a href="#s5">5. Calificación</a>
   <a href="#s6">6. Entregables</a>
   <a href="#s7">7. Condiciones</a>
   <a href="#s8">8. Recomendaciones</a>
@@ -108,7 +108,7 @@
 <div class="wrap">
 
 <section>
-  <blockquote><b>Alcance:</b> este proyecto evalúa la <b>Unidad 2</b> completa (cómputo, bases de datos administradas, seguridad e identidad, elasticidad y alta disponibilidad). Es un trabajo <b>individual</b>: cada estudiante construye su propio entorno en AWS Academy y lo defiende en vivo.</blockquote>
+  <blockquote><b>Alcance:</b> este proyecto evalúa la <b>Unidad 2</b> completa (cómputo, bases de datos administradas, seguridad e identidad, elasticidad y alta disponibilidad). Es un trabajo <b>individual</b> y la nota la pone directamente la plataforma de AWS Academy: no se entrega nada más.</blockquote>
   <p><b>Relación con el corte 1:</b> el documento de planificación del primer corte definió una segmentación en zonas: DMZ, PRD y una capa de datos aislada. Este corte es la implementación de esa misma idea. Las <b>subredes públicas</b> cumplen el papel de la <b>DMZ</b>, las <b>subredes privadas de aplicación</b> el de <b>PRD</b> y las <b>subredes de base de datos</b> el de la <b>capa de datos aislada</b>. Lo que en el corte 1 fue un diagrama, aquí debe funcionar y poder demostrarse.</p>
 </section>
 
@@ -124,9 +124,7 @@
     <tr><td>Ponderación</td><td>20% del corte (rúbrica)</td></tr>
     <tr><td>Plataforma</td><td>Laboratorio evaluable «Proyecto final» (Capstone) del curso de AWS Academy · <a class="ext" href="https://awsacademy.instructure.com/courses/181773/assignments/2199067" target="_blank">abrir la tarea en AWS Academy</a></td></tr>
     <tr><td><b>Fecha límite del envío en la plataforma</b></td><td><b>Sábado 24 de octubre de 2026, 23:59</b> (deja el domingo 25 para calificar)</td></tr>
-    <tr><td>Defensa</td><td><b>Obligatoria</b>, en vivo, sobre tu propio entorno · 5–7 minutos por estudiante · en la sesión de clase de la semana 11 (19–25 de octubre), según el horario de cada grupo</td></tr>
-    <tr><td>Medio de entrega de evidencias</td><td>Microsoft Teams</td></tr>
-    <tr><td>Nomenclatura del archivo</td><td><code>ProyectoC2_Apellidos.pdf</code></td></tr>
+    <tr><td><b>Calificación</b></td><td><b>Automática</b>, la da AWS Academy al enviar el laboratorio («Submit»). Nota del proyecto = <b>puntaje ÷ 35 × 5.0</b>. No hay defensa ni documentos adicionales.</td></tr>
   </table></div>
 </section>
 
@@ -254,67 +252,21 @@
 
 <!-- ============ 5. RÚBRICA ============ -->
 <section id="s5">
-  <h2><span class="paso">5</span> Rúbrica de evaluación — 5 criterios, nota final 0.0 a 5.0</h2>
-  <p class="lead">Cada criterio vale hasta <b>1.0 punto</b>. La suma de los 5 da la nota final del proyecto (máximo 5.0).</p>
+  <h2><span class="paso">5</span> Calificación — la nota la da la plataforma</h2>
+  <p class="lead">Al pulsar <b>«Submit»</b>, AWS Academy revisa tu entorno y asigna un puntaje sobre <b>35</b>, con el detalle por tarea en el panel <b>«Grades»</b> y en el <b>«Submission Report»</b>. Esa es la nota del proyecto, convertida a la escala de 0.0 a 5.0:</p>
+  <div class="warn"><b>Nota del proyecto (20% del corte) = puntaje en AWS ÷ 35 × 5.0</b> Se toma el <b>puntaje más alto</b> de todos tus envíos antes del plazo, con un decimal. No hay defensa, informe ni capturas que entregar: solo el envío en la plataforma.</div>
   <div class="tbl-wrap"><table class="rubrica">
-    <tr><th>#</th><th>Criterio</th><th>Qué mide</th><th>1.0 (pleno)</th><th>0.6 (parcial)</th><th>0.2 (mínimo)</th><th>0.0</th></tr>
-    <tr>
-      <td>1</td><td class="crit">Implementación verificada por la plataforma</td>
-      <td>Puntaje del «Submit» del laboratorio, sobre 35 puntos</td>
-      <td>≥ 31,5 (90 %)</td>
-      <td>≥ 21 (60 %)</td>
-      <td>Hay envío con menos de 21</td>
-      <td>Sin envío</td>
-    </tr>
-    <tr>
-      <td>2</td><td class="crit">Segmentación de red y seguridad por capas</td>
-      <td>Recorre en la consola VPC las subredes, tablas de rutas y grupos de seguridad encadenados (balanceador → aplicación → base de datos) y explica por qué ni la aplicación ni la base son alcanzables desde Internet</td>
-      <td>Lo demuestra en la consola y lo explica con precisión</td>
-      <td>Lo muestra pero con vacíos, por ejemplo reglas abiertas a 0.0.0.0/0 que no justifica</td>
-      <td>Lo describe pero no puede mostrarlo</td>
-      <td>No sabe explicarlo</td>
-    </tr>
-    <tr>
-      <td>3</td><td class="crit">Base de datos administrada y gestión de secretos</td>
-      <td>Muestra la instancia RDS en subredes de base de datos sin acceso público, las credenciales en Secrets Manager, los datos importados y una consulta en vivo desde la página web a través del DNS del balanceador</td>
-      <td>Muestra todo y explica cómo llega la aplicación a la base sin credenciales en el código</td>
-      <td>Muestra la base y los datos, pero con vacíos en secretos o en el acceso</td>
-      <td>Describe la base pero no puede mostrarla</td>
-      <td>No la muestra ni la explica</td>
-    </tr>
-    <tr>
-      <td>4</td><td class="crit">Alta disponibilidad y elasticidad</td>
-      <td>Demostración en vivo: termina una instancia de aplicación y muestra que el grupo de escalado la reemplaza mientras el balanceador sigue sirviendo. Explica la plantilla de lanzamiento y la política de escalado elegidas</td>
-      <td>Demuestra la recuperación sin interrupción visible y justifica plantilla y política</td>
-      <td>Recupera el servicio, pero la explicación de la plantilla o de la política es vaga</td>
-      <td>Demuestra solo una parte, por ejemplo que el balanceador responde</td>
-      <td>No logra la demostración</td>
-    </tr>
-    <tr>
-      <td>5</td><td class="crit">Trazabilidad al caso y costo</td>
-      <td>Relaciona la arquitectura con la segmentación DMZ/PRD/datos del corte 1 y presenta un costo mensual estimado con la calculadora de precios de AWS, indicando qué cambiaría para el portal de clientes</td>
-      <td>Trazabilidad completa y costo estimado con la calculadora, con cambios propuestos para el portal real</td>
-      <td>Trazabilidad correcta, pero el costo no trae cambios propuestos o tiene supuestos sin declarar</td>
-      <td>Menciona el corte 1 sin relacionarlo, o el costo no sale de la calculadora</td>
-      <td>No presenta costo ni trazabilidad</td>
-    </tr>
+    <tr><th>Puntaje en AWS (sobre 35)</th><th>35</th><th>31,5</th><th>28</th><th>24,5</th><th>21</th><th>17,5</th><th>14</th><th>0</th></tr>
+    <tr><td class="crit">Nota del proyecto (sobre 5.0)</td><td>5.0</td><td>4.5</td><td>4.0</td><td>3.5</td><td>3.0</td><td>2.5</td><td>2.0</td><td>0.0</td></tr>
   </table></div>
-  <div class="warn"><b>Regla de calificación:</b> los criterios 2 a 5 solo se califican en la defensa. Sin defensa, la nota máxima es 1.0 (solo el criterio 1). En la defensa, el docente puede pedir cambiar o mostrar cualquier recurso del entorno propio del estudiante.</div>
+  <p>La plataforma verifica, sobre tu propio entorno, los requisitos de la sección 4: la base de datos administrada y su aislamiento, el uso del gestor de secretos, los datos importados, los servidores de aplicación en subredes privadas, el balanceador en varias zonas, el escalado automático y que la página de consulta devuelva datos. Si una parte no funciona, pierdes los puntos de esa tarea; revisa el «Submission Report» para saber cuál corregir y vuelve a enviar. Un envío peor no te baja la nota: cuenta el mejor.</p>
 </section>
 
 <!-- ============ 6. ENTREGABLES ============ -->
 <section id="s6">
   <h2><span class="paso">6</span> Entregables</h2>
   <ol>
-    <li><b>Envío con «Submit»</b> en el laboratorio de AWS Academy antes del plazo (sábado 24 de octubre, 23:59). Es el envío que se califica en el criterio 1.</li>
-    <li><b>PDF corto en Microsoft Teams</b> (<code>ProyectoC2_Apellidos.pdf</code>) con tres elementos:
-      <ul>
-        <li>Captura del panel <b>«Grades»</b> del laboratorio con tu puntaje.</li>
-        <li>Captura de la <b>página de consulta mostrando datos</b>, con el DNS del balanceador visible en la barra de direcciones.</li>
-        <li>Diagrama de tu arquitectura final. Puede hacerse a mano o con cualquier herramienta.</li>
-      </ul>
-    </li>
-    <li><b>Defensa en vivo</b> de 5 a 7 minutos sobre tu propio entorno, en la sesión de la semana 11 según el horario de tu grupo.</li>
+    <li><b>Envío con «Submit»</b> en el laboratorio de AWS Academy antes del plazo (sábado 24 de octubre, 23:59). <b>Es lo único que se entrega</b>: la nota sale de ese envío.</li>
   </ol>
 </section>
 
@@ -324,11 +276,11 @@
   <ul>
     <li>El trabajo es <b>individual</b>. Cada estudiante construye y entrega su propio entorno.</li>
     <li>El entorno del laboratorio se conserva entre sesiones, así que puedes trabajar varios días.</li>
-    <li>Se puede enviar varias veces. <b>Cuenta el último envío.</b></li>
+    <li>Puedes enviar <b>todas las veces que quieras</b> antes del plazo. <b>Se califica la nota más alta</b> de tus envíos.</li>
     <li>Vigila el presupuesto del laboratorio y detén los recursos que no estés usando, en especial la base de datos y el grupo de escalado.</li>
-    <li>Copiar la configuración de otro estudiante no sirve: la defensa es sobre tu propio entorno y el docente puede pedir cualquier recurso.</li>
+    <li>La plataforma califica el entorno propio de cada estudiante: no se puede entregar el trabajo de otro.</li>
   </ul>
-  <div class="warn"><b>ADVERTENCIA: no uses el botón «Reset» después de terminar, y nunca antes de la defensa.</b> El botón Reset del laboratorio borra <b>todo</b> lo construido: VPC, balanceador, base de datos, plantilla, grupo de escalado y datos importados. Si lo presionas, tendrás que reconstruir desde cero y la evidencia de la defensa se pierde.</div>
+  <div class="warn"><b>ADVERTENCIA: no uses el botón «Reset» después de enviar.</b> El botón Reset del laboratorio borra <b>todo</b> lo construido: VPC, balanceador, base de datos, plantilla, grupo de escalado y datos importados. Si lo presionas, tendrás que reconstruir desde cero.</div>
 </section>
 
 <!-- ============ 8. RECOMENDACIONES ============ -->
@@ -338,9 +290,6 @@
     <li>Repasa los laboratorios de desafíos ya hechos de <b>migración a RDS</b> y de <b>entorno escalable y de alta disponibilidad</b>. Son la base de este proyecto.</li>
     <li><b>Trabaja en orden:</b> base de datos → balanceador → plantilla y grupo de escalado → importación de datos → prueba. Cada paso depende del anterior.</li>
     <li>Prueba la página de consulta antes de enviar, usando el <b>DNS del balanceador</b> y no la IP de una instancia.</li>
-    <li>Para la defensa, lleva el entorno ya iniciado (Start Lab) y la consola abierta en las pantallas que vas a mostrar.</li>
-    <li>Prepara una explicación de 5 minutos: qué subred aloja cada capa, qué grupo de seguridad permite cada flujo y por qué la base no es alcanzable desde Internet.</li>
-    <li>Para el criterio 5, calcula el costo con la <a class="ext" href="https://calculator.aws/" target="_blank">AWS Pricing Calculator</a> y compáralo con el orden de magnitud del datacenter del primer corte (USD 14.500/mes).</li>
   </ul>
 </section>
 </div>
