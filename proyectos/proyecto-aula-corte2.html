@@ -90,7 +90,7 @@
   <p class="meta">
     <b>Curso:</b> Arquitectura en la Nube — Ingeniería de Sistemas<br>
     <b>Docente:</b> Ing. Rodolfo Cañas Cervantes · Universidad de la Costa (CUC) · 2026-2<br>
-    <b>Modalidad:</b> individual &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Unidad evaluada:</b> Unidad 2 completa
+    <b>Modalidad:</b> equipo de máximo 2 estudiantes &nbsp;·&nbsp; <b>Ponderación:</b> 20% del corte &nbsp;·&nbsp; <b>Unidad evaluada:</b> Unidad 2 completa
   </p>
 </header>
 
@@ -108,7 +108,7 @@
 <div class="wrap">
 
 <section>
-  <blockquote><b>Alcance:</b> este proyecto evalúa la <b>Unidad 2</b> completa (cómputo, bases de datos administradas, seguridad e identidad, elasticidad y alta disponibilidad). Es un trabajo <b>individual</b> y la nota la pone directamente la plataforma de AWS Academy: no se entrega nada más.</blockquote>
+  <blockquote><b>Alcance:</b> este proyecto evalúa la <b>Unidad 2</b> completa (cómputo, bases de datos administradas, seguridad e identidad, elasticidad y alta disponibilidad). Es un trabajo en <b>equipos de máximo 2 estudiantes</b> (se permite individual). La nota la pone la plataforma de AWS Academy y el equipo solo sube la evidencia en Microsoft Teams.</blockquote>
   <p><b>Relación con el corte 1:</b> el documento de planificación del primer corte definió una segmentación en zonas: DMZ, PRD y una capa de datos aislada. Este corte es la implementación de esa misma idea. Las <b>subredes públicas</b> cumplen el papel de la <b>DMZ</b>, las <b>subredes privadas de aplicación</b> el de <b>PRD</b> y las <b>subredes de base de datos</b> el de la <b>capa de datos aislada</b>. Lo que en el corte 1 fue un diagrama, aquí debe funcionar y poder demostrarse.</p>
 </section>
 
@@ -120,11 +120,13 @@
     <tr><td>Asignatura</td><td>Arquitectura en la Nube</td></tr>
     <tr><td>Corte evaluado</td><td>Segundo corte</td></tr>
     <tr><td>Unidad evaluada</td><td>Unidad 2 completa (cómputo, bases de datos administradas, seguridad e identidad, elasticidad y alta disponibilidad)</td></tr>
-    <tr><td>Modalidad</td><td><b>Individual</b> — cada estudiante tiene su propio entorno en AWS Academy</td></tr>
+    <tr><td>Modalidad</td><td><b>Equipo de máximo 2 estudiantes</b> (se permite individual). El equipo construye y envía el laboratorio en el entorno de AWS Academy de <b>uno</b> de sus integrantes</td></tr>
     <tr><td>Ponderación</td><td>20% del corte (rúbrica)</td></tr>
     <tr><td>Plataforma</td><td>Laboratorio evaluable «Proyecto final» (Capstone) del curso de AWS Academy · <a class="ext" href="https://awsacademy.instructure.com/courses/181773/assignments/2199067" target="_blank">abrir la tarea en AWS Academy</a></td></tr>
     <tr><td><b>Fecha límite del envío en la plataforma</b></td><td><b>Sábado 24 de octubre de 2026, 23:59</b> (deja el domingo 25 para calificar)</td></tr>
-    <tr><td><b>Calificación</b></td><td><b>Automática</b>, la da AWS Academy al enviar el laboratorio («Submit»). Nota del proyecto = <b>puntaje ÷ 35 × 5.0</b>. No hay defensa ni documentos adicionales.</td></tr>
+    <tr><td><b>Calificación</b></td><td><b>Automática</b>, la da AWS Academy al enviar el laboratorio («Submit»). Nota del proyecto = <b>puntaje ÷ 35 × 5.0</b>. La misma nota es para los dos integrantes. No hay defensa.</td></tr>
+    <tr><td>Medio de entrega de la evidencia</td><td>Actividad en <b>Microsoft Teams</b> (la publica el docente)</td></tr>
+    <tr><td>Nomenclatura del archivo</td><td><code>ProyectoC2_Equipo#_Apellidos.pdf</code></td></tr>
   </table></div>
 </section>
 
@@ -254,31 +256,33 @@
 <section id="s5">
   <h2><span class="paso">5</span> Calificación — la nota la da la plataforma</h2>
   <p class="lead">Al pulsar <b>«Submit»</b>, AWS Academy revisa tu entorno y asigna un puntaje sobre <b>35</b>, con el detalle por tarea en el panel <b>«Grades»</b> y en el <b>«Submission Report»</b>. Esa es la nota del proyecto, convertida a la escala de 0.0 a 5.0:</p>
-  <div class="warn"><b>Nota del proyecto (20% del corte) = puntaje en AWS ÷ 35 × 5.0</b> Se toma el <b>puntaje más alto</b> de todos tus envíos antes del plazo, con un decimal. No hay defensa, informe ni capturas que entregar: solo el envío en la plataforma.</div>
+  <div class="warn"><b>Nota del proyecto (20% del corte) = puntaje en AWS ÷ 35 × 5.0</b> Se toma el <b>puntaje más alto</b> de todos los envíos del equipo antes del plazo, con un decimal. No hay defensa. Además del envío en la plataforma, el equipo sube la evidencia en Teams (sección 6).</div>
   <div class="tbl-wrap"><table class="rubrica">
     <tr><th>Puntaje en AWS (sobre 35)</th><th>35</th><th>31,5</th><th>28</th><th>24,5</th><th>21</th><th>17,5</th><th>14</th><th>0</th></tr>
     <tr><td class="crit">Nota del proyecto (sobre 5.0)</td><td>5.0</td><td>4.5</td><td>4.0</td><td>3.5</td><td>3.0</td><td>2.5</td><td>2.0</td><td>0.0</td></tr>
   </table></div>
-  <p>La plataforma verifica, sobre tu propio entorno, los requisitos de la sección 4: la base de datos administrada y su aislamiento, el uso del gestor de secretos, los datos importados, los servidores de aplicación en subredes privadas, el balanceador en varias zonas, el escalado automático y que la página de consulta devuelva datos. Si una parte no funciona, pierdes los puntos de esa tarea; revisa el «Submission Report» para saber cuál corregir y vuelve a enviar. Un envío peor no te baja la nota: cuenta el mejor.</p>
+  <p>La plataforma verifica, sobre el entorno del equipo, los requisitos de la sección 4: la base de datos administrada y su aislamiento, el uso del gestor de secretos, los datos importados, los servidores de aplicación en subredes privadas, el balanceador en varias zonas, el escalado automático y que la página de consulta devuelva datos. Si una parte no funciona, pierdes los puntos de esa tarea; revisa el «Submission Report» para saber cuál corregir y vuelve a enviar. Un envío peor no te baja la nota: cuenta el mejor.</p>
 </section>
 
 <!-- ============ 6. ENTREGABLES ============ -->
 <section id="s6">
   <h2><span class="paso">6</span> Entregables</h2>
   <ol>
-    <li><b>Envío con «Submit»</b> en el laboratorio de AWS Academy antes del plazo (sábado 24 de octubre, 23:59). <b>Es lo único que se entrega</b>: la nota sale de ese envío.</li>
+    <li><b>Envío con «Submit»</b> en el laboratorio de AWS Academy, desde el entorno del integrante elegido, antes del plazo (sábado 24 de octubre, 23:59). La nota sale de ese envío.</li>
+    <li><b>Evidencia en la actividad de Microsoft Teams</b>, un solo archivo por equipo (<code>ProyectoC2_Equipo#_Apellidos.pdf</code>), subido por cualquiera de los integrantes, con: (a) <b>nombres completos y correos institucionales de los integrantes</b>; (b) indicación de <b>en qué cuenta de AWS Academy</b> se hizo el laboratorio; (c) captura del panel <b>«Grades»</b> del laboratorio con el puntaje y el nombre del estudiante visible; (d) captura de la página de consulta mostrando datos, con el DNS del balanceador visible en la barra de direcciones.</li>
   </ol>
+  <div class="warn"><b>Sin la evidencia en Teams no hay nota:</b> es la única forma de saber quiénes forman el equipo y en qué cuenta se calificó.</div>
 </section>
 
 <!-- ============ 7. CONDICIONES ============ -->
 <section id="s7">
   <h2><span class="paso">7</span> Condiciones de entrega</h2>
   <ul>
-    <li>El trabajo es <b>individual</b>. Cada estudiante construye y entrega su propio entorno.</li>
+    <li>El trabajo es en <b>equipos de máximo 2</b> (se permite individual). El equipo trabaja en el entorno de AWS Academy de <b>uno</b> de sus integrantes y ambos reciben la misma nota.</li>
     <li>El entorno del laboratorio se conserva entre sesiones, así que puedes trabajar varios días.</li>
-    <li>Puedes enviar <b>todas las veces que quieras</b> antes del plazo. <b>Se califica la nota más alta</b> de tus envíos.</li>
+    <li>Puedes enviar <b>todas las veces que quieras</b> antes del plazo. <b>Se califica la nota más alta</b> de los envíos del equipo.</li>
     <li>Vigila el presupuesto del laboratorio y detén los recursos que no estés usando, en especial la base de datos y el grupo de escalado.</li>
-    <li>La plataforma califica el entorno propio de cada estudiante: no se puede entregar el trabajo de otro.</li>
+    <li>La plataforma califica el entorno de una cuenta concreta: los dos integrantes deben participar, y cada estudiante solo puede figurar en <b>un</b> equipo.</li>
   </ul>
   <div class="warn"><b>ADVERTENCIA: no uses el botón «Reset» después de enviar.</b> El botón Reset del laboratorio borra <b>todo</b> lo construido: VPC, balanceador, base de datos, plantilla, grupo de escalado y datos importados. Si lo presionas, tendrás que reconstruir desde cero.</div>
 </section>
