@@ -168,7 +168,7 @@
 <text x="614" y="332" font-size="15" fill="#A6192E" font-weight="bold">Personas y aplicaciones</text>
 <text x="614" y="354" font-size="12" fill="#2A2A2A"><tspan x="614" dy="0">Federación, SSO, Cognito,</tspan><tspan x="614" dy="14.6">secretos y claves</tspan></text>
 <rect x="895" y="236" width="275" height="276" rx="10" fill="#fff" stroke="#A6192E" stroke-width="2"/>
-<text x="909" y="258" font-size="12" fill="#8a6d1d" font-weight="bold">PARTE 4</text>
+<text x="909" y="258" font-size="12" fill="#8a6d1d" font-weight="bold">PARTE 3</text>
 <text x="909" y="280" font-size="15" fill="#A6192E" font-weight="bold">Multi-cuenta y costos</text>
 <text x="909" y="302" font-size="12" fill="#2A2A2A"><tspan x="909" dy="0">Organizations, SCP, etiquetas,</tspan><tspan x="909" dy="14.6">presupuestos y TCO</tspan></text>
 </svg>
@@ -1245,7 +1245,7 @@
 <text xml:space="preserve" x="22" y="423.2" font-size="13" fill="#2A2A2A" font-family="Consolas,'DejaVu Sans Mono',monospace">  "${aws:PrincipalTag/proyecto}"}}</text>
 <rect x="660" y="330" width="510" height="168" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="1.8"/>
 <text x="676" y="356" font-size="14.5" fill="#8a6d1d" font-weight="bold">ABAC: control de acceso por atributos</text>
-<text x="676" y="382" font-size="13" fill="#2A2A2A"><tspan x="676" dy="0">Un proyecto nuevo no exige política nueva: basta</tspan><tspan x="676" dy="15.9">etiquetar a la persona y a los recursos.</tspan><tspan x="676" dy="15.9">El permiso crece con la empresa, no con el número</tspan><tspan x="676" dy="15.9">de políticas. Requiere gobernar las etiquetas</tspan><tspan x="676" dy="15.9">(parte 4) para que nadie se las cambie.</tspan></text>
+<text x="676" y="382" font-size="13" fill="#2A2A2A"><tspan x="676" dy="0">Un proyecto nuevo no exige política nueva: basta</tspan><tspan x="676" dy="15.9">etiquetar a la persona y a los recursos.</tspan><tspan x="676" dy="15.9">El permiso crece con la empresa, no con el número</tspan><tspan x="676" dy="15.9">de políticas. Requiere gobernar las etiquetas</tspan><tspan x="676" dy="15.9">(parte 3) para que nadie se las cambie.</tspan></text>
 </svg>
     </div>
     <div class="s-foot">
@@ -2669,7 +2669,7 @@
 <text x="745" y="242" font-size="17" fill="#A6192E" font-weight="bold">Protege secretos y claves</text>
 <text x="745" y="268" font-size="13" fill="#2A2A2A"><tspan x="745" dy="0">Secrets Manager con rotación y políticas de clave con funciones</tspan><tspan x="745" dy="15.9">separadas.</tspan></text>
 <rect x="10" y="350" width="1160" height="148" rx="14" fill="#A6192E" stroke="#A6192E" stroke-width="1"/>
-<text x="30" y="384" font-size="19" fill="#D4AF37" font-weight="bold">Siguiente: Parte 4 · Gobernanza multi-cuenta y costos</text>
+<text x="30" y="384" font-size="19" fill="#D4AF37" font-weight="bold">Siguiente: Parte 3 · Gobernanza multi-cuenta y costos</text>
 <text x="30" y="414" font-size="13.5" fill="#fff">Ya sabemos quién entra y qué puede hacer. Falta el techo de toda la organización: cuentas, SCP y guardarraíles,</text>
 <text x="30" y="436" font-size="13.5" fill="#fff">y la otra gran pregunta de la nube: cuánto cuesta. Etiquetas, presupuestos, calculadoras y TCO.</text>
 <rect x="1050" y="372" width="100" height="100" rx="12" fill="#fff" stroke="#D4AF37" stroke-width="2"/>
@@ -2681,7 +2681,7 @@
       <span class="src">Fuente: resumen de la Parte 3; AWS IAM Identity Center, Cognito y KMS</span>
       <span class="pg">15 / 15</span>
     </div>
-    <aside class="guion">Cerremos la tercera parte con cuatro ideas. Una: las personas se federan. Un solo directorio, con SAML u OpenID Connect, e IAM Identity Center asigna grupos, conjuntos de permisos y cuentas; así las altas y bajas se hacen en un solo lugar. Dos: los pipelines no necesitan secretos. Con OIDC, el pipeline presenta un token firmado y la política de confianza valida repositorio y rama. Tres: los clientes de una aplicación viven en otro directorio, Cognito; el user pool dice quién eres y el identity pool entrega credenciales de AWS cuando hace falta. Cuatro: los secretos y las claves se gobiernan. Secrets Manager entrega y rota contraseñas, y las políticas de clave separan a quien administra de quien usa. En la Parte 4 subimos al nivel de la organización: cuentas, unidades organizativas, SCP, guardarraíles, etiquetado, presupuestos y la otra gran pregunta, cuánto cuesta. Nos vemos allí.</aside>
+    <aside class="guion">Cerremos la tercera parte con cuatro ideas. Una: las personas se federan. Un solo directorio, con SAML u OpenID Connect, e IAM Identity Center asigna grupos, conjuntos de permisos y cuentas; así las altas y bajas se hacen en un solo lugar. Dos: los pipelines no necesitan secretos. Con OIDC, el pipeline presenta un token firmado y la política de confianza valida repositorio y rama. Tres: los clientes de una aplicación viven en otro directorio, Cognito; el user pool dice quién eres y el identity pool entrega credenciales de AWS cuando hace falta. Cuatro: los secretos y las claves se gobiernan. Secrets Manager entrega y rota contraseñas, y las políticas de clave separan a quien administra de quien usa. En la última parte subimos al nivel de la organización: cuentas, unidades organizativas, SCP, guardarraíles, etiquetado, presupuestos y la otra gran pregunta, cuánto cuesta. Nos vemos allí.</aside>
   </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Encuadre</div>
@@ -3593,7 +3593,7 @@
     <aside class="guion">Integremos todo en la Corporación Industrial del Caribe. Arriba, la cuenta de gestión, solo para facturación consolidada y gobierno. Debajo, cuatro unidades organizativas. Seguridad, con las cuentas de registros y de auditoría, y una SCP que impide borrar los registros. Infraestructura, con la red compartida y una SCP que impide sacar cuentas de la organización. Cargas, con producción de pedidos, producción de planta y desarrollo de pedidos, donde se aplican la SCP de regiones aprobadas, la política de etiquetas y un presupuesto por cuenta. Y sandbox, para experimentar, con un presupuesto de doscientos dólares y limpieza mensual. Abajo están las reglas que se cumplen en toda la organización: una cuenta, un centro de costo, así finanzas ve el gasto sin hojas de cálculo; cuentas nuevas por la fábrica, con registros y controles desde el inicio; acceso solo por Identity Center, sin llaves de largo plazo; y revisión trimestral con Access Analyzer. Es la suma de las tres partes de esta semana.</aside>
   </section><section class="slide" data-parte="4">
     <div class="s-head">
-      <div class="kicker">Lo que queda de la Parte 4</div>
+      <div class="kicker">Lo que queda de la Parte 3</div>
       <h2>Cierre de la Semana 9 y adelanto de la Semana 10</h2>
       <div class="rule"></div>
       <div class="sub">Identidad, permisos, federación y gobierno forman una sola cadena de confianza.</div>
