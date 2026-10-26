@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repaso Unidad 1 y Parcial 1 — Arquitectura en la Nube</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #FBF8F3;
+    --surface: #FFFFFF;
+    --surface-2: #F4EEE3;
+    --ink: #2A2A2A;
+    --ink-soft: #6B6259;
+    --vino: #A6192E;
+    --vino-strong: #7E1223;
+    --vino-tint: #FBEBEC;
+    --dorado: #A9791C;
+    --dorado-tint: #FBF3DE;
+    --line: #E5DCCB;
+    --shadow: 0 1px 2px rgba(42,26,20,.04), 0 6px 20px rgba(42,26,20,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1613; --surface: #24201B; --surface-2: #2C2620;
+      --ink: #EFE7D9; --ink-soft: #B3A896;
+      --vino: #E2536B; --vino-strong: #F0748A; --vino-tint: #3A1E22;
+      --dorado: #E4BC5C; --dorado-tint: #3B321C; --line: #3D362B;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1B1613; --surface: #24201B; --surface-2: #2C2620;
+    --ink: #EFE7D9; --ink-soft: #B3A896;
+    --vino: #E2536B; --vino-strong: #F0748A; --vino-tint: #3A1E22;
+    --dorado: #E4BC5C; --dorado-tint: #3B321C; --line: #3D362B;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15.5px; line-height: 1.6;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; text-wrap: balance; color: var(--ink); }
+  a { color: var(--vino); }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px 90px; }
+
+  header.top {
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    padding: 54px 24px 40px; text-align: center; margin-bottom: 8px;
+  }
+  header.top .logo { height: 64px; width: auto; margin: 0 auto 26px; display: block; }
+  header.top .eyebrow { font-size: 11.5px; text-transform: uppercase; letter-spacing: .12em; color: var(--dorado); font-weight: 700; margin: 0 0 6px; }
+  header.top h1 { color: var(--vino); font-size: clamp(28px, 4vw, 38px); margin: 0 0 8px; }
+  header.top .sub { color: var(--ink-soft); font-size: 16px; margin: 0 0 20px; }
+  .accent-bar { width: 200px; height: 4px; margin: 0 auto 20px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--vino), var(--dorado)); }
+  header.top .meta { font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; }
+  header.top .meta b { color: var(--ink); font-size: 15px; }
+
+  section { margin-top: 44px; }
+  .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+  .section-head h2 { font-size: 20px; margin: 0; }
+  .section-head .count { font-size: 12.5px; color: var(--ink-soft); font-family: 'IBM Plex Mono'; }
+  .section-note { font-size: 13.5px; color: var(--ink-soft); margin: -8px 0 18px; max-width: 62ch; }
+  .notice-corte3 { background: var(--vino-tint); border: 1px solid var(--vino); border-radius: 10px; padding: 10px 14px; font-size: 13.5px; font-weight: 600; color: var(--vino-strong); margin: 0 0 16px; }
+
+  .card-grid { display: grid; gap: 10px; }
+
+  .week-card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 18px; text-decoration: none; color: inherit; box-shadow: var(--shadow);
+    transition: border-color .15s;
+  }
+  .week-card:hover { border-color: var(--vino); }
+  .week-card .num {
+    width: 40px; height: 40px; border-radius: 10px; background: var(--vino-tint); color: var(--vino);
+    display: grid; place-items: center; font-family: 'IBM Plex Mono'; font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .week-card .title { font-weight: 600; font-size: 15px; color: var(--ink); }
+  .week-card .desc { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+  .week-card .go { margin-left: auto; color: var(--ink-soft); font-size: 13px; white-space: nowrap; }
+
+  .week-card.pending { opacity: .55; }
+  .week-card.pending .num { background: var(--surface-2); color: var(--ink-soft); }
+  .week-card.pending .go { font-style: italic; }
+
+  .week-card.multi .go-group { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .week-card.multi .go-group .go {
+    margin-left: 0; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--surface-2); font-family: 'IBM Plex Mono'; font-size: 12px; text-decoration: none;
+    transition: border-color .15s, color .15s;
+  }
+  .week-card.multi .go-group .go:hover { border-color: var(--vino); color: var(--vino); }
+
+  .lab-list { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .lab-row {
+    display: flex; align-items: center; gap: 12px; padding: 11px 18px;
+    border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; font-size: 13.5px;
+  }
+  .lab-row:last-child { border-bottom: none; }
+  .lab-row:hover { background: var(--dorado-tint); }
+  .lab-row .play {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--dorado-tint); color: var(--dorado);
+    display: grid; place-items: center; font-size: 10px; flex-shrink: 0;
+  }
+  .lab-row .name { color: var(--ink); font-weight: 500; }
+  .lab-row .size { margin-left: auto; color: var(--ink-soft); font-family: 'IBM Plex Mono'; font-size: 11.5px; }
+
+
+  .tbl-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+  table.calendar { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px; }
+  table.calendar th { background: var(--vino); color: #fff; text-align: left; padding: 10px 12px; font-weight: 600; white-space: nowrap; }
+  table.calendar td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.calendar tr:last-child td { border-bottom: none; }
+  table.calendar tr:nth-child(even) td { background: var(--surface-2); }
+  table.calendar tr.receso td { background: var(--dorado-tint); font-style: italic; color: var(--ink-soft); }
+  table.calendar .sem { font-family: 'IBM Plex Mono'; font-weight: 700; color: var(--vino); white-space: nowrap; }
+  table.calendar .fechas, table.calendar .unidad { white-space: nowrap; color: var(--ink-soft); }
+  table.calendar .act { color: var(--ink-soft); }
+  table.calendar .act a { color: var(--vino); text-decoration: none; border-bottom: 1px dotted var(--vino); }
+  table.calendar .act a:hover { color: var(--vino-strong); border-bottom-style: solid; }
+
+  footer.page { max-width: 1140px; margin: 60px auto 0; padding: 20px 24px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-soft); text-align: center; }
+
+  .scroll-hint { display: none; font-size: 11.5px; color: var(--ink-soft); padding: 8px 12px 0; margin: 0; }
+
+  @media (max-width: 640px) {
+    body { font-size: 14.5px; }
+    .wrap { padding: 0 16px 70px; }
+    header.top { padding: 40px 16px 32px; }
+    header.top .logo { height: 52px; margin-bottom: 20px; }
+    header.top .meta { font-size: 13px; }
+
+    .week-card { flex-wrap: wrap; padding: 14px 16px; gap: 10px 14px; }
+    .week-card .go { margin-left: 56px; font-size: 12.5px; }
+
+    table.calendar { min-width: 620px; font-size: 12px; }
+    .scroll-hint { display: block; }
+
+    .lab-row { padding: 10px 14px; font-size: 12.5px; }
+  }
+
+  @media (max-width: 420px) {
+    header.top h1 { font-size: 24px; }
+    .week-card .num { width: 34px; height: 34px; font-size: 12.5px; }
+    .week-card .title { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" />
+  <p class="eyebrow">Semana 6 · Unidad 1</p>
+  <h1>Repaso Unidad 1 y Parcial 1</h1>
+  <p class="sub">Semana de repaso y evaluación — no hay material nuevo: el repaso son las cinco semanas anteriores</p>
+  <div class="accent-bar"></div>
+  <p class="meta"><b>Ing. Rodolfo Cañas Cervantes</b><br>Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>Periodo 2026-2 · Barranquilla, Colombia</p>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <div class="section-head"><h2>Qué se evalúa en el Parcial 1</h2><span class="count">20 % rúbrica + 70 % examen práctico</span></div>
+    <p class="section-note">El curso no tiene examen escrito: es ≥ 90 % práctico.</p>
+    <div class="tbl-wrap">
+      <table class="calendar">
+        <thead><tr><th>Parte</th><th>Vale</th><th>Qué es</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="sem">Rúbrica</td>
+            <td class="fechas">20 %</td>
+            <td class="act">La rúbrica de la Unidad 1 se libera <b>solo esta semana</b>. En este curso es el <a href="proyectos/proyecto-aula-corte1.html">Proyecto de Aula 1 — Documento de Planificación de Migración a AWS</a> (caso «Corporación Industrial del Caribe», equipos de máximo 2). La califica el docente con la rúbrica publicada en el documento.</td>
+          </tr>
+          <tr>
+            <td class="sem">Examen práctico</td>
+            <td class="fechas">70 %</td>
+            <td class="act">Parcial práctico <b>en vivo</b>: el reto se revela ese mismo día y se resuelve sobre el propio ambiente AWS del estudiante, con sustentación oral corta (3–5 min). Lo demás (labs de AWS Academy) queda el 10 % de cada módulo con lab.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>El mapa de la Unidad 1</h2><span class="count">5 semanas · 5 bloques</span></div>
+    <p class="section-note">Cinco bloques que se apoyan uno en otro (semana 5, lámina «Unidad 1 en un mapa, rumbo al Parcial 1»). Debajo de cada bloque están las preguntas que debes poder responder.</p>
+    <div class="tbl-wrap">
+      <table class="calendar">
+        <thead><tr><th>Semana</th><th>Bloque</th><th>Preguntas que debes poder responder</th></tr></thead>
+        <tbody>
+          <tr><td class="sem">1</td><td class="unidad">Fundamentos — el vocabulario</td><td class="act">¿Qué es la nube y en qué se diferencia de un centro de datos propio? ¿IaaS, PaaS, SaaS y Serverless? ¿Qué dicen las buenas prácticas de arquitectura y qué proveedores existen?</td></tr>
+          <tr><td class="sem">2</td><td class="unidad">Despliegue e identidad — quién entra</td><td class="act">¿Pública, privada, híbrida o multi-nube? ¿Autenticación contra autorización? ¿Cómo se escribe y se evalúa una política de IAM?</td></tr>
+          <tr><td class="sem">3</td><td class="unidad">Almacenamiento — dónde viven los datos</td><td class="act">¿Objetos, bloques o archivos? ¿Cómo funciona el versionado y el ciclo de vida? ¿Qué es un bucket y un sitio estático?</td></tr>
+          <tr><td class="sem">4</td><td class="unidad">Redes — por dónde viajan</td><td class="act">¿Cómo se diseña una VPC con subredes públicas y privadas? ¿Qué hace un Internet Gateway y una tabla de rutas? ¿Security Group contra NACL?</td></tr>
+          <tr><td class="sem">5</td><td class="unidad">Seguridad — cómo se protege y se demuestra</td><td class="act">¿Qué es responsabilidad compartida y defensa en profundidad? ¿Cifrado en tránsito y en reposo? ¿Cómo se registra, se alerta y se demuestra el cumplimiento (Ley 1581, ISO, SOC 2, PCI)?</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="section-note">Método de estudio de la semana 11 (válido también aquí): dibuja de memoria la arquitectura de referencia, explica cada decisión con el porqué y resuelve escenarios. La rúbrica premia la justificación más que la memorización de nombres.</p>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Material de la Unidad 1, semana por semana</h2><span class="count">5 decks · 5 PDF · 15 videos</span></div>
+    <div class="card-grid">
+      <div class="week-card multi">
+        <div class="num">1</div>
+        <div>
+          <div class="title">Semana 1 · Fundamentos de la nube</div>
+          <div class="desc">Qué es la nube, zonas de disponibilidad, IaaS/PaaS/SaaS/Serverless, proveedores</div>
+        </div>
+        <div class="go-group">
+          <a class="go" href="2026-2-S01-arquitectura-nube-fundamentos.html" target="_blank">Ver HTML →</a>
+          <a class="go" href="2026-2-S01-arquitectura-nube-fundamentos.pdf" target="_blank">Ver PDF →</a>
+          <a class="go" href="videos/2026-2-S01-arquitectura-nube-fundamentos-parte1.mp4" target="_blank">Video 1 →</a>
+          <a class="go" href="videos/2026-2-S01-arquitectura-nube-fundamentos-parte2.mp4" target="_blank">Video 2 →</a>
+          <a class="go" href="videos/2026-2-S01-arquitectura-nube-fundamentos-parte3.mp4" target="_blank">Video 3 →</a>
+        </div>
+      </div>
+      <div class="week-card multi">
+        <div class="num">2</div>
+        <div>
+          <div class="title">Semana 2 · Despliegue e identidad</div>
+          <div class="desc">Modelos de despliegue, autenticación vs autorización, políticas IAM, lock-in</div>
+        </div>
+        <div class="go-group">
+          <a class="go" href="2026-2-S02-arquitectura-nube-despliegue-identidad.html" target="_blank">Ver HTML →</a>
+          <a class="go" href="2026-2-S02-arquitectura-nube-despliegue-identidad.pdf" target="_blank">Ver PDF →</a>
+          <a class="go" href="videos/2026-2-S02-arquitectura-nube-despliegue-identidad-parte1.mp4" target="_blank">Video 1 →</a>
+          <a class="go" href="videos/2026-2-S02-arquitectura-nube-despliegue-identidad-parte2.mp4" target="_blank">Video 2 →</a>
+          <a class="go" href="videos/2026-2-S02-arquitectura-nube-despliegue-identidad-parte3.mp4" target="_blank">Video 3 →</a>
+        </div>
+      </div>
+      <div class="week-card multi">
+        <div class="num">3</div>
+        <div>
+          <div class="title">Semana 3 · Almacenamiento en la nube</div>
+          <div class="desc">Objetos, bloques y archivos — modelos de storage y ciclo de vida · 10 % Corte 1: Lab 1</div>
+        </div>
+        <div class="go-group">
+          <a class="go" href="2026-2-S03-arquitectura-nube-almacenamiento.html" target="_blank">Ver HTML →</a>
+          <a class="go" href="2026-2-S03-arquitectura-nube-almacenamiento.pdf" target="_blank">Ver PDF →</a>
+          <a class="go" href="videos/2026-2-S03-arquitectura-nube-almacenamiento-parte1.mp4" target="_blank">Video 1 →</a>
+          <a class="go" href="videos/2026-2-S03-arquitectura-nube-almacenamiento-parte2.mp4" target="_blank">Video 2 →</a>
+          <a class="go" href="videos/2026-2-S03-arquitectura-nube-almacenamiento-parte3.mp4" target="_blank">Video 3 →</a>
+        </div>
+      </div>
+      <div class="week-card multi">
+        <div class="num">4</div>
+        <div>
+          <div class="title">Semana 4 · Redes en la nube</div>
+          <div class="desc">Fundamentos IP, NAT, VPC, IGW, NAT Gateway, SG vs. NACL · 10 % Corte 1: Lab 2</div>
+        </div>
+        <div class="go-group">
+          <a class="go" href="2026-2-S04-arquitectura-nube-redes.html" target="_blank">Ver HTML →</a>
+          <a class="go" href="2026-2-S04-arquitectura-nube-redes.pdf" target="_blank">Ver PDF →</a>
+          <a class="go" href="videos/2026-2-S04-arquitectura-nube-redes-parte1.mp4" target="_blank">Video 1 →</a>
+          <a class="go" href="videos/2026-2-S04-arquitectura-nube-redes-parte2.mp4" target="_blank">Video 2 →</a>
+          <a class="go" href="videos/2026-2-S04-arquitectura-nube-redes-parte3.mp4" target="_blank">Video 3 →</a>
+        </div>
+      </div>
+      <div class="week-card multi">
+        <div class="num">5</div>
+        <div>
+          <div class="title">Semana 5 · Seguridad y cumplimiento</div>
+          <div class="desc">Cierre de la Unidad 1: responsabilidad compartida, defensa en profundidad, cifrado, logging, Ley 1581</div>
+        </div>
+        <div class="go-group">
+          <a class="go" href="2026-2-S05-arquitectura-nube-seguridad-cumplimiento.html" target="_blank">Ver HTML →</a>
+          <a class="go" href="2026-2-S05-arquitectura-nube-seguridad-cumplimiento.pdf" target="_blank">Ver PDF →</a>
+          <a class="go" href="videos/2026-2-S05-arquitectura-nube-seguridad-cumplimiento-parte1.mp4" target="_blank">Video 1 →</a>
+          <a class="go" href="videos/2026-2-S05-arquitectura-nube-seguridad-cumplimiento-parte2.mp4" target="_blank">Video 2 →</a>
+          <a class="go" href="videos/2026-2-S05-arquitectura-nube-seguridad-cumplimiento-parte3.mp4" target="_blank">Video 3 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Prácticas de este corte</h2><span class="count">Labs 1 y 2 · Proyecto de Aula 1</span></div>
+    <div class="card-grid">
+      <a class="week-card" href="laboratorios/lab-01/" target="_blank">
+        <div class="num">L1</div>
+        <div>
+          <div class="title">Lab 1 — Almacenamiento y sitio estático en la nube</div>
+          <div class="desc">10 % · Corte 1 · Actividad 1 — bucket versionado y sitio estático servido por HTTP</div>
+        </div>
+        <div class="go">Ver lab →</div>
+      </a>
+      <a class="week-card" href="laboratorios/lab-02/" target="_blank">
+        <div class="num">L2</div>
+        <div>
+          <div class="title">Lab 2 — VPC, subredes y grupos de seguridad</div>
+          <div class="desc">10 % · Corte 1 · Actividad 2 — red de dos capas con salida solo por la capa pública</div>
+        </div>
+        <div class="go">Ver lab →</div>
+      </a>
+      <a class="week-card" href="laboratorios/acceso-ssh-lab-vpc.html" target="_blank">
+        <div class="num">🔑</div>
+        <div>
+          <div class="title">Acceso SSH al Lab de red VPC — PEM y PPK</div>
+          <div class="desc">Si PuTTY dice que tu llave está dañada — solución y causa</div>
+        </div>
+        <div class="go">Ver guía →</div>
+      </a>
+      <a class="week-card" href="proyectos/proyecto-aula-corte1.html" target="_blank">
+        <div class="num">P1</div>
+        <div>
+          <div class="title">Proyecto de Aula 1 — Planificación de Migración a AWS</div>
+          <div class="desc">La rúbrica del 20 % del corte: caso «Corporación Industrial del Caribe», equipos de máximo 2</div>
+        </div>
+        <div class="go">Ver proyecto →</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Cómo sigue</h2><span class="count">Después del parcial</span></div>
+    <p class="section-note">Con el Parcial 1 se cierra la Unidad 1. La Unidad 2 arranca con cómputo (semana 7) y termina con el repaso y Parcial 2 de la semana 11: <a href="index.html">volver al índice del curso</a>.</p>
+  </section>
+
+</div>
+
+<footer class="page">
+  Arquitectura en la Nube · Universidad de la Costa (CUC) · Periodo 2026-2
+</footer>
+</body>
+</html>
