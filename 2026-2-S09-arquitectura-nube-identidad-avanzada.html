@@ -113,7 +113,7 @@
 <!-- ================= PARTE 1 ================= -->
   <section class="slide cover active" data-parte="1">
     <div class="topline-g"></div><div class="topline-v"></div>
-    <img class="logo-main" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
+    <img class="logo-main" src="assets/logo-cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
     <div class="cover-kicker">Semana 9 · Identidad avanzada</div>
     <h1>Roles y credenciales temporales</h1>
     <h3>Parte 1 de 3 · Unidad 2</h3>
@@ -131,7 +131,7 @@
       <h2>De dónde venimos y hacia dónde vamos</h2>
       <div class="rule"></div>
       <div class="sub">Las semanas 2 y 5 pusieron los cimientos; hoy aprendes a operarlos a escala, sin llaves y sin permisos de sobra.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="De dónde venimos y hacia dónde vamos"><defs><marker id="aV1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -176,7 +176,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide y del temario del curso (S02, S05)</span>
-      <span class="pg">2 / 15</span>
+      <span class="pg">2 / 59</span>
     </div>
     <aside class="guion">Antes de avanzar, una recapitulación rápida. En las semanas dos y cinco aprendiste lo esencial: el usuario raíz se protege con autenticación multifactor y casi no se usa, las personas se organizan en usuarios y grupos, los permisos se escriben como políticas en formato JSON, los roles son identidades sin contraseña, y cuando varias políticas chocan, un Deny explícito siempre gana. Eso es la base. El problema aparece cuando la empresa crece: cientos de identidades, varias cuentas de AWS, aplicaciones que necesitan acceso y alguien que pregunta cuánto cuesta todo. Por eso hoy subimos cuatro peldaños. Primero, roles y credenciales temporales. Segundo, políticas a fondo, con condiciones y límites de permisos. Tercero, identidad de personas y de aplicaciones, con federación y Cognito. Y cuarto, gobernanza multi cuenta y costos. Fíjate cómo cada peldaño se apoya en el anterior.</aside>
   </section><section class="slide" data-parte="1">
@@ -185,7 +185,7 @@
       <h2>Una llave filtrada: la puerta que nadie cierra</h2>
       <div class="rule"></div>
       <div class="sub">Una llave de largo plazo en un repositorio es una puerta abierta que nadie recuerda haber dejado así.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Una llave filtrada: la puerta que nadie cierra"><defs><marker id="aV2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -242,7 +242,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM Best Practices (credenciales temporales) y casos públicos de filtración</span>
-      <span class="pg">3 / 15</span>
+      <span class="pg">3 / 59</span>
     </div>
     <aside class="guion">Mira el flujo de izquierda a derecha. Un desarrollador de la Corporación Industrial del Caribe crea una llave de acceso y, por comodidad, la deja en un archivo punto env. Un día hace git push, y ese archivo viaja con el código a un repositorio público. Paso tres: existen bots que escanean repositorios buscando el patrón de las llaves de AWS, y lo hacen en cuestión de minutos. Paso cuatro: con esa llave lanzan instancias en muchas regiones para minar criptomonedas. Y paso cinco, a fin de mes llega una factura de miles de dólares. Lo grave es que la llave no vence, no sabe quién la usa y funciona desde cualquier lugar con los permisos de su dueño. Abajo ves tres defensas: primero, no tener llave y usar un rol; segundo, si existe, mínimo permiso y rotación; tercero, detectar cuándo se usó por última vez y alertar. Fíjate también en los prefijos: AKIA es largo plazo, ASIA es temporal.</aside>
   </section><section class="slide" data-parte="1">
@@ -251,7 +251,7 @@
       <h2>Credenciales de largo plazo frente a temporales</h2>
       <div class="rule"></div>
       <div class="sub">Cambiar una llave eterna por una sesión que caduca reduce el daño de cualquier filtración.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Credenciales de largo plazo frente a temporales"><defs><marker id="aV3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -303,7 +303,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Temporary security credentials in IAM</span>
-      <span class="pg">4 / 15</span>
+      <span class="pg">4 / 59</span>
     </div>
     <aside class="guion">Compara las dos barras de arriba, que son una escala ilustrativa del tiempo durante el cual una credencial filtrada sirve. La llave de largo plazo, en vino, no vence: sigue abierta durante meses o años hasta que alguien la elimine. Las credenciales temporales, en dorado, duran entre quince minutos y doce horas, y por defecto una hora. A la derecha ves la comparación práctica. La llave de largo plazo vive en disco, en scripts y en repositorios; la temporal vive en memoria y se renueva sola. La llave se rota a mano y casi todos lo olvidan; la temporal se rota automáticamente. Y si se filtra, una sirve hasta que la revoques, mientras la otra caduca sin que hagas nada. Abajo está la regla práctica de la semana: las personas usan inicio de sesión único, las máquinas usan roles y los pipelines usan OIDC. La llave de largo plazo queda como último recurso, rotada, limitada y vigilada.</aside>
   </section><section class="slide" data-parte="1">
@@ -312,7 +312,7 @@
       <h2>Un rol tiene dos políticas: confianza y permisos</h2>
       <div class="rule"></div>
       <div class="sub">La política de confianza decide quién entra; la de permisos decide qué puede hacer quien entró.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Un rol tiene dos políticas: confianza y permisos"><defs><marker id="aV4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -367,7 +367,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — IAM roles y trust policies</span>
-      <span class="pg">5 / 15</span>
+      <span class="pg">5 / 59</span>
     </div>
     <aside class="guion">Fíjate en el centro del diagrama: un rol de IAM, aquí llamado CIC lector de reportes. Un rol no tiene contraseña ni llaves propias. Tiene dos políticas. A la izquierda está la política de confianza, que responde a la pregunta: quién puede asumirme. En el ejemplo, confía en la cuenta uno uno uno, y la acción permitida es sts AssumeRole. Arriba ves los cuatro tipos de principal en los que un rol puede confiar: un usuario o rol de IAM, un servicio de AWS como EC2, otra cuenta, o una identidad federada por SAML u OIDC. A la derecha está la política de permisos, que responde: qué puedo hacer. Aquí solo permite leer objetos del bucket cic reportes. Para que todo funcione deben estar de acuerdo las dos. La confianza deja entrar; los permisos deciden qué se puede hacer adentro. Y recuerda: quien asume el rol trabaja con los permisos del rol, no con los suyos.</aside>
   </section><section class="slide" data-parte="1">
@@ -376,7 +376,7 @@
       <h2>AssumeRole con STS: de la petición a la sesión</h2>
       <div class="rule"></div>
       <div class="sub">El servicio de tokens verifica la confianza y entrega credenciales que caducan solas.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="AssumeRole con STS: de la petición a la sesión"><defs><marker id="aV5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -425,7 +425,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — AssumeRole y AWS STS API Reference</span>
-      <span class="pg">6 / 15</span>
+      <span class="pg">6 / 59</span>
     </div>
     <aside class="guion">Sigue los números. En el paso uno, el principal, que puede ser un usuario, una aplicación o un servicio, llama a STS con la acción AssumeRole, indicando el ARN del rol y un nombre de sesión. En el paso dos, STS comprueba dos cosas a la vez: que la política de confianza del rol permita a quien llama, y que quien llama tenga permiso sts AssumeRole en su propia política. Si falta cualquiera de las dos, la respuesta es acceso denegado. En el paso tres, STS devuelve credenciales temporales: una clave de acceso, un secreto, un token de sesión y una fecha de vencimiento. En el paso cuatro, el principal firma sus peticiones a Amazon S3 con esas credenciales; ahora actúa como el rol. En el paso cinco, S3 responde únicamente si la política de permisos del rol lo autoriza. Cuando llega el vencimiento, se repite el paso uno. Nada que revocar, nada que rotar a mano.</aside>
   </section><section class="slide" data-parte="1">
@@ -434,7 +434,7 @@
       <h2>Qué trae una sesión temporal y cuánto dura</h2>
       <div class="rule"></div>
       <div class="sub">Cuatro piezas y un reloj: la duración la fija el rol, entre 15 minutos y 12 horas.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Qué trae una sesión temporal y cuánto dura"><defs><marker id="aV6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -470,7 +470,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Temporary credentials y duración de sesión de rol</span>
-      <span class="pg">7 / 15</span>
+      <span class="pg">7 / 59</span>
     </div>
     <aside class="guion">Una sesión temporal tiene cuatro piezas. Primero la clave de acceso, que empieza por ASIA. Segundo, el secreto. Tercero, el token de sesión, una cadena larga que identifica la sesión. Y cuarto, la fecha y hora de vencimiento. Las cuatro van juntas: si falta el token, el servicio rechaza la petición. Ahora la duración, en la escala de abajo, que es ilustrativa. Cuando asumes un rol, la sesión dura por defecto una hora. Cada rol puede configurarse con una duración máxima de sesión, entre una y doce horas, y tú puedes pedir menos. Hay un caso especial: si un rol asume otro rol, lo que se llama encadenamiento de roles, la sesión queda limitada a una hora como máximo. Pregúntate siempre cuánto tiempo necesita realmente la tarea. Y una buena noticia para el día a día: cuando usas EC2, Lambda o ECS, el propio servicio renueva las credenciales antes de que venzan, sin que tu código haga nada.</aside>
   </section><section class="slide" data-parte="1">
@@ -479,7 +479,7 @@
       <h2>Perfiles de instancia: el rol de una EC2</h2>
       <div class="rule"></div>
       <div class="sub">La instancia pide sus credenciales al servicio de metadatos y el SDK las renueva sin intervención.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Perfiles de instancia: el rol de una EC2"><defs><marker id="aV7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -528,7 +528,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS EC2 User Guide — IAM roles for Amazon EC2 e IMDSv2</span>
-      <span class="pg">8 / 15</span>
+      <span class="pg">8 / 59</span>
     </div>
     <aside class="guion">Aquí el protagonista es un servidor de la aplicación de pedidos. Un servidor no puede iniciar sesión con usuario y contraseña, así que le damos un rol a través de un perfil de instancia, que es el contenedor que entrega el rol a la instancia. Observa los pasos. Uno: el SDK de AWS dentro de la instancia pide un token al servicio de metadatos, en la dirección ciento sesenta y nueve punto doscientos cincuenta y cuatro; esa es la versión dos, IMDSv2. Dos: con ese token consulta qué credenciales corresponden al rol. Tres: el servicio responde con credenciales temporales. Cuatro: el SDK firma sus llamadas a S3 con ellas, y las renueva solo antes de que venzan. La versión dos del servicio de metadatos exige una sesión con token, lo que protege las credenciales si la aplicación web sufre un ataque de tipo SSRF. El resultado: cero llaves en disco y un permiso que se gestiona en un solo lugar, el rol.</aside>
   </section><section class="slide" data-parte="1">
@@ -537,7 +537,7 @@
       <h2>Roles de servicio: cuando AWS actúa en tu nombre</h2>
       <div class="rule"></div>
       <div class="sub">Cada servicio asume un rol propio; así los permisos viven con la carga de trabajo y no con una persona.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Roles de servicio: cuando AWS actúa en tu nombre"><defs><marker id="aV8" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG8" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB8" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN8" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD8" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -594,7 +594,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Service roles y service-linked roles</span>
-      <span class="pg">9 / 15</span>
+      <span class="pg">9 / 59</span>
     </div>
     <aside class="guion">Cuando un servicio de AWS necesita llamar a otros servicios, no usa tus credenciales: asume un rol. Mira las cuatro filas. Primero, Lambda: el rol de ejecución lo asume la función cada vez que corre y, con permiso mínimo, solo puede tocar la tabla de DynamoDB que necesita. Segundo, ECS y Fargate: el rol de tarea lo asumen los contenedores, no el servidor que los hospeda, y cada tarea puede tener el suyo. Tercero, CloudFormation: el rol de servicio permite que una plantilla cree recursos sin que la persona que despliega sea administradora. Y cuarto, los roles vinculados a servicio, como el de Auto Scaling: los crea y los define el propio servicio, se reconocen por el prefijo AWSServiceRoleFor, y no puedes modificar sus permisos. La lección es una sola: los permisos viajan con la carga de trabajo. Si mañana cambias de persona o de equipo, el rol sigue siendo el mismo y el acceso sigue siendo mínimo.</aside>
   </section><section class="slide" data-parte="1">
@@ -603,7 +603,7 @@
       <h2>iam:PassRole: quién puede entregar qué rol</h2>
       <div class="rule"></div>
       <div class="sub">Entregar un rol a un servicio equivale a usar sus permisos: hay que acotarlo por rol y por servicio.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="iam:PassRole: quién puede entregar qué rol"><defs><marker id="aV9" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG9" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB9" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN9" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD9" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -659,7 +659,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Granting a user permissions to pass a role</span>
-      <span class="pg">10 / 15</span>
+      <span class="pg">10 / 59</span>
     </div>
     <aside class="guion">Este es un detalle que muchos pasan por alto. Para lanzar una función Lambda, una instancia o una tarea con un rol, la persona necesita el permiso iam PassRole sobre ese rol. A la izquierda ves el error clásico: PassRole con recurso asterisco. El desarrollador no es administrador, pero crea una función, le entrega el rol Admin, y su código corre con todos los poderes. Eso es una escalada de privilegios, y es muy difícil de detectar mirando solo el usuario. A la derecha ves la forma correcta: PassRole limitado a roles con el prefijo CIC guion Fn, y con una condición que dice que solo puede entregarse al servicio Lambda. El rol Admin queda fuera de su alcance. Mira también la regla de abajo: quien puede crear recursos y entregarles un rol hereda todo lo que ese rol pueda hacer. Por eso PassRole se revisa con el mismo cuidado que un permiso de administrador.</aside>
   </section><section class="slide" data-parte="1">
@@ -668,7 +668,7 @@
       <h2>Acceso entre cuentas: cada lado pone su parte</h2>
       <div class="rule"></div>
       <div class="sub">Producción confía en Desarrollo y Desarrollo permite pedir el rol: sin compartir ninguna llave.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Acceso entre cuentas: cada lado pone su parte"><defs><marker id="aV10" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG10" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB10" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN10" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD10" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -720,7 +720,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Cross-account access using roles</span>
-      <span class="pg">11 / 15</span>
+      <span class="pg">11 / 59</span>
     </div>
     <aside class="guion">Esta es la forma estándar de dar acceso entre cuentas, sin compartir llaves. A la izquierda, la cuenta de desarrollo; a la derecha, la de producción. Ana es ingeniera y necesita desplegar en producción. Primero, en su cuenta, tiene una política con permiso sts AssumeRole sobre el rol CIC despliegue de la cuenta de producción. Segundo, ese rol, en producción, tiene una política de confianza que acepta a la cuenta de desarrollo, aquí además exigiendo autenticación multifactor. Con los dos lados de acuerdo, Ana llama a AssumeRole, recibe credenciales de la cuenta de producción, y opera allí con los permisos del rol. Si falta cualquiera de las dos piezas, acceso denegado. Producción siempre conserva el control: puede cambiar la confianza sin pedirle permiso a nadie. Abajo a la derecha, un caso especial: cuando el que asume es un tercero, como un proveedor de monitoreo, se agrega un identificador externo para evitar el problema del suplente confuso.</aside>
   </section><section class="slide" data-parte="1">
@@ -729,7 +729,7 @@
       <h2>Quién fue: sesiones que dejan rastro en CloudTrail</h2>
       <div class="rule"></div>
       <div class="sub">Un rol compartido sigue siendo auditable si cada sesión lleva el nombre de la persona que lo asumió.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Quién fue: sesiones que dejan rastro en CloudTrail"><defs><marker id="aV11" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG11" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB11" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN11" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD11" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -784,7 +784,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Monitor and control actions taken with assumed roles</span>
-      <span class="pg">12 / 15</span>
+      <span class="pg">12 / 59</span>
     </div>
     <aside class="guion">Una preocupación habitual es que, si varias personas asumen el mismo rol, ya no se sabe quién hizo qué. Se resuelve así. Ana inicia sesión con su identidad corporativa y llama a AssumeRole con un nombre de sesión, ana punto perez. A partir de ahí, todo lo que haga queda registrado en CloudTrail con el rol y ese nombre de sesión. Mira el extracto: el evento es DeleteObject, el tipo de identidad es AssumedRole, el ARN termina en CIC despliegue barra ana punto perez, y aparece el campo SourceIdentity. Este último es especialmente valioso: lo fija quien asume el rol, no puede cambiarse dentro de la sesión y viaja si el rol encadena a otro. Puedes exigir esos campos con condiciones en la política de confianza. Así compartir un rol no es compartir anonimato. En cambio, con un usuario compartido y una llave eterna, esa trazabilidad se pierde por completo y una investigación de seguridad se vuelve muy difícil.</aside>
   </section><section class="slide" data-parte="1">
@@ -793,7 +793,7 @@
       <h2>¿Dónde corre tu código? Así eliges la credencial</h2>
       <div class="rule"></div>
       <div class="sub">Casi siempre hay una alternativa a la llave de largo plazo: la pregunta es dónde vive quien llama.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="¿Dónde corre tu código? Así eliges la credencial"><defs><marker id="aV12" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG12" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB12" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN12" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD12" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -834,7 +834,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM Best Practices y documentación de IAM Roles Anywhere</span>
-      <span class="pg">13 / 15</span>
+      <span class="pg">13 / 59</span>
     </div>
     <aside class="guion">Este árbol de decisión es la herramienta práctica de la semana. Parte de una pregunta: dónde corre quien necesita acceso. Si es una instancia EC2, un contenedor o una función Lambda, la respuesta es un rol: perfil de instancia, rol de tarea o rol de ejecución. Si es la laptop de una persona, usa IAM Identity Center y el comando aws sso login, que entrega sesiones cortas. Si es un pipeline de integración continua, como GitHub Actions, usa federación OIDC hacia un rol, de modo que no guardas secretos en el pipeline. Si es un servidor de la planta, fuera de AWS, existe IAM Roles Anywhere, que cambia un certificado X cinco cero nueve por una sesión temporal. Si es otra cuenta o un tercero, un rol entre cuentas, con identificador externo cuando es un tercero. Y solo si nada de lo anterior aplica, aceptas una llave de largo plazo, pero rotada, con permisos mínimos y vigilada. Fíjate: cinco de seis caminos ya no tienen llaves eternas.</aside>
   </section><section class="slide" data-parte="1">
@@ -843,7 +843,7 @@
       <h2>CIC elimina sus llaves de largo plazo</h2>
       <div class="rule"></div>
       <div class="sub">Catorce llaves repartidas por la empresa se convierten en una sola, vigilada.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="CIC elimina sus llaves de largo plazo"><defs><marker id="aV13" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG13" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB13" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN13" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD13" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -900,7 +900,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM Best Practices; cifras ilustrativas del caso CIC</span>
-      <span class="pg">14 / 15</span>
+      <span class="pg">14 / 59</span>
     </div>
     <aside class="guion">Volvamos a la Corporación Industrial del Caribe, la manufacturera de Barranquilla. Al revisar su cuenta de AWS encontraron catorce llaves de acceso de largo plazo, un número ilustrativo. Seis estaban en laptops de ingeniería: la solución fue IAM Identity Center. Cuatro estaban en scripts de la planta que corren en servidores locales: ahí entra IAM Roles Anywhere. Tres vivían en el pipeline de despliegue: se reemplazaron con federación OIDC hacia un rol. Y una era de un proveedor de monitoreo que aún no soporta roles; esa se conserva, rotada cada noventa días y con alerta de uso. Mira el panel de la derecha, que resume el método: el reporte de credenciales para inventariar, la fecha de último uso para saber qué sobra, la sustitución, y por último la desactivación antes de eliminar, por si algo se rompe. Resultado: de catorce puntos de fuga a uno solo vigilado, sin frenar el trabajo de ningún equipo.</aside>
   </section><section class="slide" data-parte="1">
@@ -909,7 +909,7 @@
       <h2>Lo que queda de la Parte 1</h2>
       <div class="rule"></div>
       <div class="sub">Sin llaves eternas, cada identidad actúa con sesiones cortas y deja rastro.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Lo que queda de la Parte 1"><defs><marker id="aV14" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG14" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB14" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN14" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD14" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -948,7 +948,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: resumen de la Parte 1; AWS IAM User Guide</span>
-      <span class="pg">15 / 15</span>
+      <span class="pg">15 / 59</span>
     </div>
     <aside class="guion">Cerremos la primera parte con cuatro ideas. Una: los roles no tienen llaves; se asumen, con una política de confianza que decide quién entra y una de permisos que decide qué puede hacer. Dos: STS entrega sesiones temporales de cuatro piezas, con duración de quince minutos a doce horas, y los servicios como EC2 las renuevan por ti. Tres: cada carga de trabajo tiene su rol, ya sea perfil de instancia, rol de tarea, de ejecución o de servicio, y los roles vinculados a servicio los gestiona el propio proveedor. Cuatro: entre cuentas se necesitan dos firmas, permiso en el origen y confianza en el destino, y el permiso PassRole se acota para evitar escaladas. Además, CloudTrail registra el nombre de sesión, así que sigues sabiendo quién hizo qué. En la Parte 2 pasamos de quién entra a qué puede hacer: políticas de identidad y de recurso, condiciones, límites de permisos y la lógica completa de evaluación. Nos vemos allí.</aside>
   </section><section class="slide" data-parte="2">
@@ -957,7 +957,7 @@
       <h2>Anatomía de una política: cinco piezas</h2>
       <div class="rule"></div>
       <div class="sub">Casi todo lo que verás hoy se resuelve leyendo bien estas cinco piezas.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Anatomía de una política: cinco piezas"><defs><marker id="aV15" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG15" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB15" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN15" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD15" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1021,7 +1021,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Policies and permissions in IAM</span>
-      <span class="pg">2 / 15</span>
+      <span class="pg">16 / 59</span>
     </div>
     <aside class="guion">Empecemos por leer una política por dentro. A la izquierda tienes un ejemplo real en formato JSON y a la derecha cinco piezas que debes identificar siempre. Version indica la versión del lenguaje, y en la práctica siempre es dos mil doce guion diez guion diecisiete. Effect solo puede ser Allow o Deny, y todo lo que no se permite queda negado por defecto. Action dice qué operaciones se permiten, aquí leer objetos y listar el bucket. Resource indica sobre qué recurso, con su ARN exacto, que se compone de partición, servicio, región, cuenta y recurso. Y Condition dice cuándo aplica; en el ejemplo, solo desde la red de la oficina. Abajo van tres advertencias. Los comodines con asterisco son deuda de seguridad: cada uno es una pregunta pendiente. Un ARN exacto reduce el riesgo. Y un Deny explícito vence siempre a cualquier Allow. El campo Principal solo aparece en las políticas de recurso, que vemos ahora.</aside>
   </section><section class="slide" data-parte="2">
@@ -1030,7 +1030,7 @@
       <h2>Políticas de identidad frente a políticas de recurso</h2>
       <div class="rule"></div>
       <div class="sub">Una vive en quien pide, la otra en lo que se pide; entre cuentas hacen falta ambas.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Políticas de identidad frente a políticas de recurso"><defs><marker id="aV16" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG16" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB16" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN16" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD16" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1082,7 +1082,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Identity-based and resource-based policies</span>
-      <span class="pg">3 / 15</span>
+      <span class="pg">17 / 59</span>
     </div>
     <aside class="guion">Hay dos formas de dar acceso. A la izquierda, la política de identidad: se adjunta a un usuario, grupo o rol, y no necesita Principal, porque el sujeto es quien la lleva puesta. A la derecha, la política de recurso: se adjunta al propio recurso, por ejemplo un bucket, y sí necesita Principal, porque debe decir quién puede tocarlo. Ambas llegan al mismo bucket. La regla de combinación depende de las cuentas. Dentro de la misma cuenta, basta con que una de las dos permita, siempre que nadie niegue. Entre cuentas, deben coincidir las dos: la identidad en la cuenta de origen y el recurso en la cuenta de destino; con una sola, acceso denegado. Abajo ves dónde existen políticas de recurso: buckets de S3, colas SQS, temas SNS, claves KMS, funciones Lambda, secretos y la política de confianza de los roles. Recuerda esa última: es una política de recurso.</aside>
   </section><section class="slide" data-parte="2">
@@ -1091,7 +1091,7 @@
       <h2>Las capas que se suman para decidir un permiso</h2>
       <div class="rule"></div>
       <div class="sub">Unas conceden y otras ponen techo: el permiso real es lo que cabe en todas a la vez.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Las capas que se suman para decidir un permiso"><defs><marker id="aV17" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG17" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB17" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN17" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD17" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1128,7 +1128,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Policy evaluation logic y tipos de políticas</span>
-      <span class="pg">4 / 15</span>
+      <span class="pg">18 / 59</span>
     </div>
     <aside class="guion">Para entender la lógica de evaluación primero hay que distinguir qué hace cada tipo de política. Mira las barras de arriba hacia abajo: cada una es más estrecha que la anterior. Las SCP y las políticas de control de recursos, o RCP, de Organizations ponen el techo máximo para todas las cuentas de una unidad; las define el administrador de la organización. El límite de permisos es un techo propio de un usuario o rol, definido por el administrador de IAM. La política de sesión es un techo adicional que se aplica al asumir un rol o al federar. Y la política de identidad es la que concede permisos a usuarios y roles. Las tres primeras capas solo pueden recortar; ninguna concede por sí sola. Por eso el permiso efectivo, en verde, es la intersección: lo concedido que además cabe en cada techo. Aparte, las políticas de recurso conceden por otra vía, y los puntos de enlace de VPC pueden tener su propia política.</aside>
   </section><section class="slide" data-parte="2">
@@ -1137,7 +1137,7 @@
       <h2>Condiciones: IP, MFA, etiquetas y hora</h2>
       <div class="rule"></div>
       <div class="sub">Una condición convierte un permiso general en uno que solo vale en el contexto correcto.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Condiciones: IP, MFA, etiquetas y hora"><defs><marker id="aV18" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG18" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB18" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN18" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD18" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1178,12 +1178,12 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 1 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — IAM JSON policy elements: Condition</span>
-      <span class="pg">5 / 15</span>
+      <span class="pg">19 / 59</span>
     </div>
     <aside class="guion">Las condiciones son el bisturí de las políticas. Fíjate en los cuatro cuadrantes. Primero, desde dónde: con la clave aws SourceIp limitas el acceso a la red de la oficina o a la VPN de la planta. Segundo, con qué seguridad: la clave aws MultiFactorAuthPresent exige segundo factor para operaciones sensibles. Tercero, sobre qué: las etiquetas de los recursos permiten decir, por ejemplo, que solo se toquen recursos con la etiqueta entorno igual a dev. Y cuarto, cuándo: con la clave aws CurrentTime puedes dar un acceso que vence en una fecha. Una condición se lee como operador, clave y valor. Todas las condiciones dentro de un bloque deben cumplirse a la vez; si una clave lleva varios valores, basta con que coincida uno. Abajo tienes otras claves muy útiles: la región solicitada, el uso de conexión segura, el punto de enlace de VPC y la organización del principal.</aside>
   </section><section class="slide cover" data-parte="2">
     <div class="topline-g"></div><div class="topline-v"></div>
-    <img class="logo-main" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
+    <img class="logo-main" src="assets/logo-cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
     <div class="cover-kicker">Semana 9 · Identidad avanzada</div>
     <h1>Mínimo privilegio a fondo y federación</h1>
     <h3>Parte 2 de 3 · Unidad 2</h3>
@@ -1201,7 +1201,7 @@
       <h2>ABAC: permisos que siguen a las etiquetas</h2>
       <div class="rule"></div>
       <div class="sub">Una política con etiquetas escala mejor que cien políticas por proyecto.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="ABAC: permisos que siguen a las etiquetas"><defs><marker id="aV19" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG19" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB19" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN19" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD19" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1251,7 +1251,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — ABAC for AWS y IAM tutorial: tags</span>
-      <span class="pg">6 / 15</span>
+      <span class="pg">21 / 59</span>
     </div>
     <aside class="guion">Imagina que la Corporación Industrial del Caribe tiene proyectos de planta, ventas, logística. Con el enfoque clásico, una política por proyecto. Con ABAC, control de acceso por atributos, escribes una sola política. Mira la condición de abajo a la izquierda: compara la etiqueta del recurso, llamada proyecto, con la etiqueta del principal, también llamada proyecto, mediante una variable de política. Ahora el diagrama. Ana lleva la etiqueta planta; Luis, ventas. Los dos buckets llevan su propia etiqueta. Cuando Ana toca el bucket de planta, las etiquetas coinciden y se permite. Cuando intenta tocar el de ventas, no coinciden y se niega. Lo mismo ocurre con Luis, a la inversa. Un proyecto nuevo no exige política nueva: basta etiquetar a la persona y a los recursos. La contrapartida es que debes gobernar las etiquetas, porque quien pueda cambiarlas puede cambiar sus propios permisos. Eso lo revisaremos en la gobernanza y el etiquetado, más adelante en la semana.</aside>
   </section><section class="slide" data-parte="2">
@@ -1260,7 +1260,7 @@
       <h2>Tres Deny con condición que protegen a todos</h2>
       <div class="rule"></div>
       <div class="sub">Un Deny condicionado no concede nada: solo cierra puertas que ninguna otra política puede abrir.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Tres Deny con condición que protegen a todos"><defs><marker id="aV20" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG20" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB20" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN20" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD20" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1305,7 +1305,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Example policies y AWS Security Reference Architecture</span>
-      <span class="pg">7 / 15</span>
+      <span class="pg">22 / 59</span>
     </div>
     <aside class="guion">El Deny con condición es la herramienta favorita de los equipos de seguridad, porque funciona como guardarraíl: no concede nada, solo cierra puertas, y como un Deny explícito siempre gana, ninguna otra política puede abrirlas. Mira los tres patrones. Primero, sin autenticación multifactor no se borran instancias ni bases de datos: el Deny se activa si la clave MultiFactorAuthPresent es falsa. Segundo, solo regiones aprobadas: se niega todo lo que se solicite fuera de São Paulo y Norte de Virginia, excepto servicios globales como IAM y STS, que se excluyen con NotAction. Tercero, siempre cifrado en tránsito: se niega cualquier petición a los buckets de la empresa que no use TLS. Estos tres bloques se pueden adjuntar a un grupo, a un límite de permisos o, mejor todavía, a una SCP de la organización, para que valgan para todas las cuentas y no dependan de que cada equipo se acuerde.</aside>
   </section><section class="slide" data-parte="2">
@@ -1314,7 +1314,7 @@
       <h2>Límites de permisos: el techo de una identidad</h2>
       <div class="rule"></div>
       <div class="sub">El permiso efectivo es la intersección entre lo concedido y lo que el límite permite.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Límites de permisos: el techo de una identidad"><defs><marker id="aV21" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG21" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB21" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN21" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD21" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1346,7 +1346,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Permissions boundaries for IAM entities</span>
-      <span class="pg">8 / 15</span>
+      <span class="pg">23 / 59</span>
     </div>
     <aside class="guion">Veamos los límites de permisos, o permission boundaries, con un diagrama de conjuntos. El círculo vino es la política de identidad: lo que se concede, con acciones de EC2, IAM y RDS, pero también de S3 y de logs. El círculo azul es el límite de permisos: el techo máximo, que incluye S3, logs, DynamoDB y SQS. La zona verde, donde se cruzan, es el permiso efectivo: solo S3 y logs. Las acciones de EC2, IAM y RDS quedan fuera, aunque estén concedidas, porque exceden el techo. Y DynamoDB y SQS están dentro del techo, pero como nadie las concedió, tampoco valen. Tres ideas para recordar. Primera, el límite no concede nada. Segunda, solo se aplica a usuarios y roles, no a grupos. Tercera, recorta sin necesidad de editar la política: si alguien se agrega ec2 asterisco, el límite sigue mandando.</aside>
   </section><section class="slide" data-parte="2">
@@ -1355,7 +1355,7 @@
       <h2>Delegar la creación de roles sin perder el control</h2>
       <div class="rule"></div>
       <div class="sub">Seguridad fija el techo una vez; los equipos crean roles propios sin poder superarlo.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Delegar la creación de roles sin perder el control"><defs><marker id="aV22" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG22" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB22" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN22" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD22" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1415,7 +1415,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Delegating responsibility using permissions boundaries</span>
-      <span class="pg">9 / 15</span>
+      <span class="pg">24 / 59</span>
     </div>
     <aside class="guion">El uso más práctico de los límites de permisos es delegar. Piensa en la Corporación Industrial del Caribe: el equipo de seguridad no quiere crear un rol por cada aplicación, pero tampoco quiere que los desarrolladores se den permisos de administrador. Paso uno: seguridad publica una política llamada DevBoundary que marca el techo. Paso dos: al líder de desarrollo se le permite crear roles, pero con una condición que dice que solo puede hacerlo si adjunta ese límite, como ves en el código. Paso tres: los roles de aplicación nacen acotados y actúan dentro del techo. Mira lo que falla a la derecha: crear un rol sin límite, adjuntarle la política de administrador, que sigue siendo recortada, o intentar quitar el límite, que se protege con un Deny. Resultado: los equipos avanzan rápido y seguridad audita un solo límite, no mil roles.</aside>
   </section><section class="slide" data-parte="2">
@@ -1424,7 +1424,7 @@
       <h2>Lógica de evaluación: cinco puertas en orden</h2>
       <div class="rule"></div>
       <div class="sub">La solicitud se aprueba solo si pasa todas las puertas; el Deny explícito corta el camino de inmediato.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Lógica de evaluación: cinco puertas en orden"><defs><marker id="aV23" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG23" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB23" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN23" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD23" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1504,7 +1504,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Policy evaluation logic (diagrama de flujo)</span>
-      <span class="pg">10 / 15</span>
+      <span class="pg">25 / 59</span>
     </div>
     <aside class="guion">Este es el diagrama más importante de la parte, así que síguelo con calma. Cada solicitud pasa por cinco puertas. Puerta uno: ¿hay un Deny explícito en alguna política? Si lo hay, denegado, sin discusión. Puerta dos: ¿lo permiten las SCP y las RCP de la organización? Si el techo no lo permite, denegado. Puerta tres: la política de recurso; si concede el acceso al principal dentro de la misma cuenta, se permite de inmediato, y si no, seguimos. Puerta cuatro: ¿la política de identidad concede el permiso? Si nadie lo concede, la denegación es implícita. Puerta cinco: ¿cabe dentro del límite de permisos y de la política de sesión? Si excede algún techo, denegado. Solo si pasa todo, la respuesta es permitido. Para recordarlo: por defecto todo se niega, el Deny explícito siempre gana, todos los techos deben permitir y alguien debe conceder.</aside>
   </section><section class="slide" data-parte="2">
@@ -1513,7 +1513,7 @@
       <h2>Cuatro solicitudes: ¿quién decide en cada caso?</h2>
       <div class="rule"></div>
       <div class="sub">Aplicar las cinco puertas a casos concretos es la mejor manera de dejar de adivinar.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Cuatro solicitudes: ¿quién decide en cada caso?"><defs><marker id="aV24" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG24" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB24" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN24" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD24" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1587,7 +1587,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Policy evaluation logic: ejemplos de casos</span>
-      <span class="pg">11 / 15</span>
+      <span class="pg">26 / 59</span>
     </div>
     <aside class="guion">Ahora practiquemos con cuatro solicitudes distintas. En todas, la acción es s3 GetObject sobre un bucket de la empresa. Caso A: Ana, de la misma cuenta, tiene un Allow en su política de identidad, pero el bucket tiene un Deny explícito. Resultado: denegado, porque el Deny gana. Caso B: un rol de la aplicación no tiene sentencia en su identidad, pero la política del bucket concede acceso al rol, y la SCP lo permite. Como es la misma cuenta, el recurso basta: permitido. Caso C: Luis tiene el Allow, pero la SCP de la organización no permite ese servicio. Denegado, porque el techo no alcanza. Caso D: un analista de otra cuenta tiene su Allow, pero el bucket no dice nada sobre él. Entre cuentas hacen falta las dos partes, así que está denegado. Fíjate cómo la respuesta sale de ir puerta por puerta, sin adivinar.</aside>
   </section><section class="slide" data-parte="2">
@@ -1596,7 +1596,7 @@
       <h2>IAM Access Analyzer: lo que está expuesto</h2>
       <div class="rule"></div>
       <div class="sub">El analizador responde la pregunta que nadie se hace: quién de afuera puede llegar a mis recursos.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="IAM Access Analyzer: lo que está expuesto"><defs><marker id="aV25" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG25" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB25" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN25" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD25" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1657,7 +1657,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM Access Analyzer — documentación y casos de uso</span>
-      <span class="pg">12 / 15</span>
+      <span class="pg">27 / 59</span>
     </div>
     <aside class="guion">Escribir políticas es la mitad del trabajo; la otra mitad es saber qué quedó expuesto. IAM Access Analyzer hace justamente eso. A la izquierda ves tu zona de confianza, la organización, con sus buckets, claves, roles, funciones, colas y secretos. El analizador revisa las políticas de esos recursos y genera hallazgos. A la derecha tienes ejemplos con severidad: un bucket que permite acceso a cualquier persona en Internet, un rol que confía en una cuenta externa, un usuario sin actividad en noventa días y una clave compartida fuera de la organización. Abajo están sus cuatro capacidades. Acceso externo: quién de afuera llega a tus recursos. Acceso no utilizado: roles, llaves y permisos que nadie usa. Validación y controles personalizados: revisa sintaxis y compara cambios antes de desplegarlos. Y generación de políticas a partir de la actividad real, que veremos enseguida. Actívalo desde el primer día.</aside>
   </section><section class="slide" data-parte="2">
@@ -1666,7 +1666,7 @@
       <h2>Mínimo privilegio como ciclo de mejora continua</h2>
       <div class="rule"></div>
       <div class="sub">Se empieza con permisos amplios en pruebas y se recortan con datos reales, no con suposiciones.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Mínimo privilegio como ciclo de mejora continua"><defs><marker id="aV26" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG26" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB26" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN26" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD26" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1718,7 +1718,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Generate policies based on CloudTrail events</span>
-      <span class="pg">13 / 15</span>
+      <span class="pg">28 / 59</span>
     </div>
     <aside class="guion">El mínimo privilegio rara vez se logra escribiendo la política perfecta a la primera. Funciona mejor como ciclo. Paso uno: empezar amplio, pero solo en un entorno de pruebas. Paso dos: ejecutar la carga de trabajo real, mientras CloudTrail registra cada llamada. Paso tres: Access Analyzer genera una política a partir de esa actividad, con hasta noventa días de registros. Paso cuatro: revisar y recortar; el borrador casi nunca es la versión final, hay que poner ARN exactos y condiciones. Paso cinco: desplegar y vigilar, con la información de último acceso y los hallazgos de acceso no utilizado, y repetir cuando la aplicación cambie. Fíjate en el panel de la derecha: cada herramienta aporta una pieza, CloudTrail el registro, el último acceso el uso real, la generación de políticas el borrador, y los hallazgos lo que sobra. Es un ciclo, no un evento.</aside>
   </section><section class="slide" data-parte="2">
@@ -1727,7 +1727,7 @@
       <h2>CIC reduce la brecha de permisos en cuatro sprints</h2>
       <div class="rule"></div>
       <div class="sub">La distancia entre lo concedido y lo usado se cierra con datos, no con intuición.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="CIC reduce la brecha de permisos en cuatro sprints"><defs><marker id="aV27" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG27" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB27" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN27" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD27" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1793,7 +1793,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS Well-Architected, pilar Seguridad (SEC03); cifras ilustrativas</span>
-      <span class="pg">14 / 15</span>
+      <span class="pg">29 / 59</span>
     </div>
     <aside class="guion">Veamos cómo lo hizo la Corporación Industrial del Caribe con el rol de su aplicación de facturación. El gráfico, en escala logarítmica y con cifras ilustrativas, compara dos curvas. La verde son las acciones que la aplicación realmente usa: unas ochenta, constantes. La vino son las acciones que el rol permite. En el sprint cero la aplicación corría con AdministratorAccess: catorce mil acciones permitidas para ochenta usadas. Esa distancia, la zona sombreada, es la brecha de permisos, y es superficie de ataque. En el sprint uno cambiaron a políticas administradas por servicio. En el sprint dos usaron una política generada desde CloudTrail. En el sprint tres agregaron condiciones y un límite de permisos. En el sprint cuatro quedó la revisión continua de lo que no se usa. Observa que la aplicación nunca dejó de funcionar: el recorte se hizo con datos. Esa es la diferencia entre mínimo privilegio como eslogan y como práctica.</aside>
   </section><section class="slide" data-parte="2">
@@ -1802,7 +1802,7 @@
       <h2>Lo que queda de la Parte 2</h2>
       <div class="rule"></div>
       <div class="sub">Permisos justos se construyen con condiciones, techos y mejora continua.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Lo que queda de la Parte 2"><defs><marker id="aV28" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG28" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB28" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN28" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD28" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1841,7 +1841,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: resumen de la Parte 2; AWS IAM User Guide</span>
-      <span class="pg">15 / 15</span>
+      <span class="pg">30 / 59</span>
     </div>
     <aside class="guion">Cerremos la segunda parte con cuatro ideas. Una: lee la política por dentro. Effect, Action, Resource y Condition, y desconfía de los comodines: cada asterisco es una pregunta sin responder. Dos: usa condiciones. IP, autenticación multifactor, etiquetas y hora convierten un permiso general en uno contextual, y un Deny condicionado funciona como guardarraíl para todos. Tres: pon techos. Los límites de permisos y las SCP no conceden nada, pero definen hasta dónde se puede llegar, y el permiso real es la intersección de todas las capas, que ahora sabes evaluar en cinco puertas. Cuatro: itera con datos. Access Analyzer, CloudTrail y la información de último acceso te permiten cerrar la brecha entre lo concedido y lo usado, sprint a sprint. En la Parte 3 pasamos de las identidades dentro de AWS a las personas y aplicaciones reales: federación, inicio de sesión único, Cognito, secretos y claves. Nos vemos allí.</aside>
   </section><section class="slide" data-parte="3">
@@ -1850,7 +1850,7 @@
       <h2>Tres tipos de identidad, tres herramientas</h2>
       <div class="rule"></div>
       <div class="sub">Personas, cargas de trabajo y clientes de una app se resuelven con servicios distintos.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Tres tipos de identidad, tres herramientas"><defs><marker id="aV29" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG29" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB29" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN29" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD29" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1887,7 +1887,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS Well-Architected, pilar Seguridad (SEC02): identity management</span>
-      <span class="pg">2 / 15</span>
+      <span class="pg">31 / 59</span>
     </div>
     <aside class="guion">Antes de entrar en detalles, ordenemos el mapa. En una empresa hay tres tipos de identidad, y cada una tiene su herramienta. Primero, las personas: empleados y contratistas, que ya existen en un directorio corporativo; para ellas usamos IAM Identity Center junto con un proveedor de identidad, y reciben sesiones cortas en la consola y en la línea de comandos. Segundo, las cargas de trabajo: aplicaciones y servidores, que usan roles de IAM, como vimos en la Parte uno, con credenciales temporales que el servicio renueva. Tercero, los clientes de tu aplicación: personas que no son empleados, como los distribuidores de la Corporación Industrial del Caribe que hacen pedidos; para ellos existe Amazon Cognito, que emite tokens y, si hace falta, credenciales temporales. La regla de diseño de abajo es importante: cada tipo de identidad vive en su propio directorio, porque su ciclo de vida, sus controles de seguridad y su volumen son distintos.</aside>
   </section><section class="slide" data-parte="3">
@@ -1896,7 +1896,7 @@
       <h2>Identidad federada: un solo directorio, muchas puertas</h2>
       <div class="rule"></div>
       <div class="sub">AWS y las demás plataformas confían en el proveedor de identidad de la empresa.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Identidad federada: un solo directorio, muchas puertas"><defs><marker id="aV30" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG30" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB30" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN30" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD30" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -1946,7 +1946,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — Identity providers and federation</span>
-      <span class="pg">3 / 15</span>
+      <span class="pg">32 / 59</span>
     </div>
     <aside class="guion">Observa los dos paneles. A la izquierda, un mundo sin federación: cada plataforma, ya sea AWS, una aplicación SaaS u otra nube, tiene su propia lista de usuarios y contraseñas. El resultado son cuentas duplicadas, y lo peor ocurre cuando alguien se va de la empresa: hay que acordarse de borrarlo en cada sitio, y siempre se olvida alguno. A la derecha, el mundo federado. Las personas existen una sola vez, en el proveedor de identidad de la empresa, que en nuestro ejemplo es Entra ID. Las plataformas confían en ese proveedor mediante los protocolos SAML u OpenID Connect. Las ventajas están en la franja de abajo: las altas y bajas se hacen en un solo lugar, la autenticación multifactor y el acceso condicional se centralizan, y AWS nunca guarda la contraseña de nadie; solo verifica la firma de una aserción emitida por quien sí conoce al usuario.</aside>
   </section><section class="slide" data-parte="3">
@@ -1955,7 +1955,7 @@
       <h2>SAML: el inicio de sesión federado paso a paso</h2>
       <div class="rule"></div>
       <div class="sub">El navegador lleva la aserción firmada del proveedor hasta AWS; la contraseña nunca viaja a AWS.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="SAML: el inicio de sesión federado paso a paso"><defs><marker id="aV31" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG31" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB31" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN31" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD31" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2003,7 +2003,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM User Guide — About SAML 2.0-based federation</span>
-      <span class="pg">4 / 15</span>
+      <span class="pg">33 / 59</span>
     </div>
     <aside class="guion">Veamos el flujo con tres actores: el usuario con su navegador, AWS y el proveedor de identidad. Paso uno: la persona abre el portal de acceso de AWS. Paso dos: AWS no sabe quién es, así que la redirige al proveedor de identidad con una solicitud SAML. Paso tres: en el proveedor, la persona inicia sesión con contraseña y segundo factor. Paso cuatro: el proveedor devuelve una aserción SAML firmada, que dice quién es el usuario, a qué grupos pertenece y otros atributos. Paso cinco: el navegador entrega esa aserción a AWS mediante un HTTP POST. Paso seis: AWS valida la firma y, a través de STS, con la acción AssumeRoleWithSAML, entrega una sesión con credenciales temporales. Fíjate en lo esencial: la contraseña nunca llega a AWS. La confianza se configuró una sola vez, intercambiando metadatos entre ambas partes, y desde entonces AWS solo comprueba la firma de la aserción.</aside>
   </section><section class="slide" data-parte="3">
@@ -2012,7 +2012,7 @@
       <h2>OIDC y OAuth 2.0: tokens para aplicaciones modernas</h2>
       <div class="rule"></div>
       <div class="sub">La aplicación recibe tokens firmados que dicen quién es el usuario y qué puede pedir.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="OIDC y OAuth 2.0: tokens para aplicaciones modernas"><defs><marker id="aV32" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG32" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB32" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN32" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD32" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2073,7 +2073,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de OpenID Connect Core 1.0 y RFC 7636 (PKCE); AWS IAM User Guide — OIDC federation</span>
-      <span class="pg">5 / 15</span>
+      <span class="pg">34 / 59</span>
     </div>
     <aside class="guion">SAML nació para aplicaciones empresariales con navegador; para aplicaciones web modernas, móviles y para las APIs se usa OpenID Connect, construido sobre OAuth 2.0. Sigue el flujo de código de autorización con PKCE. Uno: la aplicación redirige a la persona al servidor de autorización, enviando un desafío criptográfico, el code challenge. Dos: la persona se autentica y da su consentimiento. Tres: el servidor devuelve un código de autorización. Cuatro: la aplicación cambia ese código por tokens, demostrando que es quien inició el proceso con el code verifier. Cinco: recibe un ID token, un access token y un refresh token. Seis: con el access token llama a la API. A la derecha ves que un JWT tiene tres partes: encabezado, contenido y firma. El ID token dice quién es la persona, el access token qué puede pedir, y el refresh token renueva la sesión. Con PKCE, la aplicación no necesita guardar un secreto.</aside>
   </section><section class="slide" data-parte="3">
@@ -2082,7 +2082,7 @@
       <h2>Pipelines sin llaves: GitHub Actions hacia AWS</h2>
       <div class="rule"></div>
       <div class="sub">El pipeline presenta un token firmado de GitHub y recibe una sesión de AWS que caduca.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Pipelines sin llaves: GitHub Actions hacia AWS"><defs><marker id="aV33" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG33" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB33" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN33" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD33" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2136,7 +2136,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de GitHub Docs — Configuring OpenID Connect in AWS y AWS IAM User Guide</span>
-      <span class="pg">6 / 15</span>
+      <span class="pg">35 / 59</span>
     </div>
     <aside class="guion">Aquí cerramos el círculo con la Parte uno: ¿cómo eliminamos la llave del pipeline de despliegue? Con federación OIDC. Paso uno: el workflow de GitHub Actions solicita a GitHub un token OIDC de esa ejecución. Paso dos: GitHub entrega un token firmado que incluye el repositorio y la rama. Paso tres: el workflow llama a STS con AssumeRoleWithWebIdentity y presenta ese token; AWS lo valida contra el proveedor OIDC registrado en IAM y contra la política de confianza del rol, y entrega credenciales temporales. Paso cuatro: el pipeline publica en S3 con esa sesión. Mira el código abajo a la izquierda. La condición sub es la clave: solo el repositorio cic corp portal pedidos y la rama main pueden asumir el rol. Sin ella, cualquier repositorio de GitHub podría intentarlo. El resultado: ningún secreto guardado en el pipeline y sesiones de corta duración.</aside>
   </section><section class="slide" data-parte="3">
@@ -2145,7 +2145,7 @@
       <h2>IAM Identity Center: grupos, permisos y cuentas</h2>
       <div class="rule"></div>
       <div class="sub">Una persona entra una vez y ve solo las cuentas y roles que su grupo tiene asignados.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="IAM Identity Center: grupos, permisos y cuentas"><defs><marker id="aV34" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG34" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB34" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN34" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD34" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2205,7 +2205,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de AWS IAM Identity Center User Guide — Multi-account permissions</span>
-      <span class="pg">7 / 15</span>
+      <span class="pg">36 / 59</span>
     </div>
     <aside class="guion">IAM Identity Center es el servicio de AWS que centraliza el inicio de sesión único para toda la organización. Arriba ves de dónde pueden venir las identidades: de un directorio propio del servicio, de Active Directory, o de un proveedor externo conectado por SAML, con provisión automática por SCIM. En el centro está el servicio, y abajo el modelo de asignación, que son tres columnas: grupos, conjuntos de permisos y cuentas. Un conjunto de permisos es una plantilla de permisos, como PowerUser o SoloLectura. Cada asignación combina un grupo, un conjunto de permisos y una cuenta. Por ejemplo: Ingeniería recibe PowerUser en Desarrollo, pero solo lectura en Producción; Finanzas recibe Facturación en la cuenta de gestión; Auditoría recibe solo lectura en Seguridad. Detrás, el servicio crea en cada cuenta un rol con prefijo AWSReservedSSO. La persona entra una vez al portal de acceso y ve únicamente lo que su grupo tiene asignado.</aside>
   </section><section class="slide" data-parte="3">
@@ -2214,7 +2214,7 @@
       <h2>Entra ID como fuente: un ejemplo de proveedor</h2>
       <div class="rule"></div>
       <div class="sub">La persona se da de alta una vez y su acceso llega a AWS, a Azure y a las aplicaciones SaaS.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Entra ID como fuente: un ejemplo de proveedor"><defs><marker id="aV35" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG35" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB35" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN35" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD35" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2261,7 +2261,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de Microsoft Learn — Entra ID e IAM Identity Center (provisión con SCIM)</span>
-      <span class="pg">8 / 15</span>
+      <span class="pg">37 / 59</span>
     </div>
     <aside class="guion">Para concretar la federación, usemos Microsoft Entra ID como ejemplo, el antiguo Azure Active Directory. Es el directorio corporativo de la Corporación Industrial del Caribe, con usuarios y grupos, acceso condicional, segundo factor y revisiones de acceso. De ahí salen tres caminos. Hacia AWS, mediante IAM Identity Center: SAML para entrar y SCIM para que las altas y bajas lleguen automáticamente. Hacia Azure, donde los grupos reciben roles sobre las suscripciones. Y hacia aplicaciones SaaS, por SAML u OIDC. Abajo está el verdadero beneficio, el ciclo de vida. Cuando una persona ingresa, se crea una vez y entra a un grupo. Cuando cambia de área, cambia de grupo y cambian sus accesos. Cuando sale, se deshabilita una vez, y se cierra el acceso a todo. Entra ID es solo un ejemplo: el mismo diseño funciona con Okta, Google Workspace o un Active Directory local.</aside>
   </section><section class="slide" data-parte="3">
@@ -2270,7 +2270,7 @@
       <h2>Cognito: user pools frente a identity pools</h2>
       <div class="rule"></div>
       <div class="sub">Uno responde quién eres; el otro, qué recursos de AWS puedes usar directamente.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Cognito: user pools frente a identity pools"><defs><marker id="aV36" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG36" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB36" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN36" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD36" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2304,7 +2304,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de Amazon Cognito Developer Guide — User pools and identity pools</span>
-      <span class="pg">9 / 15</span>
+      <span class="pg">38 / 59</span>
     </div>
     <aside class="guion">Pasemos a los clientes de una aplicación, por ejemplo los distribuidores de la Corporación Industrial del Caribe que hacen pedidos desde una app. Amazon Cognito tiene dos componentes que suelen confundirse. El user pool es un directorio de usuarios: gestiona el registro, el inicio de sesión, la recuperación de contraseña, el segundo factor y el acceso con proveedores sociales o SAML y OpenID Connect, y entrega tokens JWT. Responde la pregunta: quién eres. El identity pool, o identidades federadas, responde otra: qué puedes tocar en AWS. Recibe un token de confianza, por ejemplo el del user pool, y lo cambia por credenciales temporales de STS, asociadas a un rol para usuarios autenticados y, si quieres, a otro más limitado para invitados. Pueden usarse por separado o juntos. Una API normalmente solo necesita el user pool; si la app sube fotos directamente a S3, se suma el identity pool.</aside>
   </section><section class="slide" data-parte="3">
@@ -2313,7 +2313,7 @@
       <h2>Dos caminos para una app: API o acceso directo</h2>
       <div class="rule"></div>
       <div class="sub">Los tokens del user pool abren la API; el identity pool los cambia por credenciales de AWS.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Dos caminos para una app: API o acceso directo"><defs><marker id="aV37" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG37" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB37" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN37" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD37" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2369,12 +2369,12 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 2 de 3</span>
       <span class="src">Fuente: adaptado de Amazon Cognito Developer Guide — Common Amazon Cognito scenarios</span>
-      <span class="pg">10 / 15</span>
+      <span class="pg">39 / 59</span>
     </div>
     <aside class="guion">Veamos los dos caminos en un solo diagrama. A la izquierda está la app de pedidos. Paso uno: el distribuidor inicia sesión en el user pool. Paso dos: recibe tres tokens, de identidad, de acceso y de renovación. Ahora hay dos caminos posibles. En el camino A, arriba, la app envía el token de acceso a Amazon API Gateway en cada petición; el autorizador de Cognito verifica la firma, el vencimiento y el alcance, y deja pasar la llamada hacia Lambda y DynamoDB. En el camino B, abajo, paso tres: la app entrega su token de identidad al identity pool, que lo valida y, mediante STS, entrega credenciales temporales atadas al rol de usuarios autenticados; con ellas la app sube fotos de entrega directamente a S3, sin pasar por un servidor. Una recomendación práctica: en el camino B, haz que la política del rol use la variable de identidad de Cognito para limitar la ruta de cada objeto, de modo que cada distribuidor solo vea lo suyo.</aside>
   </section><section class="slide cover" data-parte="3">
     <div class="topline-g"></div><div class="topline-v"></div>
-    <img class="logo-main" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
+    <img class="logo-main" src="assets/logo-cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
     <div class="cover-kicker">Semana 9 · Identidad avanzada</div>
     <h1>Secretos y gobernanza multi-cuenta</h1>
     <h3>Parte 3 de 3 · Unidad 2</h3>
@@ -2392,7 +2392,7 @@
       <h2>Secretos: del código a Secrets Manager</h2>
       <div class="rule"></div>
       <div class="sub">La aplicación pide la contraseña cuando la necesita, con su rol, y el servicio la rota sola.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Secretos: del código a Secrets Manager"><defs><marker id="aV38" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG38" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB38" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN38" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD38" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2444,7 +2444,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Secrets Manager User Guide — Rotate secrets y Best practices</span>
-      <span class="pg">11 / 15</span>
+      <span class="pg">41 / 59</span>
     </div>
     <aside class="guion">Hablemos de los secretos: contraseñas de bases de datos, llaves de terceros, tokens. A la izquierda, el error clásico: la contraseña escrita en el código, copiada en laptops, en el repositorio y en variables de entorno; se comparte y nunca se rota. A la derecha, la forma correcta con AWS Secrets Manager. Paso uno: la aplicación, que corre con un rol, llama a GetSecretValue en el momento en que lo necesita. Paso dos: el secreto está guardado cifrado en reposo con una clave de KMS. Además, el servicio puede rotar el secreto automáticamente, por ejemplo cada treinta días: una función Lambda crea la nueva contraseña, la cambia en la base de datos y marca la versión actual; la aplicación ni se entera, porque siempre pide la versión vigente. Abajo ves quién puede leerlo: solo el rol de la aplicación, con permiso sobre ese secreto, y cada lectura queda en CloudTrail. Si no necesitas rotación, Parameter Store con SecureString es una alternativa más económica.</aside>
   </section><section class="slide" data-parte="3">
@@ -2453,7 +2453,7 @@
       <h2>Políticas de claves: administrar no es usar</h2>
       <div class="rule"></div>
       <div class="sub">Quien gestiona la clave no puede descifrar datos, y quien descifra no puede cambiarla.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Políticas de claves: administrar no es usar"><defs><marker id="aV39" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG39" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB39" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN39" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD39" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2492,7 +2492,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS KMS Developer Guide — Key policies in AWS KMS</span>
-      <span class="pg">12 / 15</span>
+      <span class="pg">42 / 59</span>
     </div>
     <aside class="guion">En la semana cinco vimos qué hace KMS; ahora veamos quién manda sobre una clave. A diferencia de otros servicios, en KMS el acceso depende primero de la política de la propia clave. Mira el código de arriba: la primera sentencia permite al usuario raíz de la cuenta, y con eso habilita que las políticas de IAM también puedan conceder permisos sobre la clave. Si esa sentencia no existe, las políticas de IAM por sí solas no alcanzan. La segunda sentencia define los administradores. Abajo se ve el principio central: separación de funciones. Los administradores de la clave pueden crearla, describirla, habilitarla o programar su eliminación, pero no pueden cifrar ni descifrar. Los usuarios de la clave pueden cifrar, descifrar y generar claves de datos, pero no pueden borrarla ni cambiarla. Y las condiciones acotan el uso: kms ViaService permite usar la clave solo a través de S3 o EBS, y el contexto de cifrado exige que el dato lleve la etiqueta esperada.</aside>
   </section><section class="slide" data-parte="3">
@@ -2501,7 +2501,7 @@
       <h2>Un dato cifrado exige tres permisos, no uno</h2>
       <div class="rule"></div>
       <div class="sub">Si el acceso falla, revisa las tres puertas: identidad, recurso y clave.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Un dato cifrado exige tres permisos, no uno"><defs><marker id="aV40" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG40" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB40" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN40" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD40" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2556,7 +2556,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS KMS y Amazon S3 User Guide — Using SSE-KMS; IAM Policy Simulator</span>
-      <span class="pg">13 / 15</span>
+      <span class="pg">43 / 59</span>
     </div>
     <aside class="guion">Juntemos identidad y datos en un caso típico: un rol quiere leer un objeto de S3 cifrado con una clave de KMS. Necesita pasar tres puertas. Puerta uno: la política de identidad del rol debe permitir s3 GetObject sobre el bucket. Puerta dos: el bucket y su política no deben negar el acceso. Puerta tres: la política de la clave de KMS debe permitir kms Decrypt al rol, porque S3 llama a KMS en nombre del rol para descifrar el objeto. Fíjate en el ejemplo: las puertas uno y dos están bien, pero la tres falla, y el resultado es AccessDenied, con un mensaje que menciona kms Decrypt. Mucha gente pierde horas revisando solo S3. La lección es depurar con método. CloudTrail muestra el evento fallido y su código de error. El simulador de políticas permite probar una acción sin ejecutarla. Y Access Analyzer revisa políticas y accesos inesperados. Tres herramientas, tres puertas.</aside>
   </section><section class="slide" data-parte="3">
@@ -2565,7 +2565,7 @@
       <h2>CIC: quién entra y por cuál puerta</h2>
       <div class="rule"></div>
       <div class="sub">Cada tipo de persona o carga entra por su propia puerta y llega solo a las cuentas que le corresponden.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="CIC: quién entra y por cuál puerta"><defs><marker id="aV41" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG41" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB41" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN41" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD41" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2631,7 +2631,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Well-Architected, pilar Seguridad; caso transversal CIC</span>
-      <span class="pg">14 / 15</span>
+      <span class="pg">44 / 59</span>
     </div>
     <aside class="guion">Reunamos todo en la Corporación Industrial del Caribe. A la izquierda, cuatro tipos de identidad. Los empleados entran con Entra ID y autenticación multifactor, y llegan a IAM Identity Center con conjuntos de permisos por grupo. Los contratistas son invitados con acceso que vence y de solo lectura, también a través de Identity Center. Los distribuidores, que son clientes, usan el portal de pedidos con un user pool de Cognito, que emite tokens por distribuidor. Y los servidores de la planta en Barranquilla usan IAM Roles Anywhere, con certificados, para obtener sesiones temporales. A la derecha, las cuentas de AWS: desarrollo, con roles de ingeniería y sin datos reales; producción, con pedidos, facturación y planta; seguridad, con los registros centralizados; y una de datos compartidos, con secretos y claves. Abajo, los controles transversales que hemos construido durante estas tres partes: sin llaves eternas, mínimo privilegio, secretos rotados y claves con funciones separadas.</aside>
   </section><section class="slide" data-parte="3">
@@ -2640,7 +2640,7 @@
       <h2>Lo que queda de la Parte 3</h2>
       <div class="rule"></div>
       <div class="sub">Personas federadas, clientes en Cognito y secretos y claves bien gobernados.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Lo que queda de la Parte 3"><defs><marker id="aV42" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG42" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB42" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN42" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD42" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2679,7 +2679,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: resumen de la Parte 3; AWS IAM Identity Center, Cognito y KMS</span>
-      <span class="pg">15 / 15</span>
+      <span class="pg">45 / 59</span>
     </div>
     <aside class="guion">Cerremos la tercera parte con cuatro ideas. Una: las personas se federan. Un solo directorio, con SAML u OpenID Connect, e IAM Identity Center asigna grupos, conjuntos de permisos y cuentas; así las altas y bajas se hacen en un solo lugar. Dos: los pipelines no necesitan secretos. Con OIDC, el pipeline presenta un token firmado y la política de confianza valida repositorio y rama. Tres: los clientes de una aplicación viven en otro directorio, Cognito; el user pool dice quién eres y el identity pool entrega credenciales de AWS cuando hace falta. Cuatro: los secretos y las claves se gobiernan. Secrets Manager entrega y rota contraseñas, y las políticas de clave separan a quien administra de quien usa. En la última parte subimos al nivel de la organización: cuentas, unidades organizativas, SCP, guardarraíles, etiquetado, presupuestos y la otra gran pregunta, cuánto cuesta. Nos vemos allí.</aside>
   </section><section class="slide" data-parte="4">
@@ -2688,7 +2688,7 @@
       <h2>Por qué una empresa usa muchas cuentas de AWS</h2>
       <div class="rule"></div>
       <div class="sub">La cuenta es la frontera más fuerte de AWS: aísla permisos, costos y errores.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Por qué una empresa usa muchas cuentas de AWS"><defs><marker id="aV43" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG43" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB43" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN43" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD43" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2753,7 +2753,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Whitepaper — Organizing Your AWS Environment Using Multiple Accounts</span>
-      <span class="pg">2 / 15</span>
+      <span class="pg">46 / 59</span>
     </div>
     <aside class="guion">Empecemos por la pregunta de fondo: por qué no usar una sola cuenta de AWS para todo. Mira el panel de la izquierda: producción, pruebas, datos reales, registros y un sandbox conviven en la misma cuenta. Un error de un desarrollador puede tocar producción, hay un solo radio de impacto, una sola factura mezclada y los límites de servicio se comparten. A la derecha, la alternativa: varias cuentas con propósito. Producción, desarrollo, seguridad y datos viven separadas. Un error en desarrollo se queda en desarrollo. La cuenta es la frontera más fuerte que ofrece AWS, más fuerte que cualquier política dentro de ella. Abajo están las cuatro razones: aislamiento, porque el daño no se propaga; facturación, porque cada cuenta puede ser un centro de costo; límites, porque las cuotas son por cuenta; y cumplimiento, porque las fronteras son claras para auditar. El reto es gobernar muchas cuentas sin volverse loco, y para eso existe Organizations.</aside>
   </section><section class="slide" data-parte="4">
@@ -2762,7 +2762,7 @@
       <h2>AWS Organizations: la raíz, las unidades y las cuentas</h2>
       <div class="rule"></div>
       <div class="sub">Las cuentas se agrupan en unidades organizativas y heredan políticas desde la raíz.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="AWS Organizations: la raíz, las unidades y las cuentas"><defs><marker id="aV44" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG44" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB44" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN44" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD44" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2821,7 +2821,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Organizations User Guide — Terminology and concepts</span>
-      <span class="pg">3 / 15</span>
+      <span class="pg">47 / 59</span>
     </div>
     <aside class="guion">AWS Organizations es el servicio que agrupa muchas cuentas bajo un mismo techo. Mira el árbol. Arriba está la cuenta de gestión, que se reserva para facturación y gobierno, sin cargas de trabajo. Debajo, la raíz de la organización, y de ella cuelgan las unidades organizativas, o UO, que son carpetas de cuentas. En nuestro ejemplo hay cuatro: seguridad, con las cuentas de registros y auditoría; infraestructura, con la red compartida; cargas de trabajo, con producción y desarrollo; y sandbox, para que los equipos experimenten sin riesgo. Abajo ves lo que aporta la jerarquía. Primero, las políticas se heredan: lo que aplicas a una unidad llega a todas sus cuentas. Segundo, la facturación se consolida, con una sola factura y detalle por cuenta. Tercero, se pueden crear cuentas nuevas por API, con una línea base de seguridad. Y cuarto, se pueden compartir recursos entre cuentas.</aside>
   </section><section class="slide" data-parte="4">
@@ -2830,7 +2830,7 @@
       <h2>SCP: el techo de toda la organización</h2>
       <div class="rule"></div>
       <div class="sub">Una SCP no concede permisos: limita lo que cualquier identidad de la cuenta podría llegar a hacer.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="SCP: el techo de toda la organización"><defs><marker id="aV45" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG45" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB45" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN45" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD45" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2884,7 +2884,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Organizations User Guide — Service control policies (SCPs)</span>
-      <span class="pg">4 / 15</span>
+      <span class="pg">48 / 59</span>
     </div>
     <aside class="guion">Las políticas de control de servicio, o SCP, son el techo de toda la organización. Mira el árbol de la izquierda. En la raíz está la SCP predeterminada, FullAWSAccess, que permite todo. En la unidad de cargas de trabajo hay una SCP que niega las regiones no aprobadas. Y en producción se agrega otra que niega borrar los registros. El permiso efectivo en producción es la intersección de lo que concede IAM con lo que permiten todas las SCP del camino. Dos cosas importantes: la SCP nunca concede, si IAM no da el permiso no existe aunque la SCP lo deje pasar; y si una SCP del camino no permite la acción, la solicitud se rechaza aunque quien la haga sea administrador. A la derecha, recordatorios: son un techo, heredan hacia abajo, afectan a todos los usuarios y roles de la cuenta miembro, incluido su usuario raíz, no tocan la cuenta de gestión, y quitar FullAWSAccess sin reemplazo corta todo.</aside>
   </section><section class="slide" data-parte="4">
@@ -2893,7 +2893,7 @@
       <h2>Guardarraíles: prevenir, detectar y corregir</h2>
       <div class="rule"></div>
       <div class="sub">Lo ideal es impedir; lo realista es impedir, detectar lo que se escape y corregirlo solo.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Guardarraíles: prevenir, detectar y corregir"><defs><marker id="aV46" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG46" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB46" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN46" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD46" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -2945,7 +2945,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Security Reference Architecture y AWS Control Tower — controles</span>
-      <span class="pg">5 / 15</span>
+      <span class="pg">49 / 59</span>
     </div>
     <aside class="guion">Un guardarraíl es una regla que mantiene a todos dentro del camino sin frenar el tráfico. Hay tres tipos y funcionan en capas. Imagina que un desarrollador quiere crear un bucket público. Primero, el control preventivo: una SCP o un límite de permisos que impide la acción antes de que ocurra. Es el más fuerte, pero no siempre se puede escribir una regla para todo. Segundo, el control detectivo: AWS Config evalúa los recursos contra reglas, Security Hub centraliza los hallazgos y GuardDuty observa comportamientos extraños. No impide, señala. Tercero, el control correctivo: un evento de EventBridge lanza una función Lambda o una automatización de Systems Manager que corrige el recurso, por ejemplo activando el bloqueo de acceso público, y avisa al dueño. Abajo ves el mismo caso en tres pasos: prevenir, detectar y corregir. Lo ideal es impedir; lo realista es combinar las tres capas.</aside>
   </section><section class="slide" data-parte="4">
@@ -2954,7 +2954,7 @@
       <h2>Control Tower: una organización lista desde el día uno</h2>
       <div class="rule"></div>
       <div class="sub">El servicio automatiza la estructura, los registros centrales y los controles obligatorios.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Control Tower: una organización lista desde el día uno"><defs><marker id="aV47" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG47" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB47" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN47" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD47" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3013,7 +3013,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Control Tower User Guide — landing zone y controls</span>
-      <span class="pg">6 / 15</span>
+      <span class="pg">50 / 59</span>
     </div>
     <aside class="guion">Montar todo esto a mano es largo, y por eso existe AWS Control Tower. Su producto es la landing zone: una organización lista, con buenas prácticas ya aplicadas. Mira el diagrama. Control Tower crea la unidad de seguridad con dos cuentas especiales: el archivo de registros, donde se centralizan CloudTrail y Config de toda la organización, y la cuenta de auditoría, para el equipo de seguridad. Además, tú agregas tus propias unidades, como cargas de trabajo, donde viven producción y desarrollo. A la derecha ves tres tipos de controles. Los preventivos son SCP que impiden la acción. Los detectivos son reglas de Config que señalan lo que está fuera de norma. Y los proactivos revisan las plantillas de infraestructura antes de desplegarlas. Abajo está la fábrica de cuentas: se solicita una cuenta, nace en la unidad correcta, con su línea base de registros, roles y red, y los controles se aplican desde el primer día.</aside>
   </section><section class="slide" data-parte="4">
@@ -3022,7 +3022,7 @@
       <h2>Azure: grupos de administración y herencia de políticas</h2>
       <div class="rule"></div>
       <div class="sub">La misma idea de jerarquía: lo que se asigna arriba se hereda hasta los recursos.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Azure: grupos de administración y herencia de políticas"><defs><marker id="aV48" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG48" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB48" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN48" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD48" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3065,7 +3065,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de Microsoft Learn — Azure governance: management groups, Policy y RBAC</span>
-      <span class="pg">7 / 15</span>
+      <span class="pg">51 / 59</span>
     </div>
     <aside class="guion">Este concepto no es exclusivo de AWS. En Azure la jerarquía tiene cuatro niveles. En lo alto, los grupos de administración; debajo, las suscripciones, que cumplen un papel parecido al de las cuentas; luego los grupos de recursos, que agrupan recursos de una misma aplicación; y al final los propios recursos. A la derecha ves cómo se hereda. Azure Policy es el servicio que define reglas sobre los recursos. En el ejemplo, una política de ubicaciones permitidas se asigna en el grupo de administración raíz de la corporación, con efecto deny: solo se aceptan Brazil South y East US. Esa regla se hereda hacia abajo, a todas las suscripciones, grupos de recursos y recursos. Los roles de control de acceso, el RBAC de Azure, también se heredan: dar lectura al equipo de auditoría en el grupo de administración le da lectura en todo. Es el mismo concepto que las unidades organizativas y las SCP de AWS, con otros nombres.</aside>
   </section><section class="slide" data-parte="4">
@@ -3074,7 +3074,7 @@
       <h2>Azure Policy y bloqueos: reglas y protección</h2>
       <div class="rule"></div>
       <div class="sub">Policy exige la configuración correcta; los bloqueos evitan el borrado accidental.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Azure Policy y bloqueos: reglas y protección"><defs><marker id="aV49" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG49" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB49" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN49" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD49" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3143,7 +3143,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de Microsoft Learn — Azure Policy overview y Lock your resources; presentación del docente</span>
-      <span class="pg">8 / 15</span>
+      <span class="pg">52 / 59</span>
     </div>
     <aside class="guion">Veamos dos mecanismos de gobernanza de Azure que complementan al control de acceso. Arriba, el ciclo de Azure Policy. Uno: se define la regla. Dos: se asigna a un ámbito, como un grupo de administración o una suscripción. Tres: se evalúa cuando se crean o cambian recursos y de forma periódica. Cuatro: el tablero de cumplimiento muestra qué recursos son conformes. Los efectos más usados son Deny, que rechaza la creación; Audit, que solo registra; Modify o Append, que agregan o corrigen etiquetas; y DeployIfNotExists, que despliega lo que falta. Una iniciativa agrupa varias políticas con un objetivo común. Abajo, los bloqueos de recursos. Existe un riesgo que el control de acceso no resuelve: alguien con el rol adecuado puede borrar algo crítico por error. Un bloqueo CanNotDelete impide borrar y uno ReadOnly impide cambiar o borrar, incluso al propietario. Para eliminar, primero hay que quitar el bloqueo, y eso deja huella.</aside>
   </section><section class="slide" data-parte="4">
@@ -3152,7 +3152,7 @@
       <h2>Etiquetado: la base de saber quién gasta qué</h2>
       <div class="rule"></div>
       <div class="sub">Sin etiquetas coherentes no hay asignación de costos ni FinOps posible.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Etiquetado: la base de saber quién gasta qué"><defs><marker id="aV50" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG50" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB50" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN50" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD50" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3219,7 +3219,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Whitepaper — Tagging Best Practices y AWS Billing: cost allocation tags</span>
-      <span class="pg">9 / 15</span>
+      <span class="pg">53 / 59</span>
     </div>
     <aside class="guion">El costo empieza por una pregunta simple: quién gasta qué. Y esa pregunta se responde con etiquetas. Arriba a la izquierda ves el esquema de la Corporación Industrial del Caribe: cada recurso lleva las mismas cuatro claves, proyecto, centro de costo, entorno y propietario. A la derecha, el flujo: una política de etiquetas de Organizations fija las claves y valores permitidos, para evitar que existan Entorno, entorno y ENTORNO a la vez. Luego se activan como etiquetas de asignación de costos en Facturación, y Cost Explorer agrupa el gasto por etiqueta, hasta llegar a un informe por centro de costo. En el gráfico ilustrativo hay una barra gris: lo que no tiene etiqueta no tiene dueño, y hay que cerrarla. Tres recomendaciones abajo: gobernar las etiquetas, recordar que las de asignación cuentan desde que se activan, y reutilizarlas para el control por atributos que vimos en la Parte dos.</aside>
   </section><section class="slide" data-parte="4">
@@ -3228,7 +3228,7 @@
       <h2>Presupuestos y alertas: enterarte antes de la factura</h2>
       <div class="rule"></div>
       <div class="sub">Una alerta al 80 por ciento y otra por pronóstico dan tiempo para actuar dentro del mes.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Presupuestos y alertas: enterarte antes de la factura"><defs><marker id="aV51" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG51" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB51" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN51" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD51" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3293,7 +3293,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Budgets User Guide — Budget actions y notifications; cifras ilustrativas</span>
-      <span class="pg">10 / 15</span>
+      <span class="pg">54 / 59</span>
     </div>
     <aside class="guion">La factura no debería ser una sorpresa. Para eso existe AWS Budgets. Mira el gráfico, con cifras ilustrativas: el presupuesto mensual es de cinco mil dólares, la línea negra. El gasto acumulado crece semana a semana: mil cien, dos mil cuatrocientos y cuatro mil al terminar la tercera semana. Dos alertas actúan. La primera, la dorada, se dispara cuando el gasto real llega al ochenta por ciento, cuatro mil dólares. La segunda se dispara cuando el pronóstico supera el cien por ciento: en este caso, cinco mil seiscientos al cierre del mes. A la derecha, las notificaciones llegan por SNS al correo de finanzas y a un canal del equipo mediante Chatbot. Y hay algo más potente: las acciones de presupuesto, que al cruzar un umbral pueden aplicar una política de IAM o una SCP, o detener instancias EC2 y RDS. La regla práctica: primero avisa, luego actúa, y que cada umbral tenga un dueño.</aside>
   </section><section class="slide" data-parte="4">
@@ -3302,7 +3302,7 @@
       <h2>Entender la factura: Cost Explorer e informes</h2>
       <div class="rule"></div>
       <div class="sub">La factura se lee por servicio, cuenta y etiqueta; un pico se investiga el mismo mes.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Entender la factura: Cost Explorer e informes"><defs><marker id="aV52" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG52" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB52" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN52" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD52" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3382,7 +3382,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Cost Management User Guide — Cost Explorer, Data Exports y Cost Anomaly Detection</span>
-      <span class="pg">11 / 15</span>
+      <span class="pg">55 / 59</span>
     </div>
     <aside class="guion">Una factura solo sirve si se entiende. Mira el gráfico de barras apiladas, con cifras ilustrativas: el gasto mensual por servicio, en miles de dólares, en cuatro meses. Cómputo domina, seguido de base de datos y almacenamiento. Pero fíjate en octubre: la transferencia de datos, en verde, se multiplicó por cuatro. Ese pico es lo que alguien debe investigar de inmediato, y no seis semanas después. Tres herramientas ayudan. Cost Explorer permite filtrar por cuenta, servicio y etiqueta, y ver tendencia y pronóstico. Los informes de costo y uso entregan el detalle más fino en S3, para consultarlo con Athena. Y la detección de anomalías avisa cuando un gasto se sale de lo habitual. Abajo, una rutina mensual de FinOps: revisar los cambios frente al mes anterior, preguntar al dueño de cada pico, y ajustar tamaños o apagar lo que sobra. Costos es parte de la arquitectura, no un asunto de contabilidad.</aside>
   </section><section class="slide" data-parte="4">
@@ -3391,7 +3391,7 @@
       <h2>Calculadora de precios y TCO: estimar y justificar</h2>
       <div class="rule"></div>
       <div class="sub">Una estimación dice cuánto costará una carga nueva; el TCO compara contra seguir en casa.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Calculadora de precios y TCO: estimar y justificar"><defs><marker id="aV53" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG53" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB53" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN53" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD53" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3450,7 +3450,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Pricing Calculator y AWS Migration Evaluator; cifras ilustrativas</span>
-      <span class="pg">12 / 15</span>
+      <span class="pg">56 / 59</span>
     </div>
     <aside class="guion">Dos herramientas responden dos preguntas distintas. La calculadora de precios responde cuánto costará una carga de trabajo nueva antes de construirla. Eliges los servicios, la región y el uso esperado, y obtienes una estimación mensual. En el ejemplo, el portal de pedidos de la Corporación Industrial del Caribe: cómputo, base de datos, almacenamiento y transferencia suman unos dos mil trescientos noventa dólares al mes; son cifras ilustrativas. El TCO, o costo total de propiedad, responde otra pregunta: conviene migrar. A la derecha, comparamos a cinco años, con un índice donde el costo local vale cien. Local incluye equipos, energía y espacio, personal y licencias. La nube incluye servicios, personal y migración. El resultado real depende de cada carga, no lo tomes como regla. Abajo, la recomendación: para estimar, usa la calculadora; para el caso de negocio, herramientas de TCO como Migration Evaluator, y no olvides los costos ocultos de operar un centro de datos propio.</aside>
   </section><section class="slide" data-parte="4">
@@ -3459,7 +3459,7 @@
       <h2>Modelos de compra: pagar menos por lo mismo</h2>
       <div class="rule"></div>
       <div class="sub">Cargar la base estable con compromiso y dejar lo variable bajo demanda reduce el costo.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Modelos de compra: pagar menos por lo mismo"><defs><marker id="aV54" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG54" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB54" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN54" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD54" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3506,7 +3506,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Well-Architected, pilar Optimización de costos (COST07)</span>
-      <span class="pg">13 / 15</span>
+      <span class="pg">57 / 59</span>
     </div>
     <aside class="guion">Una vez entendida la factura, aparece la palanca más grande: cómo se compra el cómputo. Mira las barras, que comparan el precio relativo por hora, donde bajo demanda vale cien. Bajo demanda no exige compromiso: flexible, pero el más caro. Con Savings Plans, a cambio de comprometer un gasto por una hora durante uno o tres años, AWS publica descuentos de hasta setenta y dos por ciento. Las instancias reservadas siguen una lógica parecida, con un compromiso sobre una configuración específica. Y las instancias Spot, que usan capacidad sobrante, llegan a descuentos de hasta noventa por ciento, con la condición de que pueden interrumpirse. Son máximos publicados; el ahorro real depende de la región, el tipo de instancia y el compromiso. A la derecha, cuándo usar cada una: bajo demanda para picos y cargas nuevas, compromiso para la base estable, Spot para procesos por lotes. Y antes de comprometer, ajusta el tamaño: Compute Optimizer detecta lo sobredimensionado.</aside>
   </section><section class="slide" data-parte="4">
@@ -3515,7 +3515,7 @@
       <h2>CIC: estructura de cuentas y guardarraíles</h2>
       <div class="rule"></div>
       <div class="sub">Cada cuenta tiene un propósito, un dueño, un presupuesto y los mismos controles de base.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="CIC: estructura de cuentas y guardarraíles"><defs><marker id="aV55" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG55" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB55" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN55" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD55" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3588,7 +3588,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: adaptado de AWS Whitepaper — Organizing Your AWS Environment; caso transversal CIC</span>
-      <span class="pg">14 / 15</span>
+      <span class="pg">58 / 59</span>
     </div>
     <aside class="guion">Integremos todo en la Corporación Industrial del Caribe. Arriba, la cuenta de gestión, solo para facturación consolidada y gobierno. Debajo, cuatro unidades organizativas. Seguridad, con las cuentas de registros y de auditoría, y una SCP que impide borrar los registros. Infraestructura, con la red compartida y una SCP que impide sacar cuentas de la organización. Cargas, con producción de pedidos, producción de planta y desarrollo de pedidos, donde se aplican la SCP de regiones aprobadas, la política de etiquetas y un presupuesto por cuenta. Y sandbox, para experimentar, con un presupuesto de doscientos dólares y limpieza mensual. Abajo están las reglas que se cumplen en toda la organización: una cuenta, un centro de costo, así finanzas ve el gasto sin hojas de cálculo; cuentas nuevas por la fábrica, con registros y controles desde el inicio; acceso solo por Identity Center, sin llaves de largo plazo; y revisión trimestral con Access Analyzer. Es la suma de las tres partes de esta semana.</aside>
   </section><section class="slide" data-parte="4">
@@ -3597,7 +3597,7 @@
       <h2>Cierre de la Semana 9 y adelanto de la Semana 10</h2>
       <div class="rule"></div>
       <div class="sub">Identidad, permisos, federación y gobierno forman una sola cadena de confianza.</div>
-      <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
+      <img class="logo-corner" src="assets/logo-cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Cierre de la Semana 9 y adelanto de la Semana 10"><defs><marker id="aV56" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="aG56" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="aB56" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#2f5d9a"/></marker><marker id="aN56" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#3b8a3b"/></marker><marker id="aD56" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker></defs>
@@ -3646,7 +3646,7 @@
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 9 · Parte 3 de 3</span>
       <span class="src">Fuente: resumen de la Semana 9; temario del curso (S10)</span>
-      <span class="pg">15 / 15</span>
+      <span class="pg">59 / 59</span>
     </div>
     <aside class="guion">Cerremos la semana nueve con cuatro ideas. Una: las credenciales deben caducar; roles, STS y federación OIDC reemplazan las llaves eternas. Dos: los permisos deben ser justos; condiciones, límites de permisos y la evaluación en cinco puertas te dicen qué ocurre con cada solicitud. Tres: las identidades se federan; un directorio, IAM Identity Center para las personas, Cognito para los clientes, y secretos y claves bien gobernados. Cuatro: la organización se gobierna y se mide; Organizations, SCP y guardarraíles ponen el techo, y etiquetas, presupuestos y calculadoras hacen visible el costo. Esta semana no hay laboratorio evaluado, pero te recomiendo repasar el módulo nueve de AWS Academy. Y en la semana diez cambiamos de tema: elasticidad, alta disponibilidad y monitorización. Veremos balanceadores de carga, Auto Scaling, métricas y alarmas, comprobaciones de salud en DNS y diseño en varias zonas de disponibilidad. Gracias por acompañarme en esta semana.</aside>
   </section>
