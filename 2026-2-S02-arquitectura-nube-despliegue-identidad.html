@@ -225,7 +225,9 @@
       <span class="pg">6 / 59</span>
     </div>
     <aside class="guion">Cuando eliges un modelo de despliegue, eliges también cuánto trabajo conservas. Este gráfico apila siete capas, desde las instalaciones físicas hasta los datos, y pinta de vino lo que gestiona tu organización y de dorado lo que gestiona el proveedor. En la columna de la izquierda, la nube privada on-premise, todo es vino: desde el edificio hasta los datos. En la nube privada alojada, el proveedor se encarga de las instalaciones, la red, los servidores y, según el contrato, de la virtualización; tú sigues con sistema operativo, aplicaciones y datos. En la nube pública con infraestructura como servicio, el proveedor responde por todo hasta el hipervisor, y tú gestionas desde el sistema operativo hacia arriba. Fíjate en la franja de la derecha: sin importar el modelo, los datos y los accesos son siempre responsabilidad del cliente. Esa idea la retomaremos en la Parte 3, cuando hablemos de identidad.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/general/users.png" alt="Usuarios y responsabilidades" style="position:absolute;left:93px;top:318px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Nube comunitaria</div>
       <h2>Nube comunitaria: requisitos compartidos</h2>
@@ -345,7 +347,9 @@
       <span class="pg">12 / 59</span>
     </div>
     <aside class="guion">Vamos a convertir la teoría en un procedimiento. Cada carga de trabajo nueva atraviesa este árbol de decisión. La primera pregunta es legal: ¿los datos tienen restricción de ubicación? Si la respuesta es sí, miramos si un proveedor ofrece una región permitida; si la hay, nube pública en esa región con cifrado y claves propias, y si no, nube privada u on-premise. Si no hay restricción legal, pasamos a la segunda pregunta: ¿la demanda es variable o difícil de predecir? Si lo es, la elasticidad de la nube pública gana. Si es estable, la tercera pregunta mira la latencia: ¿necesita responder en milisegundos con la planta? Entonces conviene una híbrida con procesamiento en el borde. Si no, llegamos a la comparación de costo total a cinco años, que veremos en la siguiente diapositiva. Observa que el orden importa: primero lo que la ley no permite, después lo que conviene económicamente.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/management/trusted-advisor-checklist.png" alt="Lista de chequeo de decisión" style="position:absolute;left:183px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Costos</div>
       <h2>CapEx contra OpEx: depende del perfil de uso</h2>
@@ -365,7 +369,9 @@
       <span class="pg">13 / 59</span>
     </div>
     <aside class="guion">Una pregunta inevitable es cuál modelo sale más barato, y la respuesta depende de la forma de la carga. Mira las dos gráficas, que usan números ilustrativos para dibujar la tendencia. En la de la izquierda, una carga estable las veinticuatro horas con uso alto. El centro de datos propio arranca con una inversión inicial grande, el CapEx, pero crece despacio; la nube pública empieza en cero pero sube más rápido, y las curvas se cruzan cerca del cuarto año. Aquí lo propio gana a largo plazo. En la gráfica de la derecha, una carga con picos y uso medio bajo: el centro de datos debe dimensionarse para el pico y casi siempre está ocioso, mientras que la nube cobra solo lo usado y nunca se cruza. Abajo tienes los costos que suelen olvidarse: energía, enfriamiento, personal, renovación de equipos y, en la nube, salida de datos y soporte. La lección: no existe un modelo barato en abstracto, existe un modelo barato para cada perfil de uso.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/cost/cost-explorer.png" alt="Explorador de costos" style="position:absolute;left:1160px;top:195px;height:49px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Soberanía de datos</div>
       <h2>Soberanía de datos y casos colombianos</h2>
@@ -659,7 +665,9 @@
       <span class="pg">28 / 59</span>
     </div>
     <aside class="guion">El vendor lock-in es la dependencia de un proveedor que hace costoso cambiarse a otro. Para analizarlo, miremos tres niveles, de abajo hacia arriba. En el primero, la infraestructura: máquinas virtuales, redes y discos son conceptos estándar, y moverlos es relativamente fácil, así que el lock-in es bajo. En el segundo, los datos: cuanto más acumulas, más pesado es moverlos, algunos formatos son propietarios y los proveedores cobran por sacar datos, aunque desde 2024 los grandes ofrecen condonar ese cargo cuando te vas por completo. El lock-in es medio. En el tercero, las aplicaciones: si construyes sobre servicios gestionados con interfaces propietarias, como bases NoSQL o plataformas de aprendizaje automático, reescribir el código para migrar es lo más caro. Ahora bien, el lock-in no siempre es malo: un servicio gestionado te ahorra operación. Lo importante es elegirlo con conciencia y tener un plan de salida documentado, que es el tema de la siguiente diapositiva.</aside>
-  </section><section class="slide" data-parte="2">
+  
+      <img class="icono-tema" src="assets/iconos/aws/general/ssl-padlock.png" alt="Candado: dependencia del proveedor" style="position:absolute;left:1144px;top:549px;height:62px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">Portabilidad</div>
       <h2>Estrategias para no quedar atrapado</h2>
@@ -924,7 +932,7 @@
     <div class="s-body">
       <svg viewBox="0 0 1180 520" class="dgm" role="img" aria-label="Federación: una sola identidad, muchas nubes">
         <defs><marker id="arG312" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto-start-reverse"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="arV312" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto-start-reverse"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker></defs>
-        <rect x="10" y="10" width="180" height="150" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><image href="assets/iconos/aws/general/user.png" x="68" y="22" width="64" height="64"/><text x="100" y="112" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E"><tspan x="100" dy="0">Ana, empleada</tspan><tspan x="100" dy="15.6">de la planta</tspan></text><rect x="350" y="10" width="180" height="150" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><image href="assets/iconos/azure/identity/azure-active-directory.png" x="408" y="22" width="64" height="64"/><text x="440" y="112" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E"><tspan x="440" dy="0">Proveedor de identidad</tspan><tspan x="440" dy="15.6">(Microsoft Entra ID)</tspan></text><rect x="710" y="10" width="180" height="150" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><image href="assets/iconos/aws/security/identity-and-access-management-iam.png" x="768" y="22" width="64" height="64"/><text x="800" y="112" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E"><tspan x="800" dy="0">Servicio de la nube</tspan><tspan x="800" dy="15.6">(IAM Identity Center)</tspan></text><rect x="995" y="10" width="180" height="150" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><image href="assets/iconos/aws/storage/simple-storage-service-s3.png" x="1053" y="22" width="64" height="64"/><text x="1085" y="112" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E">Recursos</text><path d="M190,215 L440,215" fill="none" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arV312)"/><circle cx="315.0" cy="215.0" r="12" fill="#A6192E"/><text x="315.0" y="219.5" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">1</text><text x="315.0" y="195.0" font-size="12" text-anchor="middle" fill="#2A2A2A">abre el portal de la nube</text><path d="M800,260 L440,260" fill="none" stroke="#6b6b6b" stroke-width="2.6" stroke-dasharray="6 4" marker-end="url(#arG312)"/><circle cx="620.0" cy="260.0" r="12" fill="#6b6b6b"/><text x="620.0" y="264.5" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">2</text><text x="620.0" y="240.0" font-size="12" text-anchor="middle" fill="#2A2A2A">redirige al proveedor de identidad</text><rect x="310" y="290" width="260" height="64" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="1.8"/><text x="440" y="314" font-size="13" font-weight="bold" text-anchor="middle" fill="#A6192E">3 · Ana inicia sesión</text><text x="440" y="336" font-size="12" text-anchor="middle" fill="#2A2A2A">contraseña + MFA, una sola vez</text><path d="M440,390 L800,390" fill="none" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arV312)"/><circle cx="620.0" cy="390.0" r="12" fill="#A6192E"/><text x="620.0" y="394.5" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">4</text><text x="620.0" y="370.0" font-size="12" text-anchor="middle" fill="#2A2A2A">aserción firmada (SAML u OIDC)</text><path d="M800,440 L1085,440" fill="none" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arV312)"/><circle cx="942.5" cy="440.0" r="12" fill="#A6192E"/><text x="942.5" y="444.5" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">5</text><text x="942.5" y="420.0" font-size="12" text-anchor="middle" fill="#2A2A2A">credenciales temporales del rol</text><rect x="0" y="468" width="1180" height="42" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="1.8"/><text x="590" y="495" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#A6192E">La nube confía en la firma del proveedor de identidad y nunca ve la contraseña de Ana</text><path d="M100,160 L100,462" fill="none" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M440,160 L440,462" fill="none" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M800,160 L800,462" fill="none" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M1085,160 L1085,462" fill="none" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="3 4"/>
+        <rect x="10" y="10" width="180" height="150" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><image href="assets/iconos/aws/general/user.png" x="68" y="22" width="64" height="64"/><text x="100" y="112" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E"><tspan x="100" dy="0">Ana, empleada</tspan><tspan x="100" dy="15.6">de la planta</tspan></text><rect x="350" y="10" width="180" height="150" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><image href="assets/iconos/azure/identity/azure-active-directory.png" x="408" y="22" width="64" height="64"/><text x="440" y="112" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E"><tspan x="440" dy="0">Proveedor de identidad</tspan><tspan x="440" dy="15.6">(Microsoft Entra ID)</tspan></text><rect x="710" y="10" width="180" height="150" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><image href="assets/iconos/aws/security/identity-and-access-management-iam.png" x="768" y="22" width="64" height="64"/><text x="800" y="112" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E"><tspan x="800" dy="0">Servicio de la nube</tspan><tspan x="800" dy="15.6">(IAM Identity Center)</tspan></text><rect x="995" y="10" width="180" height="150" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><image href="assets/iconos/aws/storage/simple-storage-service-s3.png" x="1053" y="22" width="64" height="64"/><text x="1085" y="112" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E">Recursos</text><path d="M190,215 L440,215" fill="none" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arV312)"/><circle cx="315.0" cy="215.0" r="12" fill="#A6192E"/><text x="315.0" y="219.5" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">1</text><text x="315.0" y="195.0" font-size="12" text-anchor="middle" fill="#2A2A2A">abre el portal de la nube</text><path d="M800,260 L440,260" fill="none" stroke="#6b6b6b" stroke-width="2.6" stroke-dasharray="6 4" marker-end="url(#arG312)"/><circle cx="620.0" cy="260.0" r="12" fill="#6b6b6b"/><text x="620.0" y="264.5" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">2</text><text x="620.0" y="240.0" font-size="12" text-anchor="middle" fill="#2A2A2A">redirige al proveedor de identidad</text><rect x="310" y="290" width="260" height="64" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="1.8"/><text x="620" y="314" font-size="13" font-weight="bold" text-anchor="middle" fill="#A6192E">3 · Ana inicia sesión</text><text x="620" y="336" font-size="12" text-anchor="middle" fill="#2A2A2A">contraseña + MFA, una sola vez</text><path d="M440,390 L800,390" fill="none" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arV312)"/><circle cx="620.0" cy="390.0" r="12" fill="#A6192E"/><text x="620.0" y="394.5" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">4</text><text x="620.0" y="370.0" font-size="12" text-anchor="middle" fill="#2A2A2A">aserción firmada (SAML u OIDC)</text><path d="M800,440 L1085,440" fill="none" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arV312)"/><circle cx="942.5" cy="440.0" r="12" fill="#A6192E"/><text x="942.5" y="444.5" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">5</text><text x="942.5" y="420.0" font-size="12" text-anchor="middle" fill="#2A2A2A">credenciales temporales del rol</text><rect x="0" y="468" width="1180" height="42" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="1.8"/><text x="590" y="495" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#A6192E">La nube confía en la firma del proveedor de identidad y nunca ve la contraseña de Ana</text><path d="M100,160 L100,462" fill="none" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M440,160 L440,462" fill="none" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M800,160 L800,462" fill="none" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="3 4"/><path d="M1085,160 L1085,462" fill="none" stroke="#6b6b6b" stroke-width="1.2" stroke-dasharray="3 4"/>
       </svg>
     </div>
     <div class="s-foot">
@@ -1053,7 +1061,9 @@
       <span class="pg">48 / 59</span>
     </div>
     <aside class="guion">Esta es una política real de IAM escrita en JSON. Empecemos por lo básico: la propiedad Version indica la versión del lenguaje de políticas, y siempre es la misma fecha de dos mil doce, no la fecha de hoy. Después viene la lista Statement, que contiene una o más reglas. Cada regla tiene cuatro elementos esenciales, resaltados con colores. Effect, en verde, es Allow o Deny: se permite o se niega. Action, en dorado, enumera las operaciones; aquí, leer objetos y listar el bucket. Resource, en azul, dice sobre qué recursos aplica, mediante identificadores llamados ARN; fíjate que son dos exactos, uno para el bucket y otro para la carpeta de finanzas. Y Condition, en vino, añade un requisito extra: esta regla solo vale si la sesión se autenticó con MFA. Las políticas basadas en recurso añaden un quinto elemento, Principal, que indica a quién se le concede.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/security/identity-and-access-management-iam-permissions.png" alt="Permisos IAM" style="position:absolute;left:588px;top:203px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Effect y Action</div>
       <h2>Effect y Action: permisos exactos o comodines</h2>
@@ -1073,7 +1083,9 @@
       <span class="pg">49 / 59</span>
     </div>
     <aside class="guion">Pasemos a los dos primeros elementos con una escalera de amplitud. Cada acción tiene un nombre con el formato servicio, dos puntos, operación. En el primer escalón, s3 dos puntos GetObject, permite una sola cosa: leer objetos. En el segundo, s3 dos puntos Get con asterisco, es un comodín que cubre todas las acciones de lectura de S3. En el tercero, s3 dos puntos asterisco, cubre todas las acciones de S3, incluida borrar buckets completos. Y en el último, asterisco dos puntos asterisco, concede todas las acciones en todos los servicios: es lo que otorga la política de administrador total. Abajo vemos el elemento Effect. Con Allow se concede un permiso, siempre que ninguna regla lo niegue, porque por defecto todo está denegado. Con Deny se niega de forma absoluta, aunque otra regla permita, y se usa para barreras que nadie debe cruzar. Como regla de oro: usa acciones exactas, y deja los comodines para casos muy justificados.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/security/identity-and-access-management-iam.png" alt="IAM: Effect y Action" style="position:absolute;left:1144px;top:544px;height:62px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Resource</div>
       <h2>Resource: el ARN identifica el recurso exacto</h2>
@@ -1093,7 +1105,9 @@
       <span class="pg">50 / 59</span>
     </div>
     <aside class="guion">El elemento Resource apunta a recursos concretos mediante un identificador llamado ARN, siglas de Amazon Resource Name. Mira el ejemplo de arriba, una instancia EC2, separado por dos puntos. Empieza con el prefijo fijo arn. Sigue la partición, que casi siempre es aws. Luego el servicio, aquí ec2. Después la región, us-east-1. Después el número de cuenta de doce dígitos; el que aparece es el de ejemplo de la documentación. Y al final el recurso, que en este caso es una instancia con su identificador. Abajo se aprecia lo importante para el mínimo privilegio: el ARN puede ser muy específico, como solo los reportes de finanzas de este año, o muy amplio, como todos los objetos del bucket, o el asterisco, que significa cualquier recurso. Mientras más específico sea el recurso que escribes, menor es el daño si algo sale mal, así que evita el asterisco siempre que puedas.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/management/service-catalog.png" alt="Catálogo de recursos (ARN)" style="position:absolute;left:1108px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Condition</div>
       <h2>Condition: el permiso solo vale en ciertas circunstancias</h2>
@@ -1133,7 +1147,9 @@
       <span class="pg">52 / 59</span>
     </div>
     <aside class="guion">Esta es la lógica que sigue la nube cada vez que recibe una solicitud, y es lo más importante que debes memorizar de esta parte. Sigue el diagrama de izquierda a derecha. La solicitud llega a la API, y la primera pregunta es: ¿alguna política la niega de forma explícita, con un Deny? Si la respuesta es sí, el resultado es denegado, sin discusión, aunque diez políticas más la permitan. El Deny explícito siempre gana. Si no hay un Deny, pasamos a la segunda pregunta: ¿alguna política la permite con un Allow? Si la hay, el resultado es permitido. Y si no hay ni Deny ni Allow, se aplica el denegado implícito: por defecto, todo lo que nadie permitió queda prohibido. Abajo se resume la jerarquía: Deny explícito, luego Allow, luego Deny implícito. Una aclaración: en cuentas con límites, también deben permitir la acción los controles de la organización y los límites de permisos, pero el esquema esencial es este.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/general/generic-firewall.png" alt="Firewall: el Deny gana" style="position:absolute;left:1108px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Práctica</div>
       <h2>Ejercicio: resuelve tres solicitudes</h2>
@@ -1153,7 +1169,9 @@
       <span class="pg">53 / 59</span>
     </div>
     <aside class="guion">Pongamos a prueba la lógica de evaluación con tres solicitudes de Ana. La política A permite todas las acciones de S3 sobre el bucket cic-reportes. La política B niega de forma explícita la acción DeleteObject en todos los buckets. Y del bucket de nómina no se dice nada. Caso uno: Ana quiere leer un reporte en cic-reportes. No hay Deny que aplique, la política A permite, y el resultado es permitido. Caso dos: Ana quiere borrar un reporte del mismo bucket. Fíjate que la política A, con su acción s3 asterisco, también incluye borrar, pero la política B niega esa acción de forma explícita, y el Deny gana. Resultado: denegado por una negación explícita. Caso tres: Ana quiere leer un archivo de cic-nomina. Ninguna regla lo niega y ninguna lo permite, así que se aplica el denegado implícito. El resultado visible es el mismo, acceso denegado, pero la razón es distinta, y saber distinguirlas ayuda a depurar políticas cuando algo no funciona.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/management/management-console.png" alt="Práctica en la consola" style="position:absolute;left:848px;top:208px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Mínimo privilegio</div>
       <h2>Mínimo privilegio: cerrar la brecha</h2>
@@ -1173,7 +1191,9 @@
       <span class="pg">54 / 59</span>
     </div>
     <aside class="guion">El principio de mínimo privilegio dice que cada identidad debe recibir solo los permisos que necesita, sobre los recursos que necesita, durante el tiempo que lo necesita. El gráfico compara, con números ilustrativos, cuántos permisos tiene cada rol contra cuántos usa realmente. El rol de desarrollo tiene la política de administrador total, que concede cien unidades, pero en la práctica usa doce. El de finanzas tiene acceso amplio a S3 y bases de datos, y usa nueve. En cambio, la aplicación de la tienda tiene una política hecha a la medida, y su brecha es mínima. La diferencia entre lo concedido y lo usado es la brecha de privilegio: el espacio que un atacante, o simplemente un error humano, puede aprovechar. Recortar la brecha no es desconfiar de las personas, es diseñar para que los errores y los robos de cuentas tengan el menor impacto posible.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/security/identity-and-access-management-iam-access-analyzer.png" alt="Analizador de accesos" style="position:absolute;left:1139px;top:549px;height:62px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Mínimo privilegio</div>
       <h2>El camino al mínimo privilegio es un ciclo</h2>
@@ -1233,7 +1253,9 @@
       <span class="pg">57 / 59</span>
     </div>
     <aside class="guion">Azure trae roles integrados que cubren los casos más comunes, y comparar sus capacidades enseña cómo se gradúa el poder. El rol Lector solo puede ver los recursos. El Colaborador, además, puede crear y modificar recursos, pero no puede dar acceso a otras personas. El Administrador de acceso de usuarios, al contrario, puede asignar permisos pero no crear recursos. Y el Propietario puede todo: ver, crear, modificar y asignar acceso. La flecha de la derecha recuerda que más poder significa más riesgo, así que el rol Propietario debe ser escaso y limitado a un ámbito pequeño. Abajo vemos que en AWS existe una idea paralela, el control de acceso basado en atributos, o ABAC. En lugar de crear una política por cada área, se etiqueta la identidad y el recurso con el mismo valor, por ejemplo área igual a finanzas, y una sola política permite el acceso cuando las etiquetas coinciden.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/security/identity-and-access-management-iam-role.png" alt="Rol de IAM" style="position:absolute;left:1025px;top:65px;height:49px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Caso integrador</div>
       <h2>Caso CIC: quién puede qué sobre qué</h2>

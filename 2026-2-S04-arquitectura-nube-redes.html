@@ -124,7 +124,9 @@
     </div>
     <div class="cover-sub">Antes de construir una red en la nube hay que dominar el idioma con que se describe: direcciones IPv4, máscaras, rangos privados y puertos.</div>
     <aside class="guion">Bienvenidos a la semana cuatro de Arquitectura en la Nube. Hablamos de redes en tres partes de unos quince minutos. En esta primera construimos el idioma: cómo se escribe una dirección IPv4, qué significa la barra con un número que aparece después de ella, cuáles rangos son privados y cómo los puertos le dicen a un servidor qué servicio queremos usar. Una red virtual en la nube es esto mismo, ofrecido como servicio. Habrá tres ejercicios cortos; pausa el video y resuélvelos antes de ver la respuesta. Al final de esta parte seguimos el paquete desde la dirección IP hasta la red virtual.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/network/vpc.png" alt="Redes en la nube" style="position:absolute;left:1108px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Encuadre</div>
       <h2>Mapa de la semana: de la dirección IP a la red híbrida</h2>
@@ -175,7 +177,9 @@
       <span class="pg">4 / 59</span>
     </div>
     <aside class="guion">Una dirección IPv4 es un número de treinta y dos bits. Como a los humanos nos cuesta leer treinta y dos ceros y unos, la dividimos en cuatro grupos de ocho bits, que llamamos octetos, y cada octeto lo escribimos en decimal separado por puntos. Mira el ejemplo: 10 punto 0 punto 1 punto 7. Debajo de cada número ves sus ocho bits, con el valor de cada posición arriba: ciento veintiocho, sesenta y cuatro, treinta y dos, y así hasta uno. Como cada octeto tiene ocho bits, solo puede valer entre cero y doscientos cincuenta y cinco. En total existen más de cuatro mil doscientos noventa millones de direcciones posibles. Fíjate en las llaves de abajo: los primeros veinticuatro bits identifican la red y el último octeto identifica al equipo dentro de ella. Esa frontera entre red y equipo es la idea más importante de la sesión, y en un momento veremos cómo se declara.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/general/internet-alt1.png" alt="Direcciones de Internet" style="position:absolute;left:1140px;top:430px;height:49px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Direccionamiento</div>
       <h2>Del decimal al binario: sumar pesos</h2>
@@ -192,7 +196,9 @@
       <span class="pg">5 / 59</span>
     </div>
     <aside class="guion">Convertir un octeto a binario es más fácil de lo que parece: solo hay que sumar pesos. Arriba ves los pesos de las ocho posiciones, de ciento veintiocho hasta uno. Tomemos el número ciento setenta y dos. Empiezo por el peso más grande que quepa: ciento veintiocho sí cabe, así que enciendo ese bit. Me quedan cuarenta y cuatro. El sesenta y cuatro no cabe, el treinta y dos sí, y quedan doce. El dieciséis no cabe, el ocho sí y quedan cuatro, el cuatro sí cabe y llego a cero. El resultado es uno cero uno cero uno cero cero. Ahora te toca a ti. Convierte el doscientos y el treinta y siete; pausa el video, haz la suma y luego compara con la respuesta de la derecha. Esta habilidad la necesitas para entender las máscaras de subred, que es justo lo que viene en la siguiente diapositiva.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/devtools/command-line-interface.png" alt="Cálculo de direcciones" style="position:absolute;left:1103px;top:433px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Direccionamiento</div>
       <h2>La máscara de subred: separar red y equipo</h2>
@@ -209,7 +215,9 @@
       <span class="pg">6 / 59</span>
     </div>
     <aside class="guion">La máscara de subred es el instrumento que separa la parte de red de la parte de equipo. Funciona así: tomas la dirección y la máscara en binario y haces una operación AND bit a bit, es decir, un bit resultante vale uno solo si ambos bits valen uno. Mira la primera fila: la dirección 10 punto 0 punto 1 punto 7. En la segunda, la máscara barra veinticuatro, que son veinticuatro unos seguidos de ocho ceros, o sea 255 punto 255 punto 255 punto 0. En la tercera ves el resultado: 10 punto 0 punto 1 punto 0. Esa es la dirección de la red. Los bits en uno de la máscara marcan qué parte es red, y los ceros marcan la parte de equipo. Abajo tienes otras máscaras frecuentes: barra dieciséis, barra veinticuatro y barra veintiocho. Si dos direcciones dan el mismo resultado al aplicar la máscara, están en la misma red.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/generic/network/subnet.png" alt="Subred" style="position:absolute;left:165px;top:525px;height:49px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Direccionamiento</div>
       <h2>Notación CIDR: el tamaño lo da el prefijo</h2>
@@ -226,7 +234,9 @@
       <span class="pg">7 / 59</span>
     </div>
     <aside class="guion">CIDR significa enrutamiento entre dominios sin clases, y su idea es sencilla: escribir la dirección seguida de una barra y un número. Ese número es el prefijo, es decir, cuántos bits pertenecen a la red. Lo que sobra de los treinta y dos bits queda para los equipos. Mira las barras: barra ocho deja veinticuatro bits de host y da más de dieciséis millones de direcciones. Barra dieciséis deja dieciséis bits y da sesenta y cinco mil quinientas treinta y seis: es el tamaño máximo de una VPC en AWS. Barra veinticuatro da doscientas cincuenta y seis, la subred más común. Y barra veintiocho da dieciséis, que es el mínimo permitido. Fíjate en que AWS reserva cinco direcciones en cada subred, así que una barra veinticuatro ofrece doscientas cincuenta y una utilizables, y una barra veintiocho solo once. La regla práctica: cada bit que quitas al prefijo duplica el tamaño.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/network/public-subnet.png" alt="Subred pública" style="position:absolute;left:1108px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Ejercicio de CIDR</div>
       <h2>Ejercicio 1: anatomía de una subred /24</h2>
@@ -243,7 +253,9 @@
       <span class="pg">8 / 59</span>
     </div>
     <aside class="guion">Primer ejercicio. Tenemos la subred 10 punto 0 punto 1 punto 0 barra veinticuatro, con doscientas cincuenta y seis direcciones, y queremos saber cuáles podemos usar. Mira la franja: la primera, punto cero, es la dirección de la red. La punto uno la reserva AWS para el router de la VPC. La punto dos es para el servicio de nombres DNS. La punto tres queda reservada para uso futuro. Y la última, punto doscientos cincuenta y cinco, es la de difusión, que AWS reserva aunque no soporte difusión. Por eso quedan doscientas cincuenta y una utilizables, entre punto cuatro y punto doscientos cincuenta y cuatro. En redes tradicionales serían doscientas cincuenta y cuatro. Ahora la pregunta B, para ti: cuántas utilizables hay en una barra veintiocho y en una barra veinte. Pausa y calcula antes de mirar. La lección es práctica: una subred diminuta se agota rápido, así que planifica el tamaño.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/network/private-subnet.png" alt="Subred privada" style="position:absolute;left:1103px;top:388px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Ejercicio de CIDR</div>
       <h2>Ejercicio 2: plan de direccionamiento de la Corporación</h2>
@@ -260,7 +272,9 @@
       <span class="pg">9 / 59</span>
     </div>
     <aside class="guion">Segundo ejercicio: diseñar el plan de direccionamiento de la Corporación Industrial del Caribe. Reservamos una VPC con el rango 10 punto 20 punto 0 punto 0 barra dieciséis. A la izquierda ves los doscientos cincuenta y seis bloques barra veinticuatro que caben dentro: cada cuadrito es una subred posible, y el número es el tercer octeto. Usamos seis. Dos subredes públicas, en las zonas A y B, con los números uno y dos. Dos de aplicación, once y doce, para los servidores del ERP. Y dos de datos, veintiuno y veintidós, para la base de datos principal y su réplica. Dejamos huecos entre grupos para crecer sin renumerar. Abajo hay una pregunta de reflexión: si la sede ya usa 10 punto 10 y una empresa socia usa 10 punto 20, ¿qué pasa al conectarlas? Los rangos solapados no se pueden enrutar entre sí, y lo retomamos en la parte tres. Moraleja: planifica el direccionamiento antes de crear nada.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/general/generic-office-building.png" alt="Corporación Industrial del Caribe" style="position:absolute;left:500px;top:195px;height:49px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Ejercicio de CIDR</div>
       <h2>Ejercicio 3: ¿están en la misma red?</h2>
@@ -345,7 +359,9 @@
       <span class="pg">14 / 59</span>
     </div>
     <aside class="guion">Veamos cómo se establece una conexión TCP, porque de ahí sale la idea de stateful que usaremos con los firewalls. Primero, el cliente envía un mensaje SYN: quiero hablar. El servidor contesta con SYN-ACK: de acuerdo, y yo también. El cliente confirma con ACK y la conexión queda abierta. Es el saludo de tres pasos. Luego viajan los datos: en nuestro ejemplo, una solicitud HTTPS cifrada y la respuesta con la página. Al terminar, uno de los dos envía un FIN para cerrar ordenadamente. Fíjate en la columna derecha. Como un firewall con estado recuerda las conexiones abiertas, si tú permites la entrada al puerto cuatrocientos cuarenta y tres, no necesitas otra regla para las respuestas: salen solas. Los Security Groups de AWS y los grupos NSG de Azure funcionan así. Las NACL, en cambio, no recuerdan nada, y por eso las veremos con cuidado en la parte tres. UDP, en contraste, no tiene saludo; DNS y la transmisión de video lo usan.</aside>
-  </section><section class="slide" data-parte="1">
+  
+      <img class="icono-tema" src="assets/iconos/aws/network/direct-connect.png" alt="Conexión dedicada" style="position:absolute;left:83px;top:233px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Cierre de la Parte 1</div>
       <h2>Lo que queda de la Parte 1</h2>
@@ -430,7 +446,9 @@
       <span class="pg">19 / 59</span>
     </div>
     <aside class="guion">Aquí viene una regla que cae en todos los exámenes. ¿Qué pasa si varias entradas de la tabla coinciden con el destino? Mira el ejemplo: el paquete va hacia 10 punto 20 punto 1 punto 25. La ruta por defecto, barra cero, coincide, porque coincide con todo. La 10 barra ocho también. La 10 punto 20 barra dieciséis también. Y la 10 punto 20 punto 1 barra veinticuatro también. Cuatro candidatas. El router escoge la que comparte más bits con el destino, es decir, la de prefijo más largo, y las barras rojas lo muestran: gana la barra veinticuatro, y el paquete va al firewall de inspección. Abajo tienes otros tres destinos para practicar con la misma tabla. Por ejemplo, 8 punto 8 punto 8 punto 8 solo coincide con la ruta por defecto, así que sale hacia el proveedor. Las tablas de rutas de AWS y de Azure aplican exactamente esta regla, así que conviene dominarla desde ya.</aside>
-  </section><section class="slide cover" data-parte="2">
+  
+      <img class="icono-tema" src="assets/iconos/aws/network/route-table.png" alt="Tabla de rutas" style="position:absolute;left:1108px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide cover" data-parte="2">
     <div class="topline-g"></div><div class="topline-v"></div>
     <img class="logo-main" src="assets/logo-cuc.png" alt="Logo CUC" onerror="this.style.display='none'">
     <div class="cover-kicker">Semana 4 · Redes en la nube: redes virtuales, subredes, grupos de seguridad</div>
@@ -444,7 +462,9 @@
     </div>
     <div class="cover-sub">Ruta por defecto, NAT de salida y de entrada, PAT, DNS público y privado, y la red virtual de Azure frente a la VPC de AWS</div>
     <aside class="guion">Bienvenidos a la segunda parte de la semana cuatro. Seguimos el paquete: ruta por defecto, NAT de salida y de entrada, PAT y DNS con zona pública y privada. Después ponemos las piezas de una red virtual en Azure junto a la VPC de AWS.</aside>
-  </section><section class="slide" data-parte="2">
+  
+      <img class="icono-tema" src="assets/iconos/aws/network/vpc-router.png" alt="Enrutamiento" style="position:absolute;left:1108px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">Enrutamiento</div>
       <h2>Ruta por defecto: la diferencia entre isla y salida</h2>
@@ -733,7 +753,9 @@
       <span class="pg">37 / 59</span>
     </div>
     <aside class="guion">Un recurso tiene IP pública porque alguien se la asigna, y hay dos modalidades. La efímera, arriba: al lanzar la instancia en una subred pública con la opción habilitada, AWS le entrega una dirección del pool regional. Pero esa dirección no pertenece a la instancia: si la detienes y la vuelves a iniciar, recibe otra distinta, como muestra la línea de tiempo. Sirve cuando accedes por un nombre DNS o por un balanceador. La estática, abajo, es la Elastic IP. Es una dirección reservada a tu cuenta, que sobrevive a los reinicios y puedes mover de una instancia a otra. La necesitas cuando un tercero autoriza solo esa IP en su firewall, o cuando un registro DNS debe ser estable, por ejemplo la Elastic IP del NAT Gateway. Un detalle de costos: desde febrero de dos mil veinticuatro toda IPv4 pública se factura, unos cinco milésimos de dólar por hora, valor ilustrativo. Reserva direcciones con intención, no por costumbre. Y los recursos privados nunca tienen IP pública propia.</aside>
-  </section><section class="slide" data-parte="3">
+  
+      <img class="icono-tema" src="assets/iconos/aws/compute/ec2-elastic-ip-address.png" alt="IP elástica" style="position:absolute;left:1134px;top:224px;height:62px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="3">
     <div class="s-head">
       <div class="kicker">Filtros de seguridad</div>
       <h2>Security Group: el firewall de cada recurso</h2>
@@ -781,7 +803,9 @@
     </div>
     <div class="cover-sub">Security Groups y NACL, la VPC en dos zonas, peering, Transit Gateway, hub-and-spoke y enlaces dedicados</div>
     <aside class="guion">Bienvenidos a la última parte de la semana cuatro. Cerramos el filtrado con Security Groups y NACL, encadenados en tres capas, y su equivalente en Azure. Después conectamos redes: peering, Transit Gateway, hub-and-spoke, VPN y enlaces dedicados, con la VPC de la Corporación en dos zonas.</aside>
-  </section><section class="slide" data-parte="3">
+  
+      <img class="icono-tema" src="assets/iconos/aws/network/site-to-site-vpn.png" alt="Interconexión de redes" style="position:absolute;left:1108px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="3">
     <div class="s-head">
       <div class="kicker">Filtros de seguridad</div>
       <h2>Security Group frente a NACL: dos capas, un camino</h2>

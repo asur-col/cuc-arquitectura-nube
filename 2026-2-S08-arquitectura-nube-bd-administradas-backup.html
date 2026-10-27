@@ -546,7 +546,9 @@
     </div>
     <div class="cover-sub">Conmutación, réplicas de lectura y entre regiones, cuándo promover, escalado, RTO y RPO, y respaldo frente a réplica</div>
     <aside class="guion">Bienvenidos a la segunda parte de la semana ocho. Cómo sobrevive una base: conmutación, réplicas de lectura y entre regiones, cuándo promover una réplica y cómo escalar. Ordenamos las decisiones con RTO y RPO y separamos dos conceptos que se confunden: un respaldo no es una réplica.</aside>
-  </section><section class="slide" data-parte="2">
+  
+      <img class="icono-tema" src="assets/iconos/aws/database/rds.png" alt="Bases de datos administradas" style="position:absolute;left:1108px;top:208px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">Failover</div>
       <h2>Cómo ocurre la conmutación</h2>
@@ -572,7 +574,9 @@
       <span class="pg">19 / 55</span>
     </div>
     <aside class="guion">La conmutación, o failover, ocurre en cuatro pasos que ves arriba: detección, promoción, redirección y reconexión. Abajo los pasamos a una línea de tiempo. Empieza con la falla del principal, luego la detección por parte del servicio, después la promoción del suplente, el cambio del DNS para que el nombre de conexión apunte al nuevo principal, y por último la reconexión de la aplicación. En total, AWS indica que suele tomar entre sesenta y ciento veinte segundos para una instancia Multi-AZ. Durante ese tiempo las conexiones abiertas se pierden, así que la aplicación debe reintentar. Mira la fila de reintentos: esperar uno, dos, cuatro, ocho y dieciséis segundos, con espera creciente, evita saturar la base cuando regresa. Y la regla del recuadro: nunca guardes la dirección IP, usa siempre el nombre de conexión y respeta el TTL del DNS. Así la aplicación no necesita cambios cuando ocurre la conmutación.</aside>
-  </section><section class="slide" data-parte="2">
+  
+      <img class="icono-tema" src="assets/iconos/aws/database/aurora.png" alt="Conmutación Multi-AZ" style="position:absolute;left:1165px;top:335px;height:49px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">Mecanismo 2</div>
       <h2>Réplica de lectura: repartir las consultas</h2>
@@ -624,7 +628,9 @@
       <span class="pg">21 / 55</span>
     </div>
     <aside class="guion">Esta es la confusión clásica: dos copias con la misma palabra réplica y propósitos distintos. Arriba están las dos tarjetas, y abajo una comparación fila por fila. Primera pregunta: ¿atiende consultas? La copia en espera no, la réplica de lectura sí. Segunda: ¿conmuta sola si el principal falla? La copia en espera sí, de forma automática; la réplica de lectura no, se promueve a mano. Tercera: ¿qué problema resuelve? La espera resuelve disponibilidad, la lectura resuelve escalabilidad. Cuarta: ¿cómo replica? La espera lo hace de forma síncrona, la lectura de forma asíncrona. Las marcas verdes y rojas te ayudan a recordar. La consecuencia de confundirlas es seria: creer que hay alta disponibilidad cuando solo tienes una réplica de lectura, o esperar que la copia en espera atienda reportes. Imagina que en la Corporación Industrial del Caribe un comité de riesgo pide alta disponibilidad y el equipo monta solo una réplica de lectura. Revisa siempre qué mecanismo cubre qué necesidad.</aside>
-  </section><section class="slide" data-parte="2">
+  
+      <img class="icono-tema" src="assets/iconos/aws/database/rds-instance.png" alt="Instancia de base de datos" style="position:absolute;left:1108px;top:203px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">Replicación</div>
       <h2>Síncrona y asíncrona: la diferencia importa</h2>
@@ -650,7 +656,9 @@
       <span class="pg">22 / 55</span>
     </div>
     <aside class="guion">Replicación síncrona o asíncrona: confirmar antes o después. Las dos tarjetas de arriba lo explican, y el diagrama de abajo lo mide en tiempo. En la fila superior, la síncrona: primero se escribe en el principal, luego se envía el cambio y se espera al suplente, y solo entonces se confirma. La barra larga en dorado es esa espera, y por eso cada operación tarda más. En la fila inferior, la asíncrona: se escribe en el principal, se confirma de inmediato, y la copia ocurre en segundo plano, en azul. La respuesta es más rápida, pero hay una ventana en la que la réplica va atrasada. ¿Qué se pierde y qué no? Con síncrona no se pierden datos confirmados. Con asíncrona, si el principal cae justo antes de copiar, la réplica puede ir unos segundos atrás. Por eso se usa síncrona hacia la copia en espera y asíncrona hacia las réplicas de lectura. Y recuerda que un dato ligeramente anterior en la réplica no es un error de la base.</aside>
-  </section><section class="slide" data-parte="2">
+  
+      <img class="icono-tema" src="assets/iconos/aws/database/database-migration-service.png" alt="Replicación de datos" style="position:absolute;left:1108px;top:448px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">Desastres</div>
       <h2>Réplicas entre regiones</h2>
@@ -780,7 +788,9 @@
       <span class="pg">27 / 55</span>
     </div>
     <aside class="guion">Llegamos a dos números que ordenan todo el diseño: RTO y RPO. Arriba las dos tarjetas. El RTO, tiempo objetivo de recuperación, responde cuánto puede estar caído el servicio, y lo atiende la alta disponibilidad. El RPO, punto objetivo de recuperación, responde cuánta información se puede perder, y lo atienden los respaldos con su frecuencia y su retención. Abajo, una línea de tiempo de un incidente. El último respaldo fue a las diez y cuarto. La falla ocurre a las diez y treinta. El servicio se restablece a las once y quince. El tramo dorado, entre el respaldo y la falla, es el RPO: los datos que se pierden. El tramo vino, entre la falla y el restablecimiento, es el RTO: el servicio caído. Como meta ilustrativa, la Corporación Industrial del Caribe acepta perder como máximo quince minutos y estar caída como máximo una hora. Esos valores los define el negocio, no la tecnología, y determinan qué estrategia es suficiente.</aside>
-  </section><section class="slide" data-parte="2">
+  
+      <img class="icono-tema" src="assets/iconos/aws/management/cloudwatch-alarm.png" alt="Tiempos: RTO y RPO" style="position:absolute;left:1043px;top:218px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">Síntesis</div>
       <h2>Lo que queda de la Parte 2</h2>
@@ -988,7 +998,9 @@
       <span class="pg">35 / 55</span>
     </div>
     <aside class="guion">Apliquemos RTO y RPO al respaldo. Arriba, las dos tarjetas: la frecuencia de copia define el RPO, y la velocidad de restauración define el RTO. En el gráfico de la izquierda, de diente de sierra, cada línea muestra cuántos datos quedarían en riesgo entre copias. Con respaldo diario, la línea sube durante todo el día: se podría perder casi un día de cambios. Con copias cada ocho horas, el máximo baja a casi ocho horas. Y con restauración a un punto en el tiempo, que usa los registros de transacciones cada cinco minutos, la línea casi no sube: el RPO es de minutos. A la derecha, el tiempo de restauración crece con el tamaño: cien gigabytes restauran en poco tiempo; un terabyte, más; cinco terabytes pueden tardar horas. Por eso la frase en negrita: se mide, no se supone. Si ese tiempo no cabe en lo que el negocio tolera, se necesita otra estrategia, como una copia en espera. La copia resuelve la pérdida de datos; la disponibilidad resuelve el tiempo de servicio.</aside>
-  </section><section class="slide" data-parte="3">
+  
+      <img class="icono-tema" src="assets/iconos/aws/storage/backup.png" alt="Respaldo" style="position:absolute;left:833px;top:503px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="3">
     <div class="s-head">
       <div class="kicker">Verificación</div>
       <h2>Un respaldo no probado no es un respaldo</h2>
@@ -1158,7 +1170,9 @@
       <span class="pg">42 / 55</span>
     </div>
     <aside class="guion">Cerramos la parte tres con una matriz que responde: ¿qué mecanismo cubre cada amenaza? Arriba, las cuatro ideas fuerza: el respaldo no es una réplica; la restauración a un punto vuelve al instante justo antes de un error; la retención se decide con el negocio; y un respaldo sin restauración verificada no es un respaldo. Abajo, la matriz. Las columnas son Multi-AZ, réplica de lectura, copias con restauración a un punto, y copia en otra región. Los círculos verdes indican que cubre; los de borde dorado, parcial o manual. Falla de una zona: Multi-AZ la cubre. Borrado accidental y corrupción lógica: solo las copias, locales o cruzadas. Falla de toda la región: la copia en otra región, y parcialmente una réplica remota. Sobrecarga de lectura: la réplica de lectura. Observa que ninguna columna es verde en todas las filas. Eso confirma lo que vimos: no se sustituyen. En la última parte hacemos el puente hacia la práctica: migrar una base existente a un entorno administrado.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/management/trusted-advisor-checklist.png" alt="Síntesis de la parte" style="position:absolute;left:310px;top:365px;height:49px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Laboratorio</div>
       <h2>El laboratorio de esta semana: migración a RDS</h2>
@@ -1236,7 +1250,9 @@
       <span class="pg">45 / 55</span>
     </div>
     <aside class="guion">Hay dos formas de mover los datos, y la diferencia está en el tiempo sin servicio. Arriba las dos tarjetas. Captura y restauración: se toma una copia consistente del origen y se restaura en la base administrada; requiere interrupción, es simple y apta para ventanas de mantenimiento. Replicación continua: se replica del origen al destino hasta alcanzar el día, y el corte consiste en detener, confirmar y redirigir; exige más preparación. Abajo, el diagrama de tiempo. En la fila superior, captura y restauración: el servicio corre en el origen, luego hay un bloque rojo largo en el que está detenido mientras se copia y se restaura, y después corre en el destino. En la fila inferior, replicación continua: el origen sigue activo durante la carga completa y la captura de cambios, el corte es un bloque rojo corto, y luego se opera en el destino. Misma meta, distinto precio: preparación frente a minutos de corte. La decisión depende de cuánto tiempo puede estar detenido el servicio.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/migration/datasync.png" alt="Mover los datos" style="position:absolute;left:1108px;top:448px;height:93px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Preparación</div>
       <h2>Antes de migrar: inventario y compatibilidad</h2>
@@ -1314,7 +1330,9 @@
       <span class="pg">48 / 55</span>
     </div>
     <aside class="guion">La ventana de corte es el momento crítico. Arriba, los cinco pasos. Abajo, los mismos pasos sobre una línea de tiempo, con un ejemplo de domingo en la madrugada. A las dos de la mañana, paso uno: se detienen las escrituras en el origen y la aplicación entra en mantenimiento. A las dos y diez, paso dos: se confirma la sincronización; el destino debe tener todo y el retraso de replicación debe llegar a cero. A las dos y veinte, paso tres: se redirige la aplicación a la base administrada. A las dos y treinta, paso cuatro: se verifica que las operaciones funcionan en el destino. A las dos y cuarenta y cinco, paso cinco: el origen queda disponible como respaldo, sin permitir escrituras. Las barras de abajo muestran el estado de la aplicación: en mantenimiento durante los primeros tres pasos y en línea sobre RDS después. Lo crítico es que el retraso llegue a cero antes de redirigir. El error clásico es no detener las escrituras antes de copiar los últimos cambios.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/management/systems-manager-maintenance-windows.png" alt="Ventana de mantenimiento" style="position:absolute;left:1165px;top:335px;height:49px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Validación</div>
       <h2>Qué comprobar después de migrar</h2>
@@ -1366,7 +1384,9 @@
       <span class="pg">50 / 55</span>
     </div>
     <aside class="guion">Una migración sin marcha atrás clara es una apuesta. Arriba, las cuatro fases del plan de reversa: antes, una captura manual del origen verificada como restaurable; durante, el origen disponible sin permitir escrituras; si falla, redirigir de vuelta al origen y retomar; si funciona, validar estabilidad y planificar el retiro. Abajo, el árbol de decisión después del corte. A la izquierda, el corte ya está hecho y el origen está en solo lectura. Llegamos al rombo: ¿está estable el destino durante veinticuatro a cuarenta y ocho horas? Si la respuesta es sí, camino dorado: se hace una captura final del origen, se apaga y se retiran los accesos temporales. Si la respuesta es no, camino rojo: reversa. Se redirige la aplicación al origen y se reanudan las escrituras. Una advertencia honesta: si ya hubo escrituras en el destino, hay que replicarlas de vuelta, o se pierden. La reversa no es un fracaso, es parte del diseño: migrar sin poder volver atrás es un riesgo innecesario.</aside>
-  </section><section class="slide" data-parte="4">
+  
+      <img class="icono-tema" src="assets/iconos/aws/storage/cloudendure-disaster-recovery.png" alt="Recuperación: plan de reversa" style="position:absolute;left:318px;top:533px;height:74px;" onerror="this.style.display='none'">
+    </section><section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Laboratorio</div>
       <h2>Checklist antes de enviar el laboratorio</h2>
