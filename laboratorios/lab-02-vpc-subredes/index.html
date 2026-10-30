@@ -1,207 +1,336 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lab 2 — VPC, subredes y grupos de seguridad | Arquitectura en la Nube HEP</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 2 — VPC, subredes y grupos de seguridad</title>
 <style>
-:root{--tinta:#14213d;--mar:#0b7285;--mar-oscuro:#0b3d4d;--arena:#f4a261;
---fondo:#fbfaf6;--panel:#fff;--linea:#e5e0d5;--ok:#1b7f4b;--no:#b42318;--gris:#6b7280}
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-color:var(--tinta);background:var(--fondo);line-height:1.65}
-header.hero{padding:3.2rem 1.5rem 2.4rem;color:#fff;
-background:linear-gradient(135deg,#0b3d4d,var(--mar))}
-.wrap{max-width:64rem;margin:0 auto}
-.eyebrow{margin:0;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
-color:#ffe8c2;font-weight:600}
-h1{margin:.35rem 0 .6rem;font-size:clamp(1.9rem,4.5vw,2.9rem);line-height:1.12}
-.sub{margin:0;max-width:46rem;color:#d7f0f4;font-size:1.06rem}
-.meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.15rem}
-.meta span{font-size:.8rem;padding:.28rem .7rem;border:1px solid rgba(255,255,255,.35);
-border-radius:999px;background:rgba(255,255,255,.08)}
-.layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.2rem;
-max-width:76rem;margin:0 auto;padding:2rem 1.5rem 5rem}
-nav.toc{position:sticky;top:1rem;align-self:start;font-size:.9rem;
-border-right:1px solid var(--linea);padding-right:1rem}
-nav.toc p{margin:.2rem 0 .6rem;font-weight:700;font-size:.78rem;
-letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
-nav.toc a{display:block;padding:.18rem 0;color:var(--tinta);text-decoration:none}
-nav.toc a:hover{color:var(--mar);text-decoration:underline}
-main{min-width:0}section{margin:0 0 2.4rem}
-h2{font-size:1.35rem;margin:0 0 .7rem;padding-bottom:.35rem;
-border-bottom:2px solid var(--arena)}
-h3{font-size:1.05rem;margin:1.4rem 0 .4rem}
-p{margin:.55rem 0}a{color:var(--mar)}
-code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-font-size:.88em;background:#f0ece2;padding:.08rem .32rem;border-radius:.25rem}
-pre{margin:.7rem 0;padding:.9rem 1rem;overflow-x:auto;background:#10202a;color:#e8f1f2;
-border-radius:.45rem;font-size:.85rem;line-height:1.5}
-pre code{background:none;padding:0;color:inherit;font-size:inherit}
-blockquote{margin:.8rem 0;padding:.85rem 1rem;background:#fff7ea;
-border-left:4px solid var(--arena);border-radius:.25rem;font-size:.94rem}
-blockquote p{margin:.2rem 0}
-table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.92rem}
-th,td{padding:.55rem .6rem;border:1px solid var(--linea);text-align:left;vertical-align:top}
-th{background:#f2efe6;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase}
-tr:nth-child(even) td{background:#fcfbf7}
-ul,ol{margin:.5rem 0 .7rem;padding-left:1.5rem}li{margin:.18rem 0}
-hr{border:0;border-top:1px solid var(--linea);margin:1.6rem 0}
-footer{border-top:1px solid var(--linea);padding:1.4rem 1.5rem;text-align:center;
-font-size:.84rem;color:var(--gris)}
-@media(max-width:820px){.layout{grid-template-columns:1fr;padding-top:1.2rem}
-nav.toc{position:static;border-right:0;border-bottom:1px solid var(--linea);
-padding:0 0 .8rem}nav.toc a{display:inline-block;margin-right:.9rem}}
-@media print{header.hero{background:#0b3d4d!important;-webkit-print-color-adjust:exact}
-nav.toc{display:none}.layout{display:block;max-width:none;padding:1rem}
-pre{white-space:pre-wrap}}
+  :root{--tinta:#14213d;--mar:#0b7285;--mar-oscuro:#0b3d4d;--arena:#f4a261;--fondo:#fbfaf6;--panel:#ffffff;--linea:#e5e0d5;--ok:#1b7f4b;--no:#b42318;--gris:#6b7280;}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tinta);background:var(--fondo);line-height:1.65}
+  header.hero{padding:3rem 1.5rem 2rem;color:#fff;background:linear-gradient(135deg,#0b3d4d,var(--mar))}
+  .wrap{max-width:64rem;margin:0 auto}
+  .eyebrow{margin:0;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#ffe8c2;font-weight:600}
+  h1{margin:.35rem 0 .6rem;font-size:clamp(1.9rem,4.5vw,2.9rem);line-height:1.12}
+  .sub{margin:0;max-width:44rem;color:#d7f0f4;font-size:1.06rem}
+  .meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.2rem}
+  .meta span{font-size:.8rem;padding:.28rem .7rem;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(255,255,255,.08)}
+  .layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.2rem;max-width:76rem;margin:0 auto;padding:2rem 1.5rem 5rem}
+  nav.toc{position:sticky;top:1rem;align-self:start;font-size:.9rem;border-right:1px solid var(--linea);padding-right:1rem}
+  nav.toc p{margin:.2rem 0 .6rem;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
+  nav.toc a{display:block;padding:.18rem 0;color:var(--tinta);text-decoration:none}
+  main{min-width:0}section{margin:0 0 2.4rem}
+  h2{font-size:1.35rem;margin:0 0 .7rem;padding-bottom:.35rem;border-bottom:2px solid var(--arena)}
+  h3{font-size:1.05rem;margin:1.4rem 0 .4rem}
+  p{margin:.55rem 0}a{color:var(--mar)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:#f0ece2;padding:.08rem .32rem;border-radius:.25rem}
+  pre{margin:.7rem 0;padding:.9rem 1rem;overflow-x:auto;background:#10202a;color:#e8f1f2;border-radius:.45rem;font-size:.82rem;line-height:1.45}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit}
+  pre.salida{border-left:4px solid var(--mar);background:#0b1c24}
+  .salida .coment{color:#6b7280;font-style:italic}
+  .nota{padding:.85rem 1rem;background:#fff7ea;border-left:4px solid var(--arena);border-radius:.25rem;font-size:.94rem}
+  .peligro{background:#fdf3f2;border-left-color:var(--no)}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;padding:.1rem .45rem;border-radius:.25rem;color:#fff;background:var(--mar)}
+  .ok{color:var(--ok);font-weight:600}.no{color:var(--no);font-weight:600}
+  table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.92rem}
+  th,td{padding:.55rem .6rem;border:1px solid var(--linea);text-align:left;vertical-align:top}
+  th{background:#f2efe6;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase}
+  tr:nth-child(even)td{background:#fcfbf7}
+  footer{border-top:1px solid var(--linea);padding:1.4rem 1.5rem;text-align:center;font-size:.84rem;color:var(--gris)}
+  @media(max-width:820px){.layout{grid-template-columns:1fr;padding-top:1.2rem}nav.toc{position:static;border-right:0;border-bottom:1px solid var(--linea);padding:0 0 .8rem}nav.toc a{display:inline-block;margin-right:.9rem}}
 </style>
 </head>
 <body>
-<header class="hero">
-  <div class="wrap">
-    <p class="eyebrow">Universidad de la Costa · Arquitectura en la Nube HEP</p>
-    <h1>Lab 2 — VPC, subredes y grupos de seguridad</h1>
-    <p class="sub">Diseña una VPC de dos capas en dos zonas de disponibilidad, con salida a Internet solo para la capa pública y grupos de seguridad de mínimo privilegio.</p>
-    <div class="meta">
-      <span>Laboratorio de la HEP</span><span>Nube simulada con floci</span>
-      <span>Sin cuenta de AWS</span><span>Sin Internet</span>
-    </div>
-  </div>
-</header>
+<header class="hero"><div class="wrap">
+<p class="eyebrow">Universidad de la Costa &middot; Arquitectura en la Nube HEP &middot; Guía paso a paso</p>
+<h1>Lab 2 — VPC, subredes y grupos de seguridad</h1>
+<p class="sub">Diseña una VPC de dos capas en dos zonas de disponibilidad, con salida a Internet solo para la capa pública y reglas de seguridad de mínimo privilegio.</p>
+<div class="meta"><span>Semana 2</span><span>75–90 min</span><span>Individual</span><span>5 criterios · 5,0</span><span>Estación con floci</span></div>
+</div></header>
+
 <div class="layout">
-  <nav class="toc" aria-label="Contenido">
-    <p>Contenido</p>
-    <a href="#1-que-vas-a-aprender">1. Qué vas a aprender</a>
-<a href="#2-el-entorno">2. El entorno</a>
-<a href="#3-paso-1-crear-la-vpc-y-las-cuatro-subredes">3. Paso 1 — Crear la VPC y las cuatro subredes</a>
-<a href="#4-paso-2-internet-gateway-y-tabla-de-rutas-publica">4. Paso 2 — Internet Gateway y tabla de rutas pública</a>
-<a href="#5-paso-3-grupo-sg-web">5. Paso 3 — Grupo `sg-web`</a>
-<a href="#6-paso-4-grupo-sg-db">6. Paso 4 — Grupo `sg-db`</a>
-<a href="#7-paso-5-comprobar-las-subredes-privadas">7. Paso 5 — Comprobar las subredes privadas</a>
-<a href="#8-paso-6-autocontrol">8. Paso 6 — Autocontrol</a>
-<a href="#9-criterios-de-evaluacion">9. Criterios de evaluación</a>
-<a href="#10-problemas-frecuentes">10. Problemas frecuentes</a>
-<a href="#11-para-ir-mas-alla-opcional">11. Para ir más allá (opcional)</a>
-<a href="#12-entrega">12. Entrega</a>
-  </nav>
-  <main>
-<p><strong>Asignatura:</strong> Arquitectura en la Nube HEP · <strong>Semana:</strong> 2 <strong>Duración estimada:</strong> 75–90 min · <strong>Entrega:</strong> individual, en la plataforma <strong>Estación:</strong> nube AWS simulada con <code>floci</code> (sin cuenta de AWS y sin Internet)</p>
-<hr>
-<h2 id="1-que-vas-a-aprender">1. Qué vas a aprender</h2>
-<ul><li>diseñar una <strong>VPC</strong> con direccionamiento privado (RFC 1918);</li><li>separar una <strong>capa pública</strong> y una <strong>capa privada</strong> en dos zonas de disponibilidad;</li><li>dar salida a Internet solo a la capa pública con un <strong>Internet Gateway</strong> y una <strong>tabla de rutas</strong>;</li><li>escribir <strong>grupos de seguridad</strong> de mínimo privilegio, con referencias entre grupos en vez de rangos abiertos.</li></ul>
-<p>La VPC de este laboratorio es fija: <strong><code>10.20.0.0/16</code></strong>. Los nombres y CIDR también: el verificador los busca así.</p>
-<hr>
-<h2 id="2-el-entorno">2. El entorno</h2>
-<p><code>floci</code> emula la API de EC2 en <code>http://127.0.0.1:4566</code>. Credenciales dummy:</p>
-<pre><code>source /etc/profile.d/lab-aws.sh</code></pre>
-<table><thead><tr><th>Recurso</th><th>Nombre / valor</th></tr></thead><tbody><tr><td>VPC</td><td><code>10.20.0.0/16</code></td></tr><tr><td>Subred pública A</td><td><code>10.20.1.0/24</code> · <code>us-east-1a</code></td></tr><tr><td>Subred pública B</td><td><code>10.20.2.0/24</code> · <code>us-east-1b</code></td></tr><tr><td>Subred privada A</td><td><code>10.20.11.0/24</code> · <code>us-east-1a</code></td></tr><tr><td>Subred privada B</td><td><code>10.20.12.0/24</code> · <code>us-east-1b</code></td></tr><tr><td>Internet Gateway</td><td>etiqueta <code>Name=igw-hep</code></td></tr><tr><td>Tabla de rutas</td><td>etiqueta <code>Name=rt-publica</code></td></tr><tr><td>Grupos</td><td><code>sg-web</code>, <code>sg-db</code></td></tr></tbody></table>
-<p>Trabaja en <code>~/lab-02</code> (hay una hoja de apuntes). No hace falta crear instancias: este laboratorio es de <strong>red</strong>.</p>
-<hr>
-<h2 id="3-paso-1-crear-la-vpc-y-las-cuatro-subredes">3. Paso 1 — Crear la VPC y las cuatro subredes</h2>
-<pre><code>VPC=$(aws ec2 create-vpc --cidr-block 10.20.0.0/16 \
-  --tag-specifications &#x27;ResourceType=vpc,Tags=[{Key=Name,Value=vpc-hep}]&#x27; \
-  --query &#x27;Vpc.VpcId&#x27; --output text)
-echo &quot;$VPC&quot;
+<nav class="toc" aria-label="Contenido"><p>Contenido</p><a href="#intro">Acerca del lab</a>
+<a href="#p1">1. Crear la VPC vpc-hep</a>
+<a href="#p2">2. Crear subredes públicas</a>
+<a href="#p3">3. Crear subredes privadas</a>
+<a href="#p4">4. Crear y asociar Internet Gateway</a>
+<a href="#p5">5. Crear tabla de rutas pública</a>
+<a href="#p6">6. Agregar ruta predeterminada a IGW</a>
+<a href="#p7">7. Asociar subredes a tabla de rutas</a>
+<a href="#p8">8. Crear grupo de seguridad sg-web</a>
+<a href="#p9">9. Crear grupo de seguridad sg-db</a>
+<a href="#p10">10. Auditar y autocontrol</a>
+<a href="#criterios">Criterios de evaluación</a>
+</nav>
+<main>
+<section id="intro">
+<h2>Acerca de este laboratorio</h2>
+<p>En este laboratorio diseñarás la topología de red fundamental en la nube: una VPC <code>10.20.0.0/16</code> estructurada en dos zonas de disponibilidad (<code>us-east-1a</code> y <code>us-east-1b</code>), con aislamiento estricto de la capa privada y grupos de seguridad interrelacionados según el principio de mínimo privilegio.</p>
+</section>
 
-aws ec2 create-subnet --vpc-id &quot;$VPC&quot; --cidr-block 10.20.1.0/24 \
-  --availability-zone us-east-1a \
-  --tag-specifications &#x27;ResourceType=subnet,Tags=[{Key=Name,Value=sub-pub-a}]&#x27;
+<section id="p1">
+<h2>Paso 1 &mdash; Crear la VPC vpc-hep</h2>
+<p><strong>Objetivo:</strong> Crear la VPC principal con bloque CIDR <code>10.20.0.0/16</code> y asignarle la etiqueta <code>Name=vpc-hep</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>VPC=$(aws ec2 create-vpc --cidr-block 10.20.0.0/16   --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=vpc-hep}]'   --query 'Vpc.VpcId' --output text)
+echo "VPC_ID: $VPC"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>VPC_ID: vpc-00e37ea5</code></pre>
+<h3>Verificación</h3>
+<p>Se obtiene un identificador único de VPC (ej. <code>vpc-00e37ea5</code>).</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> CIDR erróneo (p. ej. 10.0.0.0/16). <em>Corrección:</em> Debe ser estrictamente <code>10.20.0.0/16</code>.</p>
+<p><strong>Criterio del verificador:</strong> Base obligatoria para <code>vpc_subredes</code>.</p>
+</section>
 
-aws ec2 create-subnet --vpc-id &quot;$VPC&quot; --cidr-block 10.20.2.0/24 \
-  --availability-zone us-east-1b \
-  --tag-specifications &#x27;ResourceType=subnet,Tags=[{Key=Name,Value=sub-pub-b}]&#x27;
+<section id="p2">
+<h2>Paso 2 &mdash; Crear subredes públicas</h2>
+<p><strong>Objetivo:</strong> Crear dos subredes para la capa pública: <code>10.20.1.0/24</code> en <code>us-east-1a</code> y <code>10.20.2.0/24</code> en <code>us-east-1b</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>SUBA=$(aws ec2 create-subnet --vpc-id "$VPC" --cidr-block 10.20.1.0/24   --availability-zone us-east-1a   --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=sub-pub-a}]'   --query 'Subnet.SubnetId' --output text)
+SUBB=$(aws ec2 create-subnet --vpc-id "$VPC" --cidr-block 10.20.2.0/24   --availability-zone us-east-1b   --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=sub-pub-b}]'   --query 'Subnet.SubnetId' --output text)
+echo "PUBLIC_SUBNETS: $SUBA $SUBB"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>PUBLIC_SUBNETS: subnet-9b05504c subnet-1bbaed85</code></pre>
+<h3>Verificación</h3>
+<p>Ambas subredes deben quedar registradas en distintas zonas de disponibilidad para asegurar alta disponibilidad.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Asignar ambas subredes a la misma zona de disponibilidad. <em>Corrección:</em> Especifica explícitamente <code>us-east-1a</code> y <code>us-east-1b</code>.</p>
+<p><strong>Criterio del verificador:</strong> Parte pública de <code>vpc_subredes</code>.</p>
+</section>
 
-aws ec2 create-subnet --vpc-id &quot;$VPC&quot; --cidr-block 10.20.11.0/24 \
-  --availability-zone us-east-1a \
-  --tag-specifications &#x27;ResourceType=subnet,Tags=[{Key=Name,Value=sub-priv-a}]&#x27;
+<section id="p3">
+<h2>Paso 3 &mdash; Crear subredes privadas</h2>
+<p><strong>Objetivo:</strong> Crear dos subredes para la capa privada: <code>10.20.11.0/24</code> en <code>us-east-1a</code> y <code>10.20.12.0/24</code> en <code>us-east-1b</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>SUBPA=$(aws ec2 create-subnet --vpc-id "$VPC" --cidr-block 10.20.11.0/24   --availability-zone us-east-1a   --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=sub-priv-a}]'   --query 'Subnet.SubnetId' --output text)
+SUBPB=$(aws ec2 create-subnet --vpc-id "$VPC" --cidr-block 10.20.12.0/24   --availability-zone us-east-1b   --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=sub-priv-b}]'   --query 'Subnet.SubnetId' --output text)
+echo "PRIVATE_SUBNETS: $SUBPA $SUBPB"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>PRIVATE_SUBNETS: subnet-e1023b30 subnet-7f54e543</code></pre>
+<h3>Verificación</h3>
+<p>Las subredes privadas no deben tener activada la asignación automática de IP pública (<code>MapPublicIpOnLaunch=false</code>).</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Confundir los bloques CIDR privados con los públicos. <em>Corrección:</em> Usa exactamente <code>10.20.11.0/24</code> y <code>10.20.12.0/24</code>.</p>
+<p><strong>Criterio del verificador:</strong> Completa el criterio <code>vpc_subredes</code> (1,0 pt) y sienta la base de <code>privadas_sin_salida</code>.</p>
+</section>
 
-aws ec2 create-subnet --vpc-id &quot;$VPC&quot; --cidr-block 10.20.12.0/24 \
-  --availability-zone us-east-1b \
-  --tag-specifications &#x27;ResourceType=subnet,Tags=[{Key=Name,Value=sub-priv-b}]&#x27;</code></pre>
-<p>Comprueba:</p>
-<pre><code>aws ec2 describe-subnets --filters &quot;Name=vpc-id,Values=$VPC&quot; \
-  --query &#x27;Subnets[].{CIDR:CidrBlock,AZ:AvailabilityZone,IPPublica:MapPublicIpOnLaunch}&#x27; \
-  --output table</code></pre>
-<p><strong>Criterio 1:</strong> la VPC <code>10.20.0.0/16</code> y las 4 subredes con sus CIDR y AZ.</p>
-<hr>
-<h2 id="4-paso-2-internet-gateway-y-tabla-de-rutas-publica">4. Paso 2 — Internet Gateway y tabla de rutas pública</h2>
-<pre><code>IGW=$(aws ec2 create-internet-gateway \
-  --tag-specifications &#x27;ResourceType=internet-gateway,Tags=[{Key=Name,Value=igw-hep}]&#x27; \
-  --query &#x27;InternetGateway.InternetGatewayId&#x27; --output text)
-aws ec2 attach-internet-gateway --vpc-id &quot;$VPC&quot; --internet-gateway-id &quot;$IGW&quot;
+<section id="p4">
+<h2>Paso 4 &mdash; Crear y asociar Internet Gateway</h2>
+<p><strong>Objetivo:</strong> Crear el Internet Gateway etiquetado como <code>igw-hep</code> y adjuntarlo a la VPC creada.</p>
+<h3>Comando exacto</h3>
+<pre><code>IGW=$(aws ec2 create-internet-gateway   --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=igw-hep}]'   --query 'InternetGateway.InternetGatewayId' --output text)
+echo "IGW_ID: $IGW"
+aws ec2 attach-internet-gateway --vpc-id "$VPC" --internet-gateway-id "$IGW"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>IGW_ID: igw-2a429871</code></pre>
+<h3>Verificación</h3>
+<p><code>attach-internet-gateway</code> se ejecuta con éxito y finaliza sin errores.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Olvidar ejecutar el comando <code>attach-internet-gateway</code>. <em>Corrección:</em> El IGW debe estar vinculado a la VPC.</p>
+<p><strong>Criterio del verificador:</strong> Requisito para <code>salida_publica</code>.</p>
+</section>
 
-RT=$(aws ec2 create-route-table --vpc-id &quot;$VPC&quot; \
-  --tag-specifications &#x27;ResourceType=route-table,Tags=[{Key=Name,Value=rt-publica}]&#x27; \
-  --query &#x27;RouteTable.RouteTableId&#x27; --output text)
+<section id="p5">
+<h2>Paso 5 &mdash; Crear tabla de rutas pública</h2>
+<p><strong>Objetivo:</strong> Crear una tabla de enrutamiento personalizada con la etiqueta <code>Name=rt-publica</code> dentro de la VPC.</p>
+<h3>Comando exacto</h3>
+<pre><code>RT=$(aws ec2 create-route-table --vpc-id "$VPC"   --tag-specifications 'ResourceType=route-table,Tags=[{Key=Name,Value=rt-publica}]'   --query 'RouteTable.RouteTableId' --output text)
+echo "RT_ID: $RT"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>RT_ID: rtb-dc3a30d3</code></pre>
+<h3>Verificación</h3>
+<p>Se obtiene un identificador único de tabla de rutas (ej. <code>rtb-dc3a30d3</code>).</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Olvidar la etiqueta <code>Name=rt-publica</code>. <em>Corrección:</em> El verificador busca la tabla por este tag exacto.</p>
+<p><strong>Criterio del verificador:</strong> Requisito para <code>salida_publica</code>.</p>
+</section>
 
-aws ec2 create-route --route-table-id &quot;$RT&quot; \
-  --destination-cidr-block 0.0.0.0/0 --gateway-id &quot;$IGW&quot;
+<section id="p6">
+<h2>Paso 6 &mdash; Agregar ruta predeterminada hacia el Internet Gateway</h2>
+<p><strong>Objetivo:</strong> Configurar en <code>rt-publica</code> una ruta que dirija todo el tráfico saliente (<code>0.0.0.0/0</code>) hacia el IGW.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws ec2 create-route --route-table-id "$RT"   --destination-cidr-block 0.0.0.0/0 --gateway-id "$IGW"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>{
+    "Return": true
+}</code></pre>
+<h3>Verificación</h3>
+<p>La respuesta JSON devuelve <code>"Return": true</code>.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> <code>GatewayNotAttached</code>. <em>Corrección:</em> Verifica que el paso 4 se haya completado correctamente.</p>
+<p><strong>Criterio del verificador:</strong> Elemento clave del criterio <code>salida_publica</code>.</p>
+</section>
 
-PUBA=$(aws ec2 describe-subnets --filters Name=cidr-block,Values=10.20.1.0/24 \
-  --query &#x27;Subnets[0].SubnetId&#x27; --output text)
-PUBB=$(aws ec2 describe-subnets --filters Name=cidr-block,Values=10.20.2.0/24 \
-  --query &#x27;Subnets[0].SubnetId&#x27; --output text)
+<section id="p7">
+<h2>Paso 7 &mdash; Asociar subredes públicas a la tabla de rutas</h2>
+<p><strong>Objetivo:</strong> Asociar explícitamente las dos subredes públicas a <code>rt-publica</code>, dejando las privadas en la tabla principal.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws ec2 associate-route-table --subnet-id "$SUBA" --route-table-id "$RT"
+aws ec2 associate-route-table --subnet-id "$SUBB" --route-table-id "$RT"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>{
+    "AssociationId": "rtbassoc-f1422438",
+    "AssociationState": {
+        "State": "associated"
+    }
+}
+{
+    "AssociationId": "rtbassoc-96629849",
+    "AssociationState": {
+        "State": "associated"
+    }
+}</code></pre>
+<h3>Verificación</h3>
+<p>Cada asociación produce un <code>AssociationId</code> con estado <code>associated</code>.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Asociar por equivocación una subred privada a <code>rt-publica</code>. <em>Corrección:</em> Solo asocia <code>sub-pub-a</code> y <code>sub-pub-b</code>.</p>
+<p><strong>Criterio del verificador:</strong> Completa el criterio <code>salida_publica</code> (1,0 pt).</p>
+</section>
 
-aws ec2 associate-route-table --subnet-id &quot;$PUBA&quot; --route-table-id &quot;$RT&quot;
-aws ec2 associate-route-table --subnet-id &quot;$PUBB&quot; --route-table-id &quot;$RT&quot;</code></pre>
-<p>Las subredes privadas <strong>no</strong> se asocian a <code>rt-publica</code>: se quedan con la tabla principal de la VPC, que solo tiene la ruta <code>local</code>. Esa es la diferencia entre una capa con salida y una capa aislada.</p>
-<p><strong>Criterio 2:</strong> IGW adjunto y <code>rt-publica</code> con <code>0.0.0.0/0</code> → IGW, asociada a las dos subredes públicas.</p>
-<hr>
-<h2 id="5-paso-3-grupo-sg-web">5. Paso 3 — Grupo <code>sg-web</code></h2>
-<pre><code>SG_WEB=$(aws ec2 create-security-group --group-name sg-web \
-  --description &quot;web publica&quot; --vpc-id &quot;$VPC&quot; --query GroupId --output text)
+<section id="p8">
+<h2>Paso 8 &mdash; Crear grupo de seguridad sg-web</h2>
+<p><strong>Objetivo:</strong> Crear el grupo <code>sg-web</code> permitiendo puertos 80 y 443 a todo Internet y SSH solo desde la VPC.</p>
+<h3>Comando exacto</h3>
+<pre><code>SG_WEB=$(aws ec2 create-security-group --group-name sg-web   --description "web publica" --vpc-id "$VPC" --query GroupId --output text)
+echo "SG_WEB_ID: $SG_WEB"
+aws ec2 authorize-security-group-ingress --group-id "$SG_WEB" --ip-permissions '[
+ {"IpProtocol":"tcp","FromPort":80,"ToPort":80,"IpRanges":[{"CidrIp":"0.0.0.0/0","Description":"http"}]},
+ {"IpProtocol":"tcp","FromPort":443,"ToPort":443,"IpRanges":[{"CidrIp":"0.0.0.0/0","Description":"https"}]},
+ {"IpProtocol":"tcp","FromPort":22,"ToPort":22,"IpRanges":[{"CidrIp":"10.20.0.0/16","Description":"ssh interno"}]}
+]'</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>SG_WEB_ID: sg-8472d36716d229757
+{
+    "Return": true,
+    "SecurityGroupRules": [
+        {
+            "SecurityGroupRuleId": "sgr-96f1f07b50fe41e4e",
+            "GroupId": "sg-8472d36716d229757",
+            "GroupOwnerId": "000000000000",
+            "IsEgress": false,
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIpv4": "0.0.0.0/0",
+            "Description": "http",
+            "Tags": []
+        },
+        {
+            "SecurityGroupRuleId": "sgr-2f860cad9a3b64f01",
+            "GroupId": "sg-8472d36716d229757",
+            "GroupOwnerId": "000000000000",
+            "IsEgress": false,
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrIpv4": "0.0.0.0/0",
+            "Description": "https",
+            "Tags": []
+        },
+        {
+            "SecurityGroupRuleId": "sgr-9ceb216a777a9dd25",
+            "GroupId": "sg-8472d36716d229757",
+            "GroupOwnerId": "000000000000",
+            "IsEgress": false,
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrIpv4": "10.20.0.0/16",
+            "Description": "ssh interno",
+            "Tags": []
+        }
+    ]
+}</code></pre>
+<h3>Verificación</h3>
+<p>Comprueba que la regla SSH (puerto 22) esté limitada estrictamente a <code>10.20.0.0/16</code> y no a <code>0.0.0.0/0</code>.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Abrir SSH a <code>0.0.0.0/0</code>. <em>Corrección:</em> El criterio anti-trampa penaliza cualquier regla SSH pública.</p>
+<p><strong>Criterio del verificador:</strong> Satisface completamente el criterio <code>sg_web</code> (1,0 pt).</p>
+</section>
 
-aws ec2 authorize-security-group-ingress --group-id &quot;$SG_WEB&quot; --ip-permissions &#x27;[
- {&quot;IpProtocol&quot;:&quot;tcp&quot;,&quot;FromPort&quot;:80,&quot;ToPort&quot;:80,&quot;IpRanges&quot;:[{&quot;CidrIp&quot;:&quot;0.0.0.0/0&quot;,&quot;Description&quot;:&quot;http&quot;}]},
- {&quot;IpProtocol&quot;:&quot;tcp&quot;,&quot;FromPort&quot;:443,&quot;ToPort&quot;:443,&quot;IpRanges&quot;:[{&quot;CidrIp&quot;:&quot;0.0.0.0/0&quot;,&quot;Description&quot;:&quot;https&quot;}]},
- {&quot;IpProtocol&quot;:&quot;tcp&quot;,&quot;FromPort&quot;:22,&quot;ToPort&quot;:22,&quot;IpRanges&quot;:[{&quot;CidrIp&quot;:&quot;10.20.0.0/16&quot;,&quot;Description&quot;:&quot;ssh interno&quot;}]}
-]&#x27;</code></pre>
-<p><strong>Criterio 3:</strong> 80 y 443 desde <code>0.0.0.0/0</code>; 22 <strong>solo</strong> desde <code>10.20.0.0/16</code>. Si abres SSH a Internet, el criterio falla.</p>
-<hr>
-<h2 id="6-paso-4-grupo-sg-db">6. Paso 4 — Grupo <code>sg-db</code></h2>
-<p>La base de datos no se abre a Internet: solo acepta conexiones del grupo web.</p>
-<pre><code>SG_DB=$(aws ec2 create-security-group --group-name sg-db \
-  --description &quot;base de datos&quot; --vpc-id &quot;$VPC&quot; --query GroupId --output text)
+<section id="p9">
+<h2>Paso 9 &mdash; Crear grupo de seguridad sg-db</h2>
+<p><strong>Objetivo:</strong> Crear el grupo <code>sg-db</code> permitiendo el puerto 5432 exclusivamente con origen referenciado en <code>sg-web</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>SG_DB=$(aws ec2 create-security-group --group-name sg-db   --description "base de datos" --vpc-id "$VPC" --query GroupId --output text)
+echo "SG_DB_ID: $SG_DB"
+aws ec2 authorize-security-group-ingress --group-id "$SG_DB" --ip-permissions   "[{"IpProtocol":"tcp","FromPort":5432,"ToPort":5432,
+     "UserIdGroupPairs":[{"GroupId":"$SG_WEB","Description":"desde web"}]}]"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>SG_DB_ID: sg-91f5178ca7dfdb1bb
+{
+    "Return": true,
+    "SecurityGroupRules": [
+        {
+            "SecurityGroupRuleId": "sgr-46868c8632a56a307",
+            "GroupId": "sg-91f5178ca7dfdb1bb",
+            "GroupOwnerId": "000000000000",
+            "IsEgress": false,
+            "IpProtocol": "tcp",
+            "FromPort": 5432,
+            "ToPort": 5432,
+            "ReferencedGroupInfo": {
+                "GroupId": "sg-8472d36716d229757",
+                "UserId": "000000000000"
+            },
+            "Description": "desde web",
+            "Tags": []
+        }
+    ]
+}</code></pre>
+<h3>Verificación</h3>
+<p>La regla de ingreso debe contener <code>ReferencedGroupInfo.GroupId</code> apuntando al ID de <code>sg-web</code> sin orígenes por CIDR abierto.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Poner como origen <code>0.0.0.0/0</code> o una IP fija. <em>Corrección:</em> Usa <code>UserIdGroupPairs</code> referenciando el grupo <code>$SG_WEB</code>.</p>
+<p><strong>Criterio del verificador:</strong> Satisface completamente el criterio <code>sg_db</code> (1,0 pt).</p>
+</section>
 
-aws ec2 authorize-security-group-ingress --group-id &quot;$SG_DB&quot; --ip-permissions \
-  &quot;[{\&quot;IpProtocol\&quot;:\&quot;tcp\&quot;,\&quot;FromPort\&quot;:5432,\&quot;ToPort\&quot;:5432,
-     \&quot;UserIdGroupPairs\&quot;:[{\&quot;GroupId\&quot;:\&quot;$SG_WEB\&quot;,\&quot;Description\&quot;:\&quot;desde web\&quot;}]}]&quot;</code></pre>
-<p>Una regla con <strong>origen en otro grupo</strong> es más segura que una con un CIDR: si mañana cambian las IP de la capa web, la regla sigue siendo correcta.</p>
-<p><strong>Criterio 4:</strong> <code>sg-db</code> permite 5432 solo desde <code>sg-web</code>, sin ningún <code>0.0.0.0/0</code> ni <code>::/0</code>.</p>
-<hr>
-<h2 id="7-paso-5-comprobar-las-subredes-privadas">7. Paso 5 — Comprobar las subredes privadas</h2>
-<pre><code>aws ec2 describe-subnets --filters &quot;Name=vpc-id,Values=$VPC&quot; \
-  --query &#x27;Subnets[?MapPublicIpOnLaunch==`true`].CidrBlock&#x27; --output text
-
-aws ec2 describe-route-tables --filters &quot;Name=vpc-id,Values=$VPC&quot; \
-  --query &#x27;RouteTables[].{ID:RouteTableId,Rutas:Routes[].DestinationCidrBlock,Asociaciones:Associations[].SubnetId}&#x27; \
-  --output table</code></pre>
-<p>Debe ocurrir:</p>
-<ul><li>las subredes privadas tienen <code>MapPublicIpOnLaunch = false</code>;</li><li>su tabla de rutas no contiene <code>0.0.0.0/0</code>;</li><li>la única tabla con <code>0.0.0.0/0</code> es <code>rt-publica</code>, asociada a las públicas.</li></ul>
-<p><strong>Criterio 5:</strong> las privadas no auto-asignan IP pública y no tienen salida <code>0.0.0.0/0</code>.</p>
-<hr>
-<h2 id="8-paso-6-autocontrol">8. Paso 6 — Autocontrol</h2>
+<section id="p10">
+<h2>Paso 10 &mdash; Auditar aislamiento y ejecutar autocontrol</h2>
+<p><strong>Objetivo:</strong> Confirmar que las subredes privadas carecen de salida pública y ejecutar <code>revisar</code> para obtener 5/5.</p>
+<h3>Comando exacto</h3>
 <pre><code>revisar</code></pre>
-<p>Debe terminar en <strong>5 de 5</strong>. El detalle de cada criterio te dice qué recurso falta o qué regla está mal.</p>
-<hr>
-<h2 id="9-criterios-de-evaluacion">9. Criterios de evaluación</h2>
-<table><thead><tr><th>#</th><th>Criterio</th><th>Qué se comprueba</th><th>Peso</th></tr></thead><tbody><tr><td>1</td><td><code>vpc_subredes</code></td><td>VPC <code>10.20.0.0/16</code> y 4 subredes con CIDR/AZ exactos</td><td>1,0</td></tr><tr><td>2</td><td><code>salida_publica</code></td><td>IGW adjunto; <code>rt-publica</code> con <code>0.0.0.0/0</code> y 2 públicas</td><td>1,0</td></tr><tr><td>3</td><td><code>sg_web</code></td><td>80/443 públicos; SSH solo desde <code>10.20.0.0/16</code></td><td>1,0</td></tr><tr><td>4</td><td><code>sg_db</code></td><td>5432 solo desde <code>sg-web</code>; sin <code>0.0.0.0/0</code></td><td>1,0</td></tr><tr><td>5</td><td><code>privadas_sin_salida</code></td><td>privadas sin IP pública ni ruta <code>0.0.0.0/0</code></td><td>1,0</td></tr></tbody></table>
-<hr>
-<h2 id="10-problemas-frecuentes">10. Problemas frecuentes</h2>
-<table><thead><tr><th>Síntoma</th><th>Causa</th><th>Solución</th></tr></thead><tbody><tr><td><code>describe-subnets</code> vacío</td><td><code>$VPC</code> vacío o de otra shell</td><td>vuelve a exportar <code>VPC</code></td></tr><tr><td><code>create-route</code> falla</td><td>el IGW no está adjunto</td><td><code>attach-internet-gateway</code> primero</td></tr><tr><td><code>associate-route-table</code> falla</td><td>la subred ya está en otra tabla</td><td>revisa <code>Associations</code></td></tr><tr><td><code>sg-db</code> falla</td><td>regla con <code>0.0.0.0/0</code></td><td>elimínala y usa <code>sg-web</code></td></tr><tr><td><code>revisar</code> dice 4/5</td><td>lee el detalle en rojo</td><td>corrige el recurso exacto</td></tr></tbody></table>
-<p>No reinicies la nube ni la estación. Si <code>floci</code> no responde: <code>curl -s http://127.0.0.1:4566/</code> y avisa al docente si persiste.</p>
-<hr>
-<h2 id="11-para-ir-mas-alla-opcional">11. Para ir más allá (opcional)</h2>
-<ul><li>Añade una <strong>subred privada de datos</strong> en una tercera AZ (si la región la ofrece) y su tabla de rutas.</li><li>Crea un <strong>VPC Endpoint</strong> de tipo Gateway para S3 y comprueba que la capa privada puede leer el bucket sin salir a Internet.</li><li>Escribe una <strong>Network ACL</strong> que permita solo 80/443 de entrada a la capa pública y compara con el grupo de seguridad.</li></ul>
-<hr>
-<h2 id="12-entrega">12. Entrega</h2>
-<p>El servidor evalúa el estado de tu VPC. Antes de cerrar, ejecuta <code>revisar</code> y comprueba <strong>5 de 5</strong>.</p>
-  </main>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab02</code>)</h3>
+<pre class="salida"><code>====================================================================
+ Autocontrol — Lab 2 — VPC, subredes y grupos de seguridad
+ (mismos criterios que aplica el servidor desde fuera)
+====================================================================
+ [OK] vpc_subredes: VPC 10.20.0.0/16 y 4 subredes en 2 AZ
+      VPC 10.20.0.0/16 con las 4 subredes en us-east-1a y us-east-1b
+ [OK] salida_publica: Puerta de enlace y tabla de rutas públicas
+      IGW igw-2a429871 adjunto; rt-publica con 0.0.0.0/0 y 2 subredes públicas
+ [OK] sg_web: Grupo sg-web con 80/443 abiertos y SSH interno
+      sg-web: 80/443 públicos, SSH solo desde 10.20.0.0/16
+ [OK] sg_db: Grupo sg-db solo accesible desde sg-web
+      sg-db: 5432 solo desde sg-web, sin orígenes públicos
+ [OK] privadas_sin_salida: Subredes privadas sin salida a Internet
+      las 2 subredes privadas no auto-asignan IP ni tienen salida 0.0.0.0/0
+--------------------------------------------------------------------
+ Resultado: 5 de 5 criterios en verde
+====================================================================</code></pre>
+<h3>Verificación</h3>
+<p>El autocontrol aprueba con éxito los 5 criterios sin advertencias ni fallos en rojo.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Criterio <code>privadas_sin_salida</code> en rojo. <em>Corrección:</em> Asegúrate de no haber asignado tabla con salida a las subredes privadas.</p>
+<p><strong>Criterio del verificador:</strong> Valida y cumple el criterio <code>privadas_sin_salida</code> (1,0 pt).</p>
+</section>
+
+<section id="criterios">
+<h2>Criterios de evaluación</h2>
+<table>
+<thead><tr><th>#</th><th>Criterio</th><th>Descripción</th><th>Peso</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><code>vpc_subredes</code></td><td>VPC <code>10.20.0.0/16</code> y 4 subredes con CIDR y AZ exactos</td><td>1,0 pt</td></tr>
+<tr><td>2</td><td><code>salida_publica</code></td><td>IGW adjunto y <code>rt-publica</code> con ruta <code>0.0.0.0/0</code> a públicas</td><td>1,0 pt</td></tr>
+<tr><td>3</td><td><code>sg_web</code></td><td>Puertos 80/443 públicos y SSH puerto 22 solo desde <code>10.20.0.0/16</code></td><td>1,0 pt</td></tr>
+<tr><td>4</td><td><code>sg_db</code></td><td>Puerto 5432 solo accesible mediante referencia al grupo <code>sg-web</code></td><td>1,0 pt</td></tr>
+<tr><td>5</td><td><code>privadas_sin_salida</code></td><td>Subredes privadas sin IP pública por defecto ni ruta hacia Internet</td><td>1,0 pt</td></tr>
+</tbody>
+</table>
+</section>
+</main>
 </div>
 <footer>
-  Arquitectura en la Nube HEP · Universidad de la Costa ·
-  nube simulada con <code>floci</code>, sin Internet
+<p>Laboratorio 2 &middot; Arquitectura en la Nube HEP &middot; Universidad de la Costa</p>
 </footer>
 </body>
 </html>
