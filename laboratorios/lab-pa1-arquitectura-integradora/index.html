@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PA1 — Arquitectura integrada (VPC + S3 + IAM) — Guía del Proyecto de Aula</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--cuc-azul:#003366;--cuc-azul-claro:#0056a0;--cuc-amarillo:#ffcc00;--bg:#f5f5f5;--card:#fff;--txt:#222;--muted:#666;--border:#ddd}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;background:var(--bg);color:var(--txt);margin:0;padding:2rem}
+header{background:var(--cuc-azul);color:#fff;padding:2rem;border-radius:8px;margin-bottom:2rem;text-align:center}
+header h1{margin:0;font-size:1.8rem}
+header p{margin:.5rem 0 0;opacity:.9}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 2px 4px rgba(0,0,0,.05)}
+.card h2{margin-top:0;color:var(--cuc-azul);font-size:1.3rem;border-bottom:2px solid var(--cuc-amarillo);padding-bottom:.5rem}
+.card h3{color:var(--cuc-azul-claro);font-size:1.1rem}
+.paso{border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;background:#fafafa}
+.paso h3{margin-top:0;font-size:1.1rem;color:var(--cuc-azul);border-bottom:1px solid var(--border);padding-bottom:.5rem}
+.paso .obj{font-weight:bold;color:var(--cuc-azul);display:block;margin-bottom:.5rem}
+.paso pre{background:#1e1e1e;color:#d4d4d4;padding:.8rem 1rem;border-radius:4px;font-family:monospace;font-size:.85rem;overflow-x:auto;margin:.5rem 0;white-space:pre-wrap}
+.paso .verif{color:#28a745;font-weight:bold}
+.paso .error{color:#dc3545;font-weight:bold}
+.paso .tiempo{font-size:.9rem;color:var(--muted);float:right}
+.paso .nota{background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:.8rem;margin:1rem 0;color:#856404;font-size:.9rem}
+.paso .tip{background:#d4edda;border:1px solid #28a745;border-radius:4px;padding:.8rem;margin:1rem 0;color:#155724;font-size:.9rem}
+table{width:100%;border-collapse:collapse;margin:1rem 0}
+th,td{border:1px solid var(--border);padding:.6rem;text-align:left}
+th{background:var(--cuc-azul);color:#fff}
+tr:nth-child(even){background:#fafafa}
+footer{text-align:center;color:var(--muted);font-size:.9rem;padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style>
+</head>
+<body>
+<header>
+<h1>Proyecto de Aula 1 — Arquitectura Integrada (VPC + S3 + IAM)</h1>
+<p>Guía de Orientación Metodológica y Proceso de Construcción · Arquitectura en la Nube HEP</p>
+</header>
+
+<div class="card">
+<h2>Escenario y Alcance</h2>
+<p><strong>Organización:</strong> Corporación Industrial del Caribe (CIC) — Catálogo Web Estático y Repositorio de Documentación Técnica.</p>
+<p>El estudiante debe diseñar y desplegar una arquitectura segura en la nube simulada de la estación utilizando la AWS CLI contra el endpoint local floci (<code>http://127.0.0.1:4566</code>):</p>
+<ul>
+<li><strong>Red y Seguridad:</strong> VPC con CIDR 10.10.0.0/16, subred pública (us-east-1a) conectada a Internet Gateway y tabla de rutas pública, subred privada (us-east-1a), Grupo de Seguridad <code>sg_web</code> (inbound HTTP 80 / HTTPS 443 desde cualquier origen) y Grupo de Seguridad <code>sg_db</code> restringido exclusivamente al tráfico PostgreSQL (puerto 5432) originado en <code>sg_web</code> (mínimo privilegio).</li>
+<li><strong>Almacenamiento e Identidad:</strong> Bucket S3 privado con versionado activo (<code>cic-catalogo-estatico</code>) alojando el sitio web estático, Rol IAM <code>rol-lectura-cic</code> con relación de confianza exclusiva para el servicio <code>ec2.amazonaws.com</code> y política de solo lectura sin comodines (<code>s3:GetObject</code>, <code>s3:ListBucket</code>), Instance Profile <code>ip-lectura-cic</code> y usuario IAM <code>auditor-cic</code> con política que deniegue operaciones destructivas.</li>
+<li><strong>Detección y Corrección:</strong> Identificar y corregir los 3 hallazgos sembrados en la base inicial.</li>
+<li><strong>Entregables en /workspace:</strong> <code>informe_tecnico.pdf</code> y <code>justificacion_limites.txt</code>.</li>
+</ul>
+<div class="nota"><strong>Importante:</strong> Esta guía define el flujo de trabajo metodológico, comandos de inspección y validación, sin exponer los IDs específicos de recursos temporales ni los scripts completos de despliegue.</div>
+</div>
+
+<div class="card">
+<h2>Metodología Paso a Paso (12 Pasos)</h2>
+
+<div class="paso">
+<h3>Paso 1 — Inspección de Recursos Iniciales y Conectividad con la API <span class="tiempo">≈5 min</span></h3>
+<span class="obj">Objetivo: Verificar conectividad con el endpoint local de floci y constatar que no existan recursos previos de la CIC.</span>
+<pre>
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 ec2 describe-vpcs
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 s3api list-buckets
+</pre>
+<p class="verif">Verificación: La API responde correctamente con la VPC por defecto.</p>
+<p><strong>Criterio:</strong> Conectividad y estado inicial.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 2 — Creación y Segmentación de la VPC CIC <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Crear la VPC con bloque CIDR 10.10.0.0/16 y etiquetado adecuado.</span>
+<pre>
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 ec2 create-vpc --cidr-block 10.10.0.0/16
+</pre>
+<p class="verif">Verificación: <code>describe-vpcs</code> muestra la nueva VPC con su correspondiente identificador.</p>
+<p class="error">Error típico: Utilizar un rango CIDR distinto al especificado (10.10.0.0/16).</p>
+<p><strong>Criterio:</strong> vpc_dos_capas (Criterio auto 1).</p>
+</div>
+
+<div class="paso">
+<h3>Paso 3 — Creación de Subredes Pública y Privada <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Crear sub-pa1-public (10.10.1.0/24) y sub-pa1-private (10.10.2.0/24) en la zona us-east-1a.</span>
+<pre>
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 ec2 create-subnet --vpc-id &lt;VPC_ID&gt; --cidr-block 10.10.1.0/24 --availability-zone us-east-1a
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 ec2 create-subnet --vpc-id &lt;VPC_ID&gt; --cidr-block 10.10.2.0/24 --availability-zone us-east-1a
+</pre>
+<p class="verif">Verificación: Ambas subredes creadas en la VPC designada.</p>
+<p><strong>Criterio:</strong> vpc_dos_capas.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 4 — Enrutamiento y Salida a Internet (IGW y Tabla de Rutas) <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Habilitar conectividad exterior para la subred pública mediante Internet Gateway y ruta 0.0.0.0/0.</span>
+<pre>
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 ec2 create-internet-gateway
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 ec2 attach-internet-gateway --vpc-id &lt;VPC_ID&gt; --internet-gateway-id &lt;IGW_ID&gt;
+# Crear tabla de rutas, asociar a subred pública y agregar ruta 0.0.0.0/0 hacia el IGW
+</pre>
+<p class="verif">Verificación: <code>describe-route-tables</code> confirma la asociación con la subred pública.</p>
+<p><strong>Criterio:</strong> vpc_dos_capas.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 5 — Configuración de Grupos de Seguridad (sg_web y sg_db) <span class="tiempo">≈15 min</span></h3>
+<span class="obj">Objetivo: Implementar el patrón de seguridad multicapa con mínimo privilegio.</span>
+<pre>
+# sg_web: Permitir puertos 80 y 443 desde 0.0.0.0/0
+# sg_db: Permitir puerto 5432 ÚNICAMENTE con origen en sg_web (SourceSecurityGroupId)
+</pre>
+<p class="verif">Verificación: Comprobar que sg_db no permita 0.0.0.0/0 en ningún puerto.</p>
+<p class="error">Error típico: Configurar sg_db con CIDR abierto 0.0.0.0/0 en lugar de referenciar el ID de sg_web.</p>
+<p><strong>Criterio:</strong> vpc_dos_capas + corrección de hallazgo de seguridad.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 6 — Aprovisionamiento del Bucket S3 con Versionado <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Crear el bucket cic-catalogo-estatico y habilitar versionado de objetos.</span>
+<pre>
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 s3api create-bucket --bucket cic-catalogo-estatico
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 s3api put-bucket-versioning --bucket cic-catalogo-estatico --versioning-configuration Status=Enabled
+</pre>
+<p class="verif">Verificación: <code>get-bucket-versioning</code> devuelve <code>Status: Enabled</code>.</p>
+<p><strong>Criterio:</strong> almacenamiento_identidad (Criterio auto 2).</p>
+</div>
+
+<div class="paso">
+<h3>Paso 7 — Publicación y Control de Acceso al Bucket S3 <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Cargar los objetos web y aplicar política de bucket restrictiva.</span>
+<pre>
+# Cargar index.html y assets en s3://cic-catalogo-estatico/
+# Aplicar política de bucket con permiso de lectura limitado a GetObject
+</pre>
+<p class="verif">Verificación: Comprobar que la política no contenga permisos comodín administrativos (s3:*).</p>
+<p class="error">Error típico: Usar Principal wildcard (*) con acciones destructivas.</p>
+<p><strong>Criterio:</strong> almacenamiento_identidad + corrección de hallazgo S3.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 8 — Definición del Rol IAM y Trust Relationship para Cómputo <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Crear rol-lectura-cic con relación de confianza exclusiva para ec2.amazonaws.com.</span>
+<pre>
+# Definir trust-policy para servicio EC2
+# Crear rol y adjuntar política de lectura sobre el bucket CIC
+</pre>
+<p class="verif">Verificación: <code>get-role</code> y <code>get-role-policy</code> confirman la configuración.</p>
+<p><strong>Criterio:</strong> almacenamiento_identidad.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 9 — Creación del Instance Profile y Usuario Auditor <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Crear el perfil de instancia EC2 y usuario IAM de auditoría.</span>
+<pre>
+# Crear instance-profile ip-lectura-cic y asociarle rol-lectura-cic
+# Crear usuario auditor-cic con política que deniegue operaciones destructivas
+</pre>
+<p class="verif">Verificación: <code>get-instance-profile</code> y <code>list-attached-user-policies</code>.</p>
+<p><strong>Criterio:</strong> almacenamiento_identidad.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 10 — Auditoría de Fallas Sembradas <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Asegurar la erradicación de las 3 vulnerabilidades inyectadas en la estación.</span>
+<pre>
+# 1. Bucket privado sin permisos públicos universales s3:*
+# 2. sg_db sin reglas 0.0.0.0/0
+# 3. Rol IAM sin comodines administrativos
+</pre>
+<p class="verif">Verificación: Ningún recurso presenta configuración permisiva insegura.</p>
+<p><strong>Criterio:</strong> hallazgos_corregidos (Criterio auto 3).</p>
+</div>
+
+<div class="paso">
+<h3>Paso 11 — Autoevaluación con el Verificador Local <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Comprobar los 3 criterios automáticos antes de la entrega final.</span>
+<pre>
+revisar
+</pre>
+<p class="verif">Verificación: Confirmar que vpc_dos_capas, almacenamiento_identidad y hallazgos_corregidos reporten verde (60 pts).</p>
+<p><strong>Criterio:</strong> 60 % automático.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 12 — Elaboración de Documentación Técnica en /workspace <span class="tiempo">≈15 min</span></h3>
+<span class="obj">Objetivo: Generar los documentos requeridos para la calificación manual.</span>
+<p>Cree en <code>/workspace</code>:</p>
+<ul>
+<li><code>/workspace/informe_tecnico.pdf</code> (≤ 4 páginas): Diagrama de arquitectura, capturas de CLI con salidas de <code>describe-vpcs</code>, <code>describe-security-groups</code>, <code>list-buckets</code>, y justificación del diseño.</li>
+<li><code>/workspace/justificacion_limites.txt</code>: Justificación técnica de las decisiones de diseño (aislamiento VPC, cifrado/versionado en S3, mínimo privilegio en IAM) y declaración explícita de límites (carga soportada, fallos tolerados, costes asociados).</li>
+</ul>
+<pre>
+ls -la /workspace/informe_tecnico.pdf /workspace/justificacion_limites.txt
+revisar
+</pre>
+<p class="verif">Verificación: <code>revisar</code> confirma 5 de 5 criterios en verde (100 pts).</p>
+<p><strong>Criterio:</strong> 40 % manual.</p>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Si algo falla — Diagnóstico Rápido</h2>
+<table>
+<tr><th>Problema</th><th>Causa Probable</th><th>Solución</th></tr>
+<tr><td>VPC dos capas en rojo</td><td>Falta subred privada o sg_db no referencia a sg_web</td><td>Asegure que sg_db restrinja el puerto 5432 con SourceSecurityGroupId apuntando a sg_web.</td></tr>
+<tr><td>Almacenamiento/identidad en rojo</td><td>Bucket sin versionado o rol IAM con comodines</td><td>Habilite versionado en S3 y acote los permisos del rol exclusivamente a GetObject/ListBucket.</td></tr>
+<tr><td>Hallazgos en rojo</td><td>Persiste alguna de las vulnerabilidades sembradas</td><td>Revise las políticas de S3, reglas de sg_db y permisos de rol.</td></tr>
+<tr><td>Entregables en rojo</td><td>Falta informe_tecnico.pdf o justificacion_limites.txt</td><td>Verifique que ambos archivos existan en <code>/workspace</code> con contenido sustantivo.</td></tr>
+</table>
+</div>
+
+<footer>
+<p>Arquitectura en la Nube · Campus Virtual CUC · 2026-2</p>
+</footer>
+</body>
+</html>

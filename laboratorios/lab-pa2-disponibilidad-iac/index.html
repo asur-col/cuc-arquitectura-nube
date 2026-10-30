@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PA2 — Arquitectura disponible y repetible (ALB + ASG + RDS + IaC) — Guía del Proyecto de Aula</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--cuc-azul:#003366;--cuc-azul-claro:#0056a0;--cuc-amarillo:#ffcc00;--bg:#f5f5f5;--card:#fff;--txt:#222;--muted:#666;--border:#ddd}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;background:var(--bg);color:var(--txt);margin:0;padding:2rem}
+header{background:var(--cuc-azul);color:#fff;padding:2rem;border-radius:8px;margin-bottom:2rem;text-align:center}
+header h1{margin:0;font-size:1.8rem}
+header p{margin:.5rem 0 0;opacity:.9}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 2px 4px rgba(0,0,0,.05)}
+.card h2{margin-top:0;color:var(--cuc-azul);font-size:1.3rem;border-bottom:2px solid var(--cuc-amarillo);padding-bottom:.5rem}
+.card h3{color:var(--cuc-azul-claro);font-size:1.1rem}
+.paso{border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;background:#fafafa}
+.paso h3{margin-top:0;font-size:1.1rem;color:var(--cuc-azul);border-bottom:1px solid var(--border);padding-bottom:.5rem}
+.paso .obj{font-weight:bold;color:var(--cuc-azul);display:block;margin-bottom:.5rem}
+.paso pre{background:#1e1e1e;color:#d4d4d4;padding:.8rem 1rem;border-radius:4px;font-family:monospace;font-size:.85rem;overflow-x:auto;margin:.5rem 0;white-space:pre-wrap}
+.paso .verif{color:#28a745;font-weight:bold}
+.paso .error{color:#dc3545;font-weight:bold}
+.paso .tiempo{font-size:.9rem;color:var(--muted);float:right}
+.paso .nota{background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:.8rem;margin:1rem 0;color:#856404;font-size:.9rem}
+.paso .tip{background:#d4edda;border:1px solid #28a745;border-radius:4px;padding:.8rem;margin:1rem 0;color:#155724;font-size:.9rem}
+table{width:100%;border-collapse:collapse;margin:1rem 0}
+th,td{border:1px solid var(--border);padding:.6rem;text-align:left}
+th{background:var(--cuc-azul);color:#fff}
+tr:nth-child(even){background:#fafafa}
+footer{text-align:center;color:var(--muted);font-size:.9rem;padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+</style>
+</head>
+<body>
+<header>
+<h1>Proyecto de Aula 2 — Arquitectura Disponible y Repetible (ALB + ASG + RDS + IaC)</h1>
+<p>Guía de Orientación Metodológica y Proceso de Construcción · Arquitectura en la Nube HEP</p>
+</header>
+
+<div class="card">
+<h2>Escenario y Alcance</h2>
+<p><strong>Organización:</strong> CaribeMart — Plataforma de Comercio Electrónico de Alto Tráfico.</p>
+<p>La estación parte de una infraestructura base sembrada con 5 fragilidades operativas (instancia única sin balanceador, RDS pública sin política de retención, ausencia de monitorización activa, balanceador en una única zona y plantilla CloudFormation incompleta). El estudiante debe diseñar e implementar una arquitectura de alta disponibilidad, elástica y repetible:</p>
+<ul>
+<li><strong>Cómputo Elástico:</strong> Application Load Balancer (ALB) desplegado en 2 zonas de disponibilidad (us-east-1a y us-east-1b) con Target Group y health checks, Launch Template con configuración de la aplicación CaribeMart y Auto Scaling Group con capacidad mínima de 2 instancias distribuidas entre las zonas.</li>
+<li><strong>Datos y Resiliencia:</strong> Base de datos RDS PostgreSQL ubicada en subred privada, retención de respaldos automatizados activa (≥ 7 días), snapshot de respaldo generado y validado con prueba de restauración, y alarma de monitorización en CloudWatch por consumo de CPU (&gt; 80 %).</li>
+<li><strong>Infraestructura como Código:</strong> Plantilla CloudFormation reproducible y corrección de las 5 fragilidades base.</li>
+<li><strong>Entregables en /workspace:</strong> <code>plan_operacion.txt</code> e <code>informe_limites.pdf</code>.</li>
+</ul>
+<div class="nota"><strong>Importante:</strong> Esta guía proporciona el marco metodológico y de verificación sin suministrar los scripts de automatización directa que resuelven los criterios.</div>
+</div>
+
+<div class="card">
+<h2>Metodología Paso a Paso (11 Pasos)</h2>
+
+<div class="paso">
+<h3>Paso 1 — Diagnóstico de la Infraestructura Base Frágil <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Auditar los recursos existentes e inventariar las 5 fragilidades sembradas.</span>
+<pre>
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 cloudformation describe-stacks
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 rds describe-db-instances
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 autoscaling describe-auto-scaling-groups
+</pre>
+<p class="verif">Verificación: Identifique la configuración de AZs del balanceador, tamaño del ASG, accesibilidad pública de RDS y ausencia de alarmas.</p>
+<p><strong>Criterio:</strong> Diagnóstico y reconocimiento de fragilidades base.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 2 — Despliegue de la Base de Red con CloudFormation <span class="tiempo">≈15 min</span></h3>
+<span class="obj">Objetivo: Validar y desplegar la plantilla CloudFormation base asegurando estado CREATE_COMPLETE o UPDATE_COMPLETE.</span>
+<pre>
+# Desplegar o actualizar el stack con la plantilla de red multi-AZ:
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 cloudformation deploy     --template-file /workspace/cloudformation-template.json --stack-name stack-caribemart
+</pre>
+<p class="verif">Verificación: <code>describe-stacks</code> reporta <code>CREATE_COMPLETE</code> o <code>UPDATE_COMPLETE</code>.</p>
+<p class="error">Error típico: Plantilla con errores de sintaxis que provoquen ROLLBACK_COMPLETE.</p>
+<p><strong>Criterio:</strong> datos_repetibles (Criterio auto 2).</p>
+</div>
+
+<div class="paso">
+<h3>Paso 3 — Configuración del Application Load Balancer Multi-AZ <span class="tiempo">≈15 min</span></h3>
+<span class="obj">Objetivo: Asegurar que el ALB esté asociado a subredes en al menos 2 zonas de disponibilidad distintas.</span>
+<pre>
+# Crear/actualizar ALB con subredes en us-east-1a y us-east-1b
+# Configurar Target Group HTTP 80 con health check en /
+# Asociar listener en puerto 80 hacia el Target Group
+</pre>
+<p class="verif">Verificación: <code>describe-load-balancers</code> confirma 2 subredes en zonas distintas.</p>
+<p class="error">Error típico: Asociar el balanceador a una sola subred o a dos subredes en la misma zona de disponibilidad.</p>
+<p><strong>Criterio:</strong> computo_elastico (Criterio auto 1) + Corrección de fragilidad 1.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 4 — Creación del Launch Template de CaribeMart <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Definir la plantilla de lanzamiento con la imagen oficial y script de inicialización.</span>
+<pre>
+# Crear Launch Template con AMI ami-hep-app y user-data de arranque
+</pre>
+<p class="verif">Verificación: <code>describe-launch-templates</code> confirma el registro del template.</p>
+<p><strong>Criterio:</strong> computo_elastico.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 5 — Escalabilidad Automática con Auto Scaling Group Multi-AZ <span class="tiempo">≈15 min</span></h3>
+<span class="obj">Objetivo: Desplegar el ASG configurando un mínimo de 2 instancias activas distribuidas en 2 AZs.</span>
+<pre>
+# Crear/actualizar ASG con:
+# - min-size: 2, max-size: 4, desired-capacity: 2
+# - subredes en us-east-1a y us-east-1b
+# - Target Group del ALB asociado
+</pre>
+<p class="verif">Verificación: <code>describe-auto-scaling-groups</code> confirma <code>DesiredCapacity: 2</code> y 2 instancias en estado InService.</p>
+<p class="error">Error típico: DesiredCapacity configurada en 1 (punto único de fallo).</p>
+<p><strong>Criterio:</strong> computo_elastico + Corrección de fragilidad 2.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 6 — Hardening y Confinamiento de la Base de Datos RDS <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Asegurar que la instancia RDS sea privada y no accesible desde Internet.</span>
+<pre>
+# Modificar la instancia RDS para eliminar el acceso público:
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 rds modify-db-instance     --db-instance-identifier caribemart-db-prod --no-publicly-accessible
+</pre>
+<p class="verif">Verificación: <code>describe-db-instances</code> confirma <code>PubliclyAccessible: false</code>.</p>
+<p class="error">Error típico: Mantener la base de datos con acceso público directo.</p>
+<p><strong>Criterio:</strong> fragilidades_corregidas (Criterio auto 3).</p>
+</div>
+
+<div class="paso">
+<h3>Paso 7 — Política de Respaldos Automatizados en RDS <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Habilitar retención de respaldos de al menos 7 días.</span>
+<pre>
+# Configurar backup retention period:
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 rds modify-db-instance     --db-instance-identifier caribemart-db-prod --backup-retention-period 7
+</pre>
+<p class="verif">Verificación: <code>BackupRetentionPeriod: 7</code> en la descripción de la instancia.</p>
+<p><strong>Criterio:</strong> datos_repetibles + Corrección de fragilidad 3.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 8 — Generación de Snapshot y Prueba de Restauración <span class="tiempo">≈15 min</span></h3>
+<span class="obj">Objetivo: Validar el procedimiento de recuperación ante desastres generando un snapshot manual y restaurándolo.</span>
+<pre>
+# Crear snapshot manual:
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 rds create-db-snapshot     --db-instance-identifier caribemart-db-prod --db-snapshot-identifier caribemart-snap-prod
+# Restaurar snapshot a una instancia de prueba para validar integridad
+</pre>
+<p class="verif">Verificación: Snapshot creado en estado available e instancia restaurada operativa.</p>
+<p><strong>Criterio:</strong> datos_repetibles.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 9 — Monitorización Activa y Alarmas CloudWatch <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Configurar alarma de consumo de CPU sobre la base de datos de producción.</span>
+<pre>
+# Crear métrica y alarma CloudWatch:
+aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 cloudwatch put-metric-alarm     --alarm-name Alarma-RDS-CPU-Alta --metric-name CPUUtilization --namespace AWS/RDS     --threshold 80 --comparison-operator GreaterThanThreshold ...
+</pre>
+<p class="verif">Verificación: <code>describe-alarms</code> confirma la alarma registrada.</p>
+<p class="error">Error típico: Nombre de alarma incorrecto o métrica no vinculada a la instancia.</p>
+<p><strong>Criterio:</strong> datos_repetibles + Corrección de fragilidad 4.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 10 — Autocontrol con el Verificador Local <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: Comprobar el cumplimiento de los 3 criterios automáticos.</span>
+<pre>
+revisar
+</pre>
+<p class="verif">Verificación: Cómputo elástico, datos repetibles y fragilidades corregidas en verde (60 pts).</p>
+<p><strong>Criterio:</strong> 60 % automático.</p>
+</div>
+
+<div class="paso">
+<h3>Paso 11 — Entregables Operativos y de Límites en /workspace <span class="tiempo">≈15 min</span></h3>
+<span class="obj">Objetivo: Documentar la operación continua y el cálculo cuantitativo de límites.</span>
+<p>Cree en <code>/workspace</code>:</p>
+<ul>
+<li><code>/workspace/plan_operacion.txt</code>: Plan de operación continua que detalle procedimiento de despliegue, rutina de respaldo diario, protocolo ante fallos de zona de disponibilidad y matriz de escalabilidad.</li>
+<li><code>/workspace/informe_limites.pdf</code> (≤ 4 páginas): Diagrama multi-AZ, cálculo de carga máxima soportada (solicitudes/segundo), límites de escalado del ASG, umbrales de coste mensual estimado y justificación de decisiones técnicas.</li>
+</ul>
+<pre>
+ls -la /workspace/plan_operacion.txt /workspace/informe_limites.pdf
+revisar
+</pre>
+<p class="verif">Verificación: <code>revisar</code> confirma 5 de 5 criterios en verde (100 pts).</p>
+<p><strong>Criterio:</strong> 40 % manual.</p>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Si algo falla — Diagnóstico Rápido</h2>
+<table>
+<tr><th>Problema</th><th>Causa Probable</th><th>Solución</th></tr>
+<tr><td>Cómputo elástico en rojo</td><td>ALB en una sola AZ o ASG con capacidad 1</td><td>Asocie subredes de us-east-1a y us-east-1b al ALB y ajuste el ASG a min=2, desired=2.</td></tr>
+<tr><td>Datos repetibles en rojo</td><td>Falta retención en RDS o alarma ausente</td><td>Configure <code>--backup-retention-period 7</code> y cree la alarma <code>Alarma-RDS-CPU-Alta</code>.</td></tr>
+<tr><td>Fragilidades en rojo</td><td>RDS continúa siendo pública</td><td>Ejecute <code>modify-db-instance --no-publicly-accessible</code>.</td></tr>
+<tr><td>Entregables en rojo</td><td>Archivos manuales ausentes en /workspace</td><td>Genere <code>plan_operacion.txt</code> e <code>informe_limites.pdf</code>.</td></tr>
+</table>
+</div>
+
+<footer>
+<p>Arquitectura en la Nube · Campus Virtual CUC · 2026-2</p>
+</footer>
+</body>
+</html>
