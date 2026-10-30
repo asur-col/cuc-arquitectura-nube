@@ -1,369 +1,336 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lab 1 — Almacenamiento y sitio estático | Arquitectura en la Nube HEP</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 1 — Almacenamiento y sitio estático en la nube</title>
 <style>
-  :root{
-    --tinta:#14213d; --mar:#0b7285; --mar-oscuro:#0b3d4d;
-    --arena:#f4a261; --fondo:#fbfaf6; --panel:#ffffff; --linea:#e5e0d5;
-    --ok:#1b7f4b; --no:#b42318; --gris:#6b7280;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-       color:var(--tinta);background:var(--fondo);line-height:1.65}
-  header.hero{padding:3.2rem 1.5rem 2.4rem;color:#fff;
-       background:linear-gradient(135deg,#0b3d4d,var(--mar))}
+  :root{--tinta:#14213d;--mar:#0b7285;--mar-oscuro:#0b3d4d;--arena:#f4a261;--fondo:#fbfaf6;--panel:#ffffff;--linea:#e5e0d5;--ok:#1b7f4b;--no:#b42318;--gris:#6b7280;}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tinta);background:var(--fondo);line-height:1.65}
+  header.hero{padding:3rem 1.5rem 2rem;color:#fff;background:linear-gradient(135deg,#0b3d4d,var(--mar))}
   .wrap{max-width:64rem;margin:0 auto}
-  .eyebrow{margin:0;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
-       color:#ffe8c2;font-weight:600}
+  .eyebrow{margin:0;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#ffe8c2;font-weight:600}
   h1{margin:.35rem 0 .6rem;font-size:clamp(1.9rem,4.5vw,2.9rem);line-height:1.12}
   .sub{margin:0;max-width:44rem;color:#d7f0f4;font-size:1.06rem}
   .meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.2rem}
-  .meta span{font-size:.8rem;padding:.28rem .7rem;border:1px solid rgba(255,255,255,.35);
-       border-radius:999px;background:rgba(255,255,255,.08)}
-  .layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.2rem;
-       max-width:76rem;margin:0 auto;padding:2rem 1.5rem 5rem}
-  nav.toc{position:sticky;top:1rem;align-self:start;font-size:.9rem;
-       border-right:1px solid var(--linea);padding-right:1rem}
-  nav.toc p{margin:.2rem 0 .6rem;font-weight:700;font-size:.78rem;
-       letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
+  .meta span{font-size:.8rem;padding:.28rem .7rem;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(255,255,255,.08)}
+  .layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:2.2rem;max-width:76rem;margin:0 auto;padding:2rem 1.5rem 5rem}
+  nav.toc{position:sticky;top:1rem;align-self:start;font-size:.9rem;border-right:1px solid var(--linea);padding-right:1rem}
+  nav.toc p{margin:.2rem 0 .6rem;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gris)}
   nav.toc a{display:block;padding:.18rem 0;color:var(--tinta);text-decoration:none}
-  nav.toc a:hover{color:var(--mar);text-decoration:underline}
-  main{min-width:0}
-  section{margin:0 0 2.4rem}
-  h2{font-size:1.35rem;margin:0 0 .7rem;padding-bottom:.35rem;
-       border-bottom:2px solid var(--arena)}
+  main{min-width:0}section{margin:0 0 2.4rem}
+  h2{font-size:1.35rem;margin:0 0 .7rem;padding-bottom:.35rem;border-bottom:2px solid var(--arena)}
   h3{font-size:1.05rem;margin:1.4rem 0 .4rem}
-  p{margin:.55rem 0}
-  a{color:var(--mar)}
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-       font-size:.88em;background:#f0ece2;padding:.08rem .32rem;border-radius:.25rem}
-  pre{margin:.7rem 0;padding:.9rem 1rem;overflow-x:auto;background:#10202a;color:#e8f1f2;
-       border-radius:.45rem;font-size:.85rem;line-height:1.5}
+  p{margin:.55rem 0}a{color:var(--mar)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:#f0ece2;padding:.08rem .32rem;border-radius:.25rem}
+  pre{margin:.7rem 0;padding:.9rem 1rem;overflow-x:auto;background:#10202a;color:#e8f1f2;border-radius:.45rem;font-size:.82rem;line-height:1.45}
   pre code{background:none;padding:0;color:inherit;font-size:inherit}
-  .nota{padding:.85rem 1rem;background:#fff7ea;border-left:4px solid var(--arena);
-       border-radius:.25rem;font-size:.94rem}
+  pre.salida{border-left:4px solid var(--mar);background:#0b1c24}
+  .salida .coment{color:#6b7280;font-style:italic}
+  .nota{padding:.85rem 1rem;background:#fff7ea;border-left:4px solid var(--arena);border-radius:.25rem;font-size:.94rem}
   .peligro{background:#fdf3f2;border-left-color:var(--no)}
+  .badge{display:inline-block;font-size:.72rem;font-weight:700;padding:.1rem .45rem;border-radius:.25rem;color:#fff;background:var(--mar)}
+  .ok{color:var(--ok);font-weight:600}.no{color:var(--no);font-weight:600}
   table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.92rem}
   th,td{padding:.55rem .6rem;border:1px solid var(--linea);text-align:left;vertical-align:top}
   th{background:#f2efe6;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase}
-  tr:nth-child(even) td{background:#fcfbf7}
-  .badge{display:inline-block;font-size:.72rem;font-weight:700;padding:.1rem .45rem;
-       border-radius:.25rem;color:#fff;background:var(--mar)}
-  .ok{color:var(--ok);font-weight:600}
-  .no{color:var(--no);font-weight:600}
-  .checklist{list-style:none;padding-left:0}
-  .checklist li{padding:.3rem 0 .3rem 1.6rem;position:relative}
-  .checklist li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
-  footer{border-top:1px solid var(--linea);padding:1.4rem 1.5rem;text-align:center;
-       font-size:.84rem;color:var(--gris)}
-  @media(max-width:820px){
-    .layout{grid-template-columns:1fr;padding-top:1.2rem}
-    nav.toc{position:static;border-right:0;border-bottom:1px solid var(--linea);
-         padding:0 0 .8rem}
-    nav.toc a{display:inline-block;margin-right:.9rem}
-  }
-  @media print{
-    header.hero{background:#0b3d4d!important;-webkit-print-color-adjust:exact}
-    nav.toc{display:none}.layout{display:block;max-width:none;padding:1rem}
-    pre{white-space:pre-wrap}
-  }
+  tr:nth-child(even)td{background:#fcfbf7}
+  footer{border-top:1px solid var(--linea);padding:1.4rem 1.5rem;text-align:center;font-size:.84rem;color:var(--gris)}
+  @media(max-width:820px){.layout{grid-template-columns:1fr;padding-top:1.2rem}nav.toc{position:static;border-right:0;border-bottom:1px solid var(--linea);padding:0 0 .8rem}nav.toc a{display:inline-block;margin-right:.9rem}}
 </style>
 </head>
 <body>
-
-<header class="hero">
-  <div class="wrap">
-    <p class="eyebrow">Universidad de la Costa · Arquitectura en la Nube HEP</p>
-    <h1>Lab 1 — Almacenamiento y sitio estático en la nube</h1>
-    <p class="sub">Crea un bucket versionado, publica el sitio de CaribeMart y
-      compruébalo por HTTP en una nube AWS simulada, sin cuenta de AWS y sin
-      Internet.</p>
-    <div class="meta">
-      <span>Semana 1</span><span>75–90 min</span><span>Individual</span>
-      <span>5 criterios · 5,0</span><span>Estación con floci</span>
-    </div>
-  </div>
-</header>
+<header class="hero"><div class="wrap">
+<p class="eyebrow">Universidad de la Costa &middot; Arquitectura en la Nube HEP &middot; Guía paso a paso</p>
+<h1>Lab 1 — Almacenamiento y sitio estático en la nube</h1>
+<p class="sub">Crea un bucket versionado, publica el sitio estático y compruébalo por HTTP en la nube simulada.</p>
+<div class="meta"><span>Semana 1</span><span>75–90 min</span><span>Individual</span><span>5 criterios · 5,0</span><span>Estación con floci</span></div>
+</div></header>
 
 <div class="layout">
-  <nav class="toc" aria-label="Contenido">
-    <p>Contenido</p>
-    <a href="#aprender">1. Qué vas a aprender</a>
-    <a href="#entorno">2. El entorno</a>
-    <a href="#antes">3. Antes de empezar</a>
-    <a href="#bucket">4. Crear el bucket</a>
-    <a href="#versionado">5. Activar versionado</a>
-    <a href="#objetos">6. Publicar objetos</a>
-    <a href="#segunda">7. Segunda versión</a>
-    <a href="#sitio">8. Configurar el sitio</a>
-    <a href="#comprobar">9. Comprobar</a>
-    <a href="#criterios">10. Criterios</a>
-    <a href="#problemas">11. Problemas frecuentes</a>
-    <a href="#mas">12. Para ir más allá</a>
-    <a href="#entrega">13. Entrega</a>
-  </nav>
+<nav class="toc" aria-label="Contenido"><p>Contenido</p><a href="#intro">Acerca del lab</a>
+<a href="#p1">1. Crear el bucket S3</a>
+<a href="#p2">2. Verificar existencia y región</a>
+<a href="#p3">3. Habilitar versionado en el bucket</a>
+<a href="#p4">4. Comprobar estado del versionado</a>
+<a href="#p5">5. Publicar archivos iniciales</a>
+<a href="#p6">6. Verificar metadatos y Content-Type</a>
+<a href="#p7">7. Crear y subir segunda versión de index</a>
+<a href="#p8">8. Listar y validar versiones en S3</a>
+<a href="#p9">9. Configurar hosting estático</a>
+<a href="#p10">10. Validar HTTP y autocontrol</a>
+<a href="#criterios">Criterios de evaluación</a>
+</nav>
+<main>
+<section id="intro">
+<h2>Acerca de este laboratorio</h2>
+<p>En este laboratorio vas a gestionar almacenamiento de objetos compatible con Amazon S3 utilizando la nube local <code>floci</code>. Implementarás un bucket con versionado activo, metadatos MIME rigurosos y páginas web comprobables por HTTP.</p>
+</section>
 
-  <main>
+<section id="p1">
+<h2>Paso 1 &mdash; Crear el bucket S3</h2>
+<p><strong>Objetivo:</strong> Crear el bucket <code>sitio-hep</code> en la región por defecto <code>us-east-1</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws s3api create-bucket --bucket sitio-hep</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>{
+    "Location": "/sitio-hep"
+}</code></pre>
+<h3>Verificación</h3>
+<p>Confirma que el comando finaliza con código de salida 0 y retorna el identificador del recurso en JSON.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> <code>BucketAlreadyExists</code> o <code>BucketAlreadyOwnedByYou</code>. <em>Corrección:</em> El bucket ya fue creado; continúa con el siguiente paso o verifica su estado.</p>
+<p><strong>Criterio del verificador:</strong> Base para el criterio <code>bucket_creado</code>.</p>
+</section>
 
-    <section id="aprender">
-      <h2>1. Qué vas a aprender</h2>
-      <p>En este laboratorio usarás el almacenamiento de objetos de la nube como
-        si fuera Amazon S3:</p>
-      <ul class="checklist">
-        <li>crear un <strong>bucket</strong> y comprobar su región;</li>
-        <li>activar <strong>versionado</strong> y demostrar dos versiones de un objeto;</li>
-        <li>publicar un <strong>sitio estático</strong> con los tipos MIME correctos;</li>
-        <li>comprobar el sitio por HTTP en la terminal y en la pestaña
-          <strong>Sitio web</strong>;</li>
-        <li>distinguir qué hace S3 real y qué no emula la nube de la estación.</li>
-      </ul>
-      <p>No necesitas tarjeta de crédito, cuenta de AWS ni conexión a Internet.
-        La nube vive dentro de tu estación, en <code>http://127.0.0.1:4566</code>.</p>
-    </section>
-
-    <section id="entorno">
-      <h2>2. El entorno</h2>
-      <table>
-        <thead><tr><th>Pieza</th><th>Para qué</th></tr></thead>
-        <tbody>
-          <tr><td><code>floci</code></td><td>API local compatible con AWS, en <code>http://127.0.0.1:4566</code></td></tr>
-          <tr><td><code>aws</code> (wrapper)</td><td>AWS CLI que ya apunta al endpoint local</td></tr>
-          <tr><td><code>curl</code>, <code>jq</code></td><td>Comprobar el sitio y leer JSON</td></tr>
-          <tr><td><code>docker</code></td><td>Ver los contenedores internos de la nube</td></tr>
-          <tr><td><code>revisar</code></td><td>Autocontrol con los mismos 5 criterios del servidor</td></tr>
-        </tbody>
-      </table>
-      <p>Credenciales <strong>dummy</strong> (no son secretos, no hay cuenta real):</p>
-      <pre><code>AWS_ACCESS_KEY_ID=test
-AWS_SECRET_ACCESS_KEY=test
-AWS_DEFAULT_REGION=us-east-1
-AWS_ENDPOINT_URL=http://127.0.0.1:4566</code></pre>
-      <p>En una terminal nueva ya vienen exportadas. Si no:</p>
-      <pre><code>source /etc/profile.d/lab-aws.sh</code></pre>
-      <p>El bucket se llama <strong><code>sitio-hep</code></strong>. Es fijo: la vista
-        web de la sesión lo usa para mostrar tu sitio. Los archivos de partida están
-        en <code>~/sitio</code>:</p>
-      <pre><code>sitio/
-├── index.html    ← página de inicio (ya trae la marca CaribeMart HEP)
-├── error.html    ← página de error (ya trae "No encontrado")
-├── estilo.css    ← hoja de estilos
-└── LEEME.md</code></pre>
-    </section>
-
-    <section id="antes">
-      <h2>3. Antes de empezar</h2>
-      <p>Comprueba que la nube responde y que todavía no hay buckets:</p>
-      <pre><code>curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:4566/
-aws s3 ls</code></pre>
-      <p>La primera orden debe imprimir <code>200</code> (o <code>404</code>, según la
-        versión de floci: lo importante es que <em>algo</em> responda). La segunda no
-        debe listar nada: tu nube empieza vacía.</p>
-      <div class="nota"><strong>Si <code>aws</code> dice «Unable to locate
-        credentials»:</strong> ejecuta <code>source /etc/profile.d/lab-aws.sh</code> y
-        vuelve a probar. El wrapper <code>aws</code> ya añade
-        <code>--endpoint-url</code>; no hace falta escribirlo en cada comando.</div>
-    </section>
-
-    <section id="bucket">
-      <h2>4. Paso 1 — Crear el bucket</h2>
-      <pre><code>aws s3api create-bucket --bucket sitio-hep
-aws s3api head-bucket --bucket sitio-hep &amp;&amp; echo "bucket OK"
+<section id="p2">
+<h2>Paso 2 &mdash; Verificar existencia y región del bucket</h2>
+<p><strong>Objetivo:</strong> Confirmar mediante <code>head-bucket</code> y <code>get-bucket-location</code> que el bucket existe y está en <code>us-east-1</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws s3api head-bucket --bucket sitio-hep
 aws s3api get-bucket-location --bucket sitio-hep</code></pre>
-      <p><code>us-east-1</code> es la región por defecto y no necesita
-        <code>LocationConstraint</code> (en otras regiones sí). La respuesta de
-        <code>get-bucket-location</code> puede traer <code>LocationConstraint: null</code>:
-        significa «us-east-1».</p>
-      <p><span class="badge">Criterio 1</span> El bucket <code>sitio-hep</code> existe
-        en <code>us-east-1</code>.</p>
-    </section>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>{
+    "BucketRegion": "us-east-1"
+}
+{
+    "LocationConstraint": null
+}</code></pre>
+<h3>Verificación</h3>
+<p>La salida <code>LocationConstraint: null</code> en AWS S3 indica explícitamente que el bucket pertenece a <code>us-east-1</code>.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> <code>404 Not Found</code>. <em>Corrección:</em> Revisa que no haya errores tipográficos en el nombre <code>sitio-hep</code>.</p>
+<p><strong>Criterio del verificador:</strong> Satisface completamente el criterio <code>bucket_creado</code> (1,0 pt).</p>
+</section>
 
-    <section id="versionado">
-      <h2>5. Paso 2 — Activar versionado</h2>
-      <pre><code>aws s3api put-bucket-versioning \
-  --bucket sitio-hep \
-  --versioning-configuration Status=Enabled
+<section id="p3">
+<h2>Paso 3 &mdash; Habilitar versionado en el bucket</h2>
+<p><strong>Objetivo:</strong> Activar el seguimiento de versiones para conservar el historial de cambios de cada objeto subido.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws s3api put-bucket-versioning   --bucket sitio-hep   --versioning-configuration Status=Enabled</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>(Comando ejecutado silenciosamente con código de retorno 0)</code></pre>
+<h3>Verificación</h3>
+<p>El comando no emite salida de texto cuando tiene éxito.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> <code>MalformedXML</code>. <em>Corrección:</em> Asegúrate de que el parámetro <code>Status=Enabled</code> esté bien escrito y sin espacios.</p>
+<p><strong>Criterio del verificador:</strong> Requisito indispensable para el criterio <code>versionado</code>.</p>
+</section>
 
-aws s3api get-bucket-versioning --bucket sitio-hep</code></pre>
-      <p>Debe responder <code>"Status": "Enabled"</code>. El versionado guarda
-        <strong>cada subida</strong> de un objeto; no se activa solo y no se puede
-        «simular» subiendo dos archivos con nombres distintos.</p>
-      <p><span class="badge">Criterio 2</span> Versionado <code>Enabled</code> y
-        <code>index.html</code> con al menos dos versiones.</p>
-    </section>
+<section id="p4">
+<h2>Paso 4 &mdash; Comprobar estado del versionado</h2>
+<p><strong>Objetivo:</strong> Consultar la configuración activa del bucket y asegurar que el estado sea <code>Enabled</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws s3api get-bucket-versioning --bucket sitio-hep</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>{
+    "Status": "Enabled"
+}</code></pre>
+<h3>Verificación</h3>
+<p>El campo <code>Status</code> del objeto JSON devuelto debe ser exactamente <code>"Enabled"</code>.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Respuesta vacía <code>{}</code>. <em>Corrección:</em> El versionado aún no está activo; vuelve a ejecutar <code>put-bucket-versioning</code>.</p>
+<p><strong>Criterio del verificador:</strong> Valida el estado activo de versionado en <code>versionado</code>.</p>
+</section>
 
-    <section id="objetos">
-      <h2>6. Paso 3 — Publicar los objetos con su Content-Type</h2>
-      <p>S3 guarda el tipo MIME <strong>en el momento de la subida</strong>, como
-        metadato del objeto. Que el archivo se llame <code>.css</code> no basta: hay
-        que declararlo. Usa <code>s3api put-object</code> para no depender de lo que
-        adivine la CLI:</p>
-      <pre><code>cd ~/sitio
+<section id="p5">
+<h2>Paso 5 &mdash; Publicar archivos iniciales del sitio con Content-Type</h2>
+<p><strong>Objetivo:</strong> Subir <code>index.html</code>, <code>error.html</code> y <code>estilo.css</code> especificando explícitamente el encabezado <code>Content-Type</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>cd /workspace/sitio
+aws s3api put-object --bucket sitio-hep --key index.html   --body index.html --content-type "text/html; charset=utf-8"
+aws s3api put-object --bucket sitio-hep --key error.html   --body error.html --content-type "text/html; charset=utf-8"
+aws s3api put-object --bucket sitio-hep --key estilo.css   --body estilo.css --content-type "text/css; charset=utf-8"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>{
+    "ETag": ""3d9ef5d67a48c8f7b722b248a60c6287"",
+    "VersionId": "a49d642e-50fe-47ea-91bd-81c3f2a9a39c"
+}
+{
+    "ETag": ""ec7c9843e36c1da3877df8d5ddc3a84a"",
+    "VersionId": "40e4e61f-b3ef-4685-9618-7da555a0aa4c"
+}
+{
+    "ETag": ""27f23a460e3874a68a835faeb6d002db"",
+    "VersionId": "6038e83a-1ede-4c09-b45b-81b0f1c86120"
+}</code></pre>
+<h3>Verificación</h3>
+<p>Cada subida genera un <code>VersionId</code> único generado por el motor de S3.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> <code>NoSuchFile</code> al leer el cuerpo. <em>Corrección:</em> Confirma que estás dentro del directorio <code>/workspace/sitio</code>.</p>
+<p><strong>Criterio del verificador:</strong> Base para el cumplimiento de <code>objetos</code>.</p>
+</section>
 
-aws s3api put-object --bucket sitio-hep --key index.html \
-  --body index.html --content-type "text/html; charset=utf-8"
-
-aws s3api put-object --bucket sitio-hep --key error.html \
-  --body error.html --content-type "text/html; charset=utf-8"
-
-aws s3api put-object --bucket sitio-hep --key estilo.css \
-  --body estilo.css --content-type "text/css; charset=utf-8"</code></pre>
-      <p>Comprueba los metadatos:</p>
-      <pre><code>aws s3api head-object --bucket sitio-hep --key index.html
+<section id="p6">
+<h2>Paso 6 &mdash; Verificar metadatos y Content-Type en S3</h2>
+<p><strong>Objetivo:</strong> Usar <code>head-object</code> para auditar que el servidor guardó los encabezados MIME solicitados.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws s3api head-object --bucket sitio-hep --key index.html
 aws s3api head-object --bucket sitio-hep --key estilo.css</code></pre>
-      <p><span class="badge">Criterio 3</span> Los tres objetos existen y su
-        <code>ContentType</code> es <code>text/html…</code> para los HTML y
-        <code>text/css…</code> para el CSS.</p>
-    </section>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>{
+    "AcceptRanges": "bytes",
+    "LastModified": "Fri, 30 Oct 2026 13:42:48 GMT",
+    "ContentLength": 1206,
+    "ETag": ""3d9ef5d67a48c8f7b722b248a60c6287"",
+    "VersionId": "a49d642e-50fe-47ea-91bd-81c3f2a9a39c",
+    "ContentType": "text/html; charset=utf-8",
+    "Metadata": {},
+    "StorageClass": "STANDARD"
+}
+{
+    "AcceptRanges": "bytes",
+    "LastModified": "Fri, 30 Oct 2026 13:42:49 GMT",
+    "ContentLength": 1529,
+    "ETag": ""27f23a460e3874a68a835faeb6d002db"",
+    "VersionId": "6038e83a-1ede-4c09-b45b-81b0f1c86120",
+    "ContentType": "text/css; charset=utf-8",
+    "Metadata": {},
+    "StorageClass": "STANDARD"
+}</code></pre>
+<h3>Verificación</h3>
+<p>El atributo <code>ContentType</code> debe coincidir exactamente con <code>text/html...</code> y <code>text/css...</code>.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> <code>ContentType: binary/octet-stream</code>. <em>Corrección:</em> Vuelve a subir el objeto pasando el argumento <code>--content-type</code> explícito.</p>
+<p><strong>Criterio del verificador:</strong> Cumple el criterio <code>objetos</code> (1,0 pt).</p>
+</section>
 
-    <section id="segunda">
-      <h2>7. Paso 4 — Segunda versión de index.html</h2>
-      <p>El versionado se demuestra con <strong>dos subidas distintas</strong> del
-        mismo objeto. Edita <code>~/sitio/index.html</code>, busca la línea:</p>
-      <pre><code>Versión del sitio: &lt;strong&gt;borrador&lt;/strong&gt;.</code></pre>
-      <p>y cámbiala por algo como:</p>
-      <pre><code>Versión del sitio: &lt;strong&gt;1.0 — publicada&lt;/strong&gt;.</code></pre>
-      <p>Vuelve a subir el archivo:</p>
-      <pre><code>aws s3api put-object --bucket sitio-hep --key index.html \
-  --body index.html --content-type "text/html; charset=utf-8"</code></pre>
-      <p>Y lista las versiones:</p>
-      <pre><code>aws s3api list-object-versions --bucket sitio-hep --prefix index.html</code></pre>
-      <p>Deben aparecer <strong>dos</strong> entradas en <code>Versions</code> para la
-        clave <code>index.html</code>, con <code>VersionId</code> distintos y la más
-        reciente marcada como <code>"IsLatest": true</code>.</p>
-      <p><span class="badge">Criterio 2 (completo)</span> Versionado activo y dos
-        versiones del index.</p>
-    </section>
+<section id="p7">
+<h2>Paso 7 &mdash; Crear y subir la segunda versión de index.html</h2>
+<p><strong>Objetivo:</strong> Modificar el archivo localmente y subirlo de nuevo para generar un nuevo registro histórico en S3.</p>
+<h3>Comando exacto</h3>
+<pre><code>sed -i 's/Versión del sitio: &lt;strong&gt;borrador&lt;\/strong&gt;/Versión del sitio: &lt;strong&gt;1.0 — publicada&lt;\/strong&gt;/g' /workspace/sitio/index.html
+aws s3api put-object --bucket sitio-hep --key index.html   --body /workspace/sitio/index.html --content-type "text/html; charset=utf-8"</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>{
+    "ETag": ""1d080ba0f1033e617019299fcdb83e75"",
+    "VersionId": "8663cb6b-b8d9-4aad-918e-a80b654c3e48"
+}</code></pre>
+<h3>Verificación</h3>
+<p>El nuevo <code>VersionId</code> debe ser distinto al obtenido en el paso 5.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Reemplazar el archivo sin cambios. <em>Corrección:</em> Comprueba con <code>git diff</code> o <code>grep</code> que la cadena cambió.</p>
+<p><strong>Criterio del verificador:</strong> Genera la segunda versión necesaria para <code>versionado</code>.</p>
+</section>
 
-    <section id="sitio">
-      <h2>8. Paso 5 — Configurar el sitio web</h2>
-      <p>En S3 real, el «website hosting» se configura en el bucket con un documento
-        de índice y uno de error. Hazlo también aquí:</p>
-      <pre><code>aws s3api put-bucket-website --bucket sitio-hep \
-  --website-configuration '{
-    "IndexDocument": {"Suffix": "index.html"},
-    "ErrorDocument": {"Key": "error.html"}
-  }'
+<section id="p8">
+<h2>Paso 8 &mdash; Listar y validar versiones en S3</h2>
+<p><strong>Objetivo:</strong> Consultar la lista de versiones de <code>index.html</code> y comprobar que la última tiene <code>IsLatest: true</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws s3api list-object-versions --bucket sitio-hep --prefix index.html</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>{
+    "Versions": [
+        {
+            "ETag": ""1d080ba0f1033e617019299fcdb83e75"",
+            "Size": 1215,
+            "StorageClass": "STANDARD",
+            "Key": "index.html",
+            "VersionId": "8663cb6b-b8d9-4aad-918e-a80b654c3e48",
+            "IsLatest": true,
+            "LastModified": "2026-10-30T13:42:50Z"
+        },
+        {
+            "ETag": ""3d9ef5d67a48c8f7b722b248a60c6287"",
+            "Size": 1206,
+            "StorageClass": "STANDARD",
+            "Key": "index.html",
+            "VersionId": "a49d642e-50fe-47ea-91bd-81c3f2a9a39c",
+            "IsLatest": false,
+            "LastModified": "2026-10-30T13:42:48Z"
+        }
+    ],
+    "RequestCharged": null
+}</code></pre>
+<h3>Verificación</h3>
+<p>Deben existir al menos dos objetos en la lista <code>Versions</code> bajo la clave <code>index.html</code>.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> Aparece una sola versión. <em>Corrección:</em> Sube nuevamente el archivo para registrar la versión adicional.</p>
+<p><strong>Criterio del verificador:</strong> Satisface completamente el criterio <code>versionado</code> (1,0 pt).</p>
+</section>
 
+<section id="p9">
+<h2>Paso 9 &mdash; Configurar hosting de sitio web</h2>
+<p><strong>Objetivo:</strong> Establecer la configuración de sitio web estático asociando <code>IndexDocument</code> y <code>ErrorDocument</code>.</p>
+<h3>Comando exacto</h3>
+<pre><code>aws s3api put-bucket-website --bucket sitio-hep   --website-configuration '{"IndexDocument":{"Suffix":"index.html"},"ErrorDocument":{"Key":"error.html"}}'
 aws s3api get-bucket-website --bucket sitio-hep</code></pre>
-      <h3>Una limitación que debes conocer (y explicar)</h3>
-      <p>La nube de la estación <strong>guarda</strong> la configuración del sitio,
-        pero <strong>no la aplica</strong> al servir:</p>
-      <ul>
-        <li><code>GET /sitio-hep/</code> devuelve el listado XML del bucket, no
-          <code>index.html</code>;</li>
-        <li>una clave inexistente devuelve un XML de error de S3, no tu
-          <code>error.html</code>.</li>
-      </ul>
-      <p>Por eso el laboratorio comprueba las URLs <strong>directas</strong> de los
-        objetos:</p>
-      <pre><code>http://127.0.0.1:4566/sitio-hep/index.html
-http://127.0.0.1:4566/sitio-hep/error.html</code></pre>
-      <div class="nota">Esto es una diferencia entre el emulador y AWS real. En AWS
-        real, con <code>IndexDocument</code> y <code>ErrorDocument</code>, el sitio
-        resolvería <code>/</code> y los 404 con tus páginas. En la entrega explica en
-        una frase qué cambiaría en AWS real.</div>
-    </section>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>{
+    "IndexDocument": {
+        "Suffix": "index.html"
+    },
+    "ErrorDocument": {
+        "Key": "error.html"
+    }
+}</code></pre>
+<h3>Verificación</h3>
+<p>El comando <code>get-bucket-website</code> devuelve la configuración exacta registrada en el bucket.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> JSON malformado. <em>Corrección:</em> Respeta las comillas dobles en las claves de la configuración JSON.</p>
+<p><strong>Criterio del verificador:</strong> Estructura la resolución web del bucket.</p>
+</section>
 
-    <section id="comprobar">
-      <h2>9. Paso 6 — Comprobar el sitio</h2>
-      <pre><code>curl -i http://127.0.0.1:4566/sitio-hep/index.html
-curl -i http://127.0.0.1:4566/sitio-hep/error.html
-curl -i http://127.0.0.1:4566/sitio-hep/estilo.css</code></pre>
-      <ul>
-        <li><code>index.html</code> → <code class="ok">200 OK</code>,
-          <code>Content-Type: text/html…</code>, cuerpo con
-          <code>CaribeMart HEP</code>.</li>
-        <li><code>error.html</code> → <code class="ok">200 OK</code>, cuerpo con
-          <code>No encontrado</code>.</li>
-        <li><code>estilo.css</code> → <code class="ok">200 OK</code>,
-          <code>Content-Type: text/css…</code>.</li>
-      </ul>
-      <p>En la pestaña <strong>Sitio web</strong> de la plataforma verás el mismo
-        sitio a través del proxy de la sesión (<code>http://127.0.0.1:8080/</code>);
-        el proxy traduce <code>/</code> a <code>index.html</code>.</p>
-      <p>Y el autocontrol:</p>
-      <pre><code>revisar</code></pre>
-      <p>Debe terminar con <strong>5 de 5 criterios en verde</strong>. Si falta
-        alguno, el detalle te dice exactamente qué corregir.</p>
-      <div class="nota peligro"><code>revisar</code> es un autocontrol formativo:
-        aplica los mismos criterios que el servidor, pero la nota oficial la calcula
-        el servidor <strong>desde fuera</strong> de tu sesión. No intentes «aprobar»
-        el script: mira el estado real de tu nube.</div>
-    </section>
+<section id="p10">
+<h2>Paso 10 &mdash; Validar HTTP y ejecutar autocontrol</h2>
+<p><strong>Objetivo:</strong> Comprobar los endpoints HTTP vía curl y ejecutar el comando oficial <code>revisar</code> para obtener 5/5.</p>
+<h3>Comando exacto</h3>
+<pre><code>curl -s -i http://127.0.0.1:4566/sitio-hep/index.html | head -n 12
+curl -s -i http://127.0.0.1:4566/sitio-hep/error.html | head -n 12
+revisar</code></pre>
+<h3>Salida esperada real (capturada en estación <code>oco-tmp-lab01</code>)</h3>
+<pre class="salida"><code>HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Content-Length: 1215
+Content-Type: text/html; charset=utf-8
+Date: Fri, 30 Oct 2026 13:42:51 GMT
+ETag: "1d080ba0f1033e617019299fcdb83e75"
+...
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Content-Length: 841
+Content-Type: text/html; charset=utf-8
+...
+====================================================================
+ Autocontrol del Laboratorio 1 — sitio estático
+ (mismos criterios que aplica el servidor desde fuera)
+====================================================================
+ [OK] bucket_creado: Bucket sitio-hep en us-east-1
+      bucket sitio-hep existe en us-east-1
+ [OK] versionado: Versionado activado y dos versiones del index
+      versionado Enabled; index.html con 2 versiones
+ [OK] objetos: Objetos del sitio con su Content-Type
+      index.html, error.html y estilo.css existen con su Content-Type
+ [OK] sitio_responde: El sitio responde 200 y muestra CaribeMart HEP
+      GET /sitio-hep/index.html → 200 con «CaribeMart HEP»
+ [OK] error_accesible: Página de error publicada
+      GET /sitio-hep/error.html → 200 con «No encontrado»
+--------------------------------------------------------------------
+ Resultado: 5 de 5 criterios en verde
+====================================================================</code></pre>
+<h3>Verificación</h3>
+<p>Tanto <code>index.html</code> como <code>error.html</code> retornan código de estado 200 y el autocontrol aprueba 5 de 5 criterios.</p>
+<h3>Error típico y corrección</h3>
+<p><em>Error:</em> <code>sitio_responde</code> en rojo por no encontrar marca. <em>Corrección:</em> Verifica que <code>index.html</code> contenga la frase <code>CaribeMart HEP</code>.</p>
+<p><strong>Criterio del verificador:</strong> Satisface <code>sitio_responde</code> (1,0 pt) y <code>error_accesible</code> (1,0 pt).</p>
+</section>
 
-    <section id="criterios">
-      <h2>10. Criterios de evaluación</h2>
-      <table>
-        <thead><tr><th>#</th><th>Criterio</th><th>Qué se comprueba</th><th>Peso</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td><code>bucket_creado</code></td><td><code>sitio-hep</code> existe en <code>us-east-1</code></td><td>1,0</td></tr>
-          <tr><td>2</td><td><code>versionado</code></td><td><code>Status=Enabled</code> y ≥2 versiones de <code>index.html</code></td><td>1,0</td></tr>
-          <tr><td>3</td><td><code>objetos</code></td><td>los 3 objetos existen con su <code>Content-Type</code></td><td>1,0</td></tr>
-          <tr><td>4</td><td><code>sitio_responde</code></td><td><code>GET …/index.html</code> → 200 con <code>CaribeMart HEP</code></td><td>1,0</td></tr>
-          <tr><td>5</td><td><code>error_accesible</code></td><td><code>GET …/error.html</code> → 200 con <code>No encontrado</code></td><td>1,0</td></tr>
-        </tbody>
-      </table>
-      <p>Total: <strong>5,0</strong>. Cada criterio vale 1,0 y es automático.</p>
-    </section>
-
-    <section id="problemas">
-      <h2>11. Problemas frecuentes</h2>
-      <table>
-        <thead><tr><th>Síntoma</th><th>Causa probable</th><th>Solución</th></tr></thead>
-        <tbody>
-          <tr><td><code>Unable to locate credentials</code></td><td>shell sin el perfil del lab</td><td><code>source /etc/profile.d/lab-aws.sh</code></td></tr>
-          <tr><td><code>head-bucket</code> da 404</td><td>el bucket no se creó o se creó en otro endpoint</td><td><code>aws s3 ls</code>; usa el wrapper <code>aws</code></td></tr>
-          <tr><td><code>head-object</code> da 404</td><td>la clave no coincide (mayúsculas, ruta)</td><td><code>aws s3api list-objects-v2 --bucket sitio-hep</code></td></tr>
-          <tr><td><code>ContentType</code> vacío o <code>binary/octet-stream</code></td><td>subiste con <code>s3 cp</code> sin tipo</td><td>vuelve a subir con <code>--content-type</code></td></tr>
-          <tr><td><code>list-object-versions</code> muestra 1</td><td>solo has subido el index una vez</td><td>edita el texto y súbelo otra vez</td></tr>
-          <tr><td><code>curl</code> da 404 en el objeto</td><td>floci aún arrancando o clave mal escrita</td><td><code>curl -s http://127.0.0.1:4566/</code>; espera unos segundos</td></tr>
-          <tr><td>La pestaña Sitio web da 503</td><td>el proxy no encuentra el bucket/objeto</td><td>sube <code>index.html</code>; recarga</td></tr>
-          <tr><td><code>revisar</code> dice 4/5</td><td>lee el detalle del criterio en rojo</td><td>corrige y vuelve a ejecutar</td></tr>
-        </tbody>
-      </table>
-      <p>Si la nube no responde en absoluto:</p>
-      <pre><code>curl -sv http://127.0.0.1:4566/ 2&gt;&amp;1 | head
-docker ps</code></pre>
-      <p>Y si sigue caída, avisa al docente: no reinicies nada de la plataforma.</p>
-    </section>
-
-    <section id="mas">
-      <h2>12. Para ir más allá (opcional, no se califica)</h2>
-      <ul>
-        <li>Añade una <strong>bucket policy</strong> que permita
-          <code>s3:GetObject</code> solo a <code>index.html</code> y
-          <code>error.html</code> (<code>aws s3api put-bucket-policy</code>).</li>
-        <li>Crea una <strong>regla de ciclo de vida</strong> que expire versiones
-          antiguas (<code>put-bucket-lifecycle-configuration</code>).</li>
-        <li>Sube un cuarto objeto <code>aviso.txt</code> y comprueba que
-          <code>Content-Type: text/plain</code> también se guarda.</li>
-        <li>Compara <code>s3 cp</code> con <code>s3api put-object</code>: ¿en qué
-          caso se adivina el MIME y en cuál lo declaras tú?</li>
-      </ul>
-    </section>
-
-    <section id="entrega">
-      <h2>13. Entrega</h2>
-      <p>No hay que subir archivos: el servidor evalúa el <strong>estado de tu
-        nube</strong>. Antes de cerrar la sesión, ejecuta <code>revisar</code> y
-        asegúrate de ver <strong>5 de 5</strong>. La nota del laboratorio se calcula
-        con esos cinco criterios automáticos.</p>
-      <p>Si trabajas fuera de la plataforma, el verificador del host es:</p>
-      <pre><code>python3 catalog/arquitectura-nube-hep/lab-01-sitio-estatico/bin/verificador.py \
-  --contenedor &lt;nombre-de-tu-estación&gt;</code></pre>
-    </section>
-
-  </main>
+<section id="criterios">
+<h2>Criterios de evaluación</h2>
+<table>
+<thead><tr><th>#</th><th>Criterio</th><th>Descripción</th><th>Peso</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><code>bucket_creado</code></td><td>El bucket <code>sitio-hep</code> existe en la región <code>us-east-1</code></td><td>1,0 pt</td></tr>
+<tr><td>2</td><td><code>versionado</code></td><td>Versionado en <code>Enabled</code> y al menos 2 versiones de <code>index.html</code></td><td>1,0 pt</td></tr>
+<tr><td>3</td><td><code>objetos</code></td><td><code>index.html</code>, <code>error.html</code> y <code>estilo.css</code> con Content-Type adecuado</td><td>1,0 pt</td></tr>
+<tr><td>4</td><td><code>sitio_responde</code></td><td>Página principal responde 200 OK y contiene la marca <em>CaribeMart HEP</em></td><td>1,0 pt</td></tr>
+<tr><td>5</td><td><code>error_accesible</code></td><td>Página de error responde 200 OK y contiene la marca <em>No encontrado</em></td><td>1,0 pt</td></tr>
+</tbody>
+</table>
+</section>
+</main>
 </div>
-
 <footer>
-  Laboratorio 1 · Arquitectura en la Nube HEP · Universidad de la Costa ·
-  nube simulada con <code>floci</code>, sin Internet
+<p>Laboratorio 1 &middot; Arquitectura en la Nube HEP &middot; Universidad de la Costa</p>
 </footer>
-
 </body>
 </html>
