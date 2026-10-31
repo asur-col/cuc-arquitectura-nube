@@ -41,6 +41,9 @@
   .cover h1{font-size:40px;color:var(--vino);font-weight:700;letter-spacing:.3px;line-height:1.16;max-width:1050px;margin:0 auto;}
   .cover h3{font-size:19px;font-weight:400;color:var(--texto);margin-top:12px;}
   .cover .bar{width:240px;height:6px;border-radius:3px;margin:20px auto;background:var(--dorado);}
+  .cover .cover-foto{margin:12px auto 0;text-align:center;}
+  .cover .cover-foto img{height:150px;border-radius:8px;border:2px solid var(--dorado);}
+  .cover .cover-foto .cap{font-size:10.5px;color:#6b6b6b;margin-top:3px;}
   .cover .author{font-size:16px;line-height:1.55;}
   .cover .author b{color:var(--vino);}
   .cover .cover-sub{margin-top:18px;font-size:14.5px;color:#555;max-width:900px;margin-left:auto;margin-right:auto;line-height:1.45;}
@@ -125,6 +128,7 @@
       Semana 12 · Periodo 2026-2 · Barranquilla, Colombia
     </div>
     <div class="cover-sub">Por qué las organizaciones construyen nubes propias: soberanía del dato, latencia, costos recurrentes y el modelo IaaS abierto con OpenStack.</div>
+    <div class="cover-foto"><img src="assets/fotos/cern-centro-datos-07.jpg" alt="Centro de datos del CERN"><div class="cap">Centro de cómputo del CERN. Foto: SimonWaldherr, CC BY-SA 4.0, Wikimedia Commons (commons.wikimedia.org/wiki/File:CERN_Computer_Center_07.jpg)</div></div>
     <aside class="guion">Bienvenidos a la Semana doce de Arquitectura en la Nube. Hoy iniciamos el estudio de OpenStack y la construcción de nubes privadas empresariales. Analizaremos por qué las organizaciones colombianas despliegan infraestructura propia por soberanía de datos, latencia y costos, y cómo OpenStack orquesta cómputo, redes y almacenamiento en una arquitectura modular.</aside>
   </section>
 
@@ -178,7 +182,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: NIST SP 800-145 y OpenStack Architecture Design Guide</span>
+      <span class="src">Fuente: NIST SP 800-145 (nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-145.pdf) · docs.openstack.org/arch-design/</span>
       <span>2 / 15</span>
     </div>
     <aside class="guion">Fíjate bien en la comparación que tenemos en pantalla porque aquí radica uno de los errores conceptuales más frecuentes en la industria. Muchos administradores de sistemas creen que por tener un hipervisor VMware ESXi o Proxmox con cincuenta máquinas virtuales ya cuentan con una nube privada. La virtualización tradicional simplemente consolida servidores físicos en máquinas virtuales dentro de silos aislados, donde cada nuevo aprovisionamiento requiere una solicitud por ticket a la mesa de ayuda, configuración manual de VLANs en switches físicos y días de espera. En cambio, una nube privada basada en OpenStack ofrece cinco características esenciales definidas por el NIST: autoservicio bajo demanda mediante portal web y APIs, acceso amplio a través de la red, asignación dinámica de recursos en pools compartidos, rápida elasticidad y servicio medido con telemetría. Con OpenStack, los desarrolladores despliegan infraestructura completa mediante código en cuestión de minutos.</aside>
@@ -200,8 +204,8 @@
         <text x="165" y="135" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Soberanía y Ley</text>
         <text x="60" y="175" font-size="13" font-weight="700" fill="#333">Cumplimiento Local</text>
         <text x="60" y="200" font-size="12" fill="#555">• Ley 1581 de 2012 (Habeas Data en Colombia)</text>
-        <text x="60" y="240" font-size="12" fill="#555">• Normas financieras SFC y datos de salud sensibles</text>
-        <text x="60" y="280" font-size="12" fill="#555">• Prohibición de transferir datos fuera del país sin aval</text>
+        <text x="60" y="240" font-size="12" fill="#555">• Datos sensibles: tratamiento restringido</text>
+        <text x="60" y="280" font-size="12" fill="#555">• Envío al exterior solo a países con nivel adecuado</text>
         <text x="60" y="350" font-size="12" fill="#A6192E" font-weight="600">Garantía total de residencia física de los datos.</text>
 
         <rect x="325" y="25" width="250" height="435" rx="10" fill="#fdfbf7" stroke="#D4AF37" stroke-width="1.8"/>
@@ -209,9 +213,9 @@
         <text x="450" y="87" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">2</text>
         <text x="450" y="135" text-anchor="middle" font-size="16" font-weight="700" fill="#8a6d1d">Latencia y Borde</text>
         <text x="345" y="175" font-size="13" font-weight="700" fill="#333">Tiempos Deterministas</text>
-        <text x="345" y="200" font-size="12" fill="#555">• Latencias menores a 3 milisegundos en LAN</text>
+        <text x="345" y="200" font-size="12" fill="#555">• Una LAN local responde en pocos milisegundos</text>
         <text x="345" y="240" font-size="12" fill="#555">• Control de procesos industriales, SCADA y puertos</text>
-        <text x="345" y="280" font-size="12" fill="#555">• Las regiones públicas en Virginia suman 60 a 100 ms</text>
+        <text x="345" y="280" font-size="12" fill="#555">• A una región lejana, el viaje de ida y vuelta pesa más</text>
         <text x="345" y="350" font-size="12" fill="#8a6d1d" font-weight="600">Procesamiento inmediato al lado de la operación.</text>
 
         <rect x="610" y="25" width="250" height="435" rx="10" fill="#f4f8fb" stroke="#2f5d9a" stroke-width="1.8"/>
@@ -222,7 +226,7 @@
         <text x="630" y="200" font-size="12" fill="#555">• Costes predecibles en cargas de cómputo constantes 24/7</text>
         <text x="630" y="240" font-size="12" fill="#555">• Sin cargos sorpresa por transferencia de salida (egress)</text>
         <text x="630" y="280" font-size="12" fill="#555">• Amortización óptima de servidores empresariales</text>
-        <text x="630" y="350" font-size="12" fill="#2f5d9a" font-weight="600">Mayor rentabilidad a partir de 200+ VMs continuas.</text>
+        <text x="630" y="350" font-size="12" fill="#2f5d9a" font-weight="600">Se decide con el costo total (TCO) de cada caso.</text>
 
         <rect x="895" y="25" width="250" height="435" rx="10" fill="#f6faf6" stroke="#3b8a3b" stroke-width="1.8"/>
         <circle cx="1020" cy="80" r="32" fill="#3b8a3b"/>
@@ -237,10 +241,10 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: OpenInfra Foundation User Survey y Ley 1581 de 2012</span>
+      <span class="src">Fuente: Ley 1581 de 2012, art. 26 (secretariasenado.gov.co/senado/basedoc/ley_1581_2012.html) · docs.openstack.org/arch-design/</span>
       <span>3 / 15</span>
     </div>
-    <aside class="guion">Observemos estos cuatro vectores de decisión que guían a un arquitecto de soluciones al evaluar la nube privada. El primer vector es la soberanía de los datos y el marco regulatorio. En Colombia, la Ley 1581 de 2012 y las circulares de la Superintendencia Financiera imponen estrictos controles sobre la transferencia internacional de datos personales y financieros. Si alojas información crítica en un centro de datos propio bajo OpenStack, garantizas la residencia física y jurídica del dato. El segundo vector es la latencia de red: aplicaciones de telemetría portuaria, control industrial y sistemas médicos necesitan tiempos de respuesta menores a cinco milisegundos, inviables si el tráfico debe viajar ida y vuelta hasta Virginia. El tercer vector es la economía de escala: cuando una empresa tiene cargas de cómputo predecibles las veinticuatro horas del día, el costo acumulado de instancias en nube pública y las tarifas de egress terminan superando la amortización de hardware propio. Por último, la independencia tecnológica protege a la organización contra incrementos unilaterales de precios o cambios de licenciamiento.</aside>
+    <aside class="guion">Observemos estos cuatro vectores de decisión que guían a un arquitecto de soluciones al evaluar la nube privada. El primero es la soberanía de los datos y el marco legal. En Colombia, la Ley 1581 de 2012 regula el tratamiento de datos personales, y su artículo 26 limita la transferencia de datos a países que no ofrezcan un nivel adecuado de protección. Si alojas información crítica en un centro de datos propio bajo OpenStack, sabes exactamente dónde reside el dato. El segundo vector es la latencia de red: aplicaciones de control industrial, telemetría portuaria o sistemas médicos se benefician de estar cerca de la operación, y el viaje hasta una región pública lejana añade tiempo que conviene medir con ping y traceroute en lugar de suponerlo. El tercer vector es la economía: cuando la carga es predecible las veinticuatro horas, compara el costo total de propiedad de tu hardware contra el de las instancias en nube pública, incluida la transferencia de salida. Por último, la independencia tecnológica reduce el riesgo de depender de un solo proveedor o de cambios unilaterales en sus condiciones.</aside>
   </section>
 
   <section class="slide" data-parte="1">
@@ -323,7 +327,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: OpenInfra Foundation — Documentación Oficial OpenStack</span>
+      <span class="src">Fuente: docs.openstack.org/install-guide/get-started-logical-architecture.html · openstack.org/software/</span>
       <span>4 / 15</span>
     </div>
     <aside class="guion">OpenStack es comúnmente llamado el sistema operativo de la nube porque cumple para un centro de datos lo que Linux cumple para un solo computador: abstrae la complejidad del silicio y los discos físicos y expone interfaces lógicas homogéneas para que las aplicaciones puedan ejecutarse de forma predecible. En la parte superior del diagrama observamos a los consumidores: ingenieros de software, administradores de sistemas y cadenas automatizadas de integración continua que interactúan con la nube mediante la consola web Horizon o a través de la interfaz de línea de órdenes y llamadas REST. En el corazón de la plataforma reside el plano de control modular de OpenStack, compuesto por servicios especializados como Keystone para la identidad, Nova para el cómputo, Neutron para la red, Glance para las imágenes de disco y Cinder para el almacenamiento persistente. Estos servicios se comunican entre sí para transformar servidores x86 convencionales, switches de red de veinticinco gigabits y matrices de almacenamiento distribuido en recursos compartidos elásticos.</aside>
@@ -332,9 +336,9 @@
   <section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Evolución y Versiones</div>
-      <h2>Cronología de OpenStack: De Austin a Epoxy</h2>
+      <h2>Cronología de OpenStack: De Austin a Gazpacho</h2>
       <div class="rule"></div>
-      <div class="sub">Ciclo de lanzamientos semestral en orden alfabético: madurez, soporte a largo plazo y estabilidad.</div>
+      <div class="sub">Un lanzamiento cada seis meses, con nombre alfabético; las versiones SLURP permiten saltar de una a la siguiente.</div>
       <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
@@ -345,51 +349,51 @@
         <text x="120" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#A6192E">2010</text>
         <text x="120" y="125" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Austin / Bexar</text>
         <text x="120" y="145" text-anchor="middle" font-size="10" fill="#555">NASA + Rackspace</text>
-        <text x="120" y="165" text-anchor="middle" font-size="10" fill="#777">Nace Nova y Swift</text>
-        <text x="120" y="185" text-anchor="middle" font-size="10" fill="#777">Código abierto inicial</text>
+        <text x="120" y="165" text-anchor="middle" font-size="10" fill="#777">Incluye Nova y Swift</text>
+        <text x="120" y="185" text-anchor="middle" font-size="10" fill="#777">Primera versión</text>
 
         <circle cx="360" cy="240" r="14" fill="#D4AF37"/>
         <rect x="290" y="280" width="140" height="120" rx="8" fill="#fdfbf7" stroke="#D4AF37" stroke-width="1.5"/>
-        <text x="360" y="305" text-anchor="middle" font-size="13" font-weight="700" fill="#8a6d1d">2014–2018</text>
-        <text x="360" y="325" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Juno a Queens</text>
-        <text x="360" y="345" text-anchor="middle" font-size="10" fill="#555">Llegan Neutron, Cinder</text>
-        <text x="360" y="365" text-anchor="middle" font-size="10" fill="#777">Keystone token Fernet</text>
-        <text x="360" y="385" text-anchor="middle" font-size="10" fill="#777">Adopción telco NFV</text>
+        <text x="360" y="305" text-anchor="middle" font-size="13" font-weight="700" fill="#8a6d1d">2011–2022</text>
+        <text x="360" y="325" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Bexar a Zed</text>
+        <text x="360" y="345" text-anchor="middle" font-size="10" fill="#555">Ciclo semestral</text>
+        <text x="360" y="365" text-anchor="middle" font-size="10" fill="#777">Nombres alfabéticos</text>
+        <text x="360" y="385" text-anchor="middle" font-size="10" fill="#777">Antelope: primera SLURP</text>
 
         <circle cx="620" cy="240" r="14" fill="#A6192E"/>
         <rect x="550" y="80" width="140" height="120" rx="8" fill="#f9eef0" stroke="#A6192E" stroke-width="1.5"/>
         <text x="620" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#A6192E">2024.1 Caracal</text>
-        <text x="620" y="125" text-anchor="middle" font-size="12" font-weight="700" fill="#333">LTS Consolidado</text>
-        <text x="620" y="145" text-anchor="middle" font-size="10" fill="#555">OVN por defecto</text>
-        <text x="620" y="165" text-anchor="middle" font-size="10" fill="#777">Soporte IA y vGPU</text>
-        <text x="620" y="185" text-anchor="middle" font-size="10" fill="#777">Base de DevStack lab</text>
+        <text x="620" y="125" text-anchor="middle" font-size="12" font-weight="700" fill="#333">SLURP</text>
+        <text x="620" y="145" text-anchor="middle" font-size="10" fill="#555">Lanzada 3-abr-2024</text>
+        <text x="620" y="165" text-anchor="middle" font-size="10" fill="#777">Actualización directa</text>
+        <text x="620" y="185" text-anchor="middle" font-size="10" fill="#777">entre versiones SLURP</text>
 
         <circle cx="860" cy="240" r="14" fill="#D4AF37"/>
         <rect x="790" y="280" width="140" height="120" rx="8" fill="#fdfbf7" stroke="#D4AF37" stroke-width="1.5"/>
         <text x="860" y="305" text-anchor="middle" font-size="13" font-weight="700" fill="#8a6d1d">2024.2 Dalmatian</text>
-        <text x="860" y="325" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Optimización IA</text>
-        <text x="860" y="345" text-anchor="middle" font-size="10" fill="#555">MIG NVIDIA dinámico</text>
-        <text x="860" y="365" text-anchor="middle" font-size="10" fill="#777">Neutron BGP routing</text>
-        <text x="860" y="385" text-anchor="middle" font-size="10" fill="#777">Mejoras en Skyline UI</text>
+        <text x="860" y="325" text-anchor="middle" font-size="12" font-weight="700" fill="#333">No SLURP</text>
+        <text x="860" y="345" text-anchor="middle" font-size="10" fill="#555">Lanzada 2-oct-2024</text>
+        <text x="860" y="365" text-anchor="middle" font-size="10" fill="#777">Actualización paso</text>
+        <text x="860" y="385" text-anchor="middle" font-size="10" fill="#777">a paso (sin saltos)</text>
 
         <circle cx="1060" cy="240" r="14" fill="#2f5d9a"/>
         <rect x="990" y="80" width="140" height="120" rx="8" fill="#f4f8fb" stroke="#2f5d9a" stroke-width="1.5"/>
-        <text x="1060" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#2f5d9a">2025.1 Epoxy / 2026</text>
-        <text x="1060" y="125" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Era Cloud-Native</text>
-        <text x="1060" y="145" text-anchor="middle" font-size="10" fill="#555">Kernel 6.x y Zun K8s</text>
-        <text x="1060" y="165" text-anchor="middle" font-size="10" fill="#777">Eficiencia energética</text>
-        <text x="1060" y="185" text-anchor="middle" font-size="10" fill="#777">Automatización Kolla</text>
+        <text x="1060" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#2f5d9a">2025.1 a 2026.1</text>
+        <text x="1060" y="125" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Epoxy, Flamingo, Gazpacho</text>
+        <text x="1060" y="145" text-anchor="middle" font-size="10" fill="#555">Epoxy: 2-abr-2025 (SLURP)</text>
+        <text x="1060" y="165" text-anchor="middle" font-size="10" fill="#777">Flamingo: 1-oct-2025</text>
+        <text x="1060" y="185" text-anchor="middle" font-size="10" fill="#777">Gazpacho: 1-abr-2026 (SLURP)</text>
 
         <rect x="250" y="435" width="680" height="40" rx="6" fill="#f5f5f5" stroke="#ddd"/>
-        <text x="590" y="460" text-anchor="middle" font-size="12" fill="#555">OpenInfra Foundation mantiene ciclos semestrales estables con ventanas de actualización LTS predecibles.</text>
+        <text x="590" y="460" text-anchor="middle" font-size="12" fill="#555">Más reciente (oct. 2026): 2026.2 Hibiscus, lanzada el 30-sep-2026 (no SLURP); la última SLURP es 2026.1 Gazpacho.</text>
       </svg>
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: releases.openstack.org y OpenInfra Foundation Roadmaps</span>
+      <span class="src">Fuente: releases.openstack.org (listado de series y fechas) · releases.openstack.org/gazpacho/</span>
       <span>5 / 15</span>
     </div>
-    <aside class="guion">La evolución de OpenStack a lo largo de más de quince años refleja la madurez de la computación en la nube empresarial. El proyecto nació en el año 2010 como una alianza histórica entre la NASA y la empresa Rackspace, publicando las versiones Austin y Bexar con los componentes fundacionales de cómputo y almacenamiento de objetos. Durante la siguiente década, el software adoptó un esquema de nombres alfabéticos semestrales, incorporando redes avanzadas con Neutron, almacenamiento en bloque con Cinder y plantillas declarativas con Heat. A partir de 2023, la comunidad adoptó la nomenclatura de año punto versión, destacando Caracal en 2024 como lanzamiento de soporte a largo plazo con redes OVN estables, seguido por Dalmatian con aceleración para cargas de inteligencia artificial y particionado de tarjetas gráficas, y Epoxy en 2025 consolidando el soporte para núcleos modernos de Linux y orquestación de contenedores.</aside>
+    <aside class="guion">La evolución de OpenStack a lo largo de más de quince años refleja la madurez del proyecto. Nació en 2010 como una alianza entre la NASA y la empresa Rackspace, y su primera versión, Austin, incluyó Nova para cómputo y Swift para almacenamiento de objetos. Desde entonces el proyecto publica una versión cada seis meses con nombres en orden alfabético, y desde 2023 las identifica también por año y número, por ejemplo 2024.1. Fíjate en el concepto de SLURP, siglas en inglés de proceso de actualización con salto de versión: algunas versiones, como Caracal de abril de 2024, Epoxy de abril de 2025 y Gazpacho de abril de 2026, están marcadas como SLURP, lo que permite actualizar directamente de una a la siguiente. Dalmatian, de octubre de 2024, y Flamingo, de octubre de 2025, no lo son. La más reciente, Hibiscus, salió el 30 de septiembre de 2026 y no es SLURP. Todas las fechas salen de la página oficial de lanzamientos del proyecto, que conviene consultar siempre antes de elegir versión.</aside>
   </section>
 
   <section class="slide" data-parte="1">
@@ -444,7 +448,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: OpenStack Architecture Design Guide — High Availability</span>
+      <span class="src">Fuente: docs.openstack.org/arch-design/design-control-plane.html · docs.openstack.org/ha-guide/</span>
       <span>6 / 15</span>
     </div>
     <aside class="guion">Comprender los patrones de diseño del plano de control de OpenStack es indispensable para diagnosticar incidentes y diseñar nubes de alta disponibilidad. La plataforma se sostiene sobre tres pilares arquitectónicos claramente diferenciados. En primer lugar, todos los puntos de entrada como nova-api, neutron-server y cinder-api son servicios REST totalmente sin estado. Esto significa que no conservan sesiones en memoria y pueden distribuirse detrás de balanceadores HAProxy, escalando horizontalmente según la demanda. En segundo lugar, la comunicación interna hacia los hipervisores y agentes de red se realiza mediante mensajería asíncrona utilizando RabbitMQ como bus de cola. Cuando un usuario solicita una máquina virtual, la API registra el evento y devuelve un código HTTP doscientos dos Aceptado, mientras la tarea real se ejecuta asíncronamente. En tercer lugar, el estado persistente y los metadatos se resguardan en un clúster de base de datos MariaDB con replicación sincrónica Galera, asegurando integridad transaccional estricta en cada operación.</aside>
@@ -499,7 +503,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: Keystone Architecture and Multi-tenancy Guide</span>
+      <span class="src">Fuente: docs.openstack.org/keystone/latest/getting-started/architecture.html</span>
       <span>7 / 15</span>
     </div>
     <aside class="guion">En una nube empresarial o académica, diferentes dependencias deben convivir de forma segura sobre la misma infraestructura física sin interferir entre sí. Keystone resuelve esto implementando una jerarquía multitenant basada en dominios y proyectos. Un dominio agrupa múltiples proyectos bajo una misma política de identidad empresarial, facilitando la integración con directorios activos institucionales. Dentro del dominio creamos proyectos o tenants, como observamos en el diagrama con la Facultad de Ingeniería y el grupo de Investigación en Inteligencia Artificial. Cada proyecto cuenta con un conjunto estricto de cuotas que limitan la cantidad máxima de núcleos de procesamiento, gigabytes de memoria RAM, almacenamiento persistente en disco y direcciones IP públicas asignables. Esto previene que un departamento agote los recursos del clúster y permite aislar el tráfico de red mediante redes virtuales superpuestas e imputar costes mediante telemetría.</aside>
@@ -583,7 +587,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: OpenStack Networking Guide — Physical Infrastructure</span>
+      <span class="src">Fuente: docs.openstack.org/arch-design/design-networking.html</span>
       <span>8 / 15</span>
     </div>
     <aside class="guion">Al diseñar la infraestructura física para alojar OpenStack en un centro de datos, el principio cardinal es la segmentación de redes en el plano underlay. Jamás debemos mezclar el tráfico administrativo con el flujo de datos de los usuarios o las operaciones de lectura y escritura de disco. Como observamos en el diagrama, una topología de grado de producción define al menos cuatro redes físicas o VLANs aisladas. La red de gestión comunica las APIs con la base de datos MariaDB y las colas RabbitMQ. La red de superposición o túneles transporta los paquetes encapsulados en Geneve o VXLAN entre hipervisores, requiriendo paquetes gigantes con MTU de nueve mil bytes para evitar fragmentación. La red de almacenamiento transporta el tráfico masivo de bloques hacia el clúster Ceph sin congestionar la gestión, mientras que la red externa conecta los enrutadores virtuales de Neutron con Internet mediante un bloque de direcciones IP públicas.</aside>
@@ -658,7 +662,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: OpenStack Deployment Projects Guide</span>
+      <span class="src">Fuente: docs.openstack.org/kolla-ansible/latest/ · docs.openstack.org/openstack-ansible/latest/ · docs.openstack.org/devstack/latest/</span>
       <span>9 / 15</span>
     </div>
     <aside class="guion">Instalar OpenStack manualmente configurando decenas de archivos de texto en cada servidor es una receta segura para el error humano. Por esta razón, el ecosistema ha desarrollado métodos de despliegue adaptados a cada escenario operativo. Para el ámbito académico y de desarrollo rápido contamos con DevStack, un guión oficial en Bash que compila y arranca todos los servicios sobre una máquina virtual con Ubuntu en menos de veinte minutos, perfecto para laboratorios prácticos. Canonical ofrece MicroStack, que empaqueta OpenStack dentro de contenedores snap instalables con una sola instrucción en la terminal. Para entornos de producción empresarial, el estándar de facto es Kolla-Ansible, el cual ejecuta cada microservicio de OpenStack dentro de contenedores Docker y utiliza recetas de Ansible para aplicar actualizaciones continuas sin detener las máquinas de los clientes. Finalmente, operadores modernos gestionan el plano de control completo como aplicaciones nativas sobre Kubernetes.</aside>
@@ -711,7 +715,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: OpenStack Kolla-Ansible vs DevStack Architectural Guide</span>
+      <span class="src">Fuente: docs.openstack.org/devstack/latest/ · docs.openstack.org/kolla-ansible/latest/user/quickstart.html</span>
       <span>10 / 15</span>
     </div>
     <aside class="guion">Al comparar DevStack con Kolla-Ansible entendemos la diferencia entre un prototipo desechable y una plataforma de misión crítica. DevStack fue concebido por los desarrolladores de OpenStack para probar cambios de código en repositorios Git. En DevStack, todos los servicios se ejecutan directamente sobre el sistema operativo mediante unidades de systemd compartiendo las librerías de Python globales. Si reinicias la máquina o modificas dependencias, el entorno puede corromperse fácilmente, pero su gran ventaja es que requiere apenas cuatro núcleos y ocho gigabytes de memoria, funcionando perfectamente en una máquina virtual de desarrollo. En contraste, Kolla-Ansible empaqueta cada demonio de OpenStack en su propia imagen de contenedor con dependencias aisladas. Si nova-api se actualiza, únicamente se reemplaza su contenedor sin tocar el hipervisor ni interrumpir el tráfico de las máquinas virtuales existentes, soportando alta disponibilidad con tres nodos controladores.</aside>
@@ -740,7 +744,7 @@
           <text x="20" y="170" font-size="12" fill="#555">• Nube privada y pública</text>
           <text x="20" y="195" font-size="12" fill="#555">• Orquestación de VMs y bare metal</text>
           <text x="20" y="220" font-size="12" fill="#555">• Redes virtuales SDN avanzadas</text>
-          <text x="20" y="245" font-size="12" fill="#555">• Miles de empresas en producción</text>
+          <text x="20" y="245" font-size="12" fill="#555">• VMs, contenedores y bare metal</text>
           <rect x="15" y="265" width="220" height="40" rx="4" fill="#eee"/>
           <text x="125" y="290" text-anchor="middle" font-size="11" font-weight="600" fill="#555">El núcleo de la IaaS abierta</text>
         </g>
@@ -768,7 +772,7 @@
           <text x="20" y="170" font-size="12" fill="#555">• Nube de borde distribuida</text>
           <text x="20" y="195" font-size="12" fill="#555">• Latencia ultrabaja determinista</text>
           <text x="20" y="220" font-size="12" fill="#555">• Optimizado para antenas telco</text>
-          <text x="20" y="245" font-size="12" fill="#555">• Alta disponibilidad en 2 nodos</text>
+          <text x="20" y="245" font-size="12" fill="#555">• Pensado para el borde (edge)</text>
           <rect x="15" y="265" width="220" height="40" rx="4" fill="#eee"/>
           <text x="125" y="290" text-anchor="middle" font-size="11" font-weight="600" fill="#555">El cerebro de las redes 5G</text>
         </g>
@@ -790,111 +794,117 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: openinfra.org — Proyectos Oficiales OpenInfra</span>
+      <span class="src">Fuente: openinfra.org/projects/ (OpenStack, Kata Containers, StarlingX, Zuul)</span>
       <span>11 / 15</span>
     </div>
-    <aside class="guion">Es muy importante tener una perspectiva amplia: OpenStack no es un proyecto aislado, sino el buque insignia de la Fundación OpenInfra, una entidad que agrupa a cientos de corporaciones tecnológicas para construir el futuro de la infraestructura abierta. Además de OpenStack, la fundación supervisa tres tecnologías cruciales en el panorama actual. La primera es Kata Containers, que combina la velocidad de arranque y la ligereza de los contenedores de software con la seguridad y aislamiento estricto de una máquina virtual basada en hardware, impidiendo que una brecha en un contenedor afecte al kernel compartido. La segunda es StarlingX, una distribución especialmente optimizada para computación en el borde y redes de telecomunicaciones móviles 5G, capaz de operar clústeres redundantes en ubicaciones remotas con conectividad intermitente. Y la tercera es Zuul, un motor de pruebas continuas que valida el código antes de permitir su integración definitiva en los repositorios.</aside>
+    <aside class="guion">Es muy importante tener una perspectiva amplia: OpenStack no es un proyecto aislado, sino el buque insignia de la Fundación OpenInfra, una fundación que reúne a una comunidad global para construir el futuro de la infraestructura abierta. Además de OpenStack, la fundación supervisa tres tecnologías cruciales en el panorama actual. La primera es Kata Containers, que combina la velocidad de arranque y la ligereza de los contenedores de software con la seguridad y aislamiento estricto de una máquina virtual basada en hardware, impidiendo que una brecha en un contenedor afecte al kernel compartido. La segunda es StarlingX, una distribución especialmente optimizada para computación en el borde y redes de telecomunicaciones móviles 5G, pensada para computación en el borde y redes de telecomunicaciones. Y la tercera es Zuul, un motor de pruebas continuas que valida el código antes de permitir su integración definitiva en los repositorios.</aside>
   </section>
 
   <section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">Casos Reales</div>
-      <h2>OpenStack en el mundo real: Ciencia y telecomunicaciones</h2>
+      <h2>OpenStack en el mundo real: CERN y telecomunicaciones</h2>
       <div class="rule"></div>
-      <div class="sub">El CERN con más de 300.000 núcleos y los grandes operadores 5G demuestran la robustez de la plataforma.</div>
+      <div class="sub">Casos documentados por la comunidad OpenInfra: CERN (cerca de 300.000 núcleos en 2020) y operadores que virtualizan funciones de red.</div>
       <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
-      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Casos reales de estudio de OpenStack: CERN y Telecomunicaciones">
-        <rect x="50" y="30" width="520" height="425" rx="12" fill="#fdfbf7" stroke="#D4AF37" stroke-width="2"/>
-        <rect x="50" y="30" width="520" height="45" rx="12" fill="#f7ecd0"/>
-        <text x="310" y="58" text-anchor="middle" font-size="16" font-weight="700" fill="#8a6d1d">CERN — Centro Europeo de Física de Partículas</text>
-        <g transform="translate(80, 95)">
-          <text x="0" y="25" font-size="14" font-weight="700" fill="#333">La Mayor Nube Científica de Europa</text>
-          <text x="0" y="55" font-size="12" fill="#555">• Más de 300.000 núcleos de CPU gestionados con Nova</text>
-          <text x="0" y="80" font-size="12" fill="#555">• Miles de hipervisores KVM distribuidos en Suiza y Francia</text>
-          <text x="0" y="105" font-size="12" fill="#555">• Procesa los colosales datos del Gran Colisionador de Hadrones (LHC)</text>
-          <text x="0" y="130" font-size="12" fill="#555">• Aprovisionamiento bare-metal con Ironic para cálculo masivo</text>
-          <rect x="0" y="165" width="460" height="150" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
-          <text x="20" y="195" font-size="13" font-weight="700" fill="#8a6d1d">Por Qué Eligieron OpenStack:</text>
-          <text x="20" y="222" font-size="12" fill="#555">1. Costes inviables en nube pública ante petabytes de datos continuos.</text>
-          <text x="20" y="247" font-size="12" fill="#555">2. Capacidad de personalizar el scheduler de Nova para física teórica.</text>
-          <text x="20" y="272" font-size="12" fill="#555">3. Transparencia total del código fuente ante auditorías de investigación.</text>
-        </g>
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Casos reales de OpenStack: CERN y telecomunicaciones">
+        <defs><clipPath id="clipCern"><rect x="70" y="85" width="480" height="150" rx="6"/></clipPath></defs>
+        <rect x="50" y="20" width="520" height="455" rx="12" fill="#fdfbf7" stroke="#D4AF37" stroke-width="2"/>
+        <rect x="50" y="20" width="520" height="45" rx="12" fill="#f7ecd0"/>
+        <text x="310" y="49" text-anchor="middle" font-size="16" font-weight="700" fill="#8a6d1d">CERN — nube privada con OpenStack</text>
+        <image href="assets/fotos/cern-sala-servidores-02.jpg" x="70" y="85" width="480" height="150" preserveAspectRatio="xMidYMid slice" clip-path="url(#clipCern)"/>
+        <text x="70" y="251" font-size="11" fill="#6b6b6b">Sala de servidores del CERN. Foto: Florian Hirzinger, CC BY-SA 3.0 (Wikimedia Commons)</text>
+        <text x="75" y="282" font-size="13" fill="#444">• 2012: decide una nube privada para usar mejor los equipos (2017)</text>
+        <text x="75" y="306" font-size="13" fill="#444">• Julio de 2013: entra en producción con unos cientos de nodos</text>
+        <text x="75" y="330" font-size="13" fill="#444">• 2014: 65.000 núcleos · 2017: más de 280.000 en 60 celdas Nova</text>
+        <text x="75" y="354" font-size="13" font-weight="700" fill="#8a6d1d">• 2020: cerca de 300.000 núcleos en 80 celdas Nova</text>
+        <text x="75" y="378" font-size="13" fill="#444">• 11 proyectos: Magnum, Ironic, Cinder, Neutron, CephFS...</text>
+        <rect x="70" y="398" width="480" height="62" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
+        <text x="85" y="421" font-size="12" font-weight="700" fill="#8a6d1d">Dato de 2020: la cifra actual no se verificó públicamente.</text>
+        <text x="85" y="442" font-size="12" fill="#555">Motivo declarado (2017): mejorar la utilización y acortar el</text>
+        <text x="85" y="457" font-size="12" fill="#555">tiempo de entrega de recursos de cómputo.</text>
 
-        <rect x="610" y="30" width="520" height="425" rx="12" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
-        <rect x="610" y="30" width="520" height="45" rx="12" fill="#f9eef0"/>
-        <text x="870" y="58" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Operadores de Telecomunicaciones (AT&T, Telefónica)</text>
-        <g transform="translate(640, 95)">
-          <text x="0" y="25" font-size="14" font-weight="700" fill="#333">Virtualización de Funciones de Red (NFV 5G)</text>
-          <text x="0" y="55" font-size="12" fill="#555">• Reemplazo de hardware propietario de red por software abierto</text>
-          <text x="0" y="80" font-size="12" fill="#555">• Routers de borde, firewalls y núcleos de paquetes móviles virtualizados</text>
-          <text x="0" y="105" font-size="12" fill="#555">• Aceleración de paquetes con SR-IOV y DPDK para latencias sub-milisegundo</text>
-          <text x="0" y="130" font-size="12" fill="#555">• Orquestación con OpenStack Tacker y Neutron OVN</text>
-          <rect x="0" y="165" width="460" height="150" rx="8" fill="#fff" stroke="#A6192E" stroke-width="1.5"/>
-          <text x="20" y="195" font-size="13" font-weight="700" fill="#A6192E">Por Qué Eligieron OpenStack:</text>
-          <text x="20" y="222" font-size="12" fill="#555">1. Escalabilidad elástica en cientos de centrales telefónicas de borde.</text>
-          <text x="20" y="247" font-size="12" fill="#555">2. Independencia frente a fabricantes tradicionales de telecomunicaciones.</text>
-          <text x="20" y="272" font-size="12" fill="#555">3. Tiempo de despliegue de nuevos servicios reducido de meses a horas.</text>
+        <rect x="610" y="20" width="520" height="455" rx="12" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+        <rect x="610" y="20" width="520" height="45" rx="12" fill="#f3dde1"/>
+        <text x="870" y="49" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Telecomunicaciones: NFV sobre OpenStack (2016)</text>
+        <g transform="translate(640, 85)">
+          <text x="0" y="22" font-size="14" font-weight="700" fill="#333">SK Telecom (Corea del Sur)</text>
+          <text x="0" y="48" font-size="12.5" fill="#555">• Virtualizar funciones de red tradicionales: IMS y EPC</text>
+          <text x="0" y="72" font-size="12.5" fill="#555">• Escalamiento elástico ante picos de tráfico</text>
+          <text x="0" y="96" font-size="12.5" fill="#555">• Servicios dedicados multi-inquilino con encadenamiento</text>
+          <text x="0" y="120" font-size="12.5" fill="#555">  de servicios orquestado</text>
+          <text x="0" y="162" font-size="14" font-weight="700" fill="#333">Comcast (EE. UU.)</text>
+          <text x="0" y="188" font-size="12.5" fill="#555">• Nube «Elastic Cloud» basada en OpenStack</text>
+          <text x="0" y="212" font-size="12.5" fill="#555">• NFV: de equipos físicos a orquestación por software</text>
+          <text x="0" y="236" font-size="12.5" fill="#555">• Despliegues más rápidos e instancias dedicadas al cliente</text>
+          <rect x="0" y="262" width="460" height="100" rx="8" fill="#fff" stroke="#A6192E" stroke-width="1.5"/>
+          <text x="20" y="288" font-size="13" font-weight="700" fill="#A6192E">Qué nos enseñan los dos casos</text>
+          <text x="20" y="312" font-size="12" fill="#555">Los mismos servicios (Nova, Neutron, Cinder, Ironic) sirven</text>
+          <text x="20" y="332" font-size="12" fill="#555">desde la ciencia hasta las redes móviles. Fuentes de 2016 y 2020:</text>
+          <text x="20" y="350" font-size="12" fill="#555">verifica siempre la cifra más reciente.</text>
         </g>
       </svg>
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: CERN OpenStack Whitepaper y ETSI NFV Case Studies</span>
+      <span class="src">Fuente: superuser.openinfra.org: cern-openstack-update (2020) y roundtable-nfv (2016) · Foto: F. Hirzinger, CC BY-SA 3.0</span>
       <span>12 / 15</span>
     </div>
-    <aside class="guion">Para corroborar que OpenStack es una tecnología plenamente madura, analicemos dos de sus casos de implementación más sobresalientes en el planeta. En el ámbito científico, el Centro Europeo para la Investigación Nuclear opera una de las nubes privadas más colosales del mundo, superando los trescientos mil núcleos de procesamiento para registrar y analizar los billones de colisiones de partículas que produce el Gran Colisionador de Hadrones. Para el CERN, contratar semejante escala de cómputo en la nube pública resultaría financieramente imposible por el volumen monstruoso de petabytes transferidos. Por otra parte, las gigantescas operadoras de telecomunicaciones como AT&T y Telefónica adoptaron OpenStack como estándar de virtualización de funciones de red para sus redes cinco G, reemplazando conmutadores propietarios costosos por enrutadores de paquetes ejecutándose sobre servidores estándar x86 con aceleración por hardware.</aside>
+    <aside class="guion">Para ver que OpenStack es una tecnología madura, miremos dos casos documentados por la comunidad OpenInfra. El primero es el CERN, el laboratorio europeo de física de partículas. En 2012 su departamento de informática decidió montar una nube privada con OpenStack para aprovechar mejor los equipos y acortar el tiempo de entrega de recursos, y la puso en producción en julio de 2013. En 2014 tenía unos sesenta y cinco mil núcleos de procesamiento; en 2017 superaba los doscientos ochenta mil, y en 2020 la propia comunidad reportaba alrededor de trescientos mil núcleos repartidos en ochenta celdas de Nova, con once proyectos de OpenStack, entre ellos Magnum, Ironic, Cinder y Neutron. Fíjate que son cifras de 2020, no de hoy. El segundo caso viene de las telecomunicaciones: en una mesa redonda de 2016, SK Telecom explicó que usaba OpenStack para virtualizar funciones de red como IMS y EPC con escalamiento elástico, y Comcast señaló que la virtualización de funciones de red acelera los despliegues y permite ofrecer instancias dedicadas a los clientes.</aside>
   </section>
 
   <section class="slide" data-parte="1">
     <div class="s-head">
-      <div class="kicker">Caso Colombiano</div>
-      <h2>Corporación Industrial del Caribe: Nube privada portuaria</h2>
+      <div class="kicker">Caso ilustrativo del curso</div>
+      <h2>Caso ilustrativo: nube privada para una terminal portuaria</h2>
       <div class="rule"></div>
-      <div class="sub">Empresa logística en Barranquilla: soberanía DIAN, control SCADA y latencia mínima sobre el río Magdalena.</div>
+      <div class="sub">Escenario ficticio del curso, no una empresa real: soberanía de datos, control industrial y latencia mínima en Barranquilla.</div>
       <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
-      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Caso Corporación Industrial del Caribe con OpenStack en Barranquilla">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Caso ilustrativo CIC con OpenStack en Barranquilla">
         <rect x="50" y="20" width="1080" height="440" rx="12" fill="#fafafa" stroke="#A6192E" stroke-width="2"/>
         <rect x="50" y="20" width="1080" height="42" rx="12" fill="#f9eef0"/>
-        <text x="590" y="47" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Corporación Industrial del Caribe (CIC) — Terminal Portuaria Barranquilla</text>
+        <text x="420" y="47" text-anchor="middle" font-size="16" font-weight="700" fill="#A6192E">Corporación Industrial del Caribe (CIC) — terminal portuaria</text>
+        <rect x="835" y="29" width="280" height="26" rx="13" fill="#D4AF37"/>
+        <text x="975" y="47" text-anchor="middle" font-size="13" font-weight="800" fill="#2A2A2A">CASO ILUSTRATIVO · cifras ilustrativas</text>
 
         <g transform="translate(80, 85)">
           <rect width="310" height="350" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
           <text x="155" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#333">1. Desafío Operativo</text>
           <text x="20" y="65" font-size="12" fill="#555">• Sistema SCADA de grúas pórtico</text>
-          <text x="20" y="90" font-size="12" fill="#555">• Necesidad de latencia menor a 4 ms</text>
-          <text x="20" y="115" font-size="12" fill="#555">• Facturación aduanera DIAN en tiempo real</text>
-          <text x="20" y="140" font-size="12" fill="#555">• Costes crecientes en dólares en AWS</text>
-          <text x="20" y="165" font-size="12" fill="#555">• Tráfico de vídeo de cámaras de seguridad</text>
+          <text x="20" y="90" font-size="12" fill="#555">• Latencia objetivo menor a 4 ms (supuesto)</text>
+          <text x="20" y="115" font-size="12" fill="#555">• Facturación aduanera en línea (supuesto)</text>
+          <text x="20" y="140" font-size="12" fill="#555">• Costos en dólares crecientes en nube pública</text>
+          <text x="20" y="165" font-size="12" fill="#555">• Video de cámaras de seguridad</text>
           <rect x="15" y="210" width="280" height="115" rx="6" fill="#f9eef0"/>
-          <text x="25" y="235" font-size="11" font-weight="700" fill="#A6192E">Restricción Normativa:</text>
-          <text x="25" y="255" font-size="11" fill="#444">Inspección de aduanas exigía que las bases de pesaje de carga no salieran del territorio colombiano (Ley 1581).</text>
+          <text x="25" y="235" font-size="11" font-weight="700" fill="#A6192E">Restricción del escenario:</text>
+          <text x="25" y="255" font-size="11" fill="#444">Supuesto del caso: las bases de pesaje de carga</text><text x="25" y="271" font-size="11" fill="#444">permanecen en el país. La Ley 1581 de 2012</text><text x="25" y="287" font-size="11" fill="#444">(art. 26) regula la transferencia internacional.</text>
         </g>
 
         <g transform="translate(435, 85)">
           <rect width="310" height="350" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
-          <text x="155" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#8a6d1d">2. Arquitectura Adoptada</text>
+          <text x="155" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#8a6d1d">2. Arquitectura propuesta</text>
           <text x="20" y="65" font-size="12" fill="#555">• Clúster OpenStack privado en sitio</text>
           <text x="20" y="90" font-size="12" fill="#555">• 3 Nodos controladores en clúster HA</text>
-          <text x="20" y="115" font-size="12" fill="#555">• 12 Nodos de cómputo KVM</text>
-          <text x="20" y="140" font-size="12" fill="#555">• Clúster Ceph con 120 TB útiles</text>
+          <text x="20" y="115" font-size="12" fill="#555">• 12 nodos de cómputo KVM (ilustrativo)</text>
+          <text x="20" y="140" font-size="12" fill="#555">• Clúster Ceph, 120 TB útiles (ilustrativo)</text>
           <text x="20" y="165" font-size="12" fill="#555">• Redes Neutron OVN con VXLAN</text>
           <rect x="15" y="210" width="280" height="115" rx="6" fill="#fdfbf7"/>
           <text x="25" y="235" font-size="11" font-weight="700" fill="#8a6d1d">Integración Híbrida:</text>
-          <text x="25" y="255" font-size="11" fill="#444">Enlace VPN IPsec hacia AWS us-east-1 para copias de seguridad de largo plazo en Amazon S3 Glacier.</text>
+          <text x="25" y="255" font-size="11" fill="#444">VPN IPsec hacia AWS us-east-1 para copias de</text><text x="25" y="271" font-size="11" fill="#444">seguridad de largo plazo en Amazon S3 Glacier.</text>
         </g>
 
         <g transform="translate(775, 85)">
           <rect width="310" height="350" rx="8" fill="#fff" stroke="#3b8a3b" stroke-width="1.5"/>
           <text x="155" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#3b8a3b">3. Impacto Medible</text>
-          <text x="20" y="65" font-size="12" fill="#555">• Latencia de grúas reducida a 1.8 ms</text>
-          <text x="20" y="90" font-size="12" fill="#555">• Reducción del 42% en costes operativos</text>
-          <text x="20" y="115" font-size="12" fill="#555">• Independencia de la fluctuación del dólar</text>
-          <text x="20" y="140" font-size="12" fill="#555">• Aprovisionamiento de VMs en 90 segundos</text>
-          <text x="20" y="165" font-size="12" fill="#555">• Auditoría DIAN aprobada sin observaciones</text>
+          <text x="20" y="65" font-size="12" fill="#555">• Latencia: 1,8 ms (ilustrativo)</text>
+          <text x="20" y="90" font-size="12" fill="#555">• Costos operativos: -42 % (ilustrativo)</text>
+          <text x="20" y="115" font-size="12" fill="#555">• Menos exposición a la tasa del dólar</text>
+          <text x="20" y="140" font-size="12" fill="#555">• VMs listas en 90 s (ilustrativo)</text>
+          <text x="20" y="165" font-size="12" fill="#555">• Datos sensibles dentro del país</text>
           <rect x="15" y="210" width="280" height="115" rx="6" fill="#f6faf6"/>
           <text x="25" y="235" font-size="11" font-weight="700" fill="#3b8a3b">Lección Aprendida:</text>
           <text x="25" y="255" font-size="11" fill="#444">Nube privada y pública se complementan según carga y latencia.</text>
@@ -903,10 +913,10 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: Caso de estudio Corporación Industrial del Caribe (elaboración propia)</span>
+      <span class="src">Caso ilustrativo del curso (ficticio, elaboración propia; cifras ilustrativas) · marco legal: Ley 1581 de 2012, art. 26 (secretariasenado.gov.co/senado/basedoc/ley_1581_2012.html)</span>
       <span>13 / 15</span>
     </div>
-    <aside class="guion">Aterricemos estos conceptos en nuestra realidad local con el caso de la Corporación Industrial del Caribe, una importante compañía logística y de operación portuaria ubicada a orillas del río Magdalena en Barranquilla. Esta organización enfrentaba tres problemas críticos: primero, el control telemático de las grúas de carga requería tiempos de respuesta de red inferiores a cuatro milisegundos para evitar desconexiones peligrosas; segundo, la facturación electrónica aduanera de contenedores debía cumplir con exigencias estrictas de la DIAN y de la Ley de Habeas Data, prohibiendo alojar los registros primarios fuera del territorio nacional; y tercero, la factura mensual en dólares por concepto de tráfico de salida hacia la nube pública crecía de forma insostenible. Al desplegar un clúster privado de OpenStack con doce servidores de cómputo y almacenamiento distribuido Ceph, lograron tiempos de respuesta locales de uno punto ocho milisegundos, redujeron sus costos operativos en un cuarenta y dos por ciento y consolidaron una arquitectura híbrida comunicada con AWS.</aside>
+    <aside class="guion">Aterricemos estos conceptos con un caso ilustrativo del curso: la Corporación Industrial del Caribe, una empresa ficticia que inventamos para practicar, no una compañía real. Imagina una terminal portuaria en Barranquilla con tres problemas. Primero, el control de las grúas necesita respuestas de red muy rápidas, y en el escenario fijamos un objetivo de menos de cuatro milisegundos. Segundo, la facturación de contenedores debe mantener sus registros primarios dentro del país; recuerda que la Ley 1581 de 2012, en su artículo 26, regula la transferencia internacional de datos. Y tercero, la factura en dólares por nube pública crece. Como respuesta, el escenario propone un clúster privado de OpenStack con doce servidores de cómputo y almacenamiento Ceph, conectado por VPN a AWS para copias de largo plazo. Todas las cifras de esta diapositiva, como el 1,8 milisegundos y el 42 por ciento de ahorro, son ilustrativas: sirven para razonar la arquitectura, no son resultados medidos de una empresa.</aside>
   </section>
 
   <section class="slide" data-parte="1">
@@ -992,7 +1002,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: OpenStack Technical Committee — Core Services Definition</span>
+      <span class="src">Fuente: openstack.org/software/ · docs.openstack.org/install-guide/get-started-logical-architecture.html</span>
       <span>14 / 15</span>
     </div>
     <aside class="guion">Esta taxonomía visual clasifica el extenso universo de OpenStack en dos grandes categorías conceptuales. A la izquierda encontramos los servicios núcleo indispensables que constituyen la infraestructura base de cualquier nube privada: Keystone para la gestión de usuarios y tokens, Nova para la asignación de cómputo en hipervisores, Neutron para la interconexión mediante redes virtuales, Glance como catálogo de imágenes de disco y Cinder para volúmenes en bloque persistentes, todos accesibles mediante Horizon. A la derecha figuran los servicios avanzados que dotan a la plataforma de capacidades de nivel superior, como Heat para automatizar infraestructura mediante plantillas declarativas, Zun para ejecutar contenedores ligeros bajo demanda, Octavia para balanceo de carga automático e Ironic para aprovisionar servidores físicos bare metal sin virtualización intermedia.</aside>
@@ -1042,7 +1052,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 1 de 4</span>
-      <span class="src">Fuente: Síntesis de la Parte 1 — Arquitectura en la Nube CUC</span>
+      <span class="src">Fuente: docs.openstack.org/install-guide/ · releases.openstack.org · openinfra.org/projects/</span>
       <span>15 / 15</span>
     </div>
     <aside class="guion">Con esta diapositiva concluimos la primera parte de nuestra sesión sobre OpenStack y arquitectura de nube privada. A lo largo de estos quince minutos hemos desmitificado la diferencia fundamental entre tener simples hipervisores y operar una verdadera nube elástica programable, analizando las cuatro razones estratégicas por las cuales las organizaciones deciden mantener infraestructura propia: soberanía de datos personales, latencias críticas de red, previsibilidad económica y autonomía tecnológica. Conocimos los principios arquitectónicos del plano de control desacoplado y los métodos de despliegue desde DevStack hasta clústeres contenerizados. En la Parte dos nos adentraremos en el corazón de los servicios núcleo de cómputo, autenticación y almacenamiento, analizando paso a paso qué ocurre por debajo cuando un usuario solicita el despliegue de una nueva máquina virtual.</aside>
@@ -1134,7 +1144,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Keystone Architecture and Fernet Token Specification</span>
+      <span class="src">Fuente: docs.openstack.org/keystone/latest/admin/tokens-overview.html · .../admin/fernet-token-faq.html</span>
       <span>2 / 15</span>
     </div>
     <aside class="guion">Keystone es el punto de inicio de cualquier interacción en OpenStack. Ningún usuario ni servicio puede ejecutar una acción sin pasar primero por su validación. Cuando un administrador o un script de Terraform inicia sesión, invoca la API versión tres de autenticación. Keystone verifica las credenciales consultando la base de datos MariaDB o integrándose directamente con el Active Directory institucional de la empresa mediante LDAP. Si las credenciales son válidas, Keystone genera un token criptográfico en formato Fernet. A diferencia de las versiones antiguas de OpenStack que guardaban millones de tokens en disco provocando fallos de rendimiento, los tokens Fernet son cadenas firmadas y cifradas con claves simétricas que viajan en la cabecera HTTP sin saturar la base de datos. Junto al token, Keystone entrega el catálogo de endpoints, una libreta de direcciones que le indica al cliente las URLs exactas de Nova, Neutron y Glance.</aside>
@@ -1215,7 +1225,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Nova Architecture Specification — OpenStack Documentation</span>
+      <span class="src">Fuente: docs.openstack.org/nova/latest/admin/architecture.html</span>
       <span>3 / 15</span>
     </div>
     <aside class="guion">Nova no es un único programa masivo, sino un ecosistema coordinado de demonios especializados. En los nodos controladores residen tres componentes esenciales. nova-api es la puerta de entrada que recibe las peticiones REST, valida las cuotas y devuelve inmediatamente una respuesta afirmativa para no bloquear al usuario. nova-conductor actúa como un intermediario seguro indispensable: las mejores prácticas de seguridad de OpenStack prohíben estrictamente que los hipervisores tengan acceso directo a las credenciales de la base de datos MariaDB; en su lugar, cualquier lectura o actualización de metadatos se solicita a nova-conductor vía mensajería. El tercer componente controlador es nova-scheduler, el cerebro estratégico encargado de decidir en qué servidor físico debe alojarse cada máquina. Por último, en cada uno de los servidores físicos de cómputo se ejecuta nova-compute, el cual dialoga con la API de libvirt y el módulo KVM del kernel para arrancar las instancias virtuales.</aside>
@@ -1317,7 +1327,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: OpenStack Placement Service and Filter Scheduler Guide</span>
+      <span class="src">Fuente: docs.openstack.org/nova/latest/admin/scheduling.html · docs.openstack.org/placement/latest/</span>
       <span>4 / 15</span>
     </div>
     <aside class="guion">Cuando solicitamos una máquina virtual indicando un sabor como m1.medium con dos vCPUs y cuatro gigabytes de memoria, entra en acción el Nova Scheduler. Este componente resuelve el problema de colocación mediante un algoritmo de dos fases sucesivas. En la primera fase, denominada Filtering, el scheduler toma la lista de todos los servidores físicos del centro de datos y aplica filtros booleanos eliminatorios: descarta los hipervisores inactivos con ComputeFilter, elimina los nodos que no tienen suficiente memoria RAM libre con RamFilter, y aplica reglas avanzadas como ServerGroupAntiAffinityFilter, asegurando por ejemplo que si ya tienes un servidor web en un host, su réplica de respaldo se instale en otro bastidor distinto. Aquellos servidores que superan los filtros pasan a la segunda fase de Weighing o ponderación, donde se calculan funciones de peso multiplicador. El host con mayor puntuación disponible se adjudica la instancia y recibe la orden por RabbitMQ.</aside>
@@ -1399,7 +1409,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Glance Image Service Guide and QEMU Copy-on-Write Documentation</span>
+      <span class="src">Fuente: docs.openstack.org/glance/latest/ · docs.openstack.org/glance/latest/admin/manage-images.html</span>
       <span>5 / 15</span>
     </div>
     <aside class="guion">Glance cumple el rol fundamental de almacenar y entregar las plantillas de sistemas operativos con las que cobran vida las instancias. Cuando un ingeniero solicita el despliegue de una máquina con Ubuntu veinticuatro cero cuatro, Glance no envía una copia completa pesada de diez gigabytes a través del cable de red para cada instancia. Por el contrario, el hipervisor descarga la imagen base una sola vez y la preserva en su directorio local de caché como un archivo de solo lectura. Para cada nueva máquina virtual, el sistema QEMU genera una capa diferencial bajo el mecanismo de copia en escritura o Copy-on-Write. Mientras la máquina solo lea archivos del sistema operativo, los lee directamente de la imagen compartida dorada; únicamente cuando la máquina modifica o crea un archivo nuevo, ese cambio puntual se graba en su capa delgada independiente, ahorrando almacenamiento y permitiendo arranques en menos de diez segundos.</aside>
@@ -1463,7 +1473,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Cinder Storage Architecture and Nova Storage Ephemeral Guide</span>
+      <span class="src">Fuente: docs.openstack.org/cinder/latest/ · docs.openstack.org/nova/latest/user/flavors.html</span>
       <span>6 / 15</span>
     </div>
     <aside class="guion">Una de las decisiones más críticas que toma un arquitecto en OpenStack es dónde residen los datos de sus sistemas. Por defecto, cuando lanzamos una máquina virtual básica, Nova crea un disco raíz efímero directamente en los discos locales del hipervisor físico donde corre la instancia. Si esa máquina virtual se destruye o si el hipervisor físico sufre una avería eléctrica grave, los datos del disco efímero desaparecen irremediablemente. Por esta razón, cualquier carga con persistencia como una base de datos relacional PostgreSQL o un motor de transacciones debe utilizar Cinder. Cinder es el servicio de almacenamiento en bloque que provisiona volúmenes desacoplados sobre redes SAN o clústeres distribuidos Ceph. Un volumen de Cinder existe independientemente de las máquinas virtuales: puedes apagar la instancia, desacoplar el volumen y volver a conectarlo a otro servidor en segundos sin perder un solo byte.</aside>
@@ -1534,7 +1544,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Cinder Storage Driver Matrix and Ceph RBD Integration Guide</span>
+      <span class="src">Fuente: docs.openstack.org/cinder/latest/reference/support-matrix.html · .../configuration/block-storage/volume-drivers.html</span>
       <span>7 / 15</span>
     </div>
     <aside class="guion">Cinder no implementa su propio sistema de archivos de almacenamiento, sino que actúa como una capa de abstracción controladora que delega el aprovisionamiento en drivers especializados. Su arquitectura se compone de cinder-api para recibir peticiones, cinder-scheduler para seleccionar el pool con suficiente capacidad y cinder-volume para interactuar con los motores de almacenamiento. Como observamos en el diagrama, existen tres backends predominantes en la industria. El primero y más popular en despliegues modernos es Ceph RBD, un sistema distribuido de código abierto que triplica los datos automáticamente y permite que cualquier hipervisor acceda a los volúmenes, facilitando la migración en vivo de máquinas virtuales sin mover datos físicos. El segundo es LVM sobre iSCSI, muy utilizado en laboratorios o entornos sencillos. Y el tercero son las cabinas de almacenamiento corporativo por fibra óptica de fabricantes como PureStorage o Dell EMC, integradas mediante drivers certificados.</aside>
@@ -1616,7 +1626,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: OpenStack Compute Instance Creation Workflow (Official Docs)</span>
+      <span class="src">Fuente: docs.openstack.org/nova/latest/admin/architecture.html · docs.openstack.org/nova/latest/reference/vm-states.html</span>
       <span>8 / 15</span>
     </div>
     <aside class="guion">Adentrémonos en el flujo técnico detallado de aprovisionamiento de una máquina virtual, examinando los primeros cuatro pasos del proceso. En el paso uno, cuando el usuario presiona el botón de lanzar instancia en Horizon, el navegador solicita a Keystone la validación de sus credenciales y recibe un token criptográfico Fernet con los permisos de su proyecto. En el paso dos, el cliente efectúa una llamada HTTP POST contra el servicio nova-api; este valida la vigencia del token y las cuotas de CPU del proyecto, inserta el registro inicial en estado BUILD en la base de datos MariaDB y responde inmediatamente con un código doscientos dos Aceptado. En el paso tres, nova-api publica un mensaje en RabbitMQ que es recogido por nova-conductor para armar la especificación técnica de la instancia. En el paso cuatro, el Nova Scheduler ejecuta el filtrado y ponderación, seleccionando el hipervisor óptimo y encolando la orden para su agente local.</aside>
@@ -1697,7 +1707,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: OpenStack Compute Instance Creation Workflow (Official Docs)</span>
+      <span class="src">Fuente: docs.openstack.org/install-guide/launch-instance.html · docs.openstack.org/nova/latest/reference/vm-states.html</span>
       <span>9 / 15</span>
     </div>
     <aside class="guion">Continuamos con la segunda mitad del flujo de lanzamiento, donde el agente nova-compute del nodo seleccionado toma el control absoluto. En el paso cinco, nova-compute contacta a Neutron para reservar un puerto de red virtual, asignándole una dirección IP fija y asociando los grupos de seguridad del cortafuegos. En el paso seis, nova-compute solicita la imagen a Glance: si ya reside en el disco local la reutiliza al instante; de lo contrario, la descarga y genera el disco diferencial CoW. En el paso siete, si la máquina requería un volumen persistente de Cinder, este se acopla mediante iSCSI o Ceph RBD. Finalmente, en el paso ocho, nova-compute ensambla el archivo XML de definición, inyecta las llaves SSH públicas y los scripts de inicialización de cloud-init, y ordena a libvirt encender la máquina virtual KVM, reportando a la base de datos el estado ACTIVE.</aside>
@@ -1765,7 +1775,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Cloud-init Documentation and OpenStack Metadata API</span>
+      <span class="src">Fuente: cloudinit.readthedocs.io/en/latest/reference/datasources/openstack.html · docs.openstack.org/nova/latest/user/metadata.html</span>
       <span>10 / 15</span>
     </div>
     <aside class="guion">Para que una plantilla genérica de sistema operativo se convierta en un servidor web plenamente configurado, OpenStack utiliza cloud-init. Al igual que en AWS y Azure, OpenStack implementa un servicio de metadatos accesible mediante la conocida dirección IP de enlace local ciento sesenta y nueve punto doscientos cincuenta y cuatro punto ciento sesenta y nueve punto doscientos cincuenta y cuatro. Cuando el kernel de Linux arranca, cloud-init interroga automáticamente esta dirección para averiguar qué nombre de máquina debe asignarse y qué llave SSH pública debe colocarse en la cuenta de usuario para permitir el acceso remoto seguro sin necesidad de utilizar contraseñas por defecto. Asimismo, si proporcionamos un script en el campo user-data, cloud-init lo ejecuta con privilegios de root durante el primer inicio, instalando paquetes de software y configurando aplicaciones de forma cien por ciento desatendida.</aside>
@@ -1863,7 +1873,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Nova Configuration Reference — Resource Allocation Ratios</span>
+      <span class="src">Fuente: docs.openstack.org/arch-design/design-compute/design-compute-overcommit.html · docs.openstack.org/nova/latest/user/flavors.html</span>
       <span>11 / 15</span>
     </div>
     <aside class="guion">Al aprovisionar máquinas virtuales, Nova utiliza sabores o flavors, que definen combinaciones preestablecidas de vCPUs, memoria RAM y capacidad de disco raíz, análogo a los tipos de instancia en AWS. Pero aquí surge una de las ventajas financieras más poderosas de la nube privada: la sobreasignación de recursos o overcommit. En hardware físico, la mayoría de los servidores corporativos utilizan en promedio menos del veinte por ciento de su capacidad de cómputo. Por consiguiente, Nova permite configurar ratios de sobreasignación de CPU como cuatro a uno o seis a uno, permitiendo que un servidor de treinta y dos núcleos físicos hospede hasta ciento veintiocho núcleos virtuales compartidos. Sin embargo, con la memoria RAM la regla de oro es ser sumamente conservador: el ratio debe mantenerse en uno punto cero a uno, asegurando que cada gigabyte asignado exista en la memoria física real para evitar que el sistema operativo mate procesos por falta de memoria.</aside>
@@ -1934,7 +1944,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: OpenStack High Availability Guide and Masakari Project</span>
+      <span class="src">Fuente: docs.openstack.org/ha-guide/ · docs.openstack.org/masakari/latest/ · docs.openstack.org/nova/latest/admin/evacuate.html</span>
       <span>12 / 15</span>
     </div>
     <aside class="guion">La resiliencia en OpenStack se diseña en múltiples capas para garantizar que ningún fallo de hardware detenga la operación del negocio. En el plano de control, los servicios de API operan en clúster activo-activo repartidos en tres nodos controladores bajo una IP virtual compartida con Keepalived. Para el mantenimiento planificado de servidores, Nova incorpora la capacidad de Live Migration o migración en vivo: si necesitas aplicar parches de seguridad al hipervisor físico, puedes mover una máquina virtual en plena ejecución hacia otro nodo en caliente copiando su memoria RAM por la red sin desconectar a los usuarios. Y en caso de desastres no planificados donde un servidor físico sufre una avería súbita, el servicio Masakari detecta la pérdida de latidos, aísla el nodo averiado para evitar inconsistencias y vuelve a levantar automáticamente las máquinas virtuales afectadas sobre hipervisores sanos.</aside>
@@ -1995,10 +2005,10 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Caso aplicado clúster web con OpenStack Nova y Cinder</span>
+      <span class="src">Fuente: docs.openstack.org/nova/latest/user/server-groups.html · docs.openstack.org/cinder/latest/ (escenario didáctico del curso)</span>
       <span>13 / 15</span>
     </div>
-    <aside class="guion">Veamos cómo se articulan estos servicios en un escenario real de producción empresarial. Supongamos que requerimos desplegar un clúster web de alta disponibilidad compuesto por dos servidores NGINX para atender el portal de clientes de la Corporación Industrial del Caribe. Al solicitar las máquinas, definimos un grupo de servidores con política de anti-afinidad. El Nova Scheduler garantiza que srv-web-01 se ubique en el nodo de cómputo del rack uno, mientras que srv-web-02 se coloque obligatoriamente en el rack dos. Ambas máquinas descargan la misma imagen dorada de Ubuntu veinticuatro cero cuatro desde Glance utilizando copia en escritura, y sus llaves SSH se configuran mediante cloud-init. Adicionalmente, conectamos a cada instancia un volumen de cincuenta gigabytes aprovisionado con Cinder en Ceph para almacenar los registros de acceso de forma persistente, logrando tolerancia completa a fallos de hardware.</aside>
+    <aside class="guion">Veamos cómo se articulan estos servicios en un escenario de producción empresarial. Supongamos que requerimos desplegar un clúster web de alta disponibilidad compuesto por dos servidores NGINX para atender el portal de clientes de la Corporación Industrial del Caribe, nuestra empresa ficticia del caso ilustrativo del curso. Al solicitar las máquinas, definimos un grupo de servidores con política de anti-afinidad. El Nova Scheduler garantiza que srv-web-01 se ubique en el nodo de cómputo del rack uno, mientras que srv-web-02 se coloque obligatoriamente en el rack dos. Ambas máquinas descargan la misma imagen dorada de Ubuntu veinticuatro cero cuatro desde Glance utilizando copia en escritura, y sus llaves SSH se configuran mediante cloud-init. Adicionalmente, conectamos a cada instancia un volumen de cincuenta gigabytes aprovisionado con Cinder en Ceph para almacenar los registros de acceso de forma persistente, logrando tolerancia completa a fallos de hardware.</aside>
   </section>
 
   <section class="slide" data-parte="2">
@@ -2064,7 +2074,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: OpenStack Troubleshooting and Operations Guide</span>
+      <span class="src">Fuente: docs.openstack.org/nova/latest/admin/support-compute.html</span>
       <span>14 / 15</span>
     </div>
     <aside class="guion">En la vida real de un ingeniero de nube, no todos los lanzamientos terminan en éxito inmediato. Conocer las técnicas sistemáticas de diagnóstico es indispensable para resolver incidencias de producción. Si una máquina queda en estado ERROR con el mensaje NoValidHostFound, significa que ningún hipervisor superó el filtrado del Nova Scheduler, usualmente por falta de memoria RAM libre en el clúster o restricciones excesivas de anti-afinidad, lo cual se confirma examinando nova-scheduler.log. Si la máquina arranca en estado ACTIVE pero no responde a conexiones SSH, el culpable típico es un grupo de seguridad de Neutron que carece de la regla de ingreso para el puerto veintidós, o un fallo en cloud-init al descargar metadatos. Con la orden openstack console log show podemos inspeccionar la salida del monitor virtual de arranque de la máquina como si estuviéramos sentados físicamente frente a su pantalla.</aside>
@@ -2118,7 +2128,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 2 de 4</span>
-      <span class="src">Fuente: Síntesis de la Parte 2 — Arquitectura en la Nube CUC</span>
+      <span class="src">Fuente: docs.openstack.org/keystone/latest/ · docs.openstack.org/nova/latest/ · docs.openstack.org/glance/latest/ · docs.openstack.org/cinder/latest/</span>
       <span>15 / 15</span>
     </div>
     <aside class="guion">Hemos finalizado la segunda parte de nuestra sesión sobre OpenStack, alcanzando una comprensión profunda de los mecanismos que hacen posible aprovisionar servidores bajo demanda en centros de datos modernos. Conocimos la emisión criptográfica de tokens Fernet en Keystone, el proceso matemático de filtrado y ponderación del Nova Scheduler, la eficiencia de almacenamiento de Glance mediante discos diferenciales de copia en escritura, y el ciclo completo de inicialización con cloud-init. En la Parte tres nos sumergiremos en uno de los temas más desafiantes y apasionantes de la computación en la nube: las redes definidas por software con Neutron. Analizaremos cómo se construyen redes superpuestas con VXLAN y Geneve, cómo operan los enrutadores virtuales y cómo viajan los paquetes hacia Internet mediante Floating IPs públicas asignadas a las instancias.</aside>
@@ -2137,6 +2147,7 @@
       Semana 12 · Periodo 2026-2 · Barranquilla, Colombia
     </div>
     <div class="cover-sub">Neutron, túneles Geneve/VXLAN, routers virtuales L3, Floating IPs y el motor de almacenamiento distribuido Ceph.</div>
+    <div class="cover-foto"><img src="assets/fotos/cern-centro-datos-12.jpg" alt="Centro de datos del CERN"><div class="cap">Centro de cómputo del CERN. Foto: SimonWaldherr, CC BY-SA 4.0, Wikimedia Commons (commons.wikimedia.org/wiki/File:CERN_Computer_Center_12.jpg)</div></div>
     <aside class="guion">Bienvenidos a la tercera parte de nuestra clase sobre OpenStack. En esta sesión abordaremos las redes definidas por software con Neutron, los túneles Geneve y VXLAN, los enrutadores virtuales L3 con Floating IPs y el motor de almacenamiento distribuido Ceph. Comprenderemos cómo desacoplar la topología de red del hardware físico subyacente.</aside>
   </section>
 
@@ -2220,7 +2231,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Neutron Architecture Specification</span>
+      <span class="src">Fuente: docs.openstack.org/neutron/latest/admin/intro-os-networking.html</span>
       <span>2 / 15</span>
     </div>
     <aside class="guion">El servicio Neutron representa la máxima expresión de las redes definidas por software en el centro de datos moderno. Tradicionalmente, cuando un equipo de desarrollo requería una nueva subred de red, debía solicitar al administrador de redes la creación de una VLAN física y la apertura de puertos en conmutadores de borde, proceso que demoraba semanas. Neutron transforma la red en código. Cada proyecto o departamento puede crear sus propios conmutadores virtuales, subredes y enrutadores mediante llamadas a la API. Fíjate en el fenómeno ilustrado en pantalla: el Proyecto A y el Proyecto B utilizan exactamente el mismo segmento de red diez punto cero punto cero punto cero barra veinticuatro. En redes físicas esto causaría un conflicto destructivo de direcciones IP duplicadas; sin embargo, en Neutron cada red viaja encapsulada en un túnel lógico totalmente aislado, permitiendo el uso de direcciones solapadas sin interferencias.</aside>
@@ -2285,7 +2296,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Networking Guide — Provider vs Self-Service Networks</span>
+      <span class="src">Fuente: docs.openstack.org/neutron/latest/admin/deploy-ovs-provider.html · .../deploy-ovs-selfservice.html</span>
       <span>3 / 15</span>
     </div>
     <aside class="guion">En Neutron existen dos filosofías de redes claramente diferenciadas que todo diseñador de infraestructura debe dominar. Las redes de proveedor o Provider Networks son configuradas exclusivamente por los administradores de la plataforma y conectan las máquinas virtuales de forma directa con la red física del centro de datos mediante VLANs tradicionales o interfaces planas. Su ventaja es que ofrecen el rendimiento de conmutación más elevado sin sobrecarga de encabezados, pero están limitadas a un máximo de cuatro mil noventa y cuatro identificadores. Por el contrario, las redes de autoservicio o Self-Service Networks son creadas libremente por los desarrolladores y operan mediante túneles de superposición utilizando VXLAN o Geneve. Los paquetes de las máquinas virtuales se empaquetan dentro de datagramas UDP que viajan transparentemente sobre la red física, permitiendo soportar hasta dieciséis millones de redes virtuales independientes.</aside>
@@ -2355,7 +2366,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: IETF RFC 7348 (VXLAN) y RFC 8926 (Geneve)</span>
+      <span class="src">Fuente: IETF RFC 7348 (rfc-editor.org/rfc/rfc7348) y RFC 8926 (rfc-editor.org/rfc/rfc8926)</span>
       <span>4 / 15</span>
     </div>
     <aside class="guion">Para comprender la magia de las redes superpuestas, observemos la estructura del paquete que viaja a través del cable físico. Cuando una máquina virtual envía un paquete Ethernet hacia otra máquina ubicada en un hipervisor diferente, el software del nodo de origen envuelve el paquete original dentro de una cabecera UDP estándar. Este paquete encapsulado contiene una dirección IP de origen y destino correspondientes a los servidores físicos, y una cabecera Geneve o VXLAN que incluye el identificador de red virtual VNI de veinticuatro bits. Los conmutadores físicos del centro de datos no tienen conocimiento de las máquinas virtuales: únicamente conmutan tráfico UDP normal entre hipervisores a máxima velocidad. En las versiones modernas de OpenStack, el protocolo estándar es Geneve, el cual supera a VXLAN al permitir cabeceras de longitud variable para transportar metadatos de seguridad y telemetría de OVN.</aside>
@@ -2420,7 +2431,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Neutron OVN Driver Specification</span>
+      <span class="src">Fuente: docs.openstack.org/neutron/latest/admin/config-ml2.html · docs.openstack.org/neutron/latest/admin/ovn/index.html</span>
       <span>5 / 15</span>
     </div>
     <aside class="guion">La evolución interna de Neutron es uno de los mayores hitos de ingeniería en el software libre. Durante años, Neutron utilizó el controlador Open vSwitch tradicional basado en múltiples demonios escritos en Python que operaban en cada nodo: un agente para DHCP ejecutando dnsmasq, un agente L3 configurando tablas iptables y un agente de conmutación. Este modelo clásico presentaba problemas de escalabilidad en clústeres masivos porque saturaba el bus RabbitMQ con millones de llamadas RPC. Para solucionar esto, la comunidad introdujo OVN u Open Virtual Network como estándar definitivo. OVN reemplaza todos esos agentes pesados por dos bases de datos ultra rápidas en memoria y un único controlador escrito en lenguaje C en cada hipervisor. OVN resuelve el DHCP directamente en la tarjeta virtual y compila flujos OpenFlow instantáneamente, soportando miles de nodos sin degradación.</aside>
@@ -2497,7 +2508,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Neutron L3 Agent and Distributed Virtual Routing Guide</span>
+      <span class="src">Fuente: docs.openstack.org/neutron/latest/admin/intro-nat.html · .../admin/config-dvr-ha-snat.html</span>
       <span>6 / 15</span>
     </div>
     <aside class="guion">Analicemos con detalle cómo viajan los paquetes de red entre las máquinas virtuales privadas e Internet. Un enrutador virtual de Neutron cumple dos funciones de traducción de direcciones fundamentales. La primera es SNAT o traducción de direcciones de origen: cuando un servidor de base de datos privado requiere descargar actualizaciones de paquetes del sistema operativo, el router toma sus paquetes privados diez punto cero punto uno punto treinta y reemplaza la dirección de origen por la IP pública de su propia interfaz de salida, permitiendo que la máquina navegue por Internet pero permaneciendo invisible para atacantes externos. La segunda función es la Floating IP, análoga a la Elastic IP de AWS. Mediante una regla de DNAT uno a uno, el router asocia una dirección pública estática como ciento ochenta y uno punto cuarenta y ocho punto cincuenta punto ochenta y ocho directamente a la interfaz privada del servidor web, haciendo posible recibir conexiones HTTP y SSH desde cualquier lugar del mundo.</aside>
@@ -2576,7 +2587,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Security Guide and Linux Conntrack Architecture</span>
+      <span class="src">Fuente: docs.openstack.org/security-guide/networking/services.html · docs.openstack.org/neutron/latest/admin/intro-os-networking.html</span>
       <span>7 / 15</span>
     </div>
     <aside class="guion">La seguridad perimetral en OpenStack se implementa mediante Security Groups o grupos de seguridad, equivalentes exactos a los security groups de Amazon Web Services. Operan bajo una estricta política de confianza cero: por defecto, todo el tráfico entrante está bloqueado a menos que exista una regla explícita que autorice el protocolo, el puerto y el bloque de direcciones IP de origen. Además, son cortafuegos con estado. Esto significa que cuando el hipervisor permite una conexión entrante al puerto ochenta, el subsistema Conntrack del kernel de Linux registra la sesión en memoria; cuando el servidor web responde al cliente, el paquete de vuelta se autoriza automáticamente sin requerir reglas complejas de salida. Lo más valioso es que este filtrado se ejecuta en el conmutador virtual del hipervisor antes de que los paquetes alcancen el procesador de la máquina virtual.</aside>
@@ -2644,7 +2655,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: Ceph Architecture Guide and OpenStack Storage Integration</span>
+      <span class="src">Fuente: docs.ceph.com/en/latest/architecture/</span>
       <span>8 / 15</span>
     </div>
     <aside class="guion">En el mundo del almacenamiento para nubes privadas, Ceph es indiscutiblemente el rey. Ceph es un clúster de almacenamiento distribuido diseñado para no tener ningún punto único de fallo y escalar hasta decenas de petabytes sobre hardware convencional. OpenStack se integra de manera nativa con Ceph: Cinder lo utiliza para volúmenes en bloque, Glance para el catálogo de imágenes y Nova para discos raíz efímeros. En el corazón de Ceph reside RADOS, gobernado por dos componentes principales. Los monitores o MONs mantienen el mapa de estado del clúster mediante quórum Paxos en número impar de tres o cinco nodos. Los OSDs o demonios de almacenamiento gestionan cada disco físico de forma individual, replicando automáticamente los datos tres veces en servidores físicos de racks distintos. Además, el algoritmo CRUSH calcula matemáticamente la ubicación de cada bloque sin necesidad de consultar bases de datos centrales lentas.</aside>
@@ -2723,7 +2734,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: Sage Weil — CRUSH: Controlled, Scalable, Decentralized Placement of Replicated Data</span>
+      <span class="src">Fuente: Weil et al., CRUSH, SC06 (ceph.com/assets/pdfs/weil-crush-sc06.pdf) · docs.ceph.com/en/latest/architecture/</span>
       <span>9 / 15</span>
     </div>
     <aside class="guion">La genialidad técnica detrás de Ceph es el algoritmo CRUSH, diseñado originalmente por Sage Weil en la Universidad de California. Los sistemas de almacenamiento tradicionales dependen de una tabla central de metadatos: si almacenas diez millones de archivos, el controlador debe buscar en la tabla en qué sector físico reside cada fragmento, convirtiéndose en un cuello de botella fatal. CRUSH elimina las tablas centrales por completo. Cuando Nova o Cinder necesitan leer o escribir un bloque, ejecutan una función matemática pseudoaleatoria determinista pasando el identificador del objeto y el mapa del clúster; la función devuelve de inmediato la lista exacta de los tres discos OSD donde se encuentra el dato. Además, el mapa CRUSH define dominios de falla físicos, garantizando que cada una de las tres réplicas se almacene en bastidores con fuentes de alimentación eléctrica independientes.</aside>
@@ -2790,7 +2801,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Storage Architecture Comparison Guide</span>
+      <span class="src">Fuente: docs.openstack.org/swift/latest/overview_architecture.html · docs.openstack.org/arch-design/design-storage/design-storage-concepts.html</span>
       <span>10 / 15</span>
     </div>
     <aside class="guion">Es esencial no confundir el almacenamiento en bloque con el almacenamiento de objetos, ya que resuelven problemas arquitectónicos totalmente distintos. Cinder provee almacenamiento en bloque, equivalente a Amazon EBS: entrega un dispositivo crudo que el sistema operativo de la máquina virtual reconoce como un disco duro, permitiendo formatearlo con sistemas de archivos y ejecutar lecturas y escrituras aleatorias a nivel de sector, siendo indispensable para bases de datos relacionales como MariaDB o PostgreSQL. Por otro lado, Swift provee almacenamiento de objetos, equivalente a Amazon S3. En Swift los datos no se montan como discos, sino que se suben y descargan como objetos inmutables mediante llamadas HTTP utilizando verbos GET y PUT a través de la red, ideal para depósitos masivos de documentos, archivos multimedia y copias de seguridad.</aside>
@@ -2863,7 +2874,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Octavia Load Balancing Documentation</span>
+      <span class="src">Fuente: docs.openstack.org/octavia/latest/reference/introduction.html</span>
       <span>11 / 15</span>
     </div>
     <aside class="guion">Octavia es el servicio oficial de balanceo de carga en OpenStack, reemplazando a la antigua extensión LBaaS versión dos. Su arquitectura es elegante y altamente escalable: cuando un usuario crea un balanceador de carga, Octavia no se limita a configurar un proceso compartido, sino que aprovisiona automáticamente una o dos máquinas virtuales especializadas y ligeras denominadas Amphorae. Dentro de estas máquinas virtuales se ejecuta una instancia optimizada de HAProxy para distribuir el tráfico HTTP, HTTPS o TCP entre los miembros del pool, junto con Keepalived para proporcionar redundancia activa-pasiva de la dirección IP virtual. Octavia realiza comprobaciones de salud periódicas contra los servidores backend; si una máquina deja de responder, la retira del balanceo en milisegundos evitando caídas de servicio.</aside>
@@ -2939,7 +2950,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Designate DNSaaS Architecture Guide</span>
+      <span class="src">Fuente: docs.openstack.org/designate/latest/intro/index.html</span>
       <span>12 / 15</span>
     </div>
     <aside class="guion">Designate es el servicio de nombres de dominio como servicio de OpenStack, equivalente a Amazon Route cincuenta y tres. Permite a los usuarios crear zonas DNS públicas o privadas y gestionar registros de tipo A, CNAME o MX mediante la API REST de la nube o la consola web. La característica más potente de Designate es su módulo designate-sink: este componente se conecta al bus RabbitMQ y escucha los eventos de red generados por Neutron. Cuando asignamos una dirección IP flotante a una máquina virtual con el nombre srv-web, designate-sink intercepta el evento y escribe automáticamente el registro DNS en el servidor PowerDNS o BIND institucional, haciendo que el nuevo servidor sea accesible por su nombre de dominio completo de forma instantánea sin requerir intervención del administrador de sistemas.</aside>
@@ -3018,7 +3029,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: Topología de centro de datos empresarial OpenStack + Ceph</span>
+      <span class="src">Fuente: docs.openstack.org/neutron/latest/admin/ovn/refarch/refarch.html · docs.openstack.org/arch-design/design-networking.html</span>
       <span>13 / 15</span>
     </div>
     <aside class="guion">Esta diapositiva integra todas las piezas de red y almacenamiento en una arquitectura holística de centro de datos. En el extremo superior observamos la red externa de proveedor, conectada directamente a los conmutadores troncales de borde para canalizar el tráfico hacia Internet. En el nivel intermedio opera el plano de control OVN con sus bases de datos en clúster, programando las tablas de flujo OpenFlow directamente en los hipervisores KVM, permitiendo que el tráfico este-oeste entre máquinas virtuales se conmute localmente a través de túneles Geneve sin pasar por cuellos de botella en los controladores. Y en el nivel inferior se encuentra la red de almacenamiento dedicada, donde un clúster Ceph expone pools diferenciados para volúmenes persistentes de Cinder, imágenes doradas de Glance y repositorios de objetos compatibles con S3.</aside>
@@ -3079,7 +3090,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: OpenStack Telecom NFV and OVS-DPDK Performance Whitepaper</span>
+      <span class="src">Fuente: docs.openstack.org/neutron/latest/admin/config-sriov.html · docs.openstack.org/nova/latest/admin/pci-passthrough.html</span>
       <span>14 / 15</span>
     </div>
     <aside class="guion">Cuando diseñamos nubes privadas para operadoras de telecomunicaciones o aplicaciones con exigencias extremas de rendimiento de paquetes por segundo, la pila de red convencional del kernel de Linux puede convertirse en un cuello de botella debido al costo de las interrupciones de CPU. Para superar este límite, OpenStack admite dos tecnologías de aceleración de vanguardia. La primera es SR-IOV, que divide la tarjeta de red física en funciones virtuales de hardware y las conecta directamente a la máquina virtual mediante PCI Pass-Through, alcanzando velocidades nativas de cien gigabits con latencia mínima, aunque sacrificando la migración en vivo. La segunda es OVS-DPDK, que traslada la conmutación al espacio de usuario utilizando controladores de sondeo continuo y páginas de memoria gigantes de un gigabyte, multiplicando por diez el rendimiento sin perder la capacidad de migrar máquinas virtuales en caliente.</aside>
@@ -3133,7 +3144,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 3 de 4</span>
-      <span class="src">Fuente: Síntesis de la Parte 3 — Arquitectura en la Nube CUC</span>
+      <span class="src">Fuente: docs.openstack.org/neutron/latest/ · docs.ceph.com/en/latest/architecture/ · docs.openstack.org/octavia/latest/</span>
       <span>15 / 15</span>
     </div>
     <aside class="guion">Con esta diapositiva cerramos la tercera parte de nuestra clase sobre OpenStack, habiendo dominado los mecanismos de interconexión y almacenamiento distribuido. Aprendimos cómo Neutron desacopla la topología lógica de los servidores físicos mediante túneles de superposición VXLAN y Geneve, garantizando que múltiples proyectos puedan usar los mismos rangos de direcciones privadas sin conflictos. Entendimos la evolución de los conmutadores virtuales hacia OVN y el funcionamiento del enrutamiento L3 con Floating IPs. En el ámbito del almacenamiento, desmitificamos la arquitectura de Ceph y su algoritmo matemático CRUSH con replicación distribuida. En la cuarta y última parte completaremos nuestra visión de OpenStack explorando los servicios avanzados: la consola web Horizon, la orquestación declarativa con Heat, los contenedores con Zun e Ironic para cómputo bare-metal.</aside>
@@ -3151,8 +3162,8 @@
       Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>
       Semana 12 · Periodo 2026-2 · Barranquilla, Colombia
     </div>
-    <div class="cover-sub">Horizon, Heat (HOT), Zun, Magnum, Ironic, telemetría Ceilometer, caso integrador Barranquilla CIC y síntesis.</div>
-    <aside class="guion">Bienvenidos a la cuarta y última parte de nuestra clase sobre OpenStack. En esta sesión examinaremos los servicios de alto nivel que transforman la infraestructura básica en una verdadera plataforma de servicios: la interfaz web Horizon, la orquestación declarativa con plantillas Heat, la gestión de contenedores con Zun y Magnum, y el aprovisionamiento bare-metal con Ironic. Cerraremos analizando el caso práctico del clúster CIC en Barranquilla, el dimensionamiento empresarial y las cuatro ideas maestras de la semana.</aside>
+    <div class="cover-sub">Horizon, Heat (HOT), Zun, Magnum, Ironic, telemetría Ceilometer, caso ilustrativo CIC y síntesis.</div>
+    <aside class="guion">Bienvenidos a la cuarta y última parte de nuestra clase sobre OpenStack. En esta sesión examinaremos los servicios de alto nivel que transforman la infraestructura básica en una verdadera plataforma de servicios: la interfaz web Horizon, la orquestación declarativa con plantillas Heat, la gestión de contenedores con Zun y Magnum, y el aprovisionamiento bare-metal con Ironic. Cerraremos analizando el caso ilustrativo del clúster CIC, una empresa ficticia del curso, el dimensionamiento empresarial y las cuatro ideas maestras de la semana.</aside>
   </section>
 
   <section class="slide" data-parte="4">
@@ -3233,7 +3244,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: OpenStack Horizon Documentation — 2026</span>
+      <span class="src">Fuente: docs.openstack.org/horizon/latest/ · docs.openstack.org/horizon/latest/user/index.html</span>
       <span>47 / 60</span>
     </div>
     <aside class="guion">Fíjate en Horizon, la cara gráfica y el portal de autoservicio de OpenStack. Horizon es una aplicación web escrita en Python bajo el framework Django, servida típicamente por Apache mediante mod_wsgi. Es fundamental comprender que Horizon no tiene base de datos propia de recursos: es completamente stateless y funciona exclusivamente consumiendo las APIs REST del plano de control mediante los tokens Fernet que Keystone le otorga al usuario. Cuando un desarrollador inicia sesión, la interfaz adapta dinámicamente sus paneles según los privilegios del proyecto asignado. Desde el panel Proyecto los usuarios pueden desplegar instancias, crear volúmenes Cinder y asociar Floating IPs. Además, Horizon integra un proxy WebSockets llamado noVNC que permite abrir la consola gráfica de cualquier máquina virtual directamente en el navegador, lo cual es invaluable cuando se pierde conectividad por SSH.</aside>
@@ -3308,7 +3319,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: OpenStack Heat Orchestration Service — OpenInfra Foundation</span>
+      <span class="src">Fuente: docs.openstack.org/heat/latest/template_guide/hot_guide.html · docs.openstack.org/heat/latest/</span>
       <span>48 / 60</span>
     </div>
     <aside class="guion">Entender Heat es comprender la infraestructura como código en OpenStack. Heat cumple exactamente el mismo rol que AWS CloudFormation o Azure Resource Manager, pero de forma abierta. En lugar de crear redes, routers, discos y máquinas virtuales ejecutando decenas de comandos en la terminal, definimos un archivo declarativo en formato YAML llamado plantilla HOT. Como observas en el ejemplo, la plantilla describe parámetros de entrada, recursos a aprovisionar con tipos estandarizados como OS::Neutron::Net u OS::Nova::Server, y valores de salida. El motor Heat Engine lee el documento, construye un grafo acíclico dirigido de dependencias y orquesta las llamadas a los microservicios en el orden correcto. Además, Heat gestiona grupos de autoescalado dinámico mediante alarmas métricas, permitiendo que la nube privada reaccione automáticamente a picos de tráfico.</aside>
@@ -3392,7 +3403,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: OpenStack Zun Project Documentation — 2026</span>
+      <span class="src">Fuente: docs.openstack.org/zun/latest/</span>
       <span>49 / 60</span>
     </div>
     <aside class="guion">Pasemos a Zun, uno de los proyectos más interesantes del catálogo moderno de OpenStack. Tradicionalmente, si querías ejecutar contenedores en una nube privada, debías crear primero una máquina virtual completa en Nova, instalar un sistema operativo como Ubuntu, configurar Docker y finalmente desplegar la aplicación. Esto consumía gigabytes de RAM solo para los kernels de las máquinas virtuales y retrasaba el aprovisionamiento. Zun introduce Contenedores como Servicio de forma nativa: aprovisiona contenedores en segundos sobre el motor containerd del host físico sin requerir hipervisores. Lo verdaderamente potente de Zun es que los contenedores son ciudadanos de primera clase en OpenStack: mediante Kuryr reciben IPs directas de Neutron, aplican reglas de Security Groups, pueden asociar Floating IPs y montan volúmenes persistentes gestionados por Cinder.</aside>
@@ -3478,7 +3489,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: OpenStack Magnum Architecture Guide — OpenInfra</span>
+      <span class="src">Fuente: docs.openstack.org/magnum/latest/ · docs.openstack.org/magnum/latest/user/index.html</span>
       <span>50 / 60</span>
     </div>
     <aside class="guion">Si una organización necesita desplegar arquitecturas de microservicios complejas con Kubernetes, la respuesta en OpenStack es el servicio Magnum. Configurar un clúster de Kubernetes en alta disponibilidad sobre infraestructura física requiere instalar etcd distribuido, generar autoridades certificadoras, balancear la API y parametrizar plugins de red, lo cual toma días. Magnum automatiza este proceso por completo convirtiéndolo en una simple petición de API. El administrador define una plantilla de clúster especificando la versión de Kubernetes y las dimensiones de las máquinas. Al ordenar la creación, Magnum delega en Heat la construcción de la topología: crea las máquinas virtuales, configura un balanceador Octavia para el plano de control, despliega los certificados y entrega al ingeniero el archivo kubeconfig listo para usar con kubectl.</aside>
@@ -3567,7 +3578,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: OpenStack Ironic Bare Metal Service — 2026</span>
+      <span class="src">Fuente: docs.openstack.org/ironic/latest/ · docs.openstack.org/ironic/latest/user/index.html</span>
       <span>51 / 60</span>
     </div>
     <aside class="guion">Imagina que necesitas la flexibilidad de una API de nube para aprovisionar servidores, pero el rendimiento de tu carga de trabajo no tolera la sobrecarga de un hipervisor, como ocurre en el entrenamiento de modelos de inteligencia artificial con clústeres de GPUs o bases de datos de alta transaccionalidad. Aquí entra Ironic, el servicio de cómputo bare-metal de OpenStack. Ironic se integra con Nova como si fuera un hipervisor más, pero en lugar de instanciar una máquina virtual en KVM, interactúa con el procesador de administración remota del servidor físico mediante estándares como Redfish o IPMI. Ironic enciende el equipo, inicia un sistema mínimo por red mediante arranque PXE, copia la imagen de Glance directamente en los discos de estado sólido locales y reinicia el servidor físico entregándoselo al usuario en minutos.</aside>
@@ -3645,7 +3656,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: OpenStack Barbican Key Management API — 2026</span>
+      <span class="src">Fuente: docs.openstack.org/barbican/latest/ · docs.openstack.org/barbican/latest/api/index.html</span>
       <span>52 / 60</span>
     </div>
     <aside class="guion">En entornos regulados donde la confidencialidad es innegociable, la gestión de secretos no puede dejarse al azar ni almacenarse en texto plano en archivos de configuración. Barbican es el servicio de administración de llaves criptográficas y secretos de OpenStack, equivalente a AWS KMS o Azure Key Vault. Barbican proporciona una API segura para generar, almacenar y rotar llaves simétricas, pares asimétricos y certificados X.509, respaldándose en bóvedas de software como HashiCorp Vault o en módulos físicos de seguridad de hardware HSM. Sus dos integraciones más habituales son el cifrado transparente de volúmenes en Cinder mediante dm-crypt en Linux, asegurando que los datos en reposo estén protegidos ante sustracción física de discos, y la terminación de certificados HTTPS en los balanceadores de carga de Octavia.</aside>
@@ -3741,7 +3752,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: OpenStack Telemetry Architecture Guide — 2026</span>
+      <span class="src">Fuente: docs.openstack.org/ceilometer/latest/admin/telemetry-system-architecture.html</span>
       <span>53 / 60</span>
     </div>
     <aside class="guion">Una nube privada no puede gestionarse a ciegas; requiere telemetría para monitorear el consumo de recursos, disparar alarmas de autoescalado y facturar a las diferentes áreas de negocio. En OpenStack esta labor se divide en una cadena especializada. Ceilometer despliega agentes en cada nodo de cómputo para consultar periódicamente a libvirt sobre ciclos de CPU consumidos, memoria utilizada y paquetes de red transmitidos, además de capturar eventos del bus RabbitMQ. Estas métricas se almacenan en Gnocchi, una base de datos diseñada para series de tiempo que precalcula agregaciones estadísticas para evitar sobrecargar MariaDB. Sobre estos datos actúa Aodh evaluando reglas de umbral para alertar o invocar a Heat, mientras que CloudKitty transforma las métricas en reportes financieros de costo por hora para la tarificación interna corporativa.</aside>
@@ -3750,105 +3761,83 @@
   <section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">Análisis Estratégico</div>
-      <h2>OpenStack vs VMware Cloud Foundation vs AWS Outposts</h2>
+      <h2>OpenStack vs AWS Outposts: quién opera la infraestructura</h2>
       <div class="rule"></div>
-      <div class="sub">Matriz de decisión para el arquitecto: soberanía tecnológica, modelo de licenciamiento y control de hardware.</div>
+      <div class="sub">Dos formas de tener infraestructura en tu sitio: la operas tú (OpenStack) o la opera AWS (Outposts).</div>
       <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
-      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Tabla comparativa arquitectural">
-        <!-- Tabla comparativa -->
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Comparación OpenStack y AWS Outposts">
         <g transform="translate(40, 25)">
-          <rect width="1100" height="430" rx="12" fill="#fafafa" stroke="#666" stroke-width="1.5"/>
-
-          <!-- Cabecera Tabla -->
+          <rect width="1100" height="440" rx="12" fill="#fafafa" stroke="#666" stroke-width="1.5"/>
           <rect width="1100" height="50" rx="12" fill="#2a2a2a"/>
-          <text x="140" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Criterio Arquitectónico</text>
-          <text x="400" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#ffb4a2">OpenStack (Open Source)</text>
-          <text x="680" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#9cdcfe">VMware Cloud Foundation</text>
-          <text x="960" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#ffd166">AWS Outposts (Híbrido)</text>
-
-          <!-- Fila 1: Licenciamiento -->
-          <rect x="0" y="50" width="1100" height="60" fill="#fff"/>
-          <text x="25" y="85" font-size="12" font-weight="700" fill="#333">Modelo de Licencia</text>
-          <text x="400" y="80" text-anchor="middle" font-size="11" font-weight="700" fill="#3b8a3b">Apache 2.0 (100% Libre)</text>
-          <text x="400" y="98" text-anchor="middle" font-size="10" fill="#666">Sin costo por core ni por socket</text>
-          <text x="680" y="80" text-anchor="middle" font-size="11" font-weight="700" fill="#A6192E">Suscripción Broadcom</text>
-          <text x="680" y="98" text-anchor="middle" font-size="10" fill="#666">Costo recurrente elevado por core</text>
-          <text x="960" y="80" text-anchor="middle" font-size="11" font-weight="700" fill="#8a6d1d">Suscripción AWS Cloud</text>
-          <text x="960" y="98" text-anchor="middle" font-size="10" fill="#666">Contrato a 3 años por rack</text>
-          <line x1="0" y1="110" x2="1100" y2="110" stroke="#eee" stroke-width="1"/>
-
-          <!-- Fila 2: Dependencia de Hardware -->
-          <rect x="0" y="110" width="1100" height="60" fill="#fdfdfd"/>
-          <text x="25" y="145" font-size="12" font-weight="700" fill="#333">Soporte de Hardware</text>
-          <text x="400" y="140" text-anchor="middle" font-size="11" font-weight="700" fill="#3b8a3b">Agnóstico y Heterogéneo</text>
-          <text x="400" y="158" text-anchor="middle" font-size="10" fill="#666">Commodity x86, ARM, Ceph genérico</text>
-          <text x="680" y="140" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Lista HCL Restrictiva</text>
-          <text x="680" y="158" text-anchor="middle" font-size="10" fill="#666">Requiere servidores y SAN certificados</text>
-          <text x="960" y="140" text-anchor="middle" font-size="11" font-weight="700" fill="#A6192E">Hardware Propietario</text>
-          <text x="960" y="158" text-anchor="middle" font-size="10" fill="#666">AWS suministra e instala el rack físico</text>
-          <line x1="0" y1="170" x2="1100" y2="170" stroke="#eee" stroke-width="1"/>
-
-          <!-- Fila 3: Soberanía del Dato -->
-          <rect x="0" y="170" width="1100" height="60" fill="#fff"/>
-          <text x="25" y="205" font-size="12" font-weight="700" fill="#333">Soberanía y Air-Gapping</text>
-          <text x="400" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#3b8a3b">Total (100% Desconectado)</text>
-          <text x="400" y="218" text-anchor="middle" font-size="10" fill="#666">Opera sin ninguna conexión a Internet</text>
-          <text x="680" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#3b8a3b">Alta (Soporta Air-Gap)</text>
-          <text x="680" y="218" text-anchor="middle" font-size="10" fill="#666">vCenter local puede operar aislado</text>
-          <text x="960" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#A6192E">Parcial (Depende de AWS)</text>
-          <text x="960" y="218" text-anchor="middle" font-size="10" fill="#666">Requiere enlace continuo a región AWS</text>
-          <line x1="0" y1="230" x2="1100" y2="230" stroke="#eee" stroke-width="1"/>
-
-          <!-- Fila 4: Madurez y Complejidad -->
-          <rect x="0" y="230" width="1100" height="60" fill="#fdfdfd"/>
-          <text x="25" y="265" font-size="12" font-weight="700" fill="#333">Complejidad Operativa</text>
-          <text x="400" y="260" text-anchor="middle" font-size="11" font-weight="700" fill="#A6192E">Alta (Requiere Skills Internos)</text>
-          <text x="400" y="278" text-anchor="middle" font-size="10" fill="#666">Despliegue con Kolla-Ansible / Charms</text>
-          <text x="680" y="260" text-anchor="middle" font-size="11" font-weight="700" fill="#3b8a3b">Media (Ecosistema Amplio)</text>
-          <text x="680" y="278" text-anchor="middle" font-size="10" fill="#666">Herramientas visuales y soporte comercial</text>
-          <text x="960" y="260" text-anchor="middle" font-size="11" font-weight="700" fill="#3b8a3b">Baja (Manejado por AWS)</text>
-          <text x="960" y="278" text-anchor="middle" font-size="10" fill="#666">AWS gestiona mantenimiento y hardware</text>
-          <line x1="0" y1="290" x2="1100" y2="290" stroke="#eee" stroke-width="1"/>
-
-          <!-- Veredicto del Arquitecto -->
-          <rect x="20" y="310" width="1060" height="100" rx="8" fill="#f9eef0" stroke="#A6192E" stroke-width="1.5"/>
-          <text x="40" y="335" font-size="13" font-weight="700" fill="#A6192E">Veredicto del Arquitecto Cloud para Colombia y LATAM:</text>
-          <text x="40" y="358" font-size="11" fill="#333">• Con los cambios de licenciamiento de Broadcom en VMware, OpenStack se ha convertido en el principal receptor de migraciones corporativas.</text>
-          <text x="40" y="378" font-size="11" fill="#555">• OpenStack ofrece costo de licenciamiento cero, evitando la fuga masiva de divisas por suscripciones extranjeras en dólares.</text>
-          <text x="40" y="398" font-size="11" font-weight="600" fill="#8a6d1d">La inversión requerida se traslada a la formación del talento humano en ingeniería de nube.</text>
+          <text x="140" y="32" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Criterio</text>
+          <text x="520" y="32" text-anchor="middle" font-size="14" font-weight="700" fill="#ffb4a2">OpenStack</text>
+          <text x="880" y="32" text-anchor="middle" font-size="14" font-weight="700" fill="#ffd166">AWS Outposts</text>
+          <rect x="0" y="50" width="1100" height="64" fill="#fff"/>
+          <text x="25" y="88" font-size="13" font-weight="700" fill="#333">Licencia y costo</text>
+          <text x="520" y="78" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3b8a3b">Licencia Apache 2.0</text>
+          <text x="520" y="98" text-anchor="middle" font-size="11.5" fill="#555">Sin cuota de licencia; pagas hardware y personal</text>
+          <text x="880" y="78" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a6d1d">Servicio de AWS</text>
+          <text x="880" y="98" text-anchor="middle" font-size="11.5" fill="#555">Capacidad contratada por plazo de 3 años</text>
+          <line x1="0" y1="114" x2="1100" y2="114" stroke="#eee" stroke-width="1"/>
+          <rect x="0" y="114" width="1100" height="64" fill="#fdfdfd"/>
+          <text x="25" y="152" font-size="13" font-weight="700" fill="#333">Quién aporta el hardware</text>
+          <text x="520" y="142" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3b8a3b">Lo eliges y lo compras tú</text>
+          <text x="520" y="162" text-anchor="middle" font-size="11.5" fill="#555">Tu centro de datos, tus servidores</text>
+          <text x="880" y="142" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a6d1d">AWS entrega la infraestructura</text>
+          <text x="880" y="162" text-anchor="middle" font-size="11.5" fill="#555">Instalada en tu sitio, administrada por AWS</text>
+          <line x1="0" y1="178" x2="1100" y2="178" stroke="#eee" stroke-width="1"/>
+          <rect x="0" y="178" width="1100" height="64" fill="#fff"/>
+          <text x="25" y="216" font-size="13" font-weight="700" fill="#333">Relación con la nube pública</text>
+          <text x="520" y="206" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3b8a3b">Independiente por diseño</text>
+          <text x="520" y="226" text-anchor="middle" font-size="11.5" fill="#555">Tú decides si conectas con AWS u otra nube</text>
+          <text x="880" y="206" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a6d1d">Extensión de una región AWS</text>
+          <text x="880" y="226" text-anchor="middle" font-size="11.5" fill="#555">Se conecta a la región AWS asociada</text>
+          <line x1="0" y1="242" x2="1100" y2="242" stroke="#eee" stroke-width="1"/>
+          <rect x="0" y="242" width="1100" height="64" fill="#fdfdfd"/>
+          <text x="25" y="280" font-size="13" font-weight="700" fill="#333">Quién opera la plataforma</text>
+          <text x="520" y="270" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3b8a3b">Tu equipo de ingeniería</text>
+          <text x="520" y="290" text-anchor="middle" font-size="11.5" fill="#555">Instalar, actualizar y monitorear es tu tarea</text>
+          <text x="880" y="270" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a6d1d">AWS administra el servicio</text>
+          <text x="880" y="290" text-anchor="middle" font-size="11.5" fill="#555">Tú administras tus cargas y tus datos</text>
+          <line x1="0" y1="306" x2="1100" y2="306" stroke="#eee" stroke-width="1"/>
+          <rect x="20" y="320" width="1060" height="100" rx="8" fill="#f9eef0" stroke="#A6192E" stroke-width="1.5"/>
+          <text x="40" y="347" font-size="14" font-weight="700" fill="#A6192E">Cómo decide el arquitecto</text>
+          <text x="40" y="371" font-size="12.5" fill="#333">• ¿Quién debe operar la infraestructura: mi equipo o el proveedor?</text>
+          <text x="40" y="391" font-size="12.5" fill="#333">• ¿Dónde deben residir los datos y con qué enlace a la nube pública?</text>
+          <text x="40" y="411" font-size="12.5" font-weight="600" fill="#8a6d1d">• ¿Tengo el talento técnico para operar OpenStack? La inversión se traslada a las personas.</text>
         </g>
       </svg>
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: Gartner IaaS Comparison &amp; OpenInfra Foundation Market Report — 2026</span>
+      <span class="src">Fuente: governance.openstack.org/tc/reference/licensing.html · aws.amazon.com/outposts/ · aws.amazon.com/outposts/rack/pricing/</span>
       <span>54 / 60</span>
     </div>
-    <aside class="guion">Esta diapositiva sintetiza la matriz de decisión estratégica que todo arquitecto de nube debe dominar al evaluar infraestructura privada. Si comparamos OpenStack con soluciones privativas como VMware Cloud Foundation o nubes híbridas como AWS Outposts, los factores diferenciadores son claros. OpenStack ofrece una licencia de código abierto Apache 2.0 con costo cero por núcleo, mientras que VMware, tras la adquisición de Broadcom, impuso modelos de suscripción que multiplicaron los presupuestos de TI en muchas empresas latinoamericanas. En soporte de hardware, OpenStack es totalmente agnóstico, permitiendo reutilizar servidores x86 convencionales y almacenamiento distribuido con Ceph. Aunque OpenStack exige un equipo de ingeniería con mayores competencias operativas, otorga autonomía total y soberanía absoluta sobre los datos, sin depender de un enlace a Internet ni facturas recurrentes en dólares.</aside>
+    <aside class="guion">Esta diapositiva compara dos maneras de tener infraestructura en tu propio sitio. Con OpenStack, el software tiene licencia Apache dos punto cero, así que no pagas licencia por núcleo; tu costo es el hardware que eliges y el equipo que lo opera. Con AWS Outposts, AWS entrega la infraestructura, la instala en tu centro de datos y la administra como un servicio, que según su página de precios se contrata por un plazo de tres años con distintas opciones de pago. En cuanto a la relación con la nube pública, OpenStack es independiente por diseño, mientras que Outposts se conecta a la región de AWS asociada. Y en la operación, con OpenStack tu equipo instala, actualiza y monitorea; con Outposts, AWS administra el servicio y tú administras tus cargas. Fíjate en el cuadro inferior: el arquitecto decide según quién debe operar la infraestructura, dónde deben residir los datos y qué talento técnico tiene disponible.</aside>
   </section>
 
   <section class="slide" data-parte="4">
     <div class="s-head">
-      <div class="kicker">Caso Práctico Regional</div>
-      <h2>Caso Clúster Barranquilla CIC: Nube privada e híbrida</h2>
+      <div class="kicker">Caso ilustrativo del curso</div>
+      <h2>Caso ilustrativo CIC: nube privada e híbrida</h2>
       <div class="rule"></div>
-      <div class="sub">Arquitectura de referencia: 12 nodos de cómputo, Ceph distribuido y conectividad híbrida segura con AWS us-east-1.</div>
+      <div class="sub">Escenario ficticio del curso: 12 nodos de cómputo, Ceph y enlace híbrido con AWS us-east-1 (cifras ilustrativas).</div>
       <img class="logo-corner" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="CUC" onerror="this.style.display='none'">
     </div>
     <div class="s-body">
-      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Caso Práctico Barranquilla CIC">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Caso ilustrativo CIC">
         <!-- Bloque On-Premises: Clúster OpenStack CUC / CIC -->
         <g transform="translate(40, 20)">
           <rect width="600" height="440" rx="10" fill="#fafafa" stroke="#A6192E" stroke-width="2"/>
           <rect width="600" height="40" rx="10" fill="#f9eef0"/>
-          <text x="300" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">Centro de Innovación CIC (Barranquilla, Colombia)</text>
+          <text x="300" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#A6192E">CASO ILUSTRATIVO · centro de datos CIC (ficticio)</text>
 
           <!-- Control Plane HA -->
           <g transform="translate(25, 55)">
             <rect width="550" height="75" rx="6" fill="#fff" stroke="#A6192E" stroke-width="1.5"/>
-            <text x="20" y="22" font-size="12" font-weight="700" fill="#A6192E">Plano de Control en Alta Disponibilidad (3 Controladores Dell R640):</text>
+            <text x="20" y="22" font-size="12" font-weight="700" fill="#A6192E">Plano de Control en Alta Disponibilidad (3 controladores):</text>
             <text x="20" y="42" font-size="10" fill="#555">• HAProxy + Keepalived con VIP institucional única</text>
             <text x="20" y="60" font-size="10" fill="#555">• Keystone, Nova API, Neutron Server, Horizon y clúster MariaDB Galera de 3 nodos</text>
           </g>
@@ -3856,28 +3845,28 @@
           <!-- Compute Pool -->
           <g transform="translate(25, 140)">
             <rect width="550" height="85" rx="6" fill="#fff" stroke="#2f5d9a" stroke-width="1.5"/>
-            <text x="20" y="22" font-size="12" font-weight="700" fill="#2f5d9a">Grupo de Cómputo (12 Nodos Dell R740 - KVM Hypervisors):</text>
-            <text x="20" y="42" font-size="10" fill="#555">• Total: 384 núcleos vCPU y 1.5 TB de memoria RAM DDR4</text>
-            <text x="20" y="60" font-size="10" fill="#555">• Redes de datos con enlaces duales de 25 GbE LACP hacia switches Nexus</text>
-            <text x="20" y="78" font-size="10" fill="#555">• Aloja aulas virtuales, laboratorios de ingeniería y servicios de analítica</text>
+            <text x="20" y="22" font-size="12" font-weight="700" fill="#2f5d9a">Grupo de Cómputo (12 nodos KVM, ilustrativo):</text>
+            <text x="20" y="42" font-size="10" fill="#555">• Capacidad total: valor ilustrativo, a dimensionar</text>
+            <text x="20" y="60" font-size="10" fill="#555">• Enlaces de datos redundantes (LACP) hacia los switches</text>
+            <text x="20" y="78" font-size="10" fill="#555">• Aloja las aplicaciones del escenario (portal, analítica)</text>
           </g>
 
           <!-- Ceph Storage Pool -->
           <g transform="translate(25, 235)">
             <rect width="550" height="85" rx="6" fill="#fff" stroke="#3b8a3b" stroke-width="1.5"/>
             <text x="20" y="22" font-size="12" font-weight="700" fill="#3b8a3b">Clúster Ceph Unificado (4 Nodos de Almacenamiento Dedicados):</text>
-            <text x="20" y="42" font-size="10" fill="#555">• 120 TB útiles con replicación 3x (Cinder volumes, Glance images)</text>
+            <text x="20" y="42" font-size="10" fill="#555">• 120 TB útiles (ilustrativo) para Cinder y Glance</text>
             <text x="20" y="60" font-size="10" fill="#555">• Capa de aceleración NVMe para metadatos y discos SAS mecánicos para datos</text>
-            <text x="20" y="78" font-size="10" fill="#555">• Costo por Terabyte 70% inferior comparado con almacenamiento SAN comercial</text>
+            <text x="20" y="78" font-size="10" fill="#555">• Almacenamiento definido por software en servidores estándar</text>
           </g>
 
           <!-- Métricas de éxito -->
           <g transform="translate(25, 330)">
             <rect width="550" height="90" rx="6" fill="#fbf6e7" stroke="#d4af37" stroke-width="1.5"/>
-            <text x="20" y="25" font-size="12" font-weight="700" fill="#8a6d1d">Resultados Operativos del Proyecto:</text>
-            <text x="20" y="45" font-size="11" fill="#333">• Reducción de costos de infraestructura en un 64% frente a nube pública pura</text>
-            <text x="20" y="65" font-size="11" fill="#555">• Latencia de red local inferior a 2 milisegundos para estudiantes en el campus</text>
-            <text x="20" y="80" font-size="11" font-weight="600" fill="#A6192E">Soberanía de datos conforme a la Ley de Protección de Datos Personales 1581.</text>
+            <text x="20" y="25" font-size="12" font-weight="700" fill="#8a6d1d">Resultados supuestos del escenario:</text>
+            <text x="20" y="45" font-size="11" fill="#333">• Ahorro frente a nube pública pura: 64 % (ilustrativo)</text>
+            <text x="20" y="65" font-size="11" fill="#555">• Latencia local menor a 2 ms (ilustrativo)</text>
+            <text x="20" y="80" font-size="11" font-weight="600" fill="#A6192E">Supuesto: datos sensibles en el país (Ley 1581, art. 26).</text>
           </g>
         </g>
 
@@ -3892,7 +3881,7 @@
             <text x="20" y="25" font-size="12" font-weight="700" fill="#2f5d9a">Túnel IPsec VPN Redundante:</text>
             <text x="20" y="45" font-size="11" fill="#555">• Router virtual Neutron conectado a AWS Virtual Private Gateway (VGW)</text>
             <text x="20" y="65" font-size="11" fill="#555">• Protocolo BGP para intercambio dinámico de rutas privadas</text>
-            <text x="20" y="85" font-size="11" fill="#555">• Cifrado AES-256 GCM sobre enlaces de fibra óptica dedicados</text>
+            <text x="20" y="85" font-size="11" fill="#555">• Cifrado IPsec entre el sitio y la nube pública</text>
           </g>
 
           <g transform="translate(20, 185)">
@@ -3914,10 +3903,10 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: Caso de Arquitectura Referencial CIC — CUC Barranquilla</span>
+      <span class="src">Caso ilustrativo del curso (ficticio, elaboración propia; cifras ilustrativas) · diseño: docs.openstack.org/arch-design/</span>
       <span>55 / 60</span>
     </div>
-    <aside class="guion">Aterricemos todos estos conceptos en nuestra realidad regional con el caso del Clúster Barranquilla CIC. Este diseño implementa una nube privada de doce nodos de cómputo gobernada por tres controladores en alta disponibilidad con Galera y HAProxy. El almacenamiento descansa sobre un clúster Ceph distribuido de cuatro nodos que proporciona ciento veinte terabytes útiles para imágenes de Glance y volúmenes de Cinder. La institución redujo en más de un sesenta por ciento su gasto recurrente en infraestructura pública, manteniendo latencias inferiores a dos milisegundos en el campus y garantizando la custodia de datos académicos sensibles según la normativa nacional. Para absorber picos masivos de matrícula, un enrutador Neutron conecta mediante un túnel IPsec redundante hacia una VPC en AWS Virginia, consolidando una verdadera arquitectura de nube híbrida empresarial.</aside>
+    <aside class="guion">Volvamos al caso ilustrativo de la Corporación Industrial del Caribe, la empresa ficticia del curso, para cerrar la semana con una arquitectura completa. Todas las cifras son ilustrativas y sirven para razonar el diseño, no son datos de una empresa real. El escenario implementa una nube privada de doce nodos de cómputo gobernada por tres controladores en alta disponibilidad con Galera y HAProxy. El almacenamiento descansa sobre un clúster Ceph de cuatro nodos que aporta ciento veinte terabytes útiles para imágenes de Glance y volúmenes de Cinder. Como resultados supuestos, el escenario plantea un ahorro del sesenta y cuatro por ciento frente a una nube pública pura y una latencia local menor a dos milisegundos, con los datos sensibles dentro del país. Para absorber picos, un router de Neutron se conecta mediante un túnel IPsec a una VPC en AWS Virginia, lo que forma una arquitectura de nube híbrida. La lección: la decisión no es OpenStack contra nube pública, sino ubicar cada carga donde mejor funcione.</aside>
   </section>
 
   <section class="slide" data-parte="4">
@@ -3994,7 +3983,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: DevStack Official Guide — OpenDev Community</span>
+      <span class="src">Fuente: docs.openstack.org/devstack/latest/guides/single-machine.html</span>
       <span>56 / 60</span>
     </div>
     <aside class="guion">La próxima semana realizaremos el laboratorio práctico de OpenStack, y para ello utilizaremos DevStack sobre una máquina virtual con Ubuntu veinticuatro cero cuatro LTS. DevStack es un conjunto estructurado de scripts Bash mantenido por la comunidad oficial de OpenStack, diseñado específicamente para levantar una nube completa todo en uno con fines de aprendizaje y desarrollo. Su comportamiento se controla mediante un único archivo llamado local.conf, en el cual definimos las contraseñas del sistema, la dirección IP del host y los servicios que deseamos habilitar. Al ejecutar stack.sh, el script descarga el código fuente, prepara la base de datos MariaDB, configura la mensajería en RabbitMQ y arranca las APIs. Una vez finalizado, cargamos el archivo de variables openrc y tenemos control total de nuestra nube privada desde la terminal de comandos.</aside>
@@ -4067,7 +4056,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: OpenStack Operations Guide — OpenInfra Foundation</span>
+      <span class="src">Fuente: docs.openstack.org/operations-guide/ · docs.openstack.org/arch-design/</span>
       <span>57 / 60</span>
     </div>
     <aside class="guion">Diseñar una nube privada exitosa requiere aplicar buenas prácticas de ingeniería en dimensionamiento y segregación física. Primero, en cuanto a sobreasignación de recursos, debemos ser sumamente disciplinados: en ambientes productivos la CPU puede sobreasignarse en relaciones moderadas de uno coma cinco a dos a uno, pero la memoria RAM nunca debe sobreasignarse, fijando un ratio estricto de uno a uno para evitar el uso de swap en los hipervisores. Segundo, en el plano de red, es obligatorio segmentar el tráfico en al menos cuatro redes aisladas y activar tramas gigantescas o Jumbo Frames con MTU de nueve mil bytes para maximizar el rendimiento de Ceph. Por último, en entornos empresariales de producción nunca se instalan servicios manualmente; se utiliza Kolla-Ansible para desplegar cada microservicio en contenedores independientes, garantizando actualizaciones fluidas y sin indisponibilidad.</aside>
@@ -4146,7 +4135,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: Certified OpenStack Administrator (COA) Exam Prep — OpenInfra</span>
+      <span class="src">Fuente: openstack.org/coa (Certified OpenStack Administrator) · docs.openstack.org/</span>
       <span>58 / 60</span>
     </div>
     <aside class="guion">Evaluemos tu criterio técnico con dos preguntas reales del examen Certified OpenStack Administrator. En la primera situación, un operador lanza una instancia y le asigna una IP flotante pública, pero no logra conectarse por SSH. Aunque la tentación sea sospechar de fallas en el hipervisor o en los drivers del sistema operativo, la causa más común en Neutron es que el grupo de seguridad por defecto aplica una política de denegación total para todo tráfico entrante, requiriendo crear explícitamente una regla de ingreso para el puerto veintidós. En la segunda pregunta sobre almacenamiento, al eliminar una máquina virtual, su disco efímero local desaparece irremediablemente, mientras que los volúmenes de bloques gestionados por Cinder sobreviven en el almacenamiento Ceph y pasan al estado disponible, listos para conectarse a otra instancia.</aside>
@@ -4206,7 +4195,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: Síntesis Conceptual — Cátedra de Arquitectura en la Nube CUC</span>
+      <span class="src">Fuente: docs.openstack.org/install-guide/ · docs.openstack.org/nova/latest/ · docs.openstack.org/neutron/latest/</span>
       <span>59 / 60</span>
     </div>
     <aside class="guion">Al concluir la Semana doce, consolidamos cuatro ideas maestras que definen la ingeniería de nubes privadas. Primero, OpenStack va mucho más allá de la virtualización convencional: es el sistema operativo del centro de datos moderno que ofrece soberanía sobre los datos, autonomía técnica y costos predecibles de licenciamiento. Segundo, su arquitectura modular desacoplada permite escalar de forma elástica gracias a la sincronización asíncrona sobre colas RabbitMQ y bases de datos relacionales distribuidas. Tercero, el plano de red gobernado por Neutron abstrae la infraestructura física mediante redes superpuestas Geneve y enrutadores virtuales, otorgando total aislamiento de proyectos. Y cuarto, OpenStack constituye un ecosistema integral que abarca desde máquinas virtuales y contenedores ligeros hasta clústeres de Kubernetes con Magnum y servidores físicos de alto rendimiento con Ironic para inteligencia artificial.</aside>
@@ -4288,7 +4277,7 @@
     </div>
     <div class="s-foot">
       <span>Arquitectura en la Nube · Semana 12 · Parte 4 de 4</span>
-      <span class="src">Fuente: Cátedra de Arquitectura en la Nube — CUC Barranquilla</span>
+      <span class="src">Fuente: docs.openstack.org/devstack/latest/ · docs.openstack.org/devstack/latest/guides/single-machine.html</span>
       <span>60 / 60</span>
     </div>
     <aside class="guion">Hemos llegado al final de nuestra sesión teórica y conceptual sobre OpenStack. En la próxima clase, correspondiente a la Semana trece, daremos el salto definitivo de la arquitectura a la práctica operativa de laboratorio. Cada uno de ustedes desplegará su propio entorno DevStack en Linux, aprenderá a dominar el cliente unificado de línea de comandos openstack, configurará switches virtuales privados y enrutadores L3 mediante Neutron, y lanzará su primera máquina virtual asignándole llaves SSH y una Floating IP para interactuar con ella en tiempo real. Les recomiendo revisar la guía de instalación previa para tener sus estaciones listas y con virtualización anidada habilitada. Felicitaciones por completar esta intensa sesión y nos vemos en nuestro laboratorio práctico para convertirnos en constructores de nubes privadas empresariales.</aside>
