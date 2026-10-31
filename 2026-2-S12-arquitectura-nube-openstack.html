@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquitectura en la Nube — Semana 12 · OpenStack I</title>
+<style>
+  :root{
+    --vino:#A6192E;
+    --dorado:#D4AF37;
+    --texto:#2A2A2A;
+    --vino-tint:#f9eef0;
+    --dorado-tint:#fbf6e7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#fff;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--texto);}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+  #stage{width:1280px;height:720px;position:relative;flex:0 0 auto;transform-origin:center center;box-shadow:0 0 0 1px #ddd,0 8px 30px rgba(0,0,0,.12);background:#fff;}
+  .slide{position:absolute;inset:0;background:#fff;display:none;padding:36px 50px 54px;}
+  .slide.active{display:block;}
+
+  .s-head{position:relative;margin-bottom:10px;padding-right:110px;}
+  .s-head .kicker{font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--dorado);margin-bottom:2px;}
+  .s-head h2{font-size:27px;font-weight:700;color:var(--vino);line-height:1.14;}
+  .s-head .rule{width:110px;height:4px;border-radius:3px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin-top:7px;}
+  .s-head .sub{font-size:14.5px;color:#555;line-height:1.35;margin-top:6px;}
+  .logo-corner{position:absolute;top:0;right:0;height:46px;}
+  .s-body{margin-top:12px;}
+  .s-foot{position:absolute;left:50px;right:50px;bottom:12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#6b6b6b;border-top:2px solid var(--dorado);padding-top:6px;gap:14px;}
+  .s-foot .src{font-style:italic;text-align:center;flex:1;}
+  .s-foot .pg{font-weight:700;color:var(--vino);}
+
+  .cover{display:none;text-align:center;padding-top:44px;}
+  .cover.active{display:block;}
+  .cover .topline-g{position:absolute;top:0;left:0;right:0;height:4px;background:var(--dorado);}
+  .cover .topline-v{position:absolute;top:4px;left:0;right:0;height:7px;background:var(--vino);}
+  .cover img.logo-main{height:112px;margin-bottom:18px;}
+  .cover .cover-kicker{font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dorado);margin-bottom:10px;}
+  .cover h1{font-size:40px;color:var(--vino);font-weight:700;letter-spacing:.3px;line-height:1.16;max-width:1050px;margin:0 auto;}
+  .cover h3{font-size:19px;font-weight:400;color:var(--texto);margin-top:12px;}
+  .cover .bar{width:240px;height:6px;border-radius:3px;margin:20px auto;background:var(--dorado);}
+  .cover .author{font-size:16px;line-height:1.55;}
+  .cover .author b{color:var(--vino);}
+  .cover .cover-sub{margin-top:18px;font-size:14.5px;color:#555;max-width:900px;margin-left:auto;margin-right:auto;line-height:1.45;}
+
+  /* ---- utilidades de composición ---- */
+  .cols{display:flex;gap:18px;align-items:stretch;}
+  .col{flex:1;min-width:0;}
+  .card{background:var(--vino-tint);border-left:6px solid var(--dorado);border-radius:10px;padding:13px 16px;font-size:14.5px;line-height:1.4;}
+  .card b{color:var(--vino);}
+  .card.dark{background:var(--vino);color:#fff;border-left-color:var(--dorado);}
+  .card.dark b{color:var(--dorado);}
+  .card.gold{background:var(--dorado-tint);border:1.5px solid var(--dorado);border-left:6px solid var(--dorado);}
+  .card.white{background:#fff;border:1.5px solid #ddd;border-left:6px solid var(--vino);}
+  .card h4{font-size:15px;color:var(--vino);margin-bottom:5px;}
+  .card.dark h4{color:var(--dorado);}
+  .card ul{margin-left:16px;}
+  .card li{margin-bottom:3px;}
+  .kpi{display:flex;gap:14px;}
+  .kpi .k{flex:1;text-align:center;background:#fff;border:2px solid var(--vino);border-radius:12px;padding:12px 8px;}
+  .kpi .k .n{font-size:30px;font-weight:800;color:var(--vino);line-height:1.05;}
+  .kpi .k .l{font-size:12.5px;color:#555;margin-top:5px;line-height:1.3;}
+  .kpi .k.gold{border-color:var(--dorado);}
+  .kpi .k.gold .n{color:#8a6d1d;}
+  .pill{display:inline-block;background:var(--dorado);color:#3a2c00;font-size:12.5px;font-weight:700;border-radius:999px;padding:3px 12px;margin:0 6px 6px 0;}
+  .pill.vino{background:var(--vino);color:#fff;}
+  .note{margin-top:10px;background:var(--dorado-tint);border:1.5px solid var(--dorado);border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.4;}
+  .note b{color:var(--vino);}
+  .warn{margin-top:10px;background:#fff4f4;border:1.5px solid var(--vino);border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.4;}
+  .warn b{color:var(--vino);}
+  .dgm{display:block;width:100%;height:auto;}
+  .lab-box{background:linear-gradient(90deg,var(--vino),#7d1223);color:#fff;border-radius:12px;padding:14px 20px;font-size:15px;line-height:1.5;}
+  .lab-box b{color:var(--dorado);}
+  .step{display:flex;gap:12px;align-items:flex-start;margin-bottom:9px;}
+  .step .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--vino);color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;}
+  .step .txt{flex:1;font-size:14.5px;line-height:1.4;padding-top:2px;}
+  .step .txt b{color:var(--vino);}
+  .iconrow{display:flex;gap:14px;align-items:center;}
+  .iconrow .txt{flex:1;font-size:14.5px;line-height:1.4;}
+  .iconrow .txt b{color:var(--vino);}
+
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;font-family:inherit;z-index:10;}
+  #nav button{width:38px;height:38px;border:none;border-radius:50%;background:var(--vino);color:#fff;font-size:18px;cursor:pointer;}
+  #nav button:hover{background:#7d1223;}
+  #nav #counter{font-size:14px;color:var(--texto);min-width:56px;text-align:center;}
+  #progress{position:fixed;top:0;left:0;height:4px;background:var(--dorado);width:0;z-index:10;transition:width .25s;}
+
+  /* guion de narración: nunca se muestra; lo leen herramientas/ para video y guiones/ */
+  .guion{display:none!important;}
+  /* tabla compacta */
+  table.t{width:100%;border-collapse:collapse;font-size:13.5px;}
+  table.t th{background:var(--vino);color:#fff;text-align:left;padding:7px 10px;}
+  table.t td{padding:6px 10px;border-bottom:1px solid #e5e5e5;vertical-align:top;}
+  table.t tr:nth-child(even) td{background:#faf7f2;}
+  /* divisoria de parte (corte de video) */
+  .cover .parte-num{font-size:96px;font-weight:800;color:var(--dorado);line-height:1;margin-top:6px;}
+
+  @media print{
+    body{display:block;}
+    #stage{transform:none!important;box-shadow:none;}
+    .slide{display:block!important;position:relative;page-break-after:always;}
+    #nav,#progress{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="stage">
+
+  <section class="slide cover active">
+    <div class="topline-g"></div><div class="topline-v"></div>
+    <img class="logo-main" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="Logo CUC" onerror="this.style.display='none'">
+    <div class="cover-kicker">Semana 12 · Unidad 3 · OpenStack: tu propia nube privada</div>
+    <h1>OpenStack: cuando el data center se vuelve nube</h1>
+    <h3>Arquitectura por servicios · Unidad 3</h3>
+    <div class="bar"></div>
+    <div class="author">
+      <b>Ing. Rodolfo Cañas Cervantes</b><br>
+      Universidad de la Costa (CUC) · Ingeniería de Sistemas<br>
+      Semana 12 · Periodo 2026-2 · Barranquilla, Colombia
+    </div>
+    <div class="cover-sub">Cómputo, redes, almacenamiento e identidad: lo que ya sabemos construir, ahora como una plataforma de código abierto sobre nuestro propio hardware.</div>
+    <aside class="guion">Bienvenidos a la semana doce, con la que empezamos la Unidad tres. Durante dos semanas trabajaremos OpenStack, la plataforma de código abierto para construir nubes privadas. Hoy vemos qué es OpenStack, cómo se organiza por servicios, qué hace cada uno de los principales, cómo viaja una petición cuando lanzamos una máquina virtual, y qué formas hay de instalarlo. En la semana siguiente haremos el laboratorio, donde instalaremos DevStack y lanzaremos nuestra primera máquina virtual.</aside>
+  </section>
+
+</div>
+
+<div id="nav">
+  <button onclick="prev()">‹</button>
+  <span id="counter">1 / 1</span>
+  <button onclick="next()">›</button>
+</div>
+
+
+</body>
+</html>
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Puente con lo visto</div>
+      <h2>Ya sabes construir nube… ¿y si la nube es mía?</h2>
+      <div class="rule"></div>
+      <div class="sub">Cómputo, redes, almacenamiento e identidad no desaparecen: se reorganizan dentro de tu data center.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Lo ya visto lleva a OpenStack como nube propia">
+<defs>
+<marker id="arrD2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker><marker id="arrV2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker>
+</defs>
+<rect x="10" y="10" width="270" height="140" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><image href="assets/iconos/generic/compute/rack.png" x="34" y="42" width="54" height="54"/><text x="104" y="56" font-size="16" font-weight="bold" fill="#A6192E">Cómputo</text><text x="104" y="80" font-size="12.5" fill="#6b6b6b">máquinas virtuales</text><text x="104" y="98" font-size="12.5" fill="#6b6b6b">y balanceo</text><text x="104" y="130" font-size="11.5" font-style="italic" fill="#8a6d1d">Unidad 1</text>
+<rect x="300" y="10" width="270" height="140" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><image href="assets/iconos/generic/network/switch.png" x="324" y="42" width="54" height="54"/><text x="394" y="56" font-size="16" font-weight="bold" fill="#A6192E">Redes</text><text x="394" y="80" font-size="12.5" fill="#6b6b6b">red privada, subredes,</text><text x="394" y="98" font-size="12.5" fill="#6b6b6b">reglas de firewall</text><text x="394" y="130" font-size="11.5" font-style="italic" fill="#8a6d1d">Unidades 1 y 2</text>
+<rect x="590" y="10" width="270" height="140" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><image href="assets/iconos/generic/storage/storage.png" x="614" y="42" width="54" height="54"/><text x="684" y="56" font-size="16" font-weight="bold" fill="#A6192E">Almacenamiento</text><text x="684" y="80" font-size="12.5" fill="#6b6b6b">discos persistentes</text><text x="684" y="98" font-size="12.5" fill="#6b6b6b">y objetos</text><text x="684" y="130" font-size="11.5" font-style="italic" fill="#8a6d1d">Unidad 1</text>
+<rect x="880" y="10" width="270" height="140" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><image href="assets/iconos/onprem/security/vault.png" x="904" y="42" width="54" height="54"/><text x="974" y="56" font-size="16" font-weight="bold" fill="#A6192E">Identidad</text><text x="974" y="80" font-size="12.5" fill="#6b6b6b">usuarios, roles</text><text x="974" y="98" font-size="12.5" fill="#6b6b6b">y permisos</text><text x="974" y="130" font-size="11.5" font-style="italic" fill="#8a6d1d">Unidad 2</text>
+<text x="590" y="184" font-size="14" font-weight="bold" font-style="italic" text-anchor="middle" fill="#6b6b6b">lo que ya sabes construir y operar</text>
+<line x1="145" y1="200" x2="380" y2="242" stroke="#8a6d1d" stroke-width="3" marker-end="url(#arrD2)"/><line x1="435" y1="200" x2="500" y2="242" stroke="#8a6d1d" stroke-width="3" marker-end="url(#arrD2)"/><line x1="725" y1="200" x2="680" y2="242" stroke="#8a6d1d" stroke-width="3" marker-end="url(#arrD2)"/><line x1="1015" y1="200" x2="800" y2="242" stroke="#8a6d1d" stroke-width="3" marker-end="url(#arrD2)"/>
+<rect x="220" y="246" width="740" height="200" rx="16" fill="#f9eef0" stroke="#A6192E" stroke-width="2.4"/><image href="assets/iconos/openstack/openstack.png" x="258" y="288" width="116" height="116"/><text x="410" y="306" font-size="15" font-weight="bold" letter-spacing="2" fill="#8a6d1d">UNIDAD 3</text><text x="410" y="340" font-size="24" font-weight="bold" fill="#A6192E">¿Y si la nube es mía?</text><text x="410" y="372" font-size="14" fill="#2A2A2A">La misma nube de siempre, pero el hardware,</text><text x="410" y="392" font-size="14" fill="#2A2A2A">los datos y el control quedan en tu casa.</text><text x="410" y="422" font-size="14" font-weight="bold" fill="#A6192E">OpenStack la construye con servicios pequeños.</text>
+<text x="590" y="484" font-size="14.5" text-anchor="middle" fill="#2A2A2A">Hoy: qué es OpenStack, cómo se organiza y qué hace cada pieza.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: elaboración propia a partir de las unidades 1 y 2 del curso</span>
+      <span class="pg">2 / 16</span>
+    </div>
+    <aside class="guion">Repasemos rápido dónde estamos. En las unidades uno y dos aprendimos a crear máquinas virtuales, redes privadas, discos persistentes y a gestionar identidades y permisos, todo dentro de una nube pública que otra compañía opera. La pregunta que abre la unidad tres es qué pasa si queremos operar nosotros mismos esa nube, sobre nuestro propio hardware, con nuestros propios datos. Esa es la idea de la nube privada, y la herramienta más extendida para construirla es OpenStack. Todo lo que ya sabes se mantiene; lo que cambia es quién es el dueño del data center.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Concepto</div>
+      <h2>Qué es OpenStack</h2>
+      <div class="rule"></div>
+      <div class="sub">Una plataforma de código abierto que convierte un data center en un pool de recursos bajo demanda.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Qué es OpenStack">
+<defs>
+<marker id="arrD3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker><marker id="arrG3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker>
+</defs>
+<rect x="10" y="10" width="540" height="160" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><image href="assets/iconos/openstack/openstack.png" x="34" y="46" width="86" height="86"/><text x="146" y="60" font-size="17" font-weight="bold" fill="#A6192E">Plataforma de código abierto</text><text x="146" y="90" font-size="14.5" fill="#2A2A2A">que gestiona cómputo, red y</text><text x="146" y="110" font-size="14.5" fill="#2A2A2A">almacenamiento de un data center</text><text x="146" y="130" font-size="14.5" fill="#2A2A2A">como un único pool virtual.</text>
+<rect x="10" y="188" width="172" height="34" rx="17" fill="#A6192E"/><text x="96" y="210" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">Código abierto</text><rect x="192" y="188" width="150" height="34" rx="17" fill="#A6192E"/><text x="267" y="210" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">Bajo demanda</text><rect x="352" y="188" width="198" height="34" rx="17" fill="#D4AF37"/><text x="451" y="210" font-size="13" font-weight="bold" text-anchor="middle" fill="#3a2c00">API REST + portal</text>
+<rect x="10" y="240" width="540" height="240" rx="14" fill="#fff" stroke="#ddd" stroke-width="1.6"/><text x="34" y="276" font-size="15.5" font-weight="bold" fill="#A6192E">En una frase</text><circle cx="46" cy="306" r="5" fill="#D4AF37"/><text x="64" y="311" font-size="14" fill="#2A2A2A">Los recursos físicos se agrupan en un pool.</text><circle cx="46" cy="344" r="5" fill="#D4AF37"/><text x="64" y="349" font-size="14" fill="#2A2A2A">Cada usuario solicita cuotas por API o portal.</text><circle cx="46" cy="382" r="5" fill="#D4AF37"/><text x="64" y="387" font-size="14" fill="#2A2A2A">Nadie toca el hardware directamente.</text><circle cx="46" cy="420" r="5" fill="#D4AF37"/><text x="64" y="425" font-size="14" fill="#2A2A2A">Lo usan organizaciones que necesitan su</text><text x="64" y="445" font-size="14" fill="#2A2A2A">propia nube: telecomunicaciones, banca,</text><text x="64" y="465" font-size="14" fill="#2A2A2A">universidades e investigación (p. ej. CERN).</text>
+<image href="assets/iconos/generic/compute/rack.png" x="640" y="20" width="76" height="76"/><image href="assets/iconos/generic/compute/rack.png" x="800" y="20" width="76" height="76"/><image href="assets/iconos/onprem/compute/server.png" x="960" y="20" width="76" height="76"/><text x="850" y="122" font-size="13" font-style="italic" text-anchor="middle" fill="#6b6b6b">servidores físicos del data center</text>
+<line x1="700" y1="104" x2="740" y2="168" stroke="#8a6d1d" stroke-width="3" marker-end="url(#arrD3)"/><line x1="850" y1="104" x2="850" y2="168" stroke="#8a6d1d" stroke-width="3" marker-end="url(#arrD3)"/><line x1="1000" y1="104" x2="960" y2="168" stroke="#8a6d1d" stroke-width="3" marker-end="url(#arrD3)"/>
+<rect x="620" y="174" width="540" height="80" rx="14" fill="#A6192E"/><text x="890" y="208" font-size="21" font-weight="bold" text-anchor="middle" fill="#fff">Pool de recursos</text><text x="890" y="234" font-size="13.5" text-anchor="middle" fill="#f3d7dc">cómputo · red · almacenamiento</text>
+<line x1="750" y1="254" x2="750" y2="288" stroke="#6b6b6b" stroke-width="2.5" marker-end="url(#arrG3)"/><line x1="1030" y1="254" x2="1030" y2="288" stroke="#6b6b6b" stroke-width="2.5" marker-end="url(#arrG3)"/>
+<rect x="620" y="294" width="260" height="96" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.6"/><text x="750" y="330" font-size="16" font-weight="bold" text-anchor="middle" fill="#A6192E">API REST</text><text x="750" y="356" font-size="12.5" text-anchor="middle" fill="#6b6b6b">todo se pide por HTTP</text><rect x="900" y="294" width="260" height="96" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.6"/><image href="assets/iconos/openstack/frontend/horizon.png" x="916" y="312" width="58" height="58"/><text x="990" y="336" font-size="16" font-weight="bold" fill="#A6192E">Horizon</text><text x="990" y="358" font-size="12.5" fill="#6b6b6b">portal de autoservicio</text>
+<image href="assets/iconos/onprem/client/user.png" x="700" y="410" width="64" height="64"/><text x="784" y="438" font-size="14" font-weight="bold" fill="#A6192E">Un usuario pide 1 vCPU y 2 GB</text><text x="784" y="460" font-size="13.5" fill="#6b6b6b">y el pool se los asigna en segundos.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: definición de OpenStack (openstack.org); "11 OpenStack.pptx", diapositiva 2</span>
+      <span class="pg">3 / 16</span>
+    </div>
+    <aside class="guion">OpenStack es una plataforma de código abierto, es decir, su código es público y cualquiera puede instalarla, auditarla o modificarla. Su trabajo es tomar los servidores, discos y switches de un data center, agruparlos en un solo pool de recursos y ofrecer ese pool por API y por un portal web. El usuario ya no pide una máquina a un proveedor: la pide a su propia organización. ¿Quién lo usa? Organizaciones que necesitan su propia nube por razones de datos, costos o control: telecomunicaciones, banca, universidades y centros de investigación; el caso más documentado es CERN, que opera su nube sobre OpenStack. No te aprendas cifras: recuerda el patrón.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Arquitectura</div>
+      <h2>OpenStack en un solo diagrama</h2>
+      <div class="rule"></div>
+      <div class="sub">Servicios pequeños, cada uno con una misión, coordinados por APIs y por un token común.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 525" class="dgm" role="img" aria-label="Arquitectura de servicios de OpenStack">
+<defs>
+<marker id="arrG4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="arrV4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker>
+</defs>
+<rect x="8" y="4" width="1164" height="512" rx="18" fill="#fff" stroke="#A6192E" stroke-width="2.4"/><rect x="8" y="4" width="1164" height="38" rx="18" fill="#A6192E"/><rect x="8" y="24" width="1164" height="18" fill="#A6192E"/><text x="590" y="29" font-size="15" font-weight="bold" letter-spacing="1.5" text-anchor="middle" fill="#fff">OPENSTACK · UN DATA CENTER COMO UNA SOLA PLATAFORMA</text>
+<line x1="185" y1="178" x2="995" y2="178" stroke="#D4AF37" stroke-width="7"/><text x="196" y="168" font-size="11.5" font-weight="bold" fill="#8a6d1d">APIs REST + mensajería</text>
+<line x1="590" y1="166" x2="590" y2="176" stroke="#6b6b6b" stroke-width="2.4"/><line x1="185" y1="184" x2="185" y2="192" stroke="#6b6b6b" stroke-width="2.4" marker-end="url(#arrG4)"/><line x1="590" y1="184" x2="590" y2="192" stroke="#6b6b6b" stroke-width="2.4" marker-end="url(#arrG4)"/><line x1="995" y1="184" x2="995" y2="192" stroke="#6b6b6b" stroke-width="2.4" marker-end="url(#arrG4)"/>
+<line x1="590" y1="332" x2="590" y2="312" stroke="#A6192E" stroke-width="2.2" stroke-dasharray="6 4" marker-end="url(#arrV4)"/><text x="602" y="327" font-size="11.5" font-weight="bold" fill="#A6192E">token</text>
+<line x1="451" y1="394" x2="330" y2="394" stroke="#A6192E" stroke-width="2.2" stroke-dasharray="6 4" marker-end="url(#arrV4)"/><text x="368" y="384" font-size="11.5" font-weight="bold" fill="#A6192E">token</text>
+<line x1="729" y1="394" x2="850" y2="394" stroke="#A6192E" stroke-width="2.2" stroke-dasharray="6 4" marker-end="url(#arrV4)"/><text x="768" y="384" font-size="11.5" font-weight="bold" fill="#A6192E">token</text>
+<rect x="455" y="54" width="270" height="112" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/frontend/horizon.png" x="471" y="84" width="54" height="54"/><text x="539" y="96" font-size="17" font-weight="bold" fill="#A6192E">Horizon</text><text x="539" y="118" font-size="12.5" fill="#6b6b6b">portal web</text><text x="539" y="136" font-size="12.5" fill="#6b6b6b">una pantalla sobre las API</text>
+<rect x="50" y="196" width="270" height="112" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/sharedservices/glance.png" x="66" y="226" width="54" height="54"/><text x="134" y="238" font-size="17" font-weight="bold" fill="#A6192E">Glance</text><text x="134" y="260" font-size="12.5" fill="#6b6b6b">imágenes</text><text x="134" y="278" font-size="12.5" fill="#6b6b6b">disco base de cada VM</text>
+<rect x="455" y="196" width="270" height="112" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/compute/nova.png" x="471" y="226" width="54" height="54"/><text x="539" y="238" font-size="17" font-weight="bold" fill="#A6192E">Nova</text><text x="539" y="260" font-size="12.5" fill="#6b6b6b">cómputo</text><text x="539" y="278" font-size="12.5" fill="#6b6b6b">lanza y gobierna las VM</text>
+<rect x="860" y="196" width="270" height="112" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/networking/neutron.png" x="876" y="226" width="54" height="54"/><text x="944" y="238" font-size="17" font-weight="bold" fill="#A6192E">Neutron</text><text x="944" y="260" font-size="12.5" fill="#6b6b6b">redes</text><text x="944" y="278" font-size="12.5" fill="#6b6b6b">red, subred e IP flotante</text>
+<rect x="50" y="336" width="270" height="112" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/storage/cinder.png" x="66" y="366" width="54" height="54"/><text x="134" y="378" font-size="17" font-weight="bold" fill="#A6192E">Cinder</text><text x="134" y="400" font-size="12.5" fill="#6b6b6b">bloque</text><text x="134" y="418" font-size="12.5" fill="#6b6b6b">volumen persistente</text>
+<rect x="455" y="336" width="270" height="112" rx="12" fill="#f9eef0" stroke="#A6192E" stroke-width="2.4"/><image href="assets/iconos/openstack/sharedservices/keystone.png" x="471" y="366" width="54" height="54"/><text x="539" y="378" font-size="17" font-weight="bold" fill="#A6192E">Keystone</text><text x="539" y="400" font-size="12.5" fill="#6b6b6b">identidad</text><text x="539" y="418" font-size="12.5" fill="#6b6b6b">emite y valida los tokens</text>
+<rect x="860" y="336" width="270" height="112" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/storage/swift.png" x="876" y="366" width="54" height="54"/><text x="944" y="378" font-size="17" font-weight="bold" fill="#A6192E">Swift</text><text x="944" y="400" font-size="12.5" fill="#6b6b6b">objetos</text><text x="944" y="418" font-size="12.5" fill="#6b6b6b">archivos y copias</text>
+<text x="590" y="490" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#A6192E">Una sola regla: ninguna petición entra sin un token de Keystone.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: "11 OpenStack.pptx", diapositivas 3-5; documentación de servicios de OpenStack</span>
+      <span class="pg">4 / 16</span>
+    </div>
+    <aside class="guion">Este es el mapa de la semana. En la parte superior está Horizon, el portal web con el que interactúa el usuario. En el centro, sobre la barra dorada, los servicios que hacen el trabajo pesado: Glance con las imágenes, Nova con las máquinas virtuales y Neutron con las redes. Abajo, a la izquierda, Cinder con los discos persistentes; a la derecha, Swift con los objetos; y en el centro, Keystone, la identidad. La barra dorada representa las API REST y la mensajería que comunican a todos. La flecha punteada es la idea clave: todo pasa por Keystone, que emite el token que cada servicio valida antes de trabajar. En las próximas diapositivas vemos cada servicio por separado.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Bajo el capó</div>
+      <h2>Tres piezas que todos los servicios comparten</h2>
+      <div class="rule"></div>
+      <div class="sub">Cada servicio es un proceso independiente, pero todos hablan el mismo idioma.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Piezas comunes de OpenStack">
+<defs></defs>
+<rect x="10" y="15" width="370" height="270" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><text x="34" y="56" font-size="16.5" font-weight="bold" fill="#A6192E">Una API por servicio</text><image href="assets/iconos/aws/general/sdk.png" x="34" y="76" width="64" height="64"/><text x="34" y="176" font-size="13.5" fill="#2A2A2A">Nova, Neutron y Glance son</text><text x="34" y="196" font-size="13.5" fill="#2A2A2A">procesos distintos, cada uno</text><text x="34" y="216" font-size="13.5" fill="#2A2A2A">con su API sobre HTTP.</text><text x="34" y="252" font-size="13" font-style="italic" fill="#6b6b6b">La consola y los scripts usan</text><text x="34" y="268" font-size="13" font-style="italic" fill="#6b6b6b">exactamente las mismas API.</text>
+<rect x="405" y="15" width="370" height="270" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><text x="429" y="56" font-size="16.5" font-weight="bold" fill="#A6192E">Una base de datos común</text><image href="assets/iconos/onprem/database/mariadb.png" x="429" y="76" width="64" height="64"/><text x="429" y="176" font-size="13.5" fill="#2A2A2A">MariaDB guarda los metadatos:</text><text x="429" y="196" font-size="13.5" fill="#2A2A2A">qué instancias existen, de quién</text><text x="429" y="216" font-size="13.5" fill="#2A2A2A">son y cómo están configuradas.</text><text x="429" y="252" font-size="13" font-style="italic" fill="#6b6b6b">Los datos de usuario viven</text><text x="429" y="268" font-size="13" font-style="italic" fill="#6b6b6b">fuera, en las imágenes y discos.</text>
+<rect x="800" y="15" width="370" height="270" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><text x="824" y="56" font-size="16.5" font-weight="bold" fill="#A6192E">Una mensajería común</text><g><rect x="824" y="88" width="64" height="44" rx="6" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/><path d="M824,90 L856,114 L888,90" fill="none" stroke="#A6192E" stroke-width="2"/></g><text x="824" y="176" font-size="13.5" fill="#2A2A2A">RabbitMQ (mensajería) permite</text><text x="824" y="196" font-size="13.5" fill="#2A2A2A">que los servicios se avisen sin</text><text x="824" y="216" font-size="13.5" fill="#2A2A2A">bloquearse esperándose.</text><text x="824" y="252" font-size="13" font-style="italic" fill="#6b6b6b">Las tareas largas se reparten</text><text x="824" y="268" font-size="13" font-style="italic" fill="#6b6b6b">por la cola y se ejecutan solas.</text>
+<rect x="10" y="310" width="1160" height="170" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><text x="40" y="352" font-size="16.5" font-weight="bold" fill="#8a6d1d">Drivers y plugins: el hardware entra por aquí</text><text x="40" y="384" font-size="14" fill="#2A2A2A">OpenStack no se amarra a una marca: hipervisores, switches y discos se conectan</text><text x="40" y="404" font-size="14" fill="#2A2A2A">por drivers, sin tocar el resto de la plataforma.</text><image href="assets/iconos/generic/virtualization/qemu.png" x="700" y="330" width="64" height="64"/><image href="assets/iconos/onprem/network/cisco-switch-l2.png" x="830" y="330" width="64" height="64"/><image href="assets/iconos/onprem/storage/ceph.png" x="960" y="330" width="64" height="64"/><text x="732" y="420" font-size="12.5" text-anchor="middle" fill="#2A2A2A">hipervisores</text><text x="862" y="420" font-size="12.5" text-anchor="middle" fill="#2A2A2A">red física</text><text x="992" y="420" font-size="12.5" text-anchor="middle" fill="#2A2A2A">almacenamiento</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: "11 OpenStack.pptx", diapositiva 5 (mensajería, base de datos y drivers)</span>
+      <span class="pg">5 / 16</span>
+    </div>
+    <aside class="guion">Antes de seguir, tres piezas que sostienen a todos los servicios. Primera: cada servicio expone su propia API sobre HTTP; la consola, la línea de comandos y cualquier script usan exactamente las mismas API, no hay API privadas. Segunda: hay una base de datos común, normalmente MariaDB, donde viven los metadatos: qué instancias existen, de quién son y cómo están configuradas. Tercera: hay un sistema de mensajería, normalmente RabbitMQ, que permite que los servicios se avisen entre sí; así una petición larga no bloquea a nadie: se encola y se ejecuta sola. Por último, el hardware entra por drivers y plugins, de modo que el mismo OpenStack puede correr sobre hypervisores y discos de distintos fabricantes.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Servicio clave</div>
+      <h2>Keystone: la identidad de tu nube</h2>
+      <div class="rule"></div>
+      <div class="sub">Nada ocurre sin que Keystone confirme quién eres, en qué proyecto estás y qué puedes hacer.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Flujo de identidad en Keystone">
+<defs>
+<marker id="arrG6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker><marker id="arrD6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#8a6d1d"/></marker>
+</defs>
+<image href="assets/iconos/onprem/client/user.png" x="40" y="130" width="80" height="80"/><text x="80" y="236" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#2A2A2A">usuario</text><text x="80" y="254" font-size="12" text-anchor="middle" fill="#6b6b6b">contraseña o clave</text>
+<line x1="130" y1="172" x2="194" y2="172" stroke="#6b6b6b" stroke-width="2.6" marker-end="url(#arrG6)"/>
+<rect x="200" y="80" width="310" height="190" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.4"/><image href="assets/iconos/openstack/sharedservices/keystone.png" x="222" y="104" width="72" height="72"/><text x="312" y="132" font-size="20" font-weight="bold" fill="#A6192E">Keystone</text><text x="312" y="158" font-size="13" fill="#6b6b6b">«¿Quién eres?»</text><text x="312" y="178" font-size="13" fill="#6b6b6b">«¿En qué proyecto?»</text><text x="312" y="198" font-size="13" fill="#6b6b6b">«¿Qué puedes hacer?»</text><text x="222" y="234" font-size="12.5" font-style="italic" fill="#2A2A2A">También administra catálogos de servicios</text><text x="222" y="252" font-size="12.5" font-style="italic" fill="#2A2A2A">y proyectos de usuarios.</text>
+<line x1="512" y1="172" x2="554" y2="172" stroke="#6b6b6b" stroke-width="2.6" marker-end="url(#arrG6)"/>
+<rect x="560" y="140" width="200" height="64" rx="32" fill="#D4AF37"/><text x="660" y="180" font-size="19" font-weight="bold" text-anchor="middle" fill="#3a2c00">token</text><text x="660" y="232" font-size="12.5" text-anchor="middle" fill="#6b6b6b">prueba de identidad firmada</text><text x="660" y="250" font-size="12.5" text-anchor="middle" fill="#A6192E" font-weight="bold">vence y se rota</text>
+<line x1="762" y1="168" x2="826" y2="98" stroke="#8a6d1d" stroke-width="2.4" marker-end="url(#arrD6)"/><line x1="762" y1="172" x2="826" y2="208" stroke="#8a6d1d" stroke-width="2.4" marker-end="url(#arrD6)"/><line x1="762" y1="176" x2="826" y2="318" stroke="#8a6d1d" stroke-width="2.4" marker-end="url(#arrD6)"/>
+<rect x="830" y="50" width="330" height="86" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.6"/><image href="assets/iconos/openstack/compute/nova.png" x="846" y="68" width="50" height="50"/><text x="912" y="88" font-size="16" font-weight="bold" fill="#A6192E">Nova</text><text x="912" y="110" font-size="12.5" fill="#6b6b6b">acepta el token y lanza la VM</text>
+<rect x="830" y="160" width="330" height="86" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.6"/><image href="assets/iconos/openstack/networking/neutron.png" x="846" y="178" width="50" height="50"/><text x="912" y="198" font-size="16" font-weight="bold" fill="#A6192E">Neutron</text><text x="912" y="220" font-size="12.5" fill="#6b6b6b">acepta el token y configura la red</text>
+<rect x="830" y="270" width="330" height="86" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.6"/><image href="assets/iconos/openstack/storage/cinder.png" x="846" y="288" width="50" height="50"/><text x="912" y="308" font-size="16" font-weight="bold" fill="#A6192E">Cinder</text><text x="912" y="330" font-size="12.5" fill="#6b6b6b">acepta el token y crea el volumen</text>
+<rect x="10" y="396" width="1160" height="90" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><text x="40" y="432" font-size="15" font-weight="bold" fill="#A6192E">Como la identidad que ya estudiaste: usuarios, proyectos y roles.</text><text x="40" y="458" font-size="13.5" fill="#2A2A2A">La diferencia: aquí el token es obligatorio, caduca y se puede revocar; nadie trabaja sin él.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: documentación de OpenStack Keystone; "11 OpenStack.pptx", diapositiva 5 (peticiones pasan por Keystone)</span>
+      <span class="pg">6 / 16</span>
+    </div>
+    <aside class="guion">Keystone es el servicio de identidad de OpenStack, y es el primero que entenderás si ya estudiaste identidad en la nube. Cuando un usuario se autentica con su usuario y contraseña, Keystone responde con un token: una prueba de identidad firmada que dice quién es, en qué proyecto está y qué le está permitido hacer. Ese token acompaña cada petición; por eso las flechas salen hacia Nova, Neutron y Cinder, que lo validan antes de trabajar. Además del control de acceso, Keystone administra el catálogo de servicios, es decir, la lista de endpoints disponibles, y los proyectos de usuarios. Es la pieza de la que depende todo lo demás: si Keystone cae, la nube entera deja de aceptar peticiones.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Servicio clave</div>
+      <h2>Nova: el cómputo, paso a paso</h2>
+      <div class="rule"></div>
+      <div class="sub">Nova no ejecuta la VM: decide dónde va y le ordena al hipervisor que la arranque.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Ciclo de trabajo de Nova">
+<defs>
+<marker id="arrV7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker>
+</defs>
+<rect x="10" y="40" width="210" height="130" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><text x="115" y="76" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#2A2A2A">Petición</text><text x="115" y="102" font-size="13" text-anchor="middle" fill="#6b6b6b">«1 vCPU, 1 GB,</text><text x="115" y="120" font-size="13" text-anchor="middle" fill="#6b6b6b">imagen Ubuntu»</text>
+<line x1="222" y1="105" x2="238" y2="105" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV7)"/>
+<rect x="240" y="40" width="210" height="130" rx="12" fill="#f9eef0" stroke="#A6192E" stroke-width="1.8"/><image href="assets/iconos/openstack/compute/nova.png" x="320" y="56" width="52" height="52"/><text x="345" y="134" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#A6192E">API de Nova</text><text x="345" y="154" font-size="12" text-anchor="middle" fill="#6b6b6b">recibe y valida</text>
+<line x1="452" y1="105" x2="468" y2="105" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV7)"/>
+<rect x="470" y="40" width="210" height="130" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/onprem/compute/server.png" x="550" y="56" width="52" height="52"/><text x="575" y="134" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#A6192E">Scheduler</text><text x="575" y="154" font-size="12" text-anchor="middle" fill="#6b6b6b">elige el nodo con lugar</text>
+<line x1="682" y1="105" x2="698" y2="105" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV7)"/>
+<rect x="700" y="40" width="210" height="130" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/generic/virtualization/qemu.png" x="780" y="56" width="52" height="52"/><text x="805" y="134" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#A6192E">Hipervisor</text><text x="805" y="154" font-size="12" text-anchor="middle" fill="#6b6b6b">KVM arranca la VM</text>
+<line x1="912" y1="105" x2="928" y2="105" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV7)"/>
+<rect x="930" y="40" width="240" height="130" rx="12" fill="#f9eef0" stroke="#A6192E" stroke-width="2.2"/><image href="assets/iconos/openstack/compute/nova.png" x="1010" y="56" width="52" height="52"/><text x="1050" y="134" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#A6192E">VM en marcha</text><text x="1050" y="154" font-size="12" text-anchor="middle" fill="#6b6b6b">estado: activa</text>
+<rect x="10" y="200" width="570" height="230" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><text x="34" y="238" font-size="16" font-weight="bold" fill="#A6192E">Ciclo de vida completo</text><circle cx="46" cy="270" r="5" fill="#D4AF37"/><text x="64" y="275" font-size="13.5" fill="#2A2A2A">Crear, pausar, reanudar y apagar instancias.</text><circle cx="46" cy="306" r="5" fill="#D4AF37"/><text x="64" y="311" font-size="13.5" fill="#2A2A2A">Redimensionar CPU y memoria.</text><circle cx="46" cy="342" r="5" fill="#D4AF37"/><text x="64" y="347" font-size="13.5" fill="#2A2A2A">Snapshots y migración en caliente.</text><circle cx="46" cy="378" r="5" fill="#D4AF37"/><text x="64" y="383" font-size="13.5" fill="#2A2A2A">Reconstruir la VM desde una imagen.</text>
+<rect x="600" y="200" width="570" height="230" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><text x="624" y="238" font-size="16" font-weight="bold" fill="#8a6d1d">Nova no trabaja solo</text><image href="assets/iconos/openstack/networking/neutron.png" x="624" y="256" width="42" height="42"/><text x="682" y="282" font-size="13.5" fill="#2A2A2A">Neutron entrega la red y la IP.</text><image href="assets/iconos/openstack/sharedservices/glance.png" x="624" y="310" width="42" height="42"/><text x="682" y="336" font-size="13.5" fill="#2A2A2A">Glance entrega la imagen del disco.</text><image href="assets/iconos/openstack/storage/cinder.png" x="624" y="364" width="42" height="42"/><text x="682" y="390" font-size="13.5" fill="#2A2A2A">Cinder entrega el volumen persistente.</text>
+<text x="590" y="472" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">El scheduler reparte la carga: si un nodo no tiene lugar, elige otro.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: "11 OpenStack.pptx", diapositivas 10-11 (Nova, ciclo de vida e hipervisores)</span>
+      <span class="pg">7 / 16</span>
+    </div>
+    <aside class="guion">Nova es el servicio de cómputo y gestiona el ciclo de vida completo de las instancias. El recorrido de una petición es siempre el mismo: la petición llega a la API de Nova; el scheduler, un componente que mira qué nodos tienen CPU y memoria disponibles, elige dónde va a vivir la instancia; el hipervisor de ese nodo, normalmente KVM en entornos Linux, arranca la máquina virtual. Fíjate en que Nova no ejecuta la VM él mismo: orquesta. Además, Nova no trabaja solo: pide la red a Neutron, la imagen a Glance y el disco persistente a Cinder. Por eso, cuando veas una VM, en realidad estás viendo el trabajo coordinado de cuatro servicios.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Servicio clave</div>
+      <h2>Neutron: las redes de tu nube</h2>
+      <div class="rule"></div>
+      <div class="sub">Redes privadas, subredes, routers y reglas de firewall, creadas por software.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Red virtual de Neutron con IP flotante">
+<defs>
+<marker id="arrG8" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker>
+</defs>
+<rect x="20" y="40" width="390" height="310" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.2"/><text x="215" y="70" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#A6192E">red privada · 10.0.0.0/24</text>
+<rect x="46" y="90" width="160" height="96" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.6"/><image href="assets/iconos/openstack/compute/nova.png" x="100" y="102" width="46" height="46"/><text x="126" y="172" font-size="13" font-weight="bold" text-anchor="middle" fill="#2A2A2A">VM · 10.0.0.11</text>
+<rect x="224" y="90" width="160" height="96" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.6"/><image href="assets/iconos/openstack/compute/nova.png" x="278" y="102" width="46" height="46"/><text x="304" y="172" font-size="13" font-weight="bold" text-anchor="middle" fill="#2A2A2A">VM · 10.0.0.12</text>
+<rect x="46" y="216" width="338" height="106" rx="12" fill="#fff" stroke="#A6192E" stroke-width="1.8"/><text x="66" y="246" font-size="13.5" font-weight="bold" fill="#A6192E">grupo de seguridad</text><text x="66" y="272" font-size="12.5" fill="#2A2A2A">reglas de firewall por instancia:</text><text x="66" y="292" font-size="12.5" fill="#2A2A2A">solo se abre el puerto que autorizas.</text>
+<line x1="412" y1="200" x2="466" y2="200" stroke="#6b6b6b" stroke-width="2.6" marker-end="url(#arrG8)"/>
+<rect x="470" y="140" width="170" height="120" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/generic/network/router.png" x="528" y="156" width="54" height="54"/><text x="555" y="232" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#A6192E">router virtual</text><text x="555" y="250" font-size="12" text-anchor="middle" fill="#6b6b6b">NAT hacia fuera</text>
+<line x1="642" y1="200" x2="712" y2="200" stroke="#6b6b6b" stroke-width="2.6" marker-end="url(#arrG8)"/>
+<rect x="716" y="170" width="180" height="58" rx="29" fill="#D4AF37"/><text x="806" y="206" font-size="16" font-weight="bold" text-anchor="middle" fill="#3a2c00">IP flotante</text>
+<line x1="898" y1="200" x2="944" y2="200" stroke="#6b6b6b" stroke-width="2.6" marker-end="url(#arrG8)"/>
+<rect x="948" y="140" width="212" height="120" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/onprem/network/internet.png" x="1026" y="152" width="56" height="56"/><text x="1054" y="238" font-size="14" font-weight="bold" text-anchor="middle" fill="#2A2A2A">Internet</text>
+<rect x="10" y="376" width="1160" height="108" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/><text x="36" y="408" font-size="14.5" font-weight="bold" fill="#A6192E">Redes, subredes, routers y reglas de firewall: todo definido por software.</text><rect x="36" y="428" width="104" height="30" rx="15" fill="#fff" stroke="#A6192E" stroke-width="1.2"/><text x="88" y="448" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E">L2 y L3</text><rect x="152" y="428" width="88" height="30" rx="15" fill="#fff" stroke="#A6192E" stroke-width="1.2"/><text x="196" y="448" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E">DHCP</text><rect x="252" y="428" width="150" height="30" rx="15" fill="#fff" stroke="#A6192E" stroke-width="1.2"/><text x="327" y="448" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E">redes VXLAN</text><rect x="414" y="428" width="230" height="30" rx="15" fill="#fff" stroke="#A6192E" stroke-width="1.2"/><text x="529" y="448" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#A6192E">firewall y balanceadores</text><text x="680" y="449" font-size="13" fill="#2A2A2A">La IP interna no sale; la flotante es la puerta pública.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: "11 OpenStack.pptx", diapositiva 6 (Neutron: L2/L3, DHCP, NAT y floating IPs)</span>
+      <span class="pg">8 / 16</span>
+    </div>
+    <aside class="guion">Neutron es el servicio de redes. Miramos la gráfica de izquierda a derecha: dentro de la red privada viven dos máquinas virtuales con direcciones internas, diez punto cero punto cero punto once y doce. Esas direcciones no salen a Internet. Para salir, el tráfico atraviesa un router virtual que hace traducción de direcciones, y de ahí a la IP flotante, la dirección pública que sí es alcanzable. Abajo, el grupo de seguridad: reglas de firewall que se aplican por instancia y que definen qué puertos quedan abiertos. Todo esto es software: crear una red, una subred o una regla es una petición a la API de Neutron, igual que te enseñaste con las redes de la nube pública en la unidad uno.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Servicio clave</div>
+      <h2>Glance: el catálogo de imágenes</h2>
+      <div class="rule"></div>
+      <div class="sub">Una imagen es el disco base desde el que nacen todas las VM; y el snapshot devuelve una VM a imagen.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Ciclo de imágenes en Glance">
+<defs>
+<marker id="arrV9" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker><marker id="arrVS9" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto-start-reverse"><path d="M8,0 L0,3 L8,6 z" fill="#8a6d1d"/></marker>
+</defs>
+<text x="16" y="34" font-size="14" font-weight="bold" letter-spacing="1.2" fill="#A6192E">CAMINO 1 · LANZAR DESDE UNA IMAGEN</text>
+<rect x="10" y="46" width="330" height="150" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/sharedservices/glance.png" x="34" y="76" width="76" height="76"/><text x="134" y="98" font-size="16" font-weight="bold" fill="#A6192E">Imagen en Glance</text><text x="134" y="122" font-size="13" fill="#6b6b6b">catálogo: Ubuntu, Windows…</text><text x="134" y="142" font-size="13" fill="#6b6b6b">cada una con su tamaño.</text>
+<line x1="344" y1="121" x2="404" y2="121" stroke="#A6192E" stroke-width="2.8" marker-end="url(#arrV9)"/>
+<rect x="410" y="46" width="330" height="150" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/compute/nova.png" x="434" y="76" width="76" height="76"/><text x="534" y="98" font-size="16" font-weight="bold" fill="#A6192E">Nova la copia</text><text x="534" y="122" font-size="13" fill="#6b6b6b">trae la imagen al nodo</text><text x="534" y="142" font-size="13" fill="#6b6b6b">elegido para la instancia.</text>
+<line x1="744" y1="121" x2="804" y2="121" stroke="#A6192E" stroke-width="2.8" marker-end="url(#arrV9)"/>
+<rect x="810" y="46" width="360" height="150" rx="12" fill="#f9eef0" stroke="#A6192E" stroke-width="2.2"/><image href="assets/iconos/openstack/compute/nova.png" x="834" y="76" width="76" height="76"/><text x="934" y="98" font-size="16" font-weight="bold" fill="#A6192E">VM arrancada</text><text x="934" y="122" font-size="13" fill="#6b6b6b">todas las instancias de una</text><text x="934" y="142" font-size="13" fill="#6b6b6b">imagen arrancan iguales.</text>
+<text x="16" y="248" font-size="14" font-weight="bold" letter-spacing="1.2" fill="#8a6d1d">CAMINO 2 · CONVERTIR UNA VM EN IMAGEN (SNAPSHOT)</text>
+<rect x="810" y="260" width="360" height="130" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/compute/nova.png" x="834" y="282" width="66" height="66"/><text x="922" y="306" font-size="15.5" font-weight="bold" fill="#8a6d1d">VM en producción</text><text x="922" y="330" font-size="13" fill="#6b6b6b">con la aplicación instalada.</text>
+<line x1="806" y1="325" x2="746" y2="325" stroke="#8a6d1d" stroke-width="2.8" marker-end="url(#arrVS9)"/>
+<rect x="410" y="260" width="330" height="130" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/compute/nova.png" x="434" y="282" width="66" height="66"/><text x="522" y="306" font-size="15.5" font-weight="bold" fill="#8a6d1d">Snapshot</text><text x="522" y="330" font-size="13" fill="#6b6b6b">instantánea del disco.</text>
+<line x1="406" y1="325" x2="346" y2="325" stroke="#8a6d1d" stroke-width="2.8" marker-end="url(#arrVS9)"/>
+<rect x="10" y="260" width="330" height="130" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><image href="assets/iconos/openstack/sharedservices/glance.png" x="34" y="282" width="66" height="66"/><text x="122" y="306" font-size="15.5" font-weight="bold" fill="#8a6d1d">Nueva imagen</text><text x="122" y="330" font-size="13" fill="#6b6b6b">plantilla para la próxima VM.</text>
+<text x="590" y="440" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#A6192E">Base idéntica para todas las VM: rápidas de crear y fáciles de reemplazar.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: documentación de OpenStack Glance; "11 OpenStack.pptx", arquitectura por servicios (diapositivas 3-5)</span>
+      <span class="pg">9 / 16</span>
+    </div>
+    <aside class="guion">Glance es el servicio de imágenes: mantiene el catálogo de discos base desde los que se construyen las máquinas virtuales. El primer camino de la gráfica es el habitual: eliges una imagen del catálogo, por ejemplo Ubuntu, Nova la copia al nodo elegido y desde ahí arranca la instancia; todas las instancias creadas desde esa imagen arrancan iguales. El segundo camino es el inverso y es muy útil en operación: cuando una VM en producción ya está configurada con la aplicación instalada, se toma un snapshot, una instantánea del disco, y ese snapshot se guarda en Glance como una nueva imagen. Así, la reconstrucción deja de ser un proyecto y se vuelve un clic.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Servicio clave</div>
+      <h2>Cinder y Swift: dos formas de guardar datos</h2>
+      <div class="rule"></div>
+      <div class="sub">Volumen en bloque para la VM; objetos para archivos y copias.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Cinder bloque frente a Swift objetos">
+<defs>
+<marker id="arrG10" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#6b6b6b"/></marker>
+</defs>
+<rect x="10" y="10" width="570" height="44" rx="12" fill="#A6192E"/><rect x="10" y="32" width="570" height="22" fill="#A6192E"/><text x="295" y="39" font-size="16.5" font-weight="bold" text-anchor="middle" fill="#fff">Cinder · volumen en bloque</text>
+<image href="assets/iconos/openstack/storage/cinder.png" x="36" y="76" width="72" height="72"/><text x="130" y="100" font-size="13.5" fill="#2A2A2A">Se conecta a la VM como un disco más.</text><text x="130" y="124" font-size="13.5" fill="#2A2A2A">Sobrevive a borrar la instancia.</text><text x="130" y="148" font-size="13.5" fill="#2A2A2A">Se despega y se reengancha a otra VM.</text><text x="130" y="172" font-size="13.5" fill="#2A2A2A">Admite snapshots.</text>
+<rect x="36" y="220" width="230" height="130" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><image href="assets/iconos/openstack/compute/nova.png" x="130" y="234" width="52" height="52"/><text x="151" y="320" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">VM</text>
+<line x1="268" y1="285" x2="330" y2="285" stroke="#6b6b6b" stroke-width="2.6" marker-end="url(#arrG10)"/>
+<rect x="334" y="220" width="230" height="130" rx="12" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/><image href="assets/iconos/openstack/storage/cinder.png" x="428" y="234" width="52" height="52"/><text x="449" y="320" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">volumen 20 GB</text><text x="295" y="390" font-size="13" text-anchor="middle" fill="#6b6b6b">como el disco persistente</text><text x="295" y="408" font-size="13" text-anchor="middle" fill="#6b6b6b">que ya conoces</text>
+<rect x="600" y="10" width="570" height="44" rx="12" fill="#D4AF37"/><rect x="600" y="32" width="570" height="22" fill="#D4AF37"/><text x="885" y="39" font-size="16.5" font-weight="bold" text-anchor="middle" fill="#3a2c00">Swift · almacenamiento de objetos</text>
+<image href="assets/iconos/openstack/storage/swift.png" x="626" y="76" width="72" height="72"/><text x="720" y="100" font-size="13.5" fill="#2A2A2A">Guarda objetos: archivos, copias, binarios.</text><text x="720" y="124" font-size="13.5" fill="#2A2A2A">Se accede por HTTP, con nombre y versión.</text><text x="720" y="148" font-size="13.5" fill="#2A2A2A">Diseñado para grandes volúmenes.</text><text x="720" y="172" font-size="13.5" fill="#2A2A2A">Ideal para respaldos y sitios estáticos.</text>
+<rect x="626" y="220" width="250" height="130" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/><text x="751" y="250" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#8a6d1d">contenedor de objetos</text><rect x="650" y="266" width="48" height="48" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.6"/><rect x="712" y="266" width="48" height="48" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.6"/><rect x="774" y="266" width="48" height="48" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.6"/><text x="751" y="338" font-size="12" text-anchor="middle" fill="#6b6b6b">objetos versionados</text>
+<image href="assets/iconos/onprem/storage/ceph.png" x="930" y="224" width="90" height="90"/><text x="975" y="338" font-size="12.5" text-anchor="middle" fill="#6b6b6b">copias y respaldos</text>
+<text x="590" y="484" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#A6192E">Regla simple: si la VM lo lee como disco, es Cinder; si es un archivo, es Swift.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: documentación de OpenStack Cinder y Swift; "11 OpenStack.pptx", arquitectura por servicios</span>
+      <span class="pg">10 / 16</span>
+    </div>
+    <aside class="guion">OpenStack separa el almacenamiento en dos servicios con misiones distintas. Cinder ofrece volúmenes en bloque: un disco que se conecta a la VM como si fuera físico y que sobrevive si borras la instancia; puedes despegarlo y reenganchárselo a otra VM, y tomar snapshots. Es el equivalente al disco persistente que ya conoces. Swift ofrece almacenamiento de objetos: aquí no creas discos, guardas objetos con nombre y versión, accedidos por HTTP, pensados para grandes volúmenes de archivos y copias de seguridad. La regla para no equivocarse: si la VM lo va a leer como disco, es Cinder; si es un archivo o una copia, es Swift.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Servicio clave</div>
+      <h2>Horizon: la cara de tu nube</h2>
+      <div class="rule"></div>
+      <div class="sub">Un portal web sobre las mismas API: sirve para empezar y para operar.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Interfaz de Horizon">
+<defs></defs>
+<rect x="10" y="10" width="740" height="470" rx="14" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><rect x="10" y="10" width="740" height="46" rx="14" fill="#f9eef0"/><rect x="10" y="34" width="740" height="22" fill="#f9eef0"/><circle cx="38" cy="33" r="7" fill="#A6192E"/><circle cx="62" cy="33" r="7" fill="#D4AF37"/><circle cx="86" cy="33" r="7" fill="#8a6d1d"/><rect x="120" y="20" width="420" height="26" rx="13" fill="#fff" stroke="#cccccc" stroke-width="1.2"/><text x="136" y="38" font-size="12" fill="#6b6b6b">https://horizon.mi-nube.local</text>
+<rect x="10" y="56" width="210" height="424" fill="#f9eef0"/><text x="34" y="92" font-size="13.5" font-weight="bold" fill="#A6192E">Proyecto: producción</text><rect x="24" y="110" width="180" height="30" rx="8" fill="#A6192E"/><text x="40" y="130" font-size="13" font-weight="bold" fill="#fff">Instancias</text><text x="40" y="164" font-size="13" fill="#2A2A2A">Imágenes</text><text x="40" y="194" font-size="13" fill="#2A2A2A">Volúmenes</text><text x="40" y="224" font-size="13" fill="#2A2A2A">Redes</text><text x="40" y="254" font-size="13" fill="#2A2A2A">Acceso y seguridad</text><text x="40" y="284" font-size="13" fill="#2A2A2A">Cuotas del proyecto</text>
+<text x="248" y="96" font-size="19" font-weight="bold" fill="#A6192E">Instancias</text><rect x="248" y="112" width="110" height="28" rx="14" fill="#fbf6e7" stroke="#3b8a3b" stroke-width="1.4"/><text x="303" y="131" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#2f6f2f">2 activas</text>
+<rect x="248" y="160" width="482" height="46" rx="10" fill="#fff" stroke="#dddddd" stroke-width="1.4"/><image href="assets/iconos/openstack/compute/nova.png" x="262" y="170" width="26" height="26"/><text x="302" y="178" font-size="13" font-weight="bold" fill="#2A2A2A">vm-web-01</text><text x="302" y="196" font-size="12" fill="#6b6b6b">10.0.0.11 · flotante 172.24.4.51</text><text x="714" y="188" font-size="12" font-weight="bold" text-anchor="end" fill="#2f6f2f">activo</text>
+<rect x="248" y="218" width="482" height="46" rx="10" fill="#fff" stroke="#dddddd" stroke-width="1.4"/><image href="assets/iconos/openstack/compute/nova.png" x="262" y="228" width="26" height="26"/><text x="302" y="236" font-size="13" font-weight="bold" fill="#2A2A2A">vm-lab-02</text><text x="302" y="254" font-size="12" fill="#6b6b6b">10.0.0.12 · sin flotante</text><text x="714" y="246" font-size="12" font-weight="bold" text-anchor="end" fill="#2f6f2f">activo</text>
+<rect x="248" y="292" width="190" height="42" rx="8" fill="#A6192E"/><text x="343" y="318" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#fff">Lanzar instancia</text><rect x="454" y="292" width="160" height="42" rx="8" fill="#D4AF37"/><text x="534" y="318" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#3a2c00">Crear volumen</text>
+<text x="248" y="382" font-size="12.5" fill="#6b6b6b">Detrás de cada botón: una petición a la API del servicio correspondiente.</text>
+<rect x="780" y="10" width="390" height="220" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.2"/><image href="assets/iconos/openstack/frontend/horizon.png" x="804" y="34" width="66" height="66"/><text x="890" y="66" font-size="16" font-weight="bold" fill="#A6192E">Solo una interfaz</text><text x="804" y="136" font-size="13.5" fill="#2A2A2A">Todo lo que hace la consola lo</text><text x="804" y="156" font-size="13.5" fill="#2A2A2A">hacen las API; si Horizon cae,</text><text x="804" y="176" font-size="13.5" fill="#2A2A2A">tu nube sigue funcionando.</text>
+<rect x="780" y="250" width="390" height="230" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><text x="804" y="288" font-size="16" font-weight="bold" fill="#8a6d1d">Misma nube, otra piel</text><text x="804" y="320" font-size="13.5" fill="#2A2A2A">La línea de comandos y los</text><text x="804" y="340" font-size="13.5" fill="#2A2A2A">scripts usan las mismas API.</text><text x="804" y="372" font-size="13.5" fill="#2A2A2A">Horizon es la puerta cómoda</text><text x="804" y="392" font-size="13.5" fill="#2A2A2A">para empezar y para operar.</text><image href="assets/iconos/aws/general/sdk.png" x="804" y="410" width="56" height="56"/><text x="878" y="446" font-size="13" font-style="italic" fill="#6b6b6b">automatización = API + token</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: documentación de OpenStack Horizon; "11 OpenStack.pptx", portal de autoservicio (diapositiva 2)</span>
+      <span class="pg">11 / 16</span>
+    </div>
+    <aside class="guion">Horizon es el proyecto web de interfaz de usuario: la cara de tu nube. En la pantalla de la izquierda ves lo que verás en el laboratorio: un menú de proyecto con instancias, imágenes, volúmenes y redes, y botones como lanzar instancia o crear volumen. Cada botón no hace magia: dispara una petición a la API del servicio correspondiente. Esto tiene dos consecuencias útiles. Primera, si Horizon se cae, tu nube sigue operando, porque los servicios siguen ahí. Segunda, lo que hoy haces con clics mañana lo podrás automatizar con la línea de comandos o con scripts usando las mismas API y un token de Keystone.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Puesta en práctica</div>
+      <h2>Cómo viaja la petición «lanzar una VM»</h2>
+      <div class="rule"></div>
+      <div class="sub">Seis servicios, un solo token, y una máquina virtual al final del camino.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 525" class="dgm" role="img" aria-label="Flujo de lanzamiento de una máquina virtual">
+<defs>
+<marker id="arrV12" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 z" fill="#A6192E"/></marker>
+</defs>
+<rect x="10" y="36" width="178" height="140" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><circle cx="36" cy="62" r="14" fill="#A6192E"/><text x="36" y="67" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">1</text><image href="assets/iconos/openstack/frontend/horizon.png" x="70" y="48" width="54" height="54"/><text x="99" y="128" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">Horizon</text><text x="99" y="150" font-size="11.5" text-anchor="middle" fill="#6b6b6b">«Lanzar instancia»</text>
+<line x1="190" y1="106" x2="204" y2="106" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV12)"/>
+<rect x="206" y="36" width="178" height="140" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><circle cx="232" cy="62" r="14" fill="#A6192E"/><text x="232" y="67" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">2</text><image href="assets/iconos/openstack/sharedservices/keystone.png" x="266" y="48" width="54" height="54"/><text x="295" y="128" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">Keystone</text><text x="295" y="150" font-size="11.5" text-anchor="middle" fill="#6b6b6b">entrega el token</text>
+<line x1="386" y1="106" x2="400" y2="106" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV12)"/>
+<rect x="402" y="36" width="178" height="140" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><circle cx="428" cy="62" r="14" fill="#A6192E"/><text x="428" y="67" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">3</text><image href="assets/iconos/openstack/compute/nova.png" x="462" y="48" width="54" height="54"/><text x="491" y="128" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">Nova</text><text x="491" y="150" font-size="11.5" text-anchor="middle" fill="#6b6b6b">planifica y coordina</text>
+<line x1="582" y1="106" x2="596" y2="106" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV12)"/>
+<rect x="598" y="36" width="178" height="140" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><circle cx="624" cy="62" r="14" fill="#A6192E"/><text x="624" y="67" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">4</text><image href="assets/iconos/openstack/sharedservices/glance.png" x="658" y="48" width="54" height="54"/><text x="687" y="128" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">Glance</text><text x="687" y="150" font-size="11.5" text-anchor="middle" fill="#6b6b6b">entrega la imagen</text>
+<line x1="778" y1="106" x2="792" y2="106" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV12)"/>
+<rect x="794" y="36" width="178" height="140" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><circle cx="820" cy="62" r="14" fill="#A6192E"/><text x="820" y="67" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">5</text><image href="assets/iconos/openstack/networking/neutron.png" x="854" y="48" width="54" height="54"/><text x="883" y="128" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">Neutron</text><text x="883" y="150" font-size="11.5" text-anchor="middle" fill="#6b6b6b">da red e IP flotante</text>
+<line x1="974" y1="106" x2="988" y2="106" stroke="#A6192E" stroke-width="2.6" marker-end="url(#arrV12)"/>
+<rect x="990" y="36" width="178" height="140" rx="12" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><circle cx="1016" cy="62" r="14" fill="#A6192E"/><text x="1016" y="67" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">6</text><image href="assets/iconos/openstack/storage/cinder.png" x="1050" y="48" width="54" height="54"/><text x="1079" y="128" font-size="14" font-weight="bold" text-anchor="middle" fill="#A6192E">Cinder</text><text x="1079" y="150" font-size="11.5" text-anchor="middle" fill="#6b6b6b">monta el volumen</text>
+<polyline points="1079,180 1079,250 850,250" fill="none" stroke="#A6192E" stroke-width="2.8" marker-end="url(#arrV12)"/>
+<rect x="330" y="210" width="510" height="160" rx="16" fill="#A6192E"/><image href="assets/iconos/openstack/compute/nova.png" x="356" y="236" width="76" height="76"/><text x="456" y="272" font-size="24" font-weight="bold" fill="#fff">VM en línea</text><text x="456" y="298" font-size="13.5" fill="#f3d7dc">1 vCPU · 1 GB · Ubuntu · volumen 20 GB</text><rect x="356" y="316" width="458" height="34" rx="17" fill="#2A2A2A"/><text x="374" y="338" font-size="13" font-family="monospace" fill="#7ce08a">$ ssh ubuntu@172.24.4.51</text>
+<rect x="10" y="210" width="300" height="160" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><text x="34" y="246" font-size="15" font-weight="bold" fill="#8a6d1d">Todo en segundos</text><text x="34" y="276" font-size="13" fill="#2A2A2A">Keystone firmó el pase, Nova</text><text x="34" y="296" font-size="13" fill="#2A2A2A">coordinó y los demás ejecutaron</text><text x="34" y="316" font-size="13" fill="#2A2A2A">su parte en paralelo.</text><text x="34" y="348" font-size="12.5" font-style="italic" fill="#6b6b6b">Nadie tocó un servidor físico.</text>
+<rect x="860" y="210" width="310" height="160" rx="14" fill="#fff" stroke="#6b6b6b" stroke-width="1.8"/><text x="884" y="246" font-size="15" font-weight="bold" fill="#A6192E">Y queda registrado</text><text x="884" y="276" font-size="13" fill="#2A2A2A">Metadatos en la base de datos,</text><text x="884" y="296" font-size="13" fill="#2A2A2A">facturación al proyecto y la VM</text><text x="884" y="316" font-size="13" fill="#2A2A2A">visible en Horizon.</text>
+<rect x="10" y="396" width="1160" height="90" rx="12" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/><text x="590" y="432" font-size="15" font-weight="bold" text-anchor="middle" fill="#A6192E">Un clic en Horizon = una cadena de servicios trabajando con el mismo token.</text><text x="590" y="458" font-size="13.5" text-anchor="middle" fill="#2A2A2A">En el laboratorio de la semana 13 recorrerás este mismo camino, pero observándolo paso a paso.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: elaboración propia; "11 OpenStack.pptx", arquitectura por servicios (diapositivas 3-5)</span>
+      <span class="pg">12 / 16</span>
+    </div>
+    <aside class="guion">Aquí vemos todo junto. El usuario pulsa lanzar instancia en Horizon; Horizon pide primero a Keystone el token, la prueba de identidad que acompaña la petición. Con el token en mano, Nova recibe la solicitud, consulta su base de datos de metadatos, elige un nodo y empieza a pedir: a Glance la imagen, que se copia al nodo; a Neutron la red, con una IP interna y una flotante; y a Cinder el volumen persistente. Cuando las piezas están montadas, el hipervisor arranca la VM y aparece en línea, lista para entrar por SSH con la IP flotante. Todo quedó registrado, visible en Horizon y facturado al proyecto. Este mismo recorrido será el corazón del laboratorio de la semana 13.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Instalación</div>
+      <h2>Tres formas de instalar OpenStack</h2>
+      <div class="rule"></div>
+      <div class="sub">Mismo proyecto, tres objetivos distintos: aprender, probar u operar.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Formas de instalar OpenStack">
+<defs></defs>
+<rect x="10" y="15" width="370" height="430" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2.2"/><rect x="34" y="38" width="130" height="30" rx="15" fill="#A6192E"/><text x="99" y="58" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#fff">LABORATORIO</text><text x="34" y="102" font-size="21" font-weight="bold" fill="#A6192E">DevStack</text><rect x="34" y="120" width="322" height="86" rx="10" fill="#2A2A2A"/><text x="50" y="150" font-size="13" font-family="monospace" fill="#7ce08a">$ git clone devstack</text><text x="50" y="172" font-size="13" font-family="monospace" fill="#7ce08a">$ ./stack.sh</text><text x="50" y="194" font-size="13" font-family="monospace" fill="#9a9a9a"># todo el OpenStack en una VM</text><circle cx="46" cy="248" r="5" fill="#D4AF37"/><text x="64" y="253" font-size="13.5" fill="#2A2A2A">Guiones que levantan la nube completa</text><circle cx="46" cy="286" r="5" fill="#D4AF37"/><text x="64" y="291" font-size="13.5" fill="#2A2A2A">Se instala, se prueba y se borra</text><circle cx="46" cy="324" r="5" fill="#D4AF37"/><text x="64" y="329" font-size="13.5" fill="#2A2A2A">No es para producción</text><text x="34" y="400" font-size="13.5" font-weight="bold" fill="#A6192E">Así aprenderemos en la semana 13.</text>
+<rect x="405" y="15" width="370" height="430" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2.2"/><rect x="429" y="38" width="110" height="30" rx="15" fill="#D4AF37"/><text x="484" y="58" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#3a2c00">UN NODO</text><text x="429" y="102" font-size="21" font-weight="bold" fill="#A6192E">MicroStack / Sunbeam</text><image href="assets/iconos/openstack/openstack.png" x="429" y="126" width="80" height="80"/><image href="assets/iconos/generic/os/ubuntu.png" x="530" y="126" width="80" height="80"/><text x="429" y="253" font-size="13.5" fill="#2A2A2A">Empaquetado por Canonical para Ubuntu.</text><circle cx="441" cy="286" r="5" fill="#D4AF37"/><text x="459" y="291" font-size="13.5" fill="#2A2A2A">Servicios esenciales preconfigurados</text><circle cx="441" cy="324" r="5" fill="#D4AF37"/><text x="459" y="329" font-size="13.5" fill="#2A2A2A">Instalación rápida en un solo equipo</text><circle cx="441" cy="362" r="5" fill="#D4AF37"/><text x="459" y="367" font-size="13.5" fill="#2A2A2A">Para pruebas pequeñas, no para escala</text><text x="429" y="412" font-size="13.5" font-weight="bold" fill="#8a6d1d">Buen puente entre el lab y producción.</text>
+<rect x="800" y="15" width="370" height="430" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2.2"/><rect x="824" y="38" width="140" height="30" rx="15" fill="#A6192E"/><text x="894" y="58" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#fff">PRODUCCIÓN</text><text x="824" y="102" font-size="21" font-weight="bold" fill="#A6192E">Distribuciones</text><image href="assets/iconos/generic/place/datacenter.png" x="824" y="126" width="80" height="80"/><image href="assets/iconos/generic/compute/rack.png" x="925" y="126" width="80" height="80"/><circle cx="836" cy="253" r="5" fill="#D4AF37"/><text x="854" y="258" font-size="13.5" fill="#2A2A2A">Multi-nodo y alta disponibilidad</text><circle cx="836" cy="291" r="5" fill="#D4AF37"/><text x="854" y="296" font-size="13.5" fill="#2A2A2A">Actualizaciones dirigidas y soporte</text><circle cx="836" cy="329" r="5" fill="#D4AF37"/><text x="854" y="334" font-size="13.5" fill="#2A2A2A">Operación automatizada de despliegues</text><circle cx="836" cy="367" r="5" fill="#D4AF37"/><text x="854" y="372" font-size="13.5" fill="#2A2A2A">Requiere equipo y hardware dedicado</text><text x="824" y="412" font-size="13.5" font-weight="bold" fill="#A6192E">Aquí vive el OpenStack serio.</text>
+<text x="590" y="482" font-size="14" font-style="italic" text-anchor="middle" fill="#6b6b6b">Solo concepto hoy: la elección depende del objetivo, no del proveedor.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: "11 OpenStack.pptx", diapositivas 8-9 (MicroStack y distribuciones); proyecto DevStack</span>
+      <span class="pg">13 / 16</span>
+    </div>
+    <aside class="guion">¿Cómo se instala OpenStack? Hay tres caminos y dependen del objetivo. El primero es DevStack: un conjunto de guiones que levanta una nube completa dentro de una sola máquina virtual, pensado para aprender; se instala, se prueba y se borra, y por eso es el que usaremos en el laboratorio de la semana siguiente. El segundo es empaquetado, como MicroStack o Sunbeam de Canonical, que instalan los servicios esenciales en un solo nodo con poca intervención: buen intermedio para pruebas pequeñas. El tercero son las distribuciones de operación, multi-nodo, con alta disponibilidad y actualizaciones dirigidas: ahí vive el OpenStack que sostiene cargas reales, y exige hardware dedicado y equipo capacitado.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Decisión</div>
+      <h2>Nube privada frente a nube pública</h2>
+      <div class="rule"></div>
+      <div class="sub">No hay una respuesta correcta: depende de los datos, el volumen y el equipo.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Nube privada frente a nube pública">
+<defs></defs>
+<rect x="10" y="10" width="570" height="44" rx="12" fill="#A6192E"/><rect x="10" y="32" width="570" height="22" fill="#A6192E"/><text x="295" y="39" font-size="16.5" font-weight="bold" text-anchor="middle" fill="#fff">NUBE PRIVADA · OpenStack</text>
+<circle cx="46" cy="94" r="5" fill="#D4AF37"/><text x="66" y="99" font-size="14" fill="#2A2A2A">Los datos quedan bajo tu jurisdicción.</text><circle cx="46" cy="136" r="5" fill="#D4AF37"/><text x="66" y="141" font-size="14" fill="#2A2A2A">Control total de la red y del acceso.</text><circle cx="46" cy="178" r="5" fill="#D4AF37"/><text x="66" y="183" font-size="14" fill="#2A2A2A">Costo fijo: hardware, licencias y equipo.</text><circle cx="46" cy="220" r="5" fill="#D4AF37"/><text x="66" y="225" font-size="14" fill="#2A2A2A">Escala hasta donde llega tu data center.</text><circle cx="46" cy="262" r="5" fill="#D4AF37"/><text x="66" y="267" font-size="14" fill="#2A2A2A">Tú operas la nube: parches y respaldos son tuyos.</text><image href="assets/iconos/onprem/security/vault.png" x="46" y="296" width="60" height="60"/><text x="126" y="330" font-size="13" font-style="italic" fill="#6b6b6b">cuando el dato no puede salir</text>
+<rect x="600" y="10" width="570" height="44" rx="12" fill="#D4AF37"/><rect x="600" y="32" width="570" height="22" fill="#D4AF37"/><text x="885" y="39" font-size="16.5" font-weight="bold" text-anchor="middle" fill="#3a2c00">NUBE PÚBLICA · alquilada</text>
+<circle cx="636" cy="94" r="5" fill="#A6192E"/><text x="656" y="99" font-size="14" fill="#2A2A2A">Pago por uso, sin inversión inicial.</text><circle cx="636" cy="136" r="5" fill="#A6192E"/><text x="656" y="141" font-size="14" fill="#2A2A2A">Escala global en minutos.</text><circle cx="636" cy="178" r="5" fill="#A6192E"/><text x="656" y="183" font-size="14" fill="#2A2A2A">Servicios administrados: menos operación.</text><circle cx="636" cy="220" r="5" fill="#A6192E"/><text x="656" y="225" font-size="14" fill="#2A2A2A">El proveedor opera la infraestructura.</text><circle cx="636" cy="262" r="5" fill="#A6192E"/><text x="656" y="267" font-size="14" fill="#2A2A2A">El costo crece con el uso.</text><image href="assets/iconos/onprem/network/internet.png" x="636" y="296" width="60" height="60"/><text x="716" y="330" font-size="13" font-style="italic" fill="#6b6b6b">cuando hay que escalar rápido</text>
+<rect x="10" y="376" width="1160" height="108" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.2"/><text x="40" y="412" font-size="15" font-weight="bold" fill="#A6192E">Caso Colombia (ilustrativo): un banco con datos de clientes reglados</text><text x="40" y="440" font-size="13.5" fill="#2A2A2A">Mantendría en nube privada lo sensible y usaría nube pública para los picos de tráfico: muchas veces, ambas conviven.</text><text x="40" y="462" font-size="12.5" font-style="italic" fill="#6b6b6b">Caso de aula, no un caso real documentado.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: elaboración propia; comparación privada/pública de las unidades 1 y 2 del curso</span>
+      <span class="pg">14 / 16</span>
+    </div>
+    <aside class="guion">Llegamos a la pregunta de decisión. La nube privada, construida con OpenStack, conviene cuando los datos no pueden salir de tu jurisdicción, cuando necesitas control total de la red y el acceso, o cuando el volumen de trabajo es tan constante que un costo fijo resulta mejor que pagar por uso. Su contrapartida es clara: tú eres el operador, y los parches, los respaldos y las caídas son asunto tuyo. La nube pública conviene cuando no quieres inversión inicial, cuando necesitas escala rápida y cuando prefieres que alguien más opere la infraestructura. El caso colombiano de este aula es ilustrativo: un banco con datos de clientes reglados mantendría lo sensible en su nube privada y usaría la pública para los picos. La respuesta habitual no es elegir: es convivir.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Anticipo</div>
+      <h2>Lab de la semana 13 (10 % de la nota)</h2>
+      <div class="rule"></div>
+      <div class="sub">Levantarás tu propia nube y entrarás a tu primera máquina virtual.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Pasos del laboratorio de la semana 13">
+<defs></defs>
+<rect x="340" y="8" width="500" height="42" rx="21" fill="#A6192E"/><text x="590" y="35" font-size="15" font-weight="bold" text-anchor="middle" fill="#fff">Laboratorio Semana 13 · OpenStack en tu equipo</text>
+<rect x="10" y="66" width="222" height="320" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><circle cx="42" cy="98" r="16" fill="#A6192E"/><text x="42" y="103" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">1</text><image href="assets/iconos/generic/os/ubuntu.png" x="82" y="112" width="80" height="80"/><text x="121" y="228" font-size="16" font-weight="bold" text-anchor="middle" fill="#A6192E">Ubuntu 24.04</text><text x="121" y="256" font-size="12.5" text-anchor="middle" fill="#6b6b6b">sistema base limpio</text><text x="121" y="274" font-size="12.5" text-anchor="middle" fill="#6b6b6b">con acceso a Internet</text>
+<rect x="244" y="66" width="222" height="320" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><circle cx="276" cy="98" r="16" fill="#A6192E"/><text x="276" y="103" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">2</text><rect x="285" y="120" width="140" height="84" rx="10" fill="#2A2A2A"/><text x="299" y="150" font-size="12.5" font-family="monospace" fill="#7ce08a">$ ./stack.sh</text><text x="299" y="172" font-size="12.5" font-family="monospace" fill="#9a9a9a"># DevStack levanta</text><text x="299" y="190" font-size="12.5" font-family="monospace" fill="#9a9a9a"># Keystone, Nova…</text><text x="355" y="228" font-size="16" font-weight="bold" text-anchor="middle" fill="#A6192E">DevStack</text><text x="355" y="256" font-size="12.5" text-anchor="middle" fill="#6b6b6b">instalación guiada</text><text x="355" y="274" font-size="12.5" text-anchor="middle" fill="#6b6b6b">por guiones</text>
+<rect x="478" y="66" width="222" height="320" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><circle cx="510" cy="98" r="16" fill="#A6192E"/><text x="510" y="103" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">3</text><image href="assets/iconos/openstack/frontend/horizon.png" x="549" y="112" width="80" height="80"/><text x="589" y="228" font-size="16" font-weight="bold" text-anchor="middle" fill="#A6192E">Horizon</text><text x="589" y="256" font-size="12.5" text-anchor="middle" fill="#6b6b6b">entra al portal</text><text x="589" y="274" font-size="12.5" text-anchor="middle" fill="#6b6b6b">y reconoce los menús</text>
+<rect x="712" y="66" width="222" height="320" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2"/><circle cx="744" cy="98" r="16" fill="#A6192E"/><text x="744" y="103" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">4</text><image href="assets/iconos/openstack/compute/nova.png" x="783" y="112" width="80" height="80"/><text x="823" y="228" font-size="16" font-weight="bold" text-anchor="middle" fill="#A6192E">VM pequeña</text><text x="823" y="256" font-size="12.5" text-anchor="middle" fill="#6b6b6b">1 vCPU, poca memoria,</text><text x="823" y="274" font-size="12.5" text-anchor="middle" fill="#6b6b6b">imagen Ubuntu</text>
+<rect x="946" y="66" width="222" height="320" rx="14" fill="#f9eef0" stroke="#A6192E" stroke-width="2.4"/><circle cx="978" cy="98" r="16" fill="#A6192E"/><text x="978" y="103" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">5</text><rect x="977" y="120" width="160" height="72" rx="10" fill="#2A2A2A"/><text x="991" y="150" font-size="12" font-family="monospace" fill="#7ce08a">$ ssh ubuntu@</text><text x="991" y="168" font-size="12" font-family="monospace" fill="#7ce08a">172.24.4.x</text><text x="1057" y="228" font-size="16" font-weight="bold" text-anchor="middle" fill="#A6192E">Entrar por SSH</text><text x="1057" y="256" font-size="12.5" text-anchor="middle" fill="#6b6b6b">con la IP flotante</text><text x="1057" y="274" font-size="12.5" text-anchor="middle" fill="#6b6b6b">asignada por Neutron</text>
+<line x1="232" y1="98" x2="242" y2="98" stroke="#A6192E" stroke-width="2.6"/><line x1="466" y1="98" x2="476" y2="98" stroke="#A6192E" stroke-width="2.6"/><line x1="700" y1="98" x2="710" y2="98" stroke="#A6192E" stroke-width="2.6"/><line x1="934" y1="98" x2="944" y2="98" stroke="#A6192E" stroke-width="2.6"/>
+<rect x="10" y="406" width="1160" height="82" rx="12" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><text x="40" y="440" font-size="14.5" font-weight="bold" fill="#8a6d1d">Prepárate: DevStack necesita una máquina con recursos disponibles y buen Internet.</text><text x="40" y="466" font-size="13.5" fill="#2A2A2A">La guía paso a paso se publica con la semana 13; el entorno se prueba antes de la clase.</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: plan del curso 2026-2 (Unidad 3, laboratorio Semana 13)</span>
+      <span class="pg">15 / 16</span>
+    </div>
+    <aside class="guion">Anticipemos el laboratorio de la semana 13, que vale el diez por ciento de la nota. Cinco pasos: primero, una instalación limpia de Ubuntu veinticuatro cero cuatro; segundo, DevStack, que con sus guiones levanta Keystone, Nova, Neutron, Glance, Cinder y Horizon en el propio equipo; tercero, entrar a Horizon y reconocer los menús de los que hablamos hoy; cuarto, crear una máquina virtual pequeña, con una CPU y poca memoria; y quinto, asignarle una IP flotante y entrar por SSH. Un aviso práctico: DevStack necesita una máquina con recursos disponibles y buena conexión a Internet. La guía completa llegará con la semana 13 y el entorno se probará antes de la clase.</aside>
+  </section>
+
+  <section class="slide">
+    <div class="s-head">
+      <div class="kicker">Cierre</div>
+      <h2>Tres ideas para llevarte</h2>
+      <div class="rule"></div>
+      <div class="sub">OpenStack convierte tu data center en una nube con la que puedes competir con las grandes.</div>
+      <img class="logo-corner" src="assets/logo-cuc.png" onerror="this.style.display='none'" alt="CUC" onerror="this.style.display='none'">
+    </div>
+    <div class="s-body">
+      <svg viewBox="0 0 1180 505" class="dgm" role="img" aria-label="Tres ideas clave y pregunta de reflexión">
+<defs></defs>
+<rect x="10" y="10" width="370" height="250" rx="14" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.2"/><circle cx="44" cy="46" r="16" fill="#A6192E"/><text x="44" y="51" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">1</text><text x="72" y="52" font-size="17" font-weight="bold" fill="#A6192E">Nube propia</text><image href="assets/iconos/openstack/openstack.png" x="44" y="78" width="76" height="76"/><text x="146" y="108" font-size="13.5" fill="#2A2A2A">OpenStack es un data center</text><text x="146" y="128" font-size="13.5" fill="#2A2A2A">virtualizado, de código</text><text x="146" y="148" font-size="13.5" fill="#2A2A2A">abierto, pedido por API.</text><text x="44" y="212" font-size="13" font-style="italic" fill="#6b6b6b">la nube deja de alquilarse</text><text x="44" y="230" font-size="13" font-style="italic" fill="#6b6b6b">y empieza a construirse</text>
+<rect x="405" y="10" width="370" height="250" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2.2"/><circle cx="439" cy="46" r="16" fill="#A6192E"/><text x="439" y="51" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">2</text><text x="467" y="52" font-size="17" font-weight="bold" fill="#A6192E">Servicios coordinados</text><image href="assets/iconos/openstack/sharedservices/keystone.png" x="439" y="82" width="60" height="60"/><image href="assets/iconos/openstack/compute/nova.png" x="511" y="82" width="60" height="60"/><image href="assets/iconos/openstack/networking/neutron.png" x="583" y="82" width="60" height="60"/><text x="439" y="184" font-size="13.5" fill="#2A2A2A">Nova, Neutron, Glance, Cinder y</text><text x="439" y="204" font-size="13.5" fill="#2A2A2A">Horizon: cada uno, una misión;</text><text x="439" y="224" font-size="13.5" fill="#2A2A2A">todos, con token de Keystone.</text>
+<rect x="800" y="10" width="370" height="250" rx="14" fill="#fff" stroke="#A6192E" stroke-width="2.2"/><circle cx="834" cy="46" r="16" fill="#A6192E"/><text x="834" y="51" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">3</text><text x="862" y="52" font-size="17" font-weight="bold" fill="#A6192E">Se instala a tu medida</text><image href="assets/iconos/generic/os/ubuntu.png" x="834" y="82" width="60" height="60"/><image href="assets/iconos/openstack/openstack.png" x="906" y="82" width="60" height="60"/><image href="assets/iconos/generic/place/datacenter.png" x="978" y="82" width="60" height="60"/><text x="834" y="184" font-size="13.5" fill="#2A2A2A">DevStack para aprender, un nodo</text><text x="834" y="204" font-size="13.5" fill="#2A2A2A">para probar y distribuciones</text><text x="834" y="224" font-size="13.5" fill="#2A2A2A">para operar en serio.</text>
+<rect x="10" y="284" width="1160" height="200" rx="16" fill="#A6192E"/><text x="44" y="330" font-size="17" font-weight="bold" letter-spacing="1.5" fill="#D4AF37">PARA PENSAR</text><text x="44" y="374" font-size="22" font-weight="bold" fill="#fff">¿Qué datos de tu organización justificarían construir su propia nube?</text><text x="44" y="412" font-size="14.5" fill="#f3d7dc">Piensa en soberanía de datos, costos y equipo: las tres decisiones de la diapositiva anterior.</text><rect x="44" y="436" width="520" height="34" rx="17" fill="#D4AF37"/><text x="304" y="458" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#3a2c00">Próxima semana: tu primera VM en OpenStack (lab 10 %)</text>
+      </svg>
+    </div>
+    <div class="s-foot">
+      <span>Arquitectura en la Nube · Semana 12 · Unidad 3</span>
+      <span class="src">Fuente: síntesis de la Semana 12; plan del curso 2026-2</span>
+      <span class="pg">16 / 16</span>
+    </div>
+    <aside class="guion">Cerramos con tres ideas. Primera: OpenStack es nube privada sobre tu propio hardware: un data center virtualizado, de código abierto, cuyos recursos se piden por API. Segunda: la plataforma es un conjunto de servicios pequeños, cada uno con una misión clara, coordinados por API y todos protegidos por el token de Keystone. Tercera: se instala según el objetivo, desde DevStack para aprender hasta distribuciones multi-nodo para operar. Y la pregunta para llevar a casa: ¿qué datos de tu organización justificarían construir su propia nube? Piensa en soberanía de datos, costos y equipo. En la semana 13 lo comprobamos en la práctica: instalaremos DevStack y lanzaremos nuestra primera máquina virtual.</aside>
+  </section>
+
+
+  <button onclick="prev()">‹</button>
+  <span id="counter">1 / 1</span>
+  <button onclick="next()">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let current = 0;
+
+  function show(i){
+    slides.forEach((s,idx)=>{ s.classList.toggle('active', idx===i); });
+    current = i;
+    counter.textContent = `${i+1} / ${slides.length}`;
+    progress.style.width = `${((i+1)/slides.length)*100}%`;
+    if(location.hash !== '#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  function next(){ if(current<slides.length-1) show(current+1); }
+  function prev(){ if(current>0) show(current-1); }
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown') next();
+    if(e.key==='ArrowLeft'||e.key==='PageUp') prev();
+  });
+  // escala el escenario 1280x720 a la ventana
+  function fit(){
+    const st=document.getElementById('stage');
+    const k=Math.min(window.innerWidth/1280, window.innerHeight/720);
+    st.style.transform = k<1 ? `scale(${k})` : 'none';
+  }
+  window.addEventListener('resize', fit); fit();
+  const h=parseInt(location.hash.slice(1)); show(h>0&&h<=slides.length ? h-1 : 0);
+</script>
+
+</body>
+</html>
