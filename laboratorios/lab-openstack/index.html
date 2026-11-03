@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad Semana 13: OpenStack en tu VM · Arquitectura en la Nube · CUC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --ok:#2f7d4f; --ok-tint:#e9f5ee;
+    --line:#E5DCCB; --code-bg:#F1EADA; --code-ink:#4A4030;
+    --shadow:0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    --mono:'IBM Plex Mono',monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#181411; --surface:#221D18; --surface-2:#2B2520;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C;
+      --ok:#5fbf8a; --ok-tint:#1c3327;
+      --line:#3D352A; --code-bg:#1F1914; --code-ink:#E4D9C3;
+      --shadow:0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+    }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;text-wrap:balance;color:var(--ink);}
+  a{color:var(--vino);}
+  code,.mono{font-family:var(--mono);font-size:.92em;background:var(--code-bg);color:var(--code-ink);padding:1px 5px;border-radius:4px;}
+  pre{font-family:var(--mono);font-size:13.5px;background:var(--code-bg);color:var(--code-ink);padding:14px 16px;border-radius:8px;overflow-x:auto;line-height:1.5;}
+  pre code{background:none;padding:0;}
+
+  .wrap{max-width:820px;margin:0 auto;padding:0 24px 90px;}
+  header.top{background:var(--surface);border-bottom:1px solid var(--line);padding:44px 24px 34px;text-align:center;}
+  header.top img.logo{height:56px;margin:0 auto 20px;display:block;}
+  header.top .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--dorado);font-weight:700;margin:0 0 6px;}
+  header.top h1{color:var(--vino);font-size:clamp(24px,4vw,32px);margin:0 0 8px;}
+  header.top .sub{color:var(--ink-soft);font-size:15px;margin:0 0 14px;}
+  .accent-bar{width:160px;height:4px;margin:0 auto 16px;border-radius:2px;background:linear-gradient(90deg,var(--vino),var(--dorado));}
+  header.top .meta{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+  header.top .meta b{color:var(--ink);}
+
+  section{margin-top:40px;}
+  h2{font-size:22px;border-bottom:2px solid var(--line);padding-bottom:8px;margin-bottom:16px;}
+  h2 .paso{display:inline-block;background:var(--vino);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;margin-right:10px;vertical-align:middle;}
+  h3{font-size:17px;color:var(--vino-strong);margin:22px 0 8px;}
+
+  .tip,.warn,.danger{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px;}
+  .tip{border-color:var(--ok);background:var(--ok-tint);}
+  .tip::before{content:"💡 RECOMENDADO — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok);}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint);}
+  .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado);}
+  .danger{border-color:var(--vino);background:var(--vino-tint);}
+  .danger::before{content:"☠ CAUSA MÁS FRECUENTE — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino);}
+
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
+  th{background:var(--vino);color:#fff;font-weight:600;}
+  tr:nth-child(even) td{background:var(--surface-2);}
+  tr:last-child td{border-bottom:none;}
+
+  ol.steps{padding-left:0;list-style:none;counter-reset:step;}
+  ol.steps>li{counter-increment:step;position:relative;padding:6px 0 6px 42px;margin-bottom:10px;}
+  ol.steps>li::before{content:counter(step);position:absolute;left:0;top:6px;width:28px;height:28px;border-radius:50%;background:var(--vino-tint);color:var(--vino);font-family:var(--mono);font-weight:700;font-size:13px;display:grid;place-items:center;}
+
+  footer.page{max-width:820px;margin:60px auto 0;padding:20px 24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);text-align:center;}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" onerror="this.style.display='none'">
+  <p class="eyebrow">Actividad práctica 10 % · Semana 13 · 2–8 nov 2026</p>
+  <h1>Tu propia nube: OpenStack en una VM</h1>
+  <p class="sub">Instala OpenStack (DevStack) en Ubuntu 24.04, abre Horizon y lanza una instancia con IP flotante</p>
+  <div class="accent-bar"></div>
+  <p class="meta"><b>Arquitectura en la Nube</b> · Universidad de la Costa (CUC) · Ingeniería de Sistemas · 2026-2<br>Individual · AWS no aplica en esta actividad</p>
+</header>
+<div class="wrap">
+
+<section>
+  <h2><span class="paso">0</span>Qué vas a construir</h2>
+  <svg viewBox="0 0 760 250" role="img" aria-label="Topología: PC, VM Ubuntu, OpenStack, instancia Cirros" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px">
+    <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/></marker></defs>
+    <rect x="12" y="30" width="150" height="180" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+    <text x="87" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Tu PC</text>
+    <rect x="30" y="70" width="114" height="44" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="87" y="97" text-anchor="middle" font-size="12" fill="var(--ink)">Navegador</text>
+    <rect x="30" y="130" width="114" height="60" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="87" y="155" text-anchor="middle" font-size="12" fill="var(--ink)">VirtualBox /</text><text x="87" y="171" text-anchor="middle" font-size="12" fill="var(--ink)">VMware</text>
+    <rect x="215" y="30" width="400" height="180" rx="10" fill="var(--surface-2)" stroke="var(--vino)" stroke-width="2"/>
+    <text x="415" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">VM Ubuntu Server 24.04 · 8 GB · 4 vCPU · 50 GB</text>
+    <rect x="232" y="68" width="150" height="124" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+    <text x="307" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">OpenStack (DevStack)</text>
+    <text x="307" y="112" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Horizon · Keystone</text><text x="307" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Nova · Neutron</text><text x="307" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Glance · Cinder</text>
+    <rect x="450" y="68" width="150" height="124" rx="8" fill="var(--ok-tint)" stroke="var(--ok)"/>
+    <text x="525" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Instancia Cirros</text>
+    <text x="525" y="112" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">m1.tiny</text><text x="525" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">IP privada 192.168.50.x</text><text x="525" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">IP flotante 172.24.4.x</text>
+    <line x1="144" y1="92" x2="213" y2="92" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="178" y="82" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">http :80</text>
+    <line x1="382" y1="130" x2="448" y2="130" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="415" y="120" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">crea</text>
+    <text x="680" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vino)">Resultado</text>
+    <text x="680" y="120" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">consola en Horizon</text><text x="680" y="138" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">+ SSH a la IP flotante</text>
+  </svg>
+  <p>OpenStack es la plataforma de nube open source: los mismos conceptos de EC2, VPC, Security Groups y Elastic IP que ya viste, ahora en tu propia máquina. Todo corre <b>dentro de tu VM</b>; no se usa ninguna cuenta de nube pública.</p>
+</section>
+
+<section>
+  <h2><span class="paso">1</span>Requisitos</h2>
+  <table>
+    <tr><th>Recurso</th><th>Mínimo</th></tr>
+    <tr><td>PC</td><td>16 GB de RAM (8 GB para la VM), virtualización activada en BIOS (VT-x / AMD-V), 60 GB libres</td></tr>
+    <tr><td>Hipervisor</td><td>VirtualBox o VMware Workstation/Player</td></tr>
+    <tr><td>VM</td><td><b>8 GB RAM · 4 vCPU · 50 GB disco</b> · Ubuntu Server 24.04 LTS</td></tr>
+    <tr><td>Internet</td><td>Estable: el script descarga varios GB. Reserva 45–90 min.</td></tr>
+  </table>
+  <div class="warn">Activa la <b>virtualización anidada</b> (VirtualBox: Sistema → Procesador → «Habilitar VT-x/AMD-V anidado»; VMware: «Virtualizar Intel VT-x/EPT»). Si no está disponible, OpenStack usará emulación (QEMU) y será más lento, pero Cirros arranca igual.</div>
+</section>
+
+<section>
+  <h2><span class="paso">2</span>Red de la VM: puente o NAT</h2>
+  <svg viewBox="0 0 760 170" role="img" aria-label="Red puente frente a NAT con reenvío de puertos" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px">
+    <defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/></marker></defs>
+    <text x="190" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Opción A · Adaptador puente</text>
+    <rect x="30" y="50" width="100" height="50" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="80" y="80" text-anchor="middle" font-size="12" fill="var(--ink)">PC 192.168.1.20</text>
+    <rect x="250" y="50" width="120" height="50" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="310" y="80" text-anchor="middle" font-size="12" fill="var(--ink)">VM 192.168.1.50</text>
+    <line x1="130" y1="75" x2="248" y2="75" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar2)"/>
+    <text x="190" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Navegas a http://192.168.1.50/dashboard</text>
+    <text x="190" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">(la VM recibe IP de tu router/WiFi)</text>
+    <text x="570" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Opción B · NAT + reenvío de puertos</text>
+    <rect x="420" y="50" width="100" height="50" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="470" y="80" text-anchor="middle" font-size="12" fill="var(--ink)">PC 127.0.0.1</text>
+    <rect x="640" y="50" width="100" height="50" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="690" y="80" text-anchor="middle" font-size="12" fill="var(--ink)">VM 10.0.2.15</text>
+    <line x1="520" y1="75" x2="638" y2="75" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar2)"/>
+    <text x="580" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">8080→80 (Horizon) · 2222→22 (SSH)</text>
+    <text x="580" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">http://127.0.0.1:8080/dashboard</text>
+  </svg>
+  <h3>Opción A (recomendada): puente</h3>
+  <p>VirtualBox: Configuración → Red → Adaptador 1 → «Adaptador puente». VMware: «Bridged». Úsala en WiFi de casa. En redes de la universidad o con portal cautivo puede no dar IP: usa la B.</p>
+  <h3>Opción B: NAT con reenvío de puertos</h3>
+  <p>VirtualBox: Red → Avanzado → Reenvío de puertos. Crea dos reglas (IP anfitrión 127.0.0.1, IP invitado vacía):</p>
+  <table>
+    <tr><th>Nombre</th><th>Puerto anfitrión</th><th>Puerto invitado</th></tr>
+    <tr><td>horizon</td><td>8080</td><td>80</td></tr>
+    <tr><td>ssh</td><td>2222</td><td>22</td></tr>
+  </table>
+  <p>VMware: Editor de red virtual → VMnet8 (NAT) → Reenvío de puertos, mismas reglas.</p>
+  <div class="tip">Con NAT, el script detecta la IP interna (10.0.2.15) y funciona igual; solo cambia la URL que abres desde tu PC. Si Horizon te rechaza el acceso por el nombre del host, usa el modo puente.</div>
+</section>
+
+<section>
+  <h2><span class="paso">3</span>Instalar Ubuntu Server 24.04</h2>
+  <ol class="steps">
+    <li>Descarga la ISO «Ubuntu Server 24.04 LTS» desde <a href="https://ubuntu.com/download/server" target="_blank">ubuntu.com/download/server</a>.</li>
+    <li>Crea la VM (8 GB RAM, 4 vCPU, 50 GB, red puente o NAT) e inicia desde la ISO.</li>
+    <li>En el instalador: idioma inglés, instalación mínima, disco completo (sin LVM cifrado), activa <b>OpenSSH server</b>, y crea un usuario normal (por ejemplo <code>estudiante</code>). <b>No uses root.</b></li>
+    <li>Reinicia, entra y verifica: <pre><code>lsb_release -d      # Ubuntu 24.04...
+ip -4 addr          # anota tu IP
+free -h             # ~8 GB</code></pre></li>
+  </ol>
+  <div class="tip">Tómale un <b>snapshot</b> a la VM ahora. Si algo sale mal, vuelves aquí sin reinstalar Ubuntu.</div>
+</section>
+
+<section>
+  <h2><span class="paso">4</span>Descargar y correr el script</h2>
+  <p>El docente publica el script <code>devstack-lab-install.sh</code> en el aula virtual. Cópialo a la VM (con <code>scp</code>, o descargándolo directamente) y ejecútalo como usuario normal:</p>
+  <pre><code>chmod +x devstack-lab-install.sh
+./devstack-lab-install.sh</code></pre>
+  <p>El script verifica Ubuntu 24.04, RAM, disco e Internet, detecta tu IP, crea el usuario <code>stack</code>, instala OpenStack y deja listos Cirros, el flavor <code>m1.tiny</code>, una red, un grupo de seguridad (SSH/ICMP) y una llave <code>lab-key</code>. Tarda 30–60 min.</p>
+  <table>
+    <tr><th>Opción</th><th>Para qué</th></tr>
+    <tr><td><code>--ip 10.0.2.15</code></td><td>Forzar la IP si la detección se equivoca</td></tr>
+    <tr><td><code>--password MiClave2026</code></td><td>Elegir la clave de admin (si no, se genera una aleatoria)</td></tr>
+    <tr><td><code>--branch stable/2026.1</code></td><td>Rama de OpenStack (ya es el valor por defecto)</td></tr>
+    <tr><td><code>--no-post</code></td><td>No crear imagen/red/llave: lo harás tú en Horizon</td></tr>
+  </table>
+  <div class="danger">Si cierras la terminal o se corta SSH, la instalación se interrumpe. Ejecútala desde la consola de la VM o dentro de <code>tmux</code>. Si falla, vuelve a lanzar el script: reanuda donde quedó.</div>
+  <p>Al final verás un recuadro con la <b>URL de Horizon</b>, el usuario <code>admin</code> y la <b>clave generada</b>. También queda en <code>~/devstack-credenciales.txt</code>. Guárdala.</p>
+</section>
+
+<section>
+  <h2><span class="paso">5</span>Entrar a Horizon</h2>
+  <ol class="steps">
+    <li>Abre en el navegador de tu PC: puente → <code>http://&lt;IP-de-la-VM&gt;/dashboard</code>; NAT → <code>http://127.0.0.1:8080/dashboard</code>.</li>
+    <li>Dominio <code>Default</code>, usuario <code>admin</code>, la clave del resumen final.</li>
+    <li>Ve a <b>Proyecto → Compute → Visión general</b> y comprueba que ves cuotas y el proyecto <code>admin</code>.</li>
+  </ol>
+  <div class="warn"><b>Evidencia 1:</b> captura de Horizon ya autenticado, con la URL visible en la barra del navegador.</div>
+</section>
+
+<section>
+  <h2><span class="paso">6</span>Crear tu primera VM (Cirros, m1.tiny)</h2>
+  <svg viewBox="0 0 760 90" role="img" aria-label="Flujo: red, instancia, IP flotante, acceso" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px">
+    <defs><marker id="ar3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/></marker></defs>
+    <g font-size="12" fill="var(--ink)" text-anchor="middle">
+      <rect x="15" y="25" width="150" height="40" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="90" y="49">1 · Red lab-net</text>
+      <rect x="205" y="25" width="150" height="40" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="280" y="49">2 · Instancia</text>
+      <rect x="395" y="25" width="150" height="40" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="470" y="49">3 · IP flotante</text>
+      <rect x="585" y="25" width="160" height="40" rx="6" fill="var(--ok-tint)" stroke="var(--ok)"/><text x="665" y="49">4 · Consola + SSH</text></g>
+    <line x1="165" y1="45" x2="203" y2="45" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar3)"/>
+    <line x1="355" y1="45" x2="393" y2="45" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar3)"/>
+    <line x1="545" y1="45" x2="583" y2="45" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar3)"/>
+  </svg>
+  <ol class="steps">
+    <li><b>Red:</b> Proyecto → Red → Redes. Debes ver <code>public</code>, <code>lab-net</code> (subred 192.168.50.0/24) y el enrutador <code>lab-router</code>. Si usaste <code>--no-post</code>, créalos tú.</li>
+    <li><b>Instancia:</b> Compute → Instancias → «Lanzar instancia». Nombre <code>vm-tunombre</code>; Origen: imagen <code>cirros…</code> (crear nuevo volumen: No); Sabor: <code>m1.tiny</code>; Redes: <code>lab-net</code>; Grupos de seguridad: <code>lab-ssh-icmp</code>; Par de claves: <code>lab-key</code>. Lanzar.</li>
+    <li>Espera estado <b>Activo</b> y energía «En ejecución».</li>
+    <li><b>IP flotante:</b> menú de la instancia → «Asociar IP flotante» → «+» para asignar una del pool <code>public</code> → Asociar. Anota la IP (rango 172.24.4.x).</li>
+  </ol>
+  <div class="warn"><b>Evidencia 2:</b> lista de instancias mostrando tu VM Activa con IP privada y flotante.<br><b>Evidencia 3:</b> pestaña «Grupos de seguridad» de la instancia con reglas SSH (22) e ICMP.</div>
+</section>
+
+<section>
+  <h2><span class="paso">7</span>Acceder a la instancia</h2>
+  <h3>Por la consola de Horizon</h3>
+  <p>Instancia → pestaña <b>Consola</b> → «Haz clic aquí para mostrar solo la consola». Usuario <code>cirros</code>; la contraseña aparece en el banner de la propia consola. Ejecuta <code>ip a</code> y <code>ping -c3 192.168.50.1</code>.</p>
+  <div class="warn"><b>Evidencia 4:</b> consola con sesión iniciada y salida de <code>ip a</code>.</div>
+  <h3>Por SSH</h3>
+  <p>La IP flotante (172.24.4.x) vive <b>dentro</b> de la VM Ubuntu. Desde la propia VM Ubuntu:</p>
+  <pre><code>ping -c3 172.24.4.XX
+ssh -i ~/lab-key.pem cirros@172.24.4.XX</code></pre>
+  <p>Desde tu PC, salta a través de la VM Ubuntu (ajusta IP/puerto: puente → <code>-p 22</code>; NAT → <code>-p 2222 estudiante@127.0.0.1</code>):</p>
+  <pre><code>scp -P 2222 estudiante@127.0.0.1:lab-key.pem .
+ssh -i lab-key.pem -o ProxyCommand="ssh -W %h:%p -p 2222 estudiante@127.0.0.1" cirros@172.24.4.XX</code></pre>
+  <div class="warn"><b>Evidencia 5:</b> terminal con el SSH a Cirros exitoso, mostrando <code>hostname</code> y <code>ip a</code>.</div>
+</section>
+
+<section>
+  <h2><span class="paso">8</span>Qué entregar</h2>
+  <p>Un PDF o documento con las 5 capturas (con tu nombre visible en el nombre de la instancia) y un párrafo corto (máx. 8 líneas) que responda: <i>¿qué equivalente tiene en AWS cada pieza que creaste (instancia, red, grupo de seguridad, IP flotante, llave)?</i> Súbelo al aula virtual antes del cierre de la semana 13.</p>
+  <h3>Rúbrica (10 % de la nota)</h3>
+  <table>
+    <tr><th>Criterio</th><th>Evidencia</th><th>Puntos</th></tr>
+    <tr><td>OpenStack instalado y accesible</td><td>1</td><td>25</td></tr>
+    <tr><td>Instancia Cirros m1.tiny activa en red propia</td><td>2</td><td>25</td></tr>
+    <tr><td>Grupo de seguridad correcto (SSH + ICMP)</td><td>3</td><td>15</td></tr>
+    <tr><td>Acceso por consola y por SSH con IP flotante</td><td>4 y 5</td><td>20</td></tr>
+    <tr><td>Equivalencias con AWS y calidad de la entrega</td><td>párrafo</td><td>15</td></tr>
+    <tr><th colspan="2">Total</th><th>100 (= 10 %)</th></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="paso">9</span>Problemas comunes</h2>
+  <table>
+    <tr><th>Síntoma</th><th>Causa y solución</th></tr>
+    <tr><td>El script dice «RAM insuficiente»</td><td>La VM tiene menos de 8 GB. Sube la memoria en el hipervisor.</td></tr>
+    <tr><td>«Sin DNS/Internet»</td><td>Revisa el adaptador de red; con NAT debe haber salida. Prueba <code>ping opendev.org</code>.</td></tr>
+    <tr><td>stack.sh falla a medio camino</td><td>Casi siempre red intermitente. Relanza el script; el log está en <code>~/devstack-install.log</code>.</td></tr>
+    <tr><td>Horizon no abre</td><td>Verifica IP/puerto (NAT: 8080) y <code>systemctl status apache2</code> en la VM.</td></tr>
+    <tr><td>Instancia en «Error»</td><td>Pocos recursos o falta de virtualización anidada; borra y recrea. Mira «Registro» de la instancia.</td></tr>
+    <tr><td>Consola dice «Failed to connect»</td><td>Con NAT, abre la consola en la pestaña propia; con puente, confirma que el navegador llega a la IP de la VM.</td></tr>
+    <tr><td>SSH «Permission denied»</td><td>Usuario debe ser <code>cirros</code> y <code>chmod 600 lab-key.pem</code>.</td></tr>
+    <tr><td>Tras reiniciar la VM nada funciona</td><td>DevStack no es persistente. Vuelve a ejecutar el script o restaura el snapshot.</td></tr>
+  </table>
+</section>
+
+</div>
+<footer class="page">Arquitectura en la Nube · Universidad de la Costa (CUC) · Periodo 2026-2 · Actividad Semana 13</footer>
+</body>
+</html>
