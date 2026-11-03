@@ -14,8 +14,11 @@
 #    https://governance.openstack.org/tc/reference/runtimes/2026.1.html
 #  Rama por defecto: stable/2026.1 (SLURP, mantenida; existe en opendev.org).
 #
-# Uso:  bash devstack-lab-install.sh [--ip IP] [--branch RAMA] [--password CLAVE]
-#                                    [--iface IFACE] [--no-post] [--yes] [--help]
+# Uso:  bash devstack-lab-install.sh [--aws] [--lite] [--public-ip IP] [--ip IP] [--branch RAMA]
+#                                    [--password CLAVE] [--iface IFACE] [--no-post] [--yes] [--help]
+#  --lite: para 4-5 GB de RAM (sin Cinder, un proceso por servicio, swap de 8 GB).
+#  --aws: --lite + IP publica de la EC2 (Sandbox de AWS Academy, t3.medium, 35 GB).
+#  --public-ip: IP con la que el navegador llega a la VM (consola de Horizon y resumen).
 # Variables de entorno equivalentes: HOST_IP, BRANCH, ADMIN_PASSWORD, IFACE.
 # Ejecutar como usuario normal con sudo (NO como root). Crea el usuario "stack".
 # =============================================================================
@@ -26,6 +29,9 @@ HOST_IP="${HOST_IP:-}"
 IFACE="${IFACE:-}"
 ADMIN_PASSWORD="${ADMIN_PASSWORD:-}"
 DO_POST=1
+LITE=0
+AWS=0
+PUBLIC_IP="${PUBLIC_IP:-}"
 ASSUME_YES=0
 STACK_USER="stack"
 STACK_HOME="/opt/stack"
@@ -51,6 +57,9 @@ while [ $# -gt 0 ]; do
     --password) ADMIN_PASSWORD="${2:?falta valor}"; shift 2 ;;
     --iface)    IFACE="${2:?falta valor}"; shift 2 ;;
     --no-post)  DO_POST=0; shift ;;
+    --lite)     LITE=1; shift ;;
+    --aws)      AWS=1; LITE=1; shift ;;
+    --public-ip) PUBLIC_IP="${2:?falta valor}"; shift 2 ;;
     --yes|-y)   ASSUME_YES=1; shift ;;
     -h|--help)  uso ;;
     *) die "Opcion desconocida: $1 (usa --help)" ;;
@@ -60,9 +69,10 @@ done
 : >>"$LOG_FILE" 2>/dev/null || die "No puedo escribir el log en $LOG_FILE"
 
 # ---------------------------------------------------------------- Chequeos ---
+[ "$LITE" -eq 0 ] || { MIN_RAM_MB=3500; MIN_DISK_GB=25; }
 info "Chequeos previos..."
 [ "$(id -u)" -ne 0 ] || die "No ejecutes como root. Usa un usuario normal con sudo; el script crea el usuario '$STACK_USER'."
-sudo -v || die "Se necesita sudo."
+sudo true || die "Se necesita sudo."
 # shellcheck disable=SC1091
 . /etc/os-release
 [ "${ID:-}" = "ubuntu" ] && [ "${VERSION_ID:-}" = "24.04" ] \
@@ -75,7 +85,7 @@ RAM_MB=$(awk '/MemTotal/ {print int($2/1024)}' /proc/meminfo)
   if [ "$ASSUME_YES" -ne 1 ]; then read -rp "Continuar de todos modos? [s/N] " r; [[ "$r" =~ ^[sSyY]$ ]] || exit 1; fi; }
 DISK_GB=$(df -BG --output=avail / | tail -1 | tr -dc '0-9')
 [ "$DISK_GB" -ge "$MIN_DISK_GB" ] || die "Disco libre en /: ${DISK_GB} GB (minimo ${MIN_DISK_GB} GB)."
-NCPU=$(nproc); [ "$NCPU" -ge 4 ] || warn "Solo $NCPU vCPU (recomendado 4)."
+NCPU=$(nproc); [ "$LITE" -eq 1 ] || [ "$NCPU" -ge 4 ] || warn "Solo $NCPU vCPU (recomendado 4)."
 getent hosts opendev.org >/dev/null || die "Sin DNS/Internet (no resuelve opendev.org)."
 curl -fsI --max-time 15 https://opendev.org >/dev/null || die "Sin salida HTTPS a opendev.org."
 ok "Ubuntu ${VERSION_ID}, ${RAM_MB} MB RAM, ${NCPU} vCPU, ${DISK_GB} GB libres."
@@ -90,6 +100,12 @@ if [ -z "$HOST_IP" ]; then
 fi
 [[ "$HOST_IP" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] || die "IP invalida o no detectada ('$HOST_IP'). Usa --ip."
 ip -4 -o addr show | grep -qw "$HOST_IP" || warn "La IP $HOST_IP no esta en ninguna interfaz local."
+if [ "$AWS" -eq 1 ] && [ -z "$PUBLIC_IP" ]; then
+  TOKEN=$(curl -fsS -m 5 -X PUT http://169.254.169.254/latest/api/token -H 'X-aws-ec2-metadata-token-ttl-seconds: 60')
+  PUBLIC_IP=$(curl -fsS -m 5 -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4) \
+    || die "No pude leer la IP publica de la EC2. Usa --public-ip."
+fi
+BROWSER_IP="${PUBLIC_IP:-$HOST_IP}"
 HOSTNAME_NOW=$(hostname)
 ok "Interfaz: $IFACE | IP: $HOST_IP | hostname: $HOSTNAME_NOW"
 
@@ -124,6 +140,11 @@ id -u "$STACK_USER" >/dev/null 2>&1 || sudo useradd -s /bin/bash -d "$STACK_HOME
 echo "$STACK_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack >/dev/null
 sudo chmod 0440 /etc/sudoers.d/stack
 sudo chmod 755 "$STACK_HOME"     # DevStack falla si /opt/stack es 700
+if [ "$LITE" -eq 1 ] && [ "$(swapon --noheadings | wc -l)" -eq 0 ]; then
+  info "Creando swap de 8 GB (modo lite)..."
+  sudo fallocate -l 8G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile >>"$LOG_FILE" 2>&1 && sudo swapon /swapfile
+  grep -q '^/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab >/dev/null
+fi
 ok "Sistema listo."
 
 # ----------------------------------------------------------- DevStack git ---
@@ -154,6 +175,8 @@ LOGFILE=${STACK_HOME}/logs/stack.sh.log
 LOG_COLOR=False
 enable_service horizon
 disable_service tempest
+$( [ "$LITE" -eq 1 ] && printf 'disable_service c-api c-vol c-sch c-bak\nAPI_WORKERS=1' )
+$( [ -n "$PUBLIC_IP" ] && printf 'NOVNCPROXY_URL=http://%s:6080/vnc_lite.html' "$PUBLIC_IP" )
 CONF
 sudo chmod 600 "$PREV_CONF"
 
@@ -183,7 +206,9 @@ if [ "$DO_POST" -eq 1 ]; then
 set -Eeuo pipefail
 cd /opt/stack/devstack
 # shellcheck disable=SC1091
+set +u   # openrc de DevStack no tolera set -u
 source openrc admin admin >/dev/null
+set -u
 has() { "$@" >/dev/null 2>&1; }
 # Imagen Cirros (DevStack ya sube una; si no, la descargo con la version de su stackrc)
 if ! openstack image list -f value -c Name | grep -qi '^cirros'; then
@@ -223,7 +248,7 @@ fi
 CRED="$HOME/devstack-credenciales.txt"
 umask 077
 cat >"$CRED" <<RES
-Horizon : http://${HOST_IP}/dashboard
+Horizon : http://${BROWSER_IP}/dashboard
 Usuario : admin   (tambien existe 'demo')
 Clave   : ${ADMIN_PASSWORD}
 Dominio : Default
