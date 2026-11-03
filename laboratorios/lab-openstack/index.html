@@ -87,14 +87,14 @@
   <svg viewBox="0 0 760 250" role="img" aria-label="Topología: PC, VM Ubuntu, OpenStack, instancia Cirros" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px">
     <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/></marker></defs>
     <rect x="12" y="30" width="150" height="180" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
-    <text x="87" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Tu PC</text>
+    <text x="87" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Tu navegador</text>
     <rect x="30" y="70" width="114" height="44" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="87" y="97" text-anchor="middle" font-size="12" fill="var(--ink)">Navegador</text>
-    <rect x="30" y="130" width="114" height="60" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="87" y="155" text-anchor="middle" font-size="12" fill="var(--ink)">VirtualBox /</text><text x="87" y="171" text-anchor="middle" font-size="12" fill="var(--ink)">VMware</text>
+    <rect x="30" y="130" width="114" height="60" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="87" y="155" text-anchor="middle" font-size="12" fill="var(--ink)">AWS Academy</text><text x="87" y="171" text-anchor="middle" font-size="12" fill="var(--ink)">o VirtualBox</text>
     <rect x="215" y="30" width="400" height="180" rx="10" fill="var(--surface-2)" stroke="var(--vino)" stroke-width="2"/>
-    <text x="415" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">VM Ubuntu Server 24.04 · 8 GB · 4 vCPU · 50 GB</text>
+    <text x="415" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Una VM con Ubuntu Server 24.04</text>
     <rect x="232" y="68" width="150" height="124" rx="8" fill="var(--surface)" stroke="var(--line)"/>
     <text x="307" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">OpenStack (DevStack)</text>
-    <text x="307" y="112" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Horizon · Keystone</text><text x="307" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Nova · Neutron</text><text x="307" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Glance · Cinder</text>
+    <text x="307" y="112" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Horizon · Keystone</text><text x="307" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Nova · Neutron</text><text x="307" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Glance</text>
     <rect x="450" y="68" width="150" height="124" rx="8" fill="var(--ok-tint)" stroke="var(--ok)"/>
     <text x="525" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Instancia Cirros</text>
     <text x="525" y="112" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">m1.tiny</text><text x="525" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">IP privada 192.168.50.x</text><text x="525" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">IP flotante 172.24.4.x</text>
@@ -117,11 +117,12 @@
     <li>Grupo de seguridad: abre los puertos <b>22, 80 y 6080</b> (TCP) con origen <code>0.0.0.0/0</code>. Es una VM de laboratorio y desechable.</li>
     <li>Cuando esté <i>Running</i>: <b>Connect → EC2 Instance Connect → Connect</b> y ejecuta:</li>
   </ol>
-  <pre><code>curl -fsSLO https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh
+  <pre><code>curl -fsSLO \
+  https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh
 tmux new -s lab
 bash devstack-lab-install.sh --aws --yes</code></pre>
   <p>Tarda unos 40 minutos. Si se cierra la pestaña, vuelve a conectarte y escribe <code>tmux attach -t lab</code>. Al final, abre la URL con IP pública que muestra el resumen.</p>
-  <div class="danger">Haz la instalación y todas las evidencias en <b>una sola sesión</b> (3 horas). Si la sesión termina, la VM se detiene y DevStack no vuelve bien: tendrías que crear otra VM. Al terminar, usa <b>Terminate instance</b> para no gastar tu crédito.</div>
+  <div class="warn">Haz la instalación y todas las evidencias en <b>una sola sesión</b> (3 horas). Si la sesión termina, la VM se detiene y DevStack no vuelve bien: tendrías que crear otra VM. Al terminar, usa <b>Terminate instance</b> para no gastar tu crédito.</div>
   <div class="tip">En este camino Cirros corre emulada (sin KVM), así que va más lenta. El SSH a la IP flotante se hace desde la terminal de la propia EC2.</div>
 </section>
 
@@ -184,7 +185,8 @@ free -h             # ~8 GB</code></pre></li>
   <h2><span class="paso">4</span>Descargar y correr el script</h2>
   <p>Descarga <a href="devstack-lab-install.sh" download><code>devstack-lab-install.sh</code></a> dentro de la VM y ejecútalo como usuario normal (no root):</p>
   <pre><code>sudo apt-get update &amp;&amp; sudo apt-get install -y curl tmux
-curl -fsSLO https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh</code></pre>
+curl -fsSLO \
+  https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh</code></pre>
   <pre><code>chmod +x devstack-lab-install.sh
 ./devstack-lab-install.sh</code></pre>
   <p>Si tu PC tiene <b>solo 8 GB</b>, dale 4–5 GB a la VM y usa el modo reducido: <code>./devstack-lab-install.sh --lite</code>. Se probó con 4 GB en AWS; en VirtualBox aún no se ha probado.</p>
