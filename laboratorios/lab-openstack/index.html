@@ -78,7 +78,7 @@
   <h1>Tu propia nube: OpenStack en una VM</h1>
   <p class="sub">Instala OpenStack (DevStack) en Ubuntu 24.04, abre Horizon y lanza una instancia con IP flotante</p>
   <div class="accent-bar"></div>
-  <p class="meta"><b>Arquitectura en la Nube</b> · Universidad de la Costa (CUC) · Ingeniería de Sistemas · 2026-2<br>Individual · AWS no aplica en esta actividad</p>
+  <p class="meta"><b>Arquitectura en la Nube</b> · Universidad de la Costa (CUC) · Ingeniería de Sistemas · 2026-2<br>Individual · Sandbox de AWS Academy o tu PC</p>
 </header>
 <div class="wrap">
 
@@ -113,7 +113,7 @@
   <p>No depende de tu PC: solo necesitas el navegador. Usa el <b>Entorno de pruebas</b> del curso en AWS Academy. Si haces este camino, sáltate los pasos 1 a 4 y sigue desde el paso 5.</p>
   <ol>
     <li>Abre <b>Entorno de pruebas → Start Lab</b>, espera el punto verde y haz clic en <b>AWS</b>.</li>
-    <li>En EC2 → <b>Launch instance</b>: Ubuntu Server 24.04 LTS (x86), tipo <code>t3.medium</code>, disco de <b>35 GB gp2</b>, IP pública activada.</li>
+    <li>En EC2 → <b>Launch instance</b>: Ubuntu Server 24.04 LTS (x86), tipo <code>t3.medium</code>, par de claves: <b>Proceed without a key pair</b>, disco de <b>35 GB gp2</b>, IP pública activada.</li>
     <li>Grupo de seguridad: abre los puertos <b>22, 80 y 6080</b> (TCP) con origen <code>0.0.0.0/0</code>. Es una VM de laboratorio y desechable.</li>
     <li>Cuando esté <i>Running</i>: <b>Connect → EC2 Instance Connect → Connect</b> y ejecuta:</li>
   </ol>
@@ -121,7 +121,7 @@
   https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh
 tmux new -s lab
 bash devstack-lab-install.sh --aws --yes</code></pre>
-  <p>Tarda unos 40 minutos. Si se cierra la pestaña, vuelve a conectarte y escribe <code>tmux attach -t lab</code>. Al final, abre la URL con IP pública que muestra el resumen.</p>
+  <p>Tarda unos 40 minutos. Si se cierra la pestaña, vuelve a conectarte y escribe <code>tmux attach -t lab</code>. Al final verás un resumen con la URL de Horizon (con la IP pública), el usuario <code>admin</code> y la clave. Si lo pierdes, recupéralo con <code>cat ~/devstack-credenciales.txt</code>.</p>
   <div class="warn">Haz la instalación y todas las evidencias en <b>una sola sesión</b> (3 horas). Si la sesión termina, la VM se detiene y DevStack no vuelve bien: tendrías que crear otra VM. Al terminar, usa <b>Terminate instance</b> para no gastar tu crédito.</div>
   <div class="tip">En este camino Cirros corre emulada (sin KVM), así que va más lenta. El SSH a la IP flotante se hace desde la terminal de la propia EC2.</div>
 </section>
@@ -158,14 +158,15 @@ bash devstack-lab-install.sh --aws --yes</code></pre>
   <h3>Opción A (recomendada): puente</h3>
   <p>VirtualBox: Configuración → Red → Adaptador 1 → «Adaptador puente». VMware: «Bridged». Úsala en WiFi de casa. En redes de la universidad o con portal cautivo puede no dar IP: usa la B.</p>
   <h3>Opción B: NAT con reenvío de puertos</h3>
-  <p>VirtualBox: Red → Avanzado → Reenvío de puertos. Crea dos reglas (IP anfitrión 127.0.0.1, IP invitado vacía):</p>
+  <p>VirtualBox: Red → Avanzado → Reenvío de puertos. Crea tres reglas (IP anfitrión 127.0.0.1, IP invitado vacía):</p>
   <table>
     <tr><th>Nombre</th><th>Puerto anfitrión</th><th>Puerto invitado</th></tr>
     <tr><td>horizon</td><td>8080</td><td>80</td></tr>
     <tr><td>ssh</td><td>2222</td><td>22</td></tr>
+    <tr><td>consola</td><td>6080</td><td>6080</td></tr>
   </table>
   <p>VMware: Editor de red virtual → VMnet8 (NAT) → Reenvío de puertos, mismas reglas.</p>
-  <div class="tip">Con NAT, el script detecta la IP interna (10.0.2.15) y funciona igual; solo cambia la URL que abres desde tu PC. Si Horizon te rechaza el acceso por el nombre del host, usa el modo puente.</div>
+  <div class="tip">Con NAT, el script detecta la IP interna (10.0.2.15) y funciona igual; solo cambia la URL que abres desde tu PC. Para que abra la consola de Horizon, ejecuta el script con <code>--public-ip 127.0.0.1</code> (aún no probado en VirtualBox). Si Horizon te rechaza el acceso por el nombre del host, usa el modo puente.</div>
 </section>
 
 <section>
@@ -196,10 +197,11 @@ curl -fsSLO \
     <tr><td><code>--ip 10.0.2.15</code></td><td>Forzar la IP si la detección se equivoca</td></tr>
     <tr><td><code>--password MiClave2026</code></td><td>Elegir la clave de admin (si no, se genera una aleatoria)</td></tr>
     <tr><td><code>--branch stable/2026.1</code></td><td>Rama de OpenStack (ya es el valor por defecto)</td></tr>
+    <tr><td><code>--public-ip 127.0.0.1</code></td><td>IP con la que tu navegador llega a la VM (para NAT)</td></tr>
     <tr><td><code>--lite</code></td><td>Modo reducido para 4–5 GB de RAM (sin Cinder, con swap de 8 GB)</td></tr>
     <tr><td><code>--no-post</code></td><td>No crear imagen/red/llave: lo harás tú en Horizon</td></tr>
   </table>
-  <div class="danger">Si cierras la terminal o se corta SSH, la instalación se interrumpe. Ejecútala desde la consola de la VM o dentro de <code>tmux</code>. Si falla, vuelve a lanzar el script: reanuda donde quedó.</div>
+  <div class="danger">Si cierras la terminal o se corta SSH, la instalación se interrumpe. Ejecútala desde la consola de la VM o dentro de <code>tmux</code>. Si falla, revisa el log; lo más seguro es volver al snapshot del paso 3 (en AWS, crear otra VM) y empezar de nuevo.</div>
   <p>Al final verás un recuadro con la <b>URL de Horizon</b>, el usuario <code>admin</code> y la <b>clave generada</b>. También queda en <code>~/devstack-credenciales.txt</code>. Guárdala.</p>
   <div class="tip">Toma un segundo snapshot <strong>con la VM encendida</strong> apenas termine la instalación. Ese es el que recupera OpenStack funcionando; el del paso 3 te devuelve a Ubuntu sin instalar.</div>
 </section>
@@ -207,7 +209,7 @@ curl -fsSLO \
 <section>
   <h2><span class="paso">5</span>Entrar a Horizon</h2>
   <ol class="steps">
-    <li>Abre en el navegador de tu PC: puente → <code>http://&lt;IP-de-la-VM&gt;/dashboard</code>; NAT → <code>http://127.0.0.1:8080/dashboard</code>.</li>
+    <li>Abre en el navegador: Sandbox de AWS → <code>http://&lt;IP-pública&gt;/dashboard</code>; puente → <code>http://&lt;IP-de-la-VM&gt;/dashboard</code>; NAT → <code>http://127.0.0.1:8080/dashboard</code>.</li>
     <li>Dominio <code>Default</code>, usuario <code>admin</code>, la clave del resumen final.</li>
     <li>Ve a <b>Proyecto → Compute → Visión general</b> y comprueba que ves cuotas y el proyecto <code>admin</code>.</li>
   </ol>
@@ -270,12 +272,12 @@ ssh -i lab-key.pem -o ProxyCommand="ssh -W %h:%p -p 2222 estudiante@127.0.0.1" c
   <h2><span class="paso">9</span>Problemas comunes</h2>
   <table>
     <tr><th>Síntoma</th><th>Causa y solución</th></tr>
-    <tr><td>El script dice «RAM insuficiente»</td><td>La VM tiene menos de 8 GB. Sube la memoria en el hipervisor.</td></tr>
+    <tr><td>El script avisa de poca RAM</td><td>Es un aviso. Con 8 GB o más, instalación normal; con 4–5 GB, usa <code>--lite</code>.</td></tr>
     <tr><td>«Sin DNS/Internet»</td><td>Revisa el adaptador de red; con NAT debe haber salida. Prueba <code>ping opendev.org</code>.</td></tr>
     <tr><td>stack.sh falla a medio camino</td><td>Casi siempre red intermitente. Relanza el script; el log está en <code>~/devstack-install.log</code>.</td></tr>
     <tr><td>Horizon no abre</td><td>Verifica IP/puerto (NAT: 8080) y <code>systemctl status apache2</code> en la VM.</td></tr>
     <tr><td>Instancia en «Error»</td><td>Pocos recursos o falta de virtualización anidada; borra y recrea. Mira «Registro» de la instancia.</td></tr>
-    <tr><td>Consola dice «Failed to connect»</td><td>Con NAT, abre la consola en la pestaña propia; con puente, confirma que el navegador llega a la IP de la VM.</td></tr>
+    <tr><td>Consola dice «Failed to connect»</td><td>Con NAT, revisa el reenvío del puerto 6080 y que instalaste con <code>--public-ip 127.0.0.1</code>. En AWS, que el puerto 6080 esté abierto. Con puente, confirma que el navegador llega a la IP de la VM.</td></tr>
     <tr><td>SSH «Permission denied»</td><td>Usuario debe ser <code>cirros</code> y <code>chmod 600 lab-key.pem</code>.</td></tr>
     <tr><td>Tras reiniciar la VM nada funciona</td><td>DevStack no es persistente. Restaura el snapshot tomado después de instalar (recomendado), o borra la marca con <code>sudo rm -f /opt/stack/.stack-done-*</code> y vuelve a ejecutar el script.</td></tr>
   </table>
