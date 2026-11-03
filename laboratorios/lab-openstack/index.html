@@ -105,11 +105,28 @@
     <text x="680" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vino)">Resultado</text>
     <text x="680" y="120" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">consola en Horizon</text><text x="680" y="138" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">+ SSH a la IP flotante</text>
   </svg>
-  <p>OpenStack es la plataforma de nube open source: los mismos conceptos de EC2, VPC, Security Groups y Elastic IP que ya viste, ahora en tu propia máquina. Todo corre <b>dentro de tu VM</b>; no se usa ninguna cuenta de nube pública.</p>
+  <p>OpenStack es la plataforma de nube open source: los mismos conceptos de EC2, VPC, Security Groups y Elastic IP que ya viste, ahora en una nube privada propia. Todo corre <b>dentro de una sola VM</b>: en el Sandbox de AWS Academy (camino recomendado) o en tu PC.</p>
 </section>
 
 <section>
-  <h2><span class="paso">1</span>Requisitos</h2>
+  <h2><span class="paso">★</span>Camino recomendado: Sandbox de AWS Academy</h2>
+  <p>No depende de tu PC: solo necesitas el navegador. Usa el <b>Entorno de pruebas</b> del curso en AWS Academy. Si haces este camino, sáltate los pasos 1 a 4 y sigue desde el paso 5.</p>
+  <ol>
+    <li>Abre <b>Entorno de pruebas → Start Lab</b>, espera el punto verde y haz clic en <b>AWS</b>.</li>
+    <li>En EC2 → <b>Launch instance</b>: Ubuntu Server 24.04 LTS (x86), tipo <code>t3.medium</code>, disco de <b>35 GB gp2</b>, IP pública activada.</li>
+    <li>Grupo de seguridad: abre los puertos <b>22, 80 y 6080</b> (TCP) con origen <code>0.0.0.0/0</code>. Es una VM de laboratorio y desechable.</li>
+    <li>Cuando esté <i>Running</i>: <b>Connect → EC2 Instance Connect → Connect</b> y ejecuta:</li>
+  </ol>
+  <pre><code>curl -fsSLO https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh
+tmux new -s lab
+bash devstack-lab-install.sh --aws --yes</code></pre>
+  <p>Tarda unos 40 minutos. Si se cierra la pestaña, vuelve a conectarte y escribe <code>tmux attach -t lab</code>. Al final, abre la URL con IP pública que muestra el resumen.</p>
+  <div class="danger">Haz la instalación y todas las evidencias en <b>una sola sesión</b> (3 horas). Si la sesión termina, la VM se detiene y DevStack no vuelve bien: tendrías que crear otra VM. Al terminar, usa <b>Terminate instance</b> para no gastar tu crédito.</div>
+  <div class="tip">En este camino Cirros corre emulada (sin KVM), así que va más lenta. El SSH a la IP flotante se hace desde la terminal de la propia EC2.</div>
+</section>
+
+<section>
+  <h2><span class="paso">1</span>Requisitos (si lo haces en tu PC)</h2>
   <table>
     <tr><th>Recurso</th><th>Mínimo</th></tr>
     <tr><td>PC</td><td>16 GB de RAM (8 GB para la VM), virtualización activada en BIOS (VT-x / AMD-V), 60 GB libres</td></tr>
@@ -170,12 +187,14 @@ free -h             # ~8 GB</code></pre></li>
 curl -fsSLO https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh</code></pre>
   <pre><code>chmod +x devstack-lab-install.sh
 ./devstack-lab-install.sh</code></pre>
+  <p>Si tu PC tiene <b>solo 8 GB</b>, dale 4–5 GB a la VM y usa el modo reducido: <code>./devstack-lab-install.sh --lite</code>. Se probó con 4 GB en AWS; en VirtualBox aún no se ha probado.</p>
   <p>El script verifica Ubuntu 24.04, RAM, disco e Internet, detecta tu IP, crea el usuario <code>stack</code>, instala OpenStack y deja listos Cirros, el flavor <code>m1.tiny</code>, una red, un grupo de seguridad (SSH/ICMP) y una llave <code>lab-key</code>. Tarda 30–60 min.</p>
   <table>
     <tr><th>Opción</th><th>Para qué</th></tr>
     <tr><td><code>--ip 10.0.2.15</code></td><td>Forzar la IP si la detección se equivoca</td></tr>
     <tr><td><code>--password MiClave2026</code></td><td>Elegir la clave de admin (si no, se genera una aleatoria)</td></tr>
     <tr><td><code>--branch stable/2026.1</code></td><td>Rama de OpenStack (ya es el valor por defecto)</td></tr>
+    <tr><td><code>--lite</code></td><td>Modo reducido para 4–5 GB de RAM (sin Cinder, con swap de 8 GB)</td></tr>
     <tr><td><code>--no-post</code></td><td>No crear imagen/red/llave: lo harás tú en Horizon</td></tr>
   </table>
   <div class="danger">Si cierras la terminal o se corta SSH, la instalación se interrumpe. Ejecútala desde la consola de la VM o dentro de <code>tmux</code>. Si falla, vuelve a lanzar el script: reanuda donde quedó.</div>
