@@ -165,7 +165,8 @@ free -h             # ~8 GB</code></pre></li>
 
 <section>
   <h2><span class="paso">4</span>Descargar y correr el script</h2>
-  <p>El docente publica el script <code>devstack-lab-install.sh</code> en el aula virtual. Cópialo a la VM (con <code>scp</code>, o descargándolo directamente) y ejecútalo como usuario normal:</p>
+  <p>Descarga <a href="devstack-lab-install.sh" download><code>devstack-lab-install.sh</code></a> dentro de la VM y ejecútalo como usuario normal (no root):</p>
+  <pre><code>curl -fsSLO https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh</code></pre>
   <pre><code>chmod +x devstack-lab-install.sh
 ./devstack-lab-install.sh</code></pre>
   <p>El script verifica Ubuntu 24.04, RAM, disco e Internet, detecta tu IP, crea el usuario <code>stack</code>, instala OpenStack y deja listos Cirros, el flavor <code>m1.tiny</code>, una red, un grupo de seguridad (SSH/ICMP) y una llave <code>lab-key</code>. Tarda 30–60 min.</p>
@@ -253,7 +254,7 @@ ssh -i lab-key.pem -o ProxyCommand="ssh -W %h:%p -p 2222 estudiante@127.0.0.1" c
     <tr><td>Instancia en «Error»</td><td>Pocos recursos o falta de virtualización anidada; borra y recrea. Mira «Registro» de la instancia.</td></tr>
     <tr><td>Consola dice «Failed to connect»</td><td>Con NAT, abre la consola en la pestaña propia; con puente, confirma que el navegador llega a la IP de la VM.</td></tr>
     <tr><td>SSH «Permission denied»</td><td>Usuario debe ser <code>cirros</code> y <code>chmod 600 lab-key.pem</code>.</td></tr>
-    <tr><td>Tras reiniciar la VM nada funciona</td><td>DevStack no es persistente. Vuelve a ejecutar el script o restaura el snapshot.</td></tr>
+    <tr><td>Tras reiniciar la VM nada funciona</td><td>DevStack no es persistente. Restaura el snapshot (recomendado), o borra la marca con <code>sudo rm -f /opt/stack/.stack-done-*</code> y vuelve a ejecutar el script.</td></tr>
   </table>
 </section>
 
