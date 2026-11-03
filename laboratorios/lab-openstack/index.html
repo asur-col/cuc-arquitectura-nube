@@ -180,6 +180,7 @@ curl -fsSLO https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-op
   </table>
   <div class="danger">Si cierras la terminal o se corta SSH, la instalación se interrumpe. Ejecútala desde la consola de la VM o dentro de <code>tmux</code>. Si falla, vuelve a lanzar el script: reanuda donde quedó.</div>
   <p>Al final verás un recuadro con la <b>URL de Horizon</b>, el usuario <code>admin</code> y la <b>clave generada</b>. También queda en <code>~/devstack-credenciales.txt</code>. Guárdala.</p>
+  <div class="tip">Toma un segundo snapshot <strong>con la VM encendida</strong> apenas termine la instalación. Ese es el que recupera OpenStack funcionando; el del paso 3 te devuelve a Ubuntu sin instalar.</div>
 </section>
 
 <section>
@@ -263,4 +264,3 @@ ssh -i lab-key.pem -o ProxyCommand="ssh -W %h:%p -p 2222 estudiante@127.0.0.1" c
 <footer class="page">Arquitectura en la Nube · Universidad de la Costa (CUC) · Periodo 2026-2 · Actividad Semana 13</footer>
 </body>
 </html>
-  <div class="tip">Toma un segundo snapshot <strong>con la VM encendida</strong> apenas termine la instalación. Ese es el que recupera OpenStack funcionando; el del paso 3 te devuelve a Ubuntu sin instalar.</div>
