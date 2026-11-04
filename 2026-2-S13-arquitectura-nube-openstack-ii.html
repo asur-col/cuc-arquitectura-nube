@@ -227,7 +227,7 @@
     <g transform="translate(25, 75)">
       <rect x="0" y="0" width="470" height="60" rx="6" fill="#fdfdfd" stroke="#ddd"/>
       <text x="15" y="25" font-size="13" font-weight="700" fill="#333">Una Única Máquina Virtual de 8 GB RAM</text>
-      <text x="15" y="45" font-size="12" fill="#666">Corre en cualquier PC estándar con VirtualBox o VMware.</text>
+      <text x="15" y="45" font-size="12" fill="#666">Corre en el Sandbox de AWS Academy (t3.medium) vía navegador.</text>
     </g>
     <g transform="translate(25, 150)">
       <rect x="0" y="0" width="470" height="60" rx="6" fill="#fdfdfd" stroke="#ddd"/>
@@ -254,7 +254,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/overview.html</span>
       <span class="pg">3 / 60</span>
     </div>
-    <aside class="guion">Desplegar OpenStack en producción requiere una infraestructura física considerable, con múltiples servidores para el plano de control redundante, almacenamiento distribuido Ceph y conmutadores de alta velocidad. Para un estudiante o equipo que desea aprender, montar ese clúster es inviable. Aquí radica el valor del enfoque ágil. En lugar de lidiar con decenas de servidores físicos, empaquetamos todos los servicios de OpenStack dentro de una única máquina virtual utilizando DevStack. Aunque opera en un solo equipo de ocho gigabytes de RAM, las interfaces de programación, el panel Horizon y los comandos CLI son exactamente los mismos que se utilizan en grandes centros de datos internacionales. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Desplegar OpenStack en producción requiere una infraestructura física considerable, con múltiples servidores para el plano de control redundante, almacenamiento distribuido Ceph y conmutadores de alta velocidad. Para un estudiante o equipo que desea aprender, montar ese clúster es inviable. Aquí radica el valor del enfoque ágil. En lugar de lidiar con decenas de servidores físicos, empaquetamos todos los servicios de OpenStack dentro de una única máquina virtual utilizando DevStack. Aunque opera en una sola máquina t3 punto medium en el Sandbox de AWS Academy, las interfaces de programación, el panel Horizon y los comandos CLI son exactamente los mismos que se utilizan en grandes centros de datos internacionales. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 4 -->
@@ -383,7 +383,7 @@
     <text x="25" y="55" font-size="13" fill="#333">Diseñado intencionalmente como entorno descartable.</text>
     <text x="25" y="78" font-size="12.5" fill="#666">• Los servicios no están configurados para auto-inicio tras reboot.</text>
     <text x="25" y="100" font-size="12.5" fill="#666">• Al reiniciar Ubuntu, OpenStack queda inoperativo por diseño.</text>
-    <text x="25" y="122" font-size="12.5" fill="#666">• Requiere reejecutar stack.sh o restaurar snapshots de hipervisor.</text>
+    <text x="25" y="122" font-size="12.5" fill="#666">• Si la EC2 se detiene, se debe recrear la instancia desde cero.</text>
     <rect x="390" y="115" width="125" height="26" rx="4" fill="#f9eef0"/>
     <text x="452" y="132" font-size="11" font-weight="700" fill="#A6192E" text-anchor="middle">No Persistente</text>
   </g>
@@ -418,7 +418,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/overview.html</span>
       <span class="pg">5 / 60</span>
     </div>
-    <aside class="guion">Como arquitectos de soluciones, debemos tener absoluta claridad sobre los límites de nuestras herramientas. DevStack está diseñado deliberadamente como un entorno descartable y no debe usarse en producción. Carece por completo de alta disponibilidad: todos los servicios conviven en el mismo sistema operativo y cualquier fallo tumba la nube entera. Además, los servicios no quedan configurados para autoarranque tras un reinicio; si apagan la máquina virtual, al día siguiente OpenStack estará inactivo. Por último, la seguridad está relajada para facilitar pruebas: contraseñas en texto claro y permisos totales sin clave. Para producción se emplean herramientas como Kolla-Ansible o Canonical Sunbeam, que garantizan tolerancia a fallos y cifrado integral. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Como arquitectos de soluciones, debemos tener absoluta claridad sobre los límites de nuestras herramientas. DevStack está diseñado deliberadamente como un entorno descartable y no debe usarse en producción. Carece por completo de alta disponibilidad: todos los servicios conviven en el mismo sistema operativo y cualquier fallo tumba la nube entera. Además, los servicios no quedan configurados para autoarranque tras un reinicio; si la instancia EC2 se detiene o vence la sesión de 3 horas, OpenStack no recupera sus servicios. Por último, la seguridad está relajada para facilitar pruebas: contraseñas en texto claro y permisos totales sin clave. Para producción se emplean herramientas como Kolla-Ansible o Canonical Sunbeam, que garantizan tolerancia a fallos y cifrado integral. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 6 -->
@@ -437,13 +437,13 @@
   <!-- Contenedor Exterior: PC Fisico del Estudiante -->
   <rect x="30" y="20" width="1120" height="460" rx="12" fill="#fff" stroke="#D4AF37" stroke-width="2"/>
   <rect x="30" y="20" width="1120" height="36" rx="12" fill="#fbf6e7"/>
-  <text x="50" y="44" font-size="15" font-weight="700" fill="#8a6d1d">Entorno de Laboratorio: AWS Academy Sandbox (t3.medium · 4 GB) / PC Local (Alternativa)</text>
+  <text x="50" y="44" font-size="15" font-weight="700" fill="#8a6d1d">Entorno de Laboratorio: AWS Academy Sandbox (t3.medium · 4 GB RAM · 2 vCPU · 35 GB)</text>
 
   <!-- Contenedor Medio: VM Ubuntu 24.04 LTS -->
   <g transform="translate(60, 75)">
     <rect x="0" y="0" width="1060" height="385" rx="10" fill="#fcfcfc" stroke="#A6192E" stroke-width="2"/>
     <rect x="0" y="0" width="1060" height="36" rx="10" fill="#f9eef0"/>
-    <text x="25" y="24" font-size="14" font-weight="700" fill="#A6192E">Host All-in-One: Ubuntu 24.04 LTS · AWS t3.medium (4 GB RAM, 2 vCPU) o VM Local</text>
+    <text x="25" y="24" font-size="14" font-weight="700" fill="#A6192E">Host All-in-One: Ubuntu Server 24.04 LTS · AWS EC2 t3.medium (4 GB RAM, 2 vCPU, 35 GB)</text>
     
     <!-- 3 Bloques Internos dentro de la VM -->
     <!-- 1. Plano de Control y Base de Datos -->
@@ -474,11 +474,11 @@
         <text x="0" y="18" font-size="12" font-weight="700" fill="#333">• Demonio nova-compute</text>
         <text x="0" y="38" font-size="11.5" fill="#666">Supervisa el estado del hipervisor</text>
         <text x="0" y="68" font-size="12" font-weight="700" fill="#333">• libvirtd &amp; qemu-kvm</text>
-        <text x="0" y="88" font-size="11.5" fill="#666">AWS: emulación QEMU · En PC local: KVM</text>
+        <text x="0" y="88" font-size="11.5" fill="#666">AWS EC2: emulación software QEMU (sin KVM)</text>
         
         <!-- Recuadro VM Anidada CirrOS -->
         <rect x="0" y="115" width="285" height="135" rx="6" fill="#fbf6e7" stroke="#D4AF37" stroke-width="1.5"/>
-        <text x="142" y="138" font-size="12" font-weight="700" fill="#8a6d1d" text-anchor="middle">Instancia CirrOS (VM Anidada)</text>
+        <text x="142" y="138" font-size="12" font-weight="700" fill="#8a6d1d" text-anchor="middle">Instancia CirrOS (VM en OpenStack)</text>
         <text x="15" y="162" font-size="11" fill="#333">• Flavor m1.tiny (512 MB RAM, 1 vCPU)</text>
         <text x="15" y="182" font-size="11" fill="#333">• IP Privada: 192.168.50.x (lab-net)</text>
         <text x="15" y="202" font-size="11" fill="#333">• IP Flotante: 172.24.4.x (public)</text>
@@ -512,7 +512,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/guides/single-machine.html</span>
       <span class="pg">6 / 60</span>
     </div>
-    <aside class="guion">Este diagrama representa la topología de todo lo que construiremos hoy. El camino recomendado y principal es el Sandbox de AWS Academy mediante el Entorno de pruebas, donde lanzamos una instancia EC2 t3 punto medium con cuatro gigabytes de memoria y disco de treinta y cinco gigabytes, requiriendo únicamente el navegador web. Como alternativa técnica, quienes posean un computador con dieciséis gigabytes de memoria pueden emplear VirtualBox o VMware. Dentro de este host opera Ubuntu Server veinticuatro cero cuatro, donde DevStack despliega la arquitectura Todo en Uno. En su interior conviven el plano de control con MariaDB, RabbitMQ, Keystone y Horizon; el plano de cómputo donde Nova y libvirt gestionan el hipervisor para desplegar CirrOS; y el plano de red donde Neutron y OVN administran conmutadores lógicos, enrutadores y grupos de seguridad perimetrales.</aside>
+    <aside class="guion">Este diagrama representa la topología integral de lo que construiremos hoy en el Sandbox de AWS Academy. Desde el navegador abrimos el Entorno de pruebas y lanzamos una máquina virtual EC2 con Ubuntu Server veinticuatro cero cuatro de tipo t3 punto medium, con cuatro gigabytes de memoria y disco de treinta y cinco gigabytes. En este host único, DevStack despliega la arquitectura Todo en Uno: en el plano de control conviven MariaDB, RabbitMQ, Keystone y el panel web Horizon; en el plano de cómputo, Nova ejecuta la instancia CirrOS mediante emulación QEMU; y en el plano de red, Neutron y OVN orquestan el conmutador de integración br-int, el puente externo br-ex, el enrutador virtual y los grupos de seguridad perimetrales para permitir el acceso web y SSH.</aside>
   </section>
 
   <!-- Diapositiva 7 -->
@@ -623,9 +623,9 @@
   <section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">REQUISITOS DE HARDWARE</div>
-      <h2>Dimensionamiento del Entorno: AWS vs PC Local</h2>
+      <h2>Dimensionamiento del Entorno: Sandbox AWS Academy</h2>
       <div class="rule"></div>
-      <div class="sub">Comparativa técnica entre el Sandbox de AWS Academy (recomendado) y el despliegue local.</div>
+      <div class="sub">Especificaciones exactas de la instancia EC2 t3.medium y optimización de recursos.</div>
       <img alt="CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
     </div>
     <div class="s-body">
@@ -639,14 +639,14 @@
     <rect x="0" y="0" width="260" height="45" rx="10" fill="#f9eef0"/>
     <text x="130" y="28" font-size="15" font-weight="700" fill="#A6192E" text-anchor="middle">Memoria RAM</text>
     <g transform="translate(20, 65)">
-      <text x="110" y="45" font-size="34" font-weight="800" fill="#A6192E" text-anchor="middle">AWS 4GB</text>
-      <text x="110" y="75" font-size="13" font-weight="700" fill="#555" text-anchor="middle">PC: 16GB / 8GB --lite</text>
+      <text x="110" y="45" font-size="44" font-weight="800" fill="#A6192E" text-anchor="middle">4 GB</text>
+      <text x="110" y="75" font-size="13" font-weight="700" fill="#555" text-anchor="middle">RAM Física t3.medium</text>
       <line x1="10" y1="95" x2="210" y2="95" stroke="#eee" stroke-width="1.5"/>
-      <text x="0" y="125" font-size="12" fill="#333" font-weight="600">• AWS: t3.medium (4 GB)</text>
-      <text x="0" y="145" font-size="11.5" fill="#666">Cero hardware local requerido.</text>
-      <text x="0" y="175" font-size="12" fill="#333" font-weight="600">• PC 8 GB: usar --lite</text>
-      <text x="0" y="195" font-size="11.5" fill="#666">Aún no probado en VirtualBox.</text>
-      <text x="0" y="225" font-size="11" fill="#A6192E" font-weight="700">Modo --aws agrega 8 GB swap</text>
+      <text x="0" y="125" font-size="12" fill="#333" font-weight="600">• Instancia t3.medium</text>
+      <text x="0" y="145" font-size="11.5" fill="#666">Asignada en AWS Academy.</text>
+      <text x="0" y="175" font-size="12" fill="#333" font-weight="600">• Swap de 8 GB activo</text>
+      <text x="0" y="195" font-size="11.5" fill="#666">Creado por el instalador.</text>
+      <text x="0" y="225" font-size="11" fill="#A6192E" font-weight="700">Cinder suprimido para ahorrar RAM</text>
     </g>
   </g>
 
@@ -656,14 +656,14 @@
     <rect x="0" y="0" width="260" height="45" rx="10" fill="#eaf0fa"/>
     <text x="130" y="28" font-size="15" font-weight="700" fill="#2f5d9a" text-anchor="middle">Procesador (CPU)</text>
     <g transform="translate(20, 65)">
-      <text x="110" y="45" font-size="44" font-weight="800" fill="#2f5d9a" text-anchor="middle">4 vCPU</text>
-      <text x="110" y="75" font-size="13" font-weight="700" fill="#555" text-anchor="middle">Asignados a la VM</text>
+      <text x="110" y="45" font-size="44" font-weight="800" fill="#2f5d9a" text-anchor="middle">2 vCPU</text>
+      <text x="110" y="75" font-size="13" font-weight="700" fill="#555" text-anchor="middle">Procesador t3.medium</text>
       <line x1="10" y1="95" x2="210" y2="95" stroke="#eee" stroke-width="1.5"/>
-      <text x="0" y="125" font-size="12" fill="#333" font-weight="600">• CPU Host: 4 cores / 8 hilos</text>
-      <text x="0" y="145" font-size="11.5" fill="#666">Intel Core i5/i7 o AMD Ryzen 5/7.</text>
-      <text x="0" y="175" font-size="12" fill="#333" font-weight="600">• VT-x / AMD-V en BIOS</text>
-      <text x="0" y="195" font-size="11.5" fill="#666">Virtualización por hardware obligatoria.</text>
-      <text x="0" y="225" font-size="11" fill="#2f5d9a" font-weight="700">Compilación paralela rápida</text>
+      <text x="0" y="125" font-size="12" fill="#333" font-weight="600">• Procesador Virtual: 2 vCPU</text>
+      <text x="0" y="145" font-size="11.5" fill="#666">Suficiente para el plano de control.</text>
+      <text x="0" y="175" font-size="12" fill="#333" font-weight="600">• Arquitectura x86_64</text>
+      <text x="0" y="195" font-size="11.5" fill="#666">Ubuntu Server 24.04 LTS estándar.</text>
+      <text x="0" y="225" font-size="11" fill="#2f5d9a" font-weight="700">API_WORKERS=1 optimiza hilos</text>
     </g>
   </g>
 
@@ -673,14 +673,14 @@
     <rect x="0" y="0" width="260" height="45" rx="10" fill="#eaf5ea"/>
     <text x="130" y="28" font-size="15" font-weight="700" fill="#2f7d4f" text-anchor="middle">Almacenamiento</text>
     <g transform="translate(20, 65)">
-      <text x="110" y="45" font-size="44" font-weight="800" fill="#2f7d4f" text-anchor="middle">60 GB</text>
-      <text x="110" y="75" font-size="13" font-weight="700" fill="#555" text-anchor="middle">Espacio Libre SSD</text>
+      <text x="110" y="45" font-size="44" font-weight="800" fill="#2f7d4f" text-anchor="middle">35 GB</text>
+      <text x="110" y="75" font-size="13" font-weight="700" fill="#555" text-anchor="middle">Disco gp2 en AWS</text>
       <line x1="10" y1="95" x2="210" y2="95" stroke="#eee" stroke-width="1.5"/>
-      <text x="0" y="125" font-size="12" fill="#333" font-weight="600">• Disco Virtual: 50 GB</text>
-      <text x="0" y="145" font-size="11.5" fill="#666">Asignación dinámica recomendada.</text>
-      <text x="0" y="175" font-size="12" fill="#333" font-weight="600">• Unidad de Estado Sólido (SSD)</text>
-      <text x="0" y="195" font-size="11.5" fill="#666">Discos HDD mecánicos causan timeouts.</text>
-      <text x="0" y="225" font-size="11" fill="#2f7d4f" font-weight="700">Lectura y escritura intensiva</text>
+      <text x="0" y="125" font-size="12" fill="#333" font-weight="600">• Volumen EBS: 35 GB gp2</text>
+      <text x="0" y="145" font-size="11.5" fill="#666">Espacio asignado al crear la EC2.</text>
+      <text x="0" y="175" font-size="12" fill="#333" font-weight="600">• Rendimiento EBS gp2</text>
+      <text x="0" y="195" font-size="11.5" fill="#666">Velocidad garantizada en la nube.</text>
+      <text x="0" y="225" font-size="11" fill="#2f7d4f" font-weight="700">Espacio óptimo para DevStack</text>
     </g>
   </g>
 
@@ -704,9 +704,9 @@
   <!-- Caja Inferior de Resumen -->
   <g transform="translate(40, 360)">
     <rect x="0" y="0" width="1100" height="100" rx="8" fill="#fbf6e7" stroke="#D4AF37" stroke-width="1.5"/>
-    <text x="30" y="32" font-size="14" font-weight="700" fill="#8a6d1d">Flexibilidad de recursos en el laboratorio:</text>
-    <text x="30" y="58" font-size="13" fill="#333">En AWS Academy Sandbox no consumen RAM de su PC: el script crea automáticamente swap de 8 GB y suprime Cinder.</text>
-    <text x="30" y="80" font-size="13" fill="#333">En PC local, 16 GB corre en modo estándar y con 8 GB asignen 4–5 GB a la VM usando el parámetro --lite.</text>
+    <text x="30" y="32" font-size="14" font-weight="700" fill="#8a6d1d">Ventajas del Sandbox de AWS Academy:</text>
+    <text x="30" y="58" font-size="13" fill="#333">No depende del computador del estudiante ni consume espacio local: la práctica se ejecuta enteramente en AWS.</text>
+    <text x="30" y="80" font-size="13" fill="#333">El script crea 8 GB de swap y suprime Cinder, logrando que DevStack corra estable en los 4 GB de la t3.medium.</text>
   </g>
 </svg>
     </div>
@@ -715,16 +715,16 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/guides/single-machine.html</span>
       <span class="pg">8 / 60</span>
     </div>
-    <aside class="guion">El dimensionamiento del entorno ofrece dos alternativas claras. El camino recomendado es el Sandbox de AWS Academy a través del Entorno de pruebas del curso, que no depende de la potencia de su computador ni exige descargas pesadas locales. En AWS creamos una instancia EC2 Ubuntu veinticuatro cero cuatro de tipo t3 punto medium con cuatro gigabytes de memoria, disco de treinta y cinco gigabytes y puertos veintidós, ochenta y seis mil ochenta abiertos. Para quienes prefieran trabajar en su computador local, si cuentan con dieciséis gigabytes de memoria pueden asignar ocho gigabytes a la máquina virtual en modo normal; si tienen ocho gigabytes, pueden asignar cuatro o cinco gigabytes usando el parámetro lite, configuración que aún no ha sido probada formalmente en VirtualBox. Ambas opciones permiten dominar la arquitectura y alcanzar todas las evidencias.</aside>
+    <aside class="guion">El dimensionamiento del laboratorio en el Sandbox de AWS Academy aprovecha la instancia EC2 t3 punto medium. Esta máquina virtual cuenta con dos procesadores virtuales, cuatro gigabytes de memoria física y un disco gp2 de treinta y cinco gigabytes sobre Ubuntu Server veinticuatro cero cuatro. Para permitir que OpenStack funcione de manera estable en cuatro gigabytes de RAM, el instalador automatizado crea un archivo de intercambio o swap de ocho gigabytes en disco, fija un único proceso por servicio y suprime Cinder. Esto garantiza que la descarga e instalación de dependencias culmine sin errores por falta de memoria. Toda la actividad se realiza en la nube a través de su navegador web, sin requerir descargas pesadas ni configuraciones locales en sus computadores.</aside>
   </section>
 
   <!-- Diapositiva 9 -->
   <section class="slide" data-parte="1">
     <div class="s-head">
-      <div class="kicker">CONFIGURACIÓN DEL HIPERVISOR</div>
-      <h2>Virtualización Anidada vs Emulación: KVM y QEMU</h2>
+      <div class="kicker">VIRTUALIZACIÓN EN LA NUBE</div>
+      <h2>Emulación QEMU en EC2: CirrOS sin Aceleración KVM</h2>
       <div class="rule"></div>
-      <div class="sub">Aceleración hardware en PC local vs emulación software en AWS Academy Sandbox.</div>
+      <div class="sub">Cómo opera la emulación por software de QEMU en la instancia t3.medium de AWS.</div>
       <img alt="CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
     </div>
     <div class="s-body">
@@ -736,21 +736,21 @@
     <!-- Escenario A: Con Anidacion (Optimo) -->
     <rect x="0" y="0" width="525" height="320" rx="10" fill="#fff" stroke="#2f7d4f" stroke-width="2"/>
     <rect x="0" y="0" width="525" height="42" rx="10" fill="#eaf5ea"/>
-    <text x="262" y="27" font-size="15" font-weight="700" fill="#2f7d4f" text-anchor="middle">PC Local: Virtualización Anidada Hardware (KVM)</text>
+    <text x="262" y="27" font-size="15" font-weight="700" fill="#2f7d4f" text-anchor="middle">¿Por Qué QEMU y No KVM en la Instancia EC2?</text>
     
     <g transform="translate(25, 60)">
       <rect x="0" y="0" width="475" height="65" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="25" font-size="13" font-weight="700" fill="#2f7d4f">Hipervisor Nivel 1 (VirtualBox / VMware)</text>
-      <text x="15" y="48" font-size="12" fill="#555">Pasa las instrucciones VT-x / AMD-V directamente al procesador virtual.</text>
+      <text x="15" y="25" font-size="13" font-weight="700" fill="#2f7d4f">Hipervisor AWS Nitro / Xen</text>
+      <text x="15" y="48" font-size="12" fill="#555">Las instancias estándar t3.medium no exponen flags de virtualización por hardware.</text>
 
       <rect x="0" y="80" width="475" height="65" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="105" font-size="13" font-weight="700" fill="#2f5d9a">Ubuntu Server 24.04 (VM)</text>
-      <text x="15" y="128" font-size="12" fill="#555">El kernel detecta /dev/kvm con aceleración directa por hardware.</text>
+      <text x="15" y="105" font-size="13" font-weight="700" fill="#2f5d9a">Ausencia del Dispositivo /dev/kvm</text>
+      <text x="15" y="128" font-size="12" fill="#555">Al no haber KVM nativo, Nova selecciona automáticamente el motor virt_type = qemu.</text>
 
       <rect x="0" y="160" width="475" height="85" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="185" font-size="13" font-weight="700" fill="#A6192E">Nova Compute usa el Driver KVM (virt_type = kvm)</text>
-      <text x="15" y="208" font-size="12" fill="#555">Las instancias CirrOS arrancan en menos de 5 segundos.</text>
-      <text x="15" y="230" font-size="11.5" fill="#2f7d4f" font-weight="600">Rendimiento nativo y experiencia de nube idéntica a producción.</text>
+      <text x="15" y="185" font-size="13" font-weight="700" fill="#A6192E">Emulación Completa de Instrucciones</text>
+      <text x="15" y="208" font-size="12" fill="#555">QEMU traduce cada instrucción x86 de la instancia invitada por software.</text>
+      <text x="15" y="230" font-size="11.5" fill="#2f7d4f" font-weight="600">Funcionalidad completa de redes, discos y consola para el laboratorio.</text>
     </g>
   </g>
 
@@ -779,10 +779,10 @@
   <!-- Instrucciones de Activacion -->
   <g transform="translate(40, 365)">
     <rect x="0" y="0" width="1100" height="105" rx="8" fill="#fbf6e7" stroke="#D4AF37" stroke-width="1.5"/>
-    <text x="25" y="26" font-size="14" font-weight="700" fill="#8a6d1d">Comportamiento según plataforma de despliegue:</text>
-    <text x="25" y="52" font-size="12.5" fill="#333">• <tspan font-weight="700">VirtualBox</tspan>: Configuración de la VM → Sistema → Procesador → Marcar «Habilitar VT-x/AMD-V anidado».</text>
-    <text x="25" y="72" font-size="12" fill="#666">  Si la casilla aparece deshabilitada en gris, ejecutar en terminal: <tspan font-family="monospace">VBoxManage modifyvm "nombre_vm" --nested-hw-virt on</tspan></text>
-    <text x="25" y="94" font-size="12.5" fill="#333">• <tspan font-weight="700">VMware Workstation</tspan>: Ajustes de la VM → Procesadores → Marcar «Virtualizar Intel VT-x/EPT o AMD-V/RVI».</text>
+    <text x="25" y="26" font-size="14" font-weight="700" fill="#8a6d1d">Puntos Clave de la Emulación en AWS Academy:</text>
+    <text x="25" y="52" font-size="12.5" fill="#333">• La emulación software hace que CirrOS arranque más lenta, pero su tamaño mínimo (~16 MB) mitiga el impacto.</text>
+    <text x="25" y="72" font-size="12.5" fill="#333">• En una prueba individual observamos estado ACTIVE en 26 s y SSH en 73 s con 1,9 GB de swap (no es garantía).</text>
+    <text x="25" y="94" font-size="12" fill="#666">El comportamiento de OpenStack (Horizon, Neutron, Keystone, Security Groups) es 100% idéntico a producción.</text>
   </g>
 </svg>
     </div>
@@ -791,23 +791,23 @@
       <span class="src">Fuente: docs.openstack.org/nova/latest/admin/support-compute.html</span>
       <span class="pg">9 / 60</span>
     </div>
-    <aside class="guion">Un concepto arquitectónico clave es la diferencia entre virtualización acelerada por hardware y emulación por software. En el Sandbox de AWS Academy, las instancias t3 punto medium no ofrecen virtualización anidada hacia el sistema operativo invitado. Por esta razón, Nova configura automáticamente el hipervisor en modo de emulación QEMU por software. Al no contar con aceleración KVM, la máquina virtual CirrOS arranca más despacio. En una prueba técnica individual observamos que la instancia alcanzó el estado activo en veintiséis segundos y el servicio SSH estuvo disponible a los setenta y tres segundos, con un uso de swap de uno punto nueve gigabytes; estos datos corresponden a una prueba específica y no constituyen una garantía. Por el contrario, en un PC con anidación habilitada, Nova emplea KVM directamente.</aside>
+    <aside class="guion">Un concepto técnico esencial en este laboratorio es el modo de ejecución de nuestras instancias virtuales dentro de AWS Academy. La máquina EC2 de tipo t3 punto medium no expone aceleración por hardware hacia el sistema operativo huésped. Por este motivo, el servicio Nova de OpenStack configura automáticamente el hipervisor en modo de emulación QEMU por software. Al ejecutarse sin aceleración KVM, la máquina virtual CirrOS arranca de forma más pausada. En una prueba técnica observamos que la instancia alcanzó el estado activo a los veintiséis segundos y el servicio SSH estuvo disponible a los setenta y tres segundos, utilizando aproximadamente uno punto nueve gigabytes de swap; estos tiempos corresponden a un ensayo específico y no representan una garantía fija. Lo importante es que la emulación permite validar completamente el ciclo de vida, la asignación de IPs flotantes y el acceso por consola.</aside>
   </section>
 
   <!-- Diapositiva 10 -->
   <section class="slide" data-parte="1">
     <div class="s-head">
       <div class="kicker">CONECTIVIDAD DEL LABORATORIO</div>
-      <h2>Conectividad y Red: AWS IP Pública vs PC Local</h2>
+      <h2>Conectividad y Acceso: IP Pública y Security Group</h2>
       <div class="rule"></div>
-      <div class="sub">Acceso directo por IP pública en AWS o mediante adaptador puente/NAT en PC.</div>
+      <div class="sub">Puertos de entrada en AWS Security Group y acceso directo a Horizon y consola.</div>
       <img alt="CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
     </div>
     <div class="s-body">
-      <svg viewBox="0 0 1180 500" class="dgm" role="img" aria-label="Modo puente vs modo NAT en el lab">
+      <svg viewBox="0 0 1180 500" class="dgm" role="img" aria-label="Conectividad por IP publica y Security Group">
   <rect x="0" y="0" width="1180" height="500" fill="#fafafa" rx="10" stroke="#e5e5e5"/>
   
-  <!-- Opcion A: Adaptador Puente -->
+  <!-- Opcion A: Acceso por IP Publica -->
   <g transform="translate(40, 30)">
     <rect x="0" y="0" width="520" height="430" rx="10" fill="#fff" stroke="#2f7d4f" stroke-width="2"/>
     <rect x="0" y="0" width="520" height="45" rx="10" fill="#eaf5ea"/>
@@ -837,25 +837,25 @@
   <g transform="translate(620, 30)">
     <rect x="0" y="0" width="520" height="430" rx="10" fill="#fff" stroke="#2f5d9a" stroke-width="2"/>
     <rect x="0" y="0" width="520" height="45" rx="10" fill="#eaf0fa"/>
-    <text x="260" y="28" font-size="15" font-weight="700" fill="#2f5d9a" text-anchor="middle">Camino PC Local (Adaptador Puente o NAT)</text>
+    <text x="260" y="28" font-size="15" font-weight="700" fill="#2f5d9a" text-anchor="middle">Flujo de Tráfico y Reglas de Entrada</text>
     
     <g transform="translate(25, 65)">
       <rect x="0" y="0" width="470" height="90" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="25" font-size="13" font-weight="700" fill="#2f5d9a">Aislamiento Tras el Hipervisor</text>
-      <text x="15" y="48" font-size="12" fill="#555">La VM obtiene una IP privada interna (ej. 10.0.2.15) oculta tras el host.</text>
-      <text x="15" y="70" font-size="12" fill="#333" font-weight="600">Ideal si la red institucional bloquea múltiples direcciones MAC.</text>
+      <text x="15" y="25" font-size="13" font-weight="700" fill="#2f5d9a">Seguridad de Perímetro en AWS</text>
+      <text x="15" y="48" font-size="12" fill="#555">El Security Group de AWS actúa como cortafuegos externo antes de la EC2.</text>
+      <text x="15" y="70" font-size="12" fill="#333" font-weight="600">Reglas con origen 0.0.0.0/0 para una máquina de lab desechable.</text>
 
       <rect x="0" y="105" width="470" height="110" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="130" font-size="13" font-weight="700" fill="#333">Mapeo de Puertos Obligatorio</text>
-      <text x="15" y="153" font-size="12" fill="#555">• Puerto Host 8080 → Puerto VM 80 (Horizon: localhost:8080/dashboard)</text>
-      <text x="15" y="175" font-size="12" fill="#555">• Puerto Host 2222 → Puerto VM 22 (SSH: ssh -p 2222 cuc@127.0.0.1)</text>
-      <text x="15" y="197" font-size="12" fill="#555">• Requiere configurar las reglas en los ajustes de red del hipervisor.</text>
+      <text x="15" y="130" font-size="13" font-weight="700" fill="#333">Tres Puertos Críticos Habilitados</text>
+      <text x="15" y="153" font-size="12" fill="#555">• Puerto TCP 22: Administración y EC2 Instance Connect.</text>
+      <text x="15" y="175" font-size="12" fill="#555">• Puerto TCP 80: Acceso al panel web Horizon en tu navegador.</text>
+      <text x="15" y="197" font-size="12" fill="#555">• Puerto TCP 6080: Consola gráfica noVNC para interactuar con CirrOS.</text>
 
       <rect x="0" y="230" width="470" height="110" rx="6" fill="#eaf0fa" stroke="#2f5d9a"/>
-      <text x="15" y="255" font-size="13" font-weight="700" fill="#2f5d9a">Particularidad de la Red Flotante</text>
-      <text x="15" y="278" font-size="12" fill="#333">• La red 172.24.4.x vive SOLO dentro de la VM de Ubuntu.</text>
-      <text x="15" y="300" font-size="12" fill="#333">• El SSH a CirrOS se ejecuta desde la propia consola de Ubuntu.</text>
-      <text x="15" y="322" font-size="12" fill="#333">• O mediante un túnel ProxyCommand desde el computador anfitrión.</text>
+      <text x="15" y="255" font-size="13" font-weight="700" fill="#2f5d9a">Direccionamiento y SSH Interno</text>
+      <text x="15" y="278" font-size="12" fill="#333">• La red flotante 172.24.4.x reside dentro del conmutador virtual de la EC2.</text>
+      <text x="15" y="300" font-size="12" fill="#333">• El comando SSH hacia CirrOS se ejecuta desde la terminal de la EC2.</text>
+      <text x="15" y="322" font-size="12" fill="#333">• Comando: ssh -i ~/lab-key.pem cirros@172.24.4.x</text>
     </g>
   </g>
 </svg>
@@ -865,7 +865,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/guides/neutron.html</span>
       <span class="pg">10 / 60</span>
     </div>
-    <aside class="guion">La estrategia de conectividad varía según la plataforma elegida. En el camino principal de AWS Academy, la máquina virtual EC2 recibe una dirección IP pública. En el grupo de seguridad de AWS configuramos las reglas de entrada abriendo el puerto ochenta para Horizon, el puerto veintidós para administración y el puerto seis mil ochenta para la consola gráfica noVNC. Gracias a esto, abren Horizon directamente ingresando la IP pública en su navegador. Un detalle técnico fundamental es que la dirección IP flotante de CirrOS, perteneciente al rango ciento setenta y dos veinticuatro cuatro punto equis, reside en una red virtual interna dentro de la propia EC2; por ello, la conexión SSH hacia la instancia se realiza desde la terminal de la propia máquina EC2. En el camino local se utiliza adaptador puente o modo NAT con reenvío de puertos.</aside>
+    <aside class="guion">La arquitectura de conectividad del laboratorio se apoya en la dirección IP pública de la instancia EC2. En el grupo de seguridad de AWS Academy abrimos tres puertos esenciales con origen cero punto cero punto cero punto cero barra cero: el puerto TCP veintidós para la administración y la conexión por EC2 Instance Connect; el puerto ochenta para visualizar la interfaz web de Horizon; y el puerto seis mil ochenta para la consola gráfica interactiva noVNC. Esto les permite ingresar directamente a Horizon digitando la IP pública en la barra del navegador. Un aspecto crucial que deben recordar es que la dirección IP flotante de la instancia CirrOS, en el rango ciento setenta y dos veinticuatro cuatro punto equis, reside en el conmutador virtual dentro de la propia EC2; por esta razón, la conexión por SSH se ejecuta desde la terminal de la máquina virtual.</aside>
   </section>
 
   <!-- Diapositiva 11 -->
@@ -885,7 +885,7 @@
   <g transform="translate(40, 20)">
     <rect x="0" y="0" width="1100" height="85" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.8"/>
     <text x="25" y="28" font-size="14" font-weight="700" fill="#8a6d1d">1. Red de Gestión / IP Pública EC2 o LAN Local</text>
-    <text x="25" y="52" font-size="12.5" fill="#333">Interfaz eth0 del host · <tspan font-weight="700" fill="#2f7d4f">IP Pública AWS</tspan> (o IP local 192.168.1.x / NAT 10.0.2.15)</text>
+    <text x="25" y="52" font-size="12.5" fill="#333">Interfaz eth0 de la EC2 · <tspan font-weight="700" fill="#2f7d4f">IP Pública de AWS</tspan> (acceso directo por navegador)</text>
     <text x="25" y="72" font-size="12" fill="#666">Transporta el tráfico de administración de Horizon (HTTP 80) y la sesión SSH de control del estudiante.</text>
     <rect x="940" y="25" width="135" height="35" rx="6" fill="#fbf6e7" stroke="#D4AF37"/>
     <text x="1007" y="47" font-size="12" font-weight="700" fill="#8a6d1d" text-anchor="middle">Plano de Gestión</text>
@@ -933,7 +933,7 @@
       <span class="src">Fuente: docs.openstack.org/neutron/latest/admin/ovn/refarch/refarch.html</span>
       <span class="pg">11 / 60</span>
     </div>
-    <aside class="guion">Para comprender el flujo de tráfico en el laboratorio debemos distinguir los tres niveles de red. En el nivel superior opera la red de administración: en AWS corresponde a la interfaz con IP pública de la instancia EC2, mientras que en un computador local es la interfaz conectada a la red doméstica o hipervisor. En el nivel intermedio encontramos la red pública simulada por DevStack en el conmutador virtual br-ex, configurada en el rango ciento setenta y dos veinticuatro cuatro punto cero con máscara veinticuatro; de este segmento provienen las direcciones IP flotantes. En el nivel inferior opera la red privada del proyecto, lab-net, con el rango ciento noventa y dos ciento sesenta y ocho cincuenta punto cero. Ambas redes se comunican a través del enrutador virtual lab-router, que implementa Source NAT y mapeo bidireccional hacia la instancia CirrOS.</aside>
+    <aside class="guion">Para comprender la conectividad del laboratorio debemos distinguir los tres niveles de red que conviven en el entorno. En el nivel superior opera el plano de gestión de AWS, donde la interfaz externa de la EC2 cuenta con una IP pública que transporta el tráfico de Horizon en el puerto ochenta, la consola noVNC en el puerto seis mil ochenta y la sesión SSH de administración. En el nivel intermedio encontramos la red pública simulada de OpenStack alojada en el conmutador virtual br-ex, con el rango oficial ciento setenta y dos veinticuatro cuatro punto cero con máscara veinticuatro, de donde se reservan las IPs flotantes. En el nivel inferior se encuentra la red privada lab-net, en el segmento ciento noventa y dos ciento sesenta y ocho cincuenta punto cero. El enrutador lab-router conecta ambas redes aplicando traducción de direcciones y mapeo bidireccional.</aside>
   </section>
 
   <!-- Diapositiva 12 -->
@@ -959,7 +959,7 @@
       <text x="0" y="20" font-size="13" font-weight="700" fill="#A6192E">Sistema Base</text>
       <text x="0" y="42" font-size="12" fill="#555">• AWS: EC2 t3.medium 35GB</text>
       <text x="0" y="62" font-size="12" fill="#555">• SG: puertos 22, 80 y 6080</text>
-      <text x="0" y="82" font-size="12" fill="#555">• PC: VM Ubuntu 24.04 (puente/NAT)</text>
+      <text x="0" y="82" font-size="12" fill="#555">• Par de claves: Proceed without</text>
       <line x1="0" y1="105" x2="220" y2="105" stroke="#eee" stroke-width="1.5"/>
       <text x="0" y="130" font-size="13" font-weight="700" fill="#A6192E">Usuario del Sistema</text>
       <text x="0" y="152" font-size="12" fill="#555">• EC2 Instance Connect</text>
@@ -967,7 +967,7 @@
       <line x1="0" y1="195" x2="220" y2="195" stroke="#eee" stroke-width="1.5"/>
       <text x="0" y="220" font-size="13" font-weight="700" fill="#A6192E">Repositorio Oficial</text>
       <text x="0" y="242" font-size="12" fill="#555">• Descargar script con curl</text>
-      <text x="0" y="262" font-size="12" fill="#555">• Parámetro --aws o --lite</text>
+      <text x="0" y="262" font-size="12" fill="#555">• Comando: --aws --yes</text>
       <rect x="0" y="300" width="220" height="35" rx="6" fill="#fbf6e7" stroke="#D4AF37"/>
       <text x="110" y="322" font-size="11.5" font-weight="700" fill="#8a6d1d" text-anchor="middle">Inicio en 5 min</text>
     </g>
@@ -989,7 +989,7 @@
       <text x="0" y="172" font-size="12" fill="#555">• Generación de archivo openrc</text>
       <line x1="0" y1="195" x2="220" y2="195" stroke="#eee" stroke-width="1.5"/>
       <text x="0" y="220" font-size="13" font-weight="700" fill="#A6192E">Resguardo Preventivo</text>
-      <text x="0" y="242" font-size="12" fill="#555">• Tomar snapshot en hipervisor</text>
+      <text x="0" y="242" font-size="12" fill="#555">• Guardar credenciales generadas</text>
       <text x="0" y="262" font-size="12" fill="#555">• Guardar contraseñas</text>
       <rect x="0" y="300" width="220" height="35" rx="6" fill="#f9eef0" stroke="#A6192E"/>
       <text x="110" y="322" font-size="11.5" font-weight="700" fill="#A6192E" text-anchor="middle">Evidencia 1: Dashboard</text>
@@ -1242,7 +1242,7 @@
 
       <rect x="0" y="160" width="470" height="65" rx="6" fill="#fdfdfd" stroke="#ddd"/>
       <text x="15" y="185" font-size="13" font-weight="700" fill="#2f7d4f">Requisitos Técnicos Críticos</text>
-      <text x="15" y="208" font-size="12" fill="#555">16 GB RAM física, virtualización anidada y adaptador en modo puente.</text>
+      <text x="15" y="208" font-size="12" fill="#555">EC2 t3.medium en AWS, puertos 22/80/6080 y script desatendido.</text>
 
       <rect x="0" y="240" width="470" height="65" rx="6" fill="#fdfdfd" stroke="#ddd"/>
       <text x="15" y="265" font-size="13" font-weight="700" fill="#8a6d1d">Rúbrica y Metodología Evaluativa</text>
@@ -1286,7 +1286,7 @@
       <span class="src">Fuente: Universidad de la Costa · Arquitectura en la Nube 2026-2</span>
       <span class="pg">15 / 60</span>
     </div>
-    <aside class="guion">Hemos culminado con éxito la primera parte de nuestra Semana trece. En esta sesión sentamos las bases conceptuales, arquitectónicas y metodológicas del laboratorio. Ahora conocemos qué es DevStack, por qué no debe usarse en producción, cómo se distribuyen los procesos internamente y cuáles son los requisitos de hardware y virtualización anidada para que todo opere con fluidez. Además, revisamos la rúbrica de evaluación y el valor de las cinco evidencias solicitadas. En el próximo video abriremos la consola de Ubuntu Server veinticuatro cero cuatro para crear el usuario stack, configurar el archivo local punto conf y lanzar la instalación desatendida con stack punto ese hache. Tengan lista su máquina virtual y nos vemos en la Parte dos. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Hemos culminado con éxito la primera parte de nuestra Semana trece. En esta sesión sentamos las bases conceptuales, arquitectónicas y metodológicas del laboratorio. Ahora conocemos qué es DevStack, por qué no debe usarse en producción, cómo se distribuyen los procesos internamente y cuáles son los requisitos de la instancia t3 punto medium en AWS Academy y cómo opera la emulación QEMU. Además, revisamos la rúbrica de evaluación y el valor de las cinco evidencias solicitadas. En el próximo video abriremos la consola de Ubuntu Server veinticuatro cero cuatro para crear el usuario stack, configurar el archivo local punto conf y lanzar la instalación desatendida con stack punto ese hache. Tengan lista su máquina virtual y nos vemos en la Parte dos. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 16 (Portada Parte 2) -->
@@ -1306,9 +1306,9 @@
   <section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">SISTEMA OPERATIVO BASE</div>
-      <h2>Preparación del Host: AWS Academy o VM Local</h2>
+      <h2>Preparación del Host en AWS Academy Sandbox</h2>
       <div class="rule"></div>
-      <div class="sub">Lanzamiento en AWS Academy Sandbox (recomendado) o en hipervisor local.</div>
+      <div class="sub">Lanzamiento de Ubuntu 24.04 en AWS Academy Sandbox y conexión por EC2 Instance Connect.</div>
       <img alt="CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
     </div>
     <div class="s-body">
@@ -1319,7 +1319,7 @@
   <g transform="translate(40, 20)">
     <rect x="0" y="0" width="1100" height="65" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.8"/>
     <text x="25" y="30" font-size="15" font-weight="700" fill="#8a6d1d">Paso 1: Preparación del Entorno Base (Ubuntu Server 24.04 LTS Noble Numbat)</text>
-    <text x="25" y="52" font-size="12.5" fill="#555">Camino recomendado: Sandbox AWS Academy (solo navegador). Alternativa: máquina virtual local en VirtualBox o VMware.</text>
+    <text x="25" y="52" font-size="12.5" fill="#555">Entorno oficial: Sandbox AWS Academy (solo navegador). Instancia t3.medium con disco de 35 GB gp2.</text>
   </g>
 
   <!-- 3 Cajas de Comandos y Validaciones -->
@@ -1386,7 +1386,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/guides/single-machine.html</span>
       <span class="pg">17 / 60</span>
     </div>
-    <aside class="guion">El punto de partida para este laboratorio es preparar el host con Ubuntu Server veinticuatro cero cuatro. El camino recomendado es usar el Sandbox de AWS Academy: ingresan a Entorno de pruebas, inician el laboratorio y en la consola de AWS lanzan una instancia EC2 t3 punto medium con disco de treinta y cinco gigabytes y un grupo de seguridad con los puertos veintidós, ochenta y seis mil ochenta abiertos. Se conectan directamente desde el navegador con EC2 Instance Connect sin instalar nada en su computador. Como alternativa, si trabajan en su máquina física, pueden crear una máquina virtual en VirtualBox con la ISO de Ubuntu. En ambos casos, descargamos el script oficial devstack lab install con curl, el cual automatiza todas las dependencias y prepara el entorno para la instalación.</aside>
+    <aside class="guion">El punto de partida para este laboratorio es desplegar nuestra máquina host en el Sandbox de AWS Academy. Desde el Entorno de pruebas iniciamos el laboratorio, entramos a la consola de AWS y en el servicio EC2 pulsamos Lanzar instancia. Seleccionamos Ubuntu Server veinticuatro cero cuatro LTS para arquitectura x86, elegimos el tipo t3 punto medium y configuramos treinta y cinco gigabytes en disco gp2. En par de claves seleccionamos continuar sin llave, ya que nos conectaremos directamente con EC2 Instance Connect. En el grupo de seguridad abrimos los puertos veintidós, ochenta y seis mil ochenta desde cualquier origen. Una vez la máquina esté en ejecución, abrimos la terminal del navegador, descargamos el script con curl, creamos una sesión con tmux new guion ese lab y lanzamos la instalación desatendida con el comando bash devstack lab install guion guion aws guion guion yes.</aside>
   </section>
 
   <!-- Diapositiva 18 -->
@@ -1619,7 +1619,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/configuration.html</span>
       <span class="pg">20 / 60</span>
     </div>
-    <aside class="guion">Toda la configuración de DevStack se centraliza en un único archivo declarativo llamado local punto conf en la raíz del repositorio. Este archivo utiliza una sección obligatoria llamada corchete corchete local barra localrc corchete corchete. La primera variable clave es HOST guion bajo IP, que define la dirección donde OpenStack publicará los endpoints de Keystone y Horizon; en modo puente será la IP asignada por su router. Para simplificar el laboratorio, unificamos las contraseñas del usuario admin, la base de datos MariaDB, el broker RabbitMQ y las cuentas de servicio bajo la variable ADMIN guion bajo PASSWORD. Además, fijamos la ruta del log en stack punto ese hache punto log y nos aseguramos de habilitar Horizon y deshabilitar Tempest. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Toda la configuración de DevStack se centraliza en un único archivo declarativo llamado local punto conf en la raíz del repositorio. Este archivo utiliza una sección obligatoria llamada corchete corchete local barra localrc corchete corchete. La primera variable clave es HOST guion bajo IP, que define la dirección donde OpenStack publicará los endpoints de Keystone y Horizon; en AWS corresponde a la IP privada interna mientras que NOVNCPROXY_URL usa la IP pública. Para simplificar el laboratorio, unificamos las contraseñas del usuario admin, la base de datos MariaDB, el broker RabbitMQ y las cuentas de servicio bajo la variable ADMIN guion bajo PASSWORD. Además, fijamos la ruta del log en stack punto ese hache punto log y nos aseguramos de habilitar Horizon y deshabilitar Tempest. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 21 -->
@@ -1875,7 +1875,7 @@
   <!-- Banner Inferior Informativo -->
   <g transform="translate(40, 395)">
     <rect x="0" y="0" width="1100" height="75" rx="8" fill="#fbf6e7" stroke="#D4AF37" stroke-width="1.5"/>
-    <text x="550" y="30" font-size="13.5" font-weight="700" fill="#8a6d1d" text-anchor="middle">En la Fase 3 es donde ocurre el mayor consumo de memoria y CPU del PC anfitrión</text>
+    <text x="550" y="30" font-size="13.5" font-weight="700" fill="#8a6d1d" text-anchor="middle">En la Fase 3 es donde ocurre el mayor consumo de memoria y CPU de la instancia EC2</text>
     <text x="550" y="52" font-size="12.5" fill="#333" text-anchor="middle">Si el equipo tiene poca memoria, la compilación de librerías Python activará el OOM Killer en este punto.</text>
   </g>
 </svg>
@@ -1885,7 +1885,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/</span>
       <span class="pg">23 / 60</span>
     </div>
-    <aside class="guion">Examinemos qué ocurre en las entrañas de stack punto ese hache durante sus primeras tres fases. En la Fase uno, el script realiza comprobaciones de coherencia: valida que no seamos root, confirma que la distribución sea Ubuntu veinticuatro cero cuatro y verifica la memoria disponible. En la Fase dos, DevStack usa apt para instalar los compiladores de C, librerías de virtualización de libvirt y los servidores base de MariaDB, RabbitMQ y Apache. La Fase tres es la más exigente: aquí el instalador clona los repositorios de cada microservicio en opt barra stack y compila cientos de librerías de Python mediante pip. Si su equipo tiene menos de ocho gigabytes de RAM, este es el momento exacto donde la instalación suele fallar por falta de memoria. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Examinemos qué ocurre en las entrañas de stack punto ese hache durante sus primeras tres fases. En la Fase uno, el script realiza comprobaciones de coherencia: valida que no seamos root, confirma que la distribución sea Ubuntu veinticuatro cero cuatro y verifica la memoria disponible. En la Fase dos, DevStack usa apt para instalar los compiladores de C, librerías de virtualización de libvirt y los servidores base de MariaDB, RabbitMQ y Apache. La Fase tres es la más exigente: aquí el instalador clona los repositorios de cada microservicio en opt barra stack y compila cientos de librerías de Python mediante pip. Por esta razón el script activa ocho gigabytes de swap y deshabilita Cinder, garantizando que la compilación concluya sin agotar la memoria. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 24 -->
@@ -2009,7 +2009,7 @@
 
       <rect x="0" y="85" width="480" height="70" rx="6" fill="#fdfdfd" stroke="#ddd"/>
       <text x="15" y="109" font-size="13" font-weight="700" fill="#333">Demonio ovn-controller</text>
-      <text x="15" y="129" font-size="12" fill="#555">Conecta el hipervisor local con las bases de datos Northbound y</text>
+      <text x="15" y="129" font-size="12" fill="#555">Conecta el nodo de cómputo local con las bases de datos Northbound y</text>
       <text x="15" y="145" font-size="12" fill="#555">Southbound de OVN para traducir flujos OpenFlow en microsegundos.</text>
 
       <rect x="0" y="170" width="480" height="80" rx="6" fill="#eaf5ea" stroke="#2f7d4f"/>
@@ -2138,7 +2138,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/</span>
       <span class="pg">26 / 60</span>
     </div>
-    <aside class="guion">¿Cómo verificar que la instalación culminó con éxito? Existen tres señales técnicas concluyentes. La primera es visual: al terminar, la consola imprime un banner verde con la IP anfitriona, la URL de Horizon y el mensaje stack punto ese hache completed. Si el script se detuvo antes, la instalación no finalizó correctamente. La segunda prueba es comprobar la existencia del archivo openrc en opt barra stack barra devstack: al cargarlo con source openrc admin admin y ejecutar openstack endpoint list, la terminal devolverá el listado completo de servicios registrados en Keystone. La tercera prueba es abrir el navegador e ingresar a la IP de su máquina en barra dashboard; ver la pantalla de inicio de sesión confirma la operatividad y completa la Evidencia uno. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">¿Cómo verificar que la instalación culminó con éxito? Existen tres señales técnicas concluyentes. La primera es visual: al terminar, la consola imprime un resumen con la IP pública de la EC2, la URL de Horizon y el mensaje stack punto ese hache completed. Si el script se detuvo antes, la instalación no finalizó correctamente. La segunda prueba es comprobar la existencia del archivo openrc en opt barra stack barra devstack: al cargarlo con source openrc admin admin y ejecutar openstack endpoint list, la terminal devolverá el listado completo de servicios registrados en Keystone. La tercera prueba es abrir el navegador e ingresar a la IP de su máquina en barra dashboard; ver la pantalla de inicio de sesión confirma la operatividad y completa la Evidencia uno. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 27 -->
@@ -2166,8 +2166,8 @@
     <rect x="0" y="0" width="220" height="65" rx="6" fill="#f9eef0"/>
     <text x="110" y="27" font-size="13" font-weight="800" fill="#A6192E" text-anchor="middle">1. Memoria Insuficiente</text>
     <text x="110" y="47" font-size="11" fill="#666" text-anchor="middle">Proceso «Killed» o fallo pip</text>
-    <text x="240" y="27" font-size="12" font-weight="700" fill="#333">Causa: La VM tiene menos de 8 GB de RAM física asignada o el hipervisor agotó la memoria.</text>
-    <text x="240" y="47" font-size="12" fill="#2f7d4f"><tspan font-weight="700">Solución:</tspan> Apagar la VM, subir la RAM a 8192 MB y crear un swapfile de 4 GB: <tspan font-family="monospace">fallocate -l 4G /swapfile</tspan></text>
+    <text x="240" y="27" font-size="12" font-weight="700" fill="#333">Causa: No se configuró el swapfile o se omitió el parámetro --aws en la t3.medium.</text>
+    <text x="240" y="47" font-size="12" fill="#2f7d4f"><tspan font-weight="700">Solución:</tspan> Usar <tspan font-family="monospace">--aws</tspan> en el script para habilitar 8 GB de swap y suprimir Cinder automáticamente.</text>
 
     <!-- Error 2 -->
     <rect x="0" y="75" width="1100" height="65" rx="6" fill="#fff" stroke="#ddd"/>
@@ -2188,10 +2188,10 @@
     <!-- Error 4 -->
     <rect x="0" y="225" width="1100" height="65" rx="6" fill="#fff" stroke="#ddd"/>
     <rect x="0" y="225" width="220" height="65" rx="6" fill="#f9eef0"/>
-    <text x="110" y="252" font-size="13" font-weight="800" fill="#A6192E" text-anchor="middle">4. Sin Virtualización Anidada</text>
-    <text x="110" y="272" font-size="11" fill="#666" text-anchor="middle">Instancia CirrOS en «ERROR»</text>
-    <text x="240" y="252" font-size="12" font-weight="700" fill="#333">Causa: El hipervisor no expone VT-x/AMD-V; libvirt falla al inicializar el dominio KVM.</text>
-    <text x="240" y="272" font-size="12" fill="#2f7d4f"><tspan font-weight="700">Solución:</tspan> Activar anidación en VirtualBox/VMware o configurar <tspan font-family="monospace">virt_type = qemu</tspan> en nova-cpu.conf.</text>
+    <text x="110" y="252" font-size="13" font-weight="800" fill="#A6192E" text-anchor="middle">4. Puertos en Security Group</text>
+    <text x="110" y="272" font-size="11" fill="#666" text-anchor="middle">Horizon o noVNC inaccesible</text>
+    <text x="240" y="252" font-size="12" font-weight="700" fill="#333">Causa: Faltan reglas en el Security Group de AWS para los puertos TCP 80 o 6080.</text>
+    <text x="240" y="272" font-size="12" fill="#2f7d4f"><tspan font-weight="700">Solución:</tspan> En la consola AWS agregar reglas de entrada TCP 80 y 6080 desde 0.0.0.0/0.</text>
 
     <!-- Error 5 -->
     <rect x="0" y="300" width="1100" height="65" rx="6" fill="#fff" stroke="#ddd"/>
@@ -2199,7 +2199,7 @@
     <text x="110" y="327" font-size="13" font-weight="800" fill="#8a6d1d" text-anchor="middle">5. Reinicio de la VM</text>
     <text x="110" y="347" font-size="11" fill="#666" text-anchor="middle">Horizon no abre tras reboot</text>
     <text x="240" y="327" font-size="12" font-weight="700" fill="#333">Causa: DevStack no persiste servicios en el arranque por diseño; los demonios quedan inactivos.</text>
-    <text x="240" y="347" font-size="12" fill="#2f7d4f"><tspan font-weight="700">Solución:</tspan> Restaurar el snapshot tomado tras stack.sh o volver a correr <tspan font-family="monospace">./stack.sh</tspan> (borrando la marca).</text>
+    <text x="240" y="347" font-size="12" fill="#2f7d4f"><tspan font-weight="700">Solución:</tspan> Terminar la instancia EC2 y lanzar una nueva desde el paso 1 si la sesión expiró.</text>
   </g>
 </svg>
     </div>
@@ -2208,7 +2208,7 @@
       <span class="src">Fuente: actividades/lab-openstack/index.html</span>
       <span class="pg">27 / 60</span>
     </div>
-    <aside class="guion">Esta diapositiva resume los cinco errores más frecuentes al desplegar DevStack con su solución inmediata. El error uno es la falta de RAM: si ven el mensaje Killed, la solución es subir la memoria a ocho gigabytes y crear un archivo swap de cuatro gigabytes. El segundo error es la pérdida de internet o fallas de DNS durante la descarga; se corrige configurando servidores DNS públicos como ocho punto ocho punto ocho punto ocho. El tercer error ocurre al reejecutar stack punto ese hache tras un fallo sin limpiar; esto provoca choques en MariaDB, por lo que siempre deben correr antes unstack punto ese hache. El cuarto error es ver la instancia en estado ERROR por falta de virtualización anidada. El quinto error es reiniciar la máquina y encontrar los servicios caídos; la solución definitiva es restaurar el snapshot.</aside>
+    <aside class="guion">Esta diapositiva resume los cinco errores más frecuentes al desplegar DevStack en AWS Academy y cómo resolverlos. El primer error es la falta de memoria si el instalador no activa el swap de ocho gigabytes; el parámetro aws lo resuelve automáticamente. El segundo error son cortes en la resolución DNS o de internet al descargar paquetes, lo cual se soluciona verificando la IP pública y probando ping hacia opendev punto org. El tercer error surge de interrupciones en la terminal, que se evitan por completo ejecutando dentro de una sesión de tmux. El cuarto error es la falta de acceso a Horizon o a la consola noVNC por omitir los puertos ochenta o seis mil ochenta en el grupo de seguridad de la instancia EC2. Y el quinto error ocurre si se detiene la máquina o expira la sesión de tres horas, ante lo cual la solución oficial es terminar la instancia y crear otra desde el paso uno.</aside>
   </section>
 
   <!-- Diapositiva 28 -->
@@ -2288,13 +2288,13 @@
   <section class="slide" data-parte="2">
     <div class="s-head">
       <div class="kicker">BUENAS PRÁCTICAS OPERATIVAS</div>
-      <h2>Credenciales y Snapshot Preventivo Inmediato</h2>
+      <h2>Credenciales y Resguardo de Acceso</h2>
       <div class="rule"></div>
-      <div class="sub">Cómo asegurar el éxito de la instalación contra contingencias antes de tocar Horizon.</div>
+      <div class="sub">Consulta y resguardo de contraseñas generadas y política de sesión continua.</div>
       <img alt="CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
     </div>
     <div class="s-body">
-      <svg viewBox="0 0 1180 500" class="dgm" role="img" aria-label="Snapshot y resguardo de credenciales">
+      <svg viewBox="0 0 1180 500" class="dgm" role="img" aria-label="Resguardo de credenciales y sesion en AWS">
   <rect x="0" y="0" width="1180" height="500" fill="#fafafa" rx="10" stroke="#e5e5e5"/>
   
   <!-- 2 Columnas de Buenas Practicas -->
@@ -2324,28 +2324,28 @@
     </g>
   </g>
 
-  <!-- Columna 2: Snapshot en Hipervisor -->
+  <!-- Columna 2: Politica de Sesion en AWS -->
   <g transform="translate(620, 25)">
     <rect x="0" y="0" width="520" height="440" rx="10" fill="#fff" stroke="#2f7d4f" stroke-width="2"/>
     <rect x="0" y="0" width="520" height="45" rx="10" fill="#eaf5ea"/>
-    <text x="260" y="28" font-size="15" font-weight="700" fill="#2f7d4f" text-anchor="middle">Paso B: Snapshot Inmediato del Hipervisor</text>
+    <text x="260" y="28" font-size="15" font-weight="700" fill="#2f7d4f" text-anchor="middle">Paso B: Política de Sesión en AWS Academy</text>
     
     <g transform="translate(25, 65)">
-      <text x="0" y="20" font-size="13" font-weight="700" fill="#2f7d4f">¡LA ACCIÓN MÁS IMPORTANTE DEL LABORATORIO!</text>
-      <text x="0" y="42" font-size="12" fill="#555">Apenas termine stack.sh, diríjanse al menú de su hipervisor:</text>
+      <text x="0" y="20" font-size="13" font-weight="700" fill="#2f7d4f">SESIÓN CONTINUA DE 3 HORAS</text>
+      <text x="0" y="42" font-size="12" fill="#555">Completa todas las evidencias antes de cerrar:</text>
 
       <rect x="0" y="60" width="470" height="90" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="85" font-size="13" font-weight="700" fill="#333">• En VirtualBox:</text>
-      <text x="15" y="108" font-size="12" fill="#555">Máquina → Tomar instantánea → Nombre: <tspan font-weight="700" fill="#2f7d4f">«DevStack-Instalado-OK»</tspan></text>
-      <text x="15" y="130" font-size="12" fill="#333">• En VMware: VM → Snapshot → Take Snapshot.</text>
+      <text x="15" y="85" font-size="13" font-weight="700" fill="#333">• Consulta Rápida de Clave:</text>
+      <text x="15" y="108" font-size="12" font-family="monospace" fill="#D4AF37">cat ~/devstack-credenciales.txt</text>
+      <text x="15" y="130" font-size="12" fill="#555">Recupera la contraseña autogenerada en cualquier momento.</text>
 
-      <text x="0" y="175" font-size="13" font-weight="700" fill="#333">Beneficio Arquitectónico:</text>
-      <text x="0" y="198" font-size="12" fill="#555">• Congela en disco el estado exacto de MariaDB, OVN y Horizon.</text>
-      <text x="0" y="218" font-size="12" fill="#555">• Si la VM se reinicia o se corrompe una red, se restaura en 10 s.</text>
-      <text x="0" y="238" font-size="12" fill="#555">• No tendrán que volver a esperar los 40 minutos de stack.sh.</text>
+      <text x="0" y="175" font-size="13" font-weight="700" fill="#333">Disciplina Operativa de Nube:</text>
+      <text x="0" y="198" font-size="12" fill="#555">• DevStack no es persistente: si la EC2 se apaga, no reinicia sola.</text>
+      <text x="0" y="218" font-size="12" fill="#555">• Realiza la práctica en un único bloque de trabajo de 3 horas.</text>
+      <text x="0" y="238" font-size="12" fill="#A6192E" font-weight="700">• Al terminar las 5 capturas: ejecuta Terminate instance en AWS.</text>
 
       <rect x="0" y="275" width="470" height="45" rx="6" fill="#eaf5ea" stroke="#2f7d4f"/>
-      <text x="235" y="302" font-size="12.5" font-weight="700" fill="#2f7d4f" text-anchor="middle">Póliza de seguro que garantiza el éxito del laboratorio</text>
+      <text x="235" y="302" font-size="12.5" font-weight="700" fill="#2f7d4f" text-anchor="middle">Todo en una sola sesión de 3 horas y cierre seguro</text>
     </g>
   </g>
 </svg>
@@ -2355,7 +2355,7 @@
       <span class="src">Fuente: docs.openstack.org/devstack/latest/</span>
       <span class="pg">29 / 60</span>
     </div>
-    <aside class="guion">Apenas visualicen el banner final de confirmación, deben ejecutar de inmediato dos acciones operativas indispensables. La primera es resguardar sus credenciales: nuestro script genera el archivo devstack guion credenciales punto te equis te en su carpeta personal, resumiendo la URL de Horizon, el usuario admin, la contraseña y la ubicación de la llave SSH. La segunda acción, y la más importante de la semana, es tomar un snapshot de la máquina virtual en su hipervisor. Ya sea en VirtualBox o en VMware, congelen el estado con el nombre DevStack Instalado OK. Si su computador se apaga o sufre una falla, bastará con hacer clic en restaurar snapshot para recuperar su nube al cien por ciento en quince segundos, ahorrándose repetir toda la instalación. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Apenas concluya la instalación verán en la terminal un recuadro con el resumen completo de acceso. La primera acción consiste en anotar la dirección web de Horizon con la IP pública de la EC2, el usuario admin y la contraseña autogenerada. Si por alguna razón cierran la consola o pierden esos datos, pueden recuperarlos de inmediato ejecutando cat virgulilla barra devstack guion credenciales punto te equis te. La segunda directriz esencial es completar las cinco evidencias dentro de la misma sesión de tres horas del Sandbox. Debido a la naturaleza efímera de DevStack, si la instancia se detiene los servicios no arrancan de forma automática. Al finalizar la totalidad de las capturas deberán aplicar Terminate instance en la consola de AWS.</aside>
   </section>
 
   <!-- Diapositiva 30 -->
@@ -2390,7 +2390,7 @@
       <text x="15" y="208" font-size="12" fill="#555">MariaDB, RabbitMQ, Keystone, Nova, Neutron y Horizon activos.</text>
 
       <rect x="0" y="240" width="470" height="65" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="265" font-size="13" font-weight="700" fill="#8a6d1d">Snapshot de Seguridad Creado</text>
+      <text x="15" y="265" font-size="13" font-weight="700" fill="#8a6d1d">Credenciales Resguardadas</text>
       <text x="15" y="288" font-size="12" fill="#555">Plataforma blindada contra apagados o corrupciones de red.</text>
     </g>
   </g>
@@ -2431,7 +2431,7 @@
       <span class="src">Fuente: Universidad de la Costa · Arquitectura en la Nube 2026-2</span>
       <span class="pg">30 / 60</span>
     </div>
-    <aside class="guion">Felicitaciones por completar la segunda parte. En esta sesión transformamos una máquina virtual estándar con Ubuntu Server en una nube privada OpenStack completamente funcional. Aprendimos a crear el usuario stack, a clonar la rama estable Gazpacho dos mil veintiséis punto uno, a configurar el archivo local punto conf y a supervisar la ejecución de stack punto ese hache a través de sus seis fases. Además, resguardamos nuestras credenciales y aseguramos el entorno con un snapshot preventivo. Con los cimientos listos y los microservicios activos en el puerto ochenta, estamos preparados para asumir el rol de usuarios de la nube. En la Parte tres ingresaremos a Horizon, configuraremos redes y lanzaremos nuestra primera máquina virtual CirrOS. Nos vemos en el próximo video. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Felicitaciones por completar la segunda parte. En esta sesión transformamos una máquina virtual estándar con Ubuntu Server en una nube privada OpenStack completamente funcional. Aprendimos a crear el usuario stack, a clonar la rama estable Gazpacho dos mil veintiséis punto uno, a configurar el archivo local punto conf y a supervisar la ejecución de stack punto ese hache a través de sus seis fases. Además, resguardamos nuestras credenciales y verificamos la operatividad de Horizon en el puerto ochenta. Con los cimientos listos y los microservicios activos en el puerto ochenta, estamos preparados para asumir el rol de usuarios de la nube. En la Parte tres ingresaremos a Horizon, configuraremos redes y lanzaremos nuestra primera máquina virtual CirrOS. Nos vemos en el próximo video. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 31 (Portada Parte 3) -->
@@ -2444,7 +2444,7 @@
     <div class="bar"></div>
     <div class="author">Docente: <b>Ing. Rodolfo José Cañas Cervantes</b> · Universidad de la Costa</div>
     <div class="cover-sub">Aprovisionamiento de recursos de infraestructura mediante el panel gráfico y la CLI oficial de OpenStack.</div>
-    <aside class="guion">Bienvenidos a la Parte tres de la Semana trece. Con nuestra plataforma OpenStack instalada y respaldada con snapshots, es momento de actuar como arquitectos de infraestructura. En esta sesión entraremos al panel Horizon para explorar su interfaz de autoservicio. Configuraremos el aislamiento del proyecto, crearemos nuestra red privada con direccionamiento asignado por Neutron y conectaremos un enrutador lógico hacia la red pública. Es un procedimiento fundamental para el éxito del laboratorio.</aside>
+    <aside class="guion">Bienvenidos a la Parte tres de la Semana trece. Con nuestra plataforma OpenStack instalada y plenamente accesible por su IP pública, es momento de actuar como arquitectos de infraestructura. En esta sesión entraremos al panel Horizon para explorar su interfaz de autoservicio. Configuraremos el aislamiento del proyecto, crearemos nuestra red privada con direccionamiento asignado por Neutron y conectaremos un enrutador lógico hacia la red pública. Es un procedimiento fundamental para el éxito del laboratorio.</aside>
   </section>
 
   <!-- Diapositiva 32 -->
@@ -3095,7 +3095,7 @@
     <!-- Fila 4: m1.large -->
     <rect x="0" y="222" width="1100" height="50" rx="4" fill="#fff" stroke="#eee"/>
     <text x="50" y="252" font-size="13" font-weight="600" fill="#333">m1.large</text>
-    <text x="280" y="252" font-size="13" fill="#666">4 vCPUs</text>
+    <text x="280" y="252" font-size="13" fill="#666">2 vCPUs</text>
     <text x="450" y="252" font-size="13" fill="#666">8.192 MB (8 GB)</text>
     <text x="650" y="252" font-size="13" fill="#666">80 GB</text>
     <text x="880" y="252" font-size="12" fill="#666">Bases de datos y cargas pesadas</text>
@@ -3106,7 +3106,7 @@
     <rect x="0" y="0" width="1100" height="85" rx="8" fill="#eaf5ea" stroke="#2f7d4f" stroke-width="1.5"/>
     <text x="25" y="28" font-size="13.5" font-weight="700" fill="#2f7d4f">¿Por qué es indispensable usar m1.tiny en nuestro laboratorio All-in-One?</text>
     <text x="25" y="52" font-size="12.5" fill="#333">Nuestra VM de Ubuntu cuenta con 8 GB de RAM compartida entre MariaDB, RabbitMQ, Neutron y Nova.</text>
-    <text x="25" y="72" font-size="12.5" fill="#333">El sabor m1.tiny consume apenas 512 MB de RAM, garantizando que el hipervisor KVM no compita con los servicios de control.</text>
+    <text x="25" y="72" font-size="12.5" fill="#333">El sabor m1.tiny consume apenas 512 MB de RAM, garantizando que la emulación QEMU no compita con los servicios de control.</text>
   </g>
 </svg>
     </div>
@@ -3115,7 +3115,7 @@
       <span class="src">Fuente: docs.openstack.org/nova/latest/user/flavors.html</span>
       <span class="pg">39 / 60</span>
     </div>
-    <aside class="guion">En OpenStack el hardware de una máquina virtual se define seleccionando un sabor o Flavor preconfigurado. El Flavor establece la cantidad de procesadores virtuales, memoria RAM y tamaño de disco efímero. Nova incluye un catálogo estándar desde em uno punto tiny hasta em uno punto large. Para nuestro laboratorio seleccionamos obligatoriamente el sabor em uno punto tiny, el cual asigna un núcleo virtual, quinientos doce megabytes de RAM y un gigabyte de disco. Recuerden que operamos en una arquitectura Todo en Uno dentro de una máquina de ocho gigabytes; elegir un sabor grande consumiría memoria crítica, dejando a MariaDB y a Neutron sin recursos suficientes y provocando fallos en el sistema anfitrión. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">En OpenStack el hardware de una máquina virtual se define seleccionando un sabor o Flavor preconfigurado. El Flavor establece la cantidad de procesadores virtuales, memoria RAM y tamaño de disco efímero. Nova incluye un catálogo estándar desde em uno punto tiny hasta em uno punto large. Para nuestro laboratorio seleccionamos obligatoriamente el sabor em uno punto tiny, el cual asigna un núcleo virtual, quinientos doce megabytes de RAM y un gigabyte de disco. Recuerden que operamos en una arquitectura Todo en Uno dentro de una instancia de cuatro gigabytes; elegir un sabor grande consumiría memoria crítica, dejando a MariaDB y a Neutron sin recursos suficientes y provocando bloqueos en el sistema operativo. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 40 -->
@@ -3464,7 +3464,7 @@
       <span class="src">Fuente: docs.openstack.org/install-guide/launch-instance.html</span>
       <span class="pg">43 / 60</span>
     </div>
-    <aside class="guion">Analicemos la coreografía arquitectónica que ocurrió en apenas tres segundos cuando pulsaron el botón de lanzar instancia. Horizon validó su token ante Keystone y envió una solicitud REST a nova-api con el flavor y la imagen seleccionada. Nova consultó a Placement para verificar que el hipervisor tuviera capacidad de cómputo disponible. Con el visto bueno, Nova consultó a Glance para obtener la imagen CirrOS y envió una petición asíncrona a Neutron. Neutron reservó un puerto virtual en br-int, asignó la dirección IP privada por DHCP y aplicó los filtros de seguridad. Con la red y el disco listos, nova-compute invocó a libvirt para arrancar la máquina en KVM, notificando a Horizon el estado activo. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Analicemos la coreografía arquitectónica que ocurrió en apenas tres segundos cuando pulsaron el botón de lanzar instancia. Horizon validó su token ante Keystone y envió una solicitud REST a nova-api con el flavor y la imagen seleccionada. Nova consultó a Placement para verificar que el nodo tuviera capacidad de cómputo disponible. Con el visto bueno, Nova consultó a Glance para obtener la imagen CirrOS y envió una petición asíncrona a Neutron. Neutron reservó un puerto virtual en br-int, asignó la dirección IP privada por DHCP y aplicó los filtros de seguridad. Con la red y el disco listos, nova-compute invocó a libvirt para arrancar la máquina bajo emulación QEMU, notificando a Horizon el estado activo. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 44 -->
@@ -3573,7 +3573,7 @@
 
       <rect x="0" y="80" width="470" height="65" rx="6" fill="#fdfdfd" stroke="#ddd"/>
       <text x="15" y="105" font-size="13" font-weight="700" fill="#2f5d9a">Manejo de Reinicios y Volatilidad</text>
-      <text x="15" y="128" font-size="12" fill="#555">Qué pasa al reiniciar la VM y cómo restaurar con snapshots.</text>
+      <text x="15" y="128" font-size="12" fill="#555">Volatilidad de DevStack y protocolo de recreación en AWS.</text>
 
       <rect x="0" y="160" width="470" height="65" rx="6" fill="#fdfdfd" stroke="#ddd"/>
       <text x="15" y="185" font-size="13" font-weight="700" fill="#2f7d4f">Alta Disponibilidad y Live Migration</text>
@@ -3581,7 +3581,7 @@
 
       <rect x="0" y="240" width="470" height="65" rx="6" fill="#fdfdfd" stroke="#ddd"/>
       <text x="15" y="265" font-size="13" font-weight="700" fill="#8a6d1d">Consolidación del Informe y Adelanto S14</text>
-      <text x="15" y="288" font-size="12" fill="#555">Checklist de entrega del 10 % y puente hacia IA en la Nube.</text>
+      <text x="15" y="288" font-size="12" fill="#555">Checklist de entrega del 10 % y transición hacia IA en la Nube.</text>
     </g>
   </g>
 
@@ -3610,7 +3610,7 @@
     <div class="bar"></div>
     <div class="author">Docente: <b>Ing. Rodolfo José Cañas Cervantes</b> · Universidad de la Costa</div>
     <div class="cover-sub">Gestión del ciclo de vida, contingencia de reinicio, alta disponibilidad empresarial y rúbrica final.</div>
-    <aside class="guion">Bienvenidos a la Parte cuatro y final de la Semana trece. En las sesiones anteriores comprendimos los fundamentos de DevStack, desplegamos la plataforma y construimos nuestra infraestructura virtual con redes privadas e instancias activas. En este último video abordaremos la operación avanzada de las máquinas virtuales y cómo gestionar sus estados de ejecución. Entenderemos qué ocurre cuando se reinicia la máquina anfitriona y cómo recuperarnos en segundos con snapshots.</aside>
+    <aside class="guion">Bienvenidos a la Parte cuatro y final de la Semana trece. En las sesiones anteriores comprendimos los fundamentos de DevStack, desplegamos la plataforma y construimos nuestra infraestructura virtual con redes privadas e instancias activas. En este último video abordaremos la operación avanzada de las máquinas virtuales y cómo gestionar sus estados de ejecución. Entenderemos la volatilidad de DevStack, el protocolo de contingencia en AWS y la disciplina obligatoria de terminar la instancia.</aside>
   </section>
 
   <!-- Diapositiva 47 -->
@@ -3714,7 +3714,7 @@
       <span class="src">Fuente: docs.openstack.org/nova/latest/reference/vm-states.html</span>
       <span class="pg">47 / 60</span>
     </div>
-    <aside class="guion">Con la máquina virtual en ejecución, el servicio Nova ofrece control granular sobre su ciclo de vida a través de cuatro operaciones fundamentales. La primera es stop y start: al apagar la instancia, libvirt detiene el proceso en KVM y libera la memoria RAM en el anfitrión, pero conserva el disco efímero y las direcciones IP asignadas. La segunda es pause y unpause: congela los ciclos de la CPU en el hipervisor sin liberar la memoria RAM, permitiendo reanudar la máquina en menos de un segundo. La tercera es suspend y resume, equivalente a hibernar: Nova vuelca la memoria RAM a disco y libera la memoria física, permitiendo recuperar el estado exacto posteriormente. Por último, reboot permite reiniciar el sistema de forma suave por ACPI o forzada mediante el flag hard.</aside>
+    <aside class="guion">Con la máquina virtual en ejecución, el servicio Nova ofrece control granular sobre su ciclo de vida a través de cuatro operaciones fundamentales. La primera es stop y start: al apagar la instancia, libvirt detiene el proceso y libera la memoria RAM en la máquina virtual, pero conserva el disco efímero y las direcciones IP asignadas. La segunda es pause y unpause: congela los ciclos de la CPU en el hipervisor sin liberar la memoria RAM, permitiendo reanudar la máquina en menos de un segundo. La tercera es suspend y resume, equivalente a hibernar: Nova vuelca la memoria RAM a disco y libera la memoria física, permitiendo recuperar el estado exacto posteriormente. Por último, reboot permite reiniciar el sistema de forma suave por ACPI o forzada mediante el flag hard.</aside>
   </section>
 
   <!-- Diapositiva 48 -->
@@ -3749,7 +3749,7 @@
       <text x="10" y="81" font-size="11" font-family="monospace" fill="#fff">openstack server show vm-tuapellido</text>
 
       <text x="0" y="125" font-size="12.5" font-weight="700" fill="#333">Información que Revela:</text>
-      <text x="0" y="147" font-size="12" fill="#555">• Hipervisor anfitrión donde corre (OS-EXT-SRV-ATTR:host).</text>
+      <text x="0" y="147" font-size="12" fill="#555">• Nodo de cómputo donde corre (OS-EXT-SRV-ATTR:host).</text>
       <text x="0" y="167" font-size="12" fill="#555">• Nombre del dominio en libvirt (instance-00000001).</text>
       <text x="0" y="187" font-size="12" fill="#555">• Mapeo de puertos, IPs privadas y flotantes.</text>
       <text x="0" y="207" font-size="12" fill="#555">• Mensajes de falla si el estado es ERROR.</text>
@@ -3808,14 +3808,14 @@
       <span class="src">Fuente: docs.openstack.org/nova/latest/admin/support-compute.html</span>
       <span class="pg">48 / 60</span>
     </div>
-    <aside class="guion">Cuando una máquina virtual presenta anomalías, los ingenieros de nube no adivinan: inspeccionan la telemetría del sistema. OpenStack provee tres niveles de observabilidad fundamentales. El primer nivel es el comando openstack server show, que imprime la ficha técnica de la instancia: el nodo de cómputo donde reside, el identificador interno del dominio en KVM y las interfaces asociadas. El segundo nivel es openstack console log show: captura la salida del puerto serie virtual de la máquina, permitiéndonos leer los mensajes de arranque del kernel y las trazas de cloud-init aunque no haya red configurada. El tercer nivel son las bitácoras del plano de control con journalctl: podemos monitorear devstack arroba n-cpu para errores de libvirt o devstack arroba q-svc para incidencias de red. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Cuando una máquina virtual presenta anomalías, los ingenieros de nube no adivinan: inspeccionan la telemetría del sistema. OpenStack provee tres niveles de observabilidad fundamentales. El primer nivel es el comando openstack server show, que imprime la ficha técnica de la instancia: el nodo de cómputo donde reside, el identificador interno del dominio en libvirt y las interfaces asociadas. El segundo nivel es openstack console log show: captura la salida del puerto serie virtual de la máquina, permitiéndonos leer los mensajes de arranque del kernel y las trazas de cloud-init aunque no haya red configurada. El tercer nivel son las bitácoras del plano de control con journalctl: podemos monitorear devstack arroba n-cpu para errores de libvirt o devstack arroba q-svc para incidencias de red. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
   </section>
 
   <!-- Diapositiva 49 -->
   <section class="slide" data-parte="4">
     <div class="s-head">
       <div class="kicker">CONTINGENCIA Y RESILIENCIA</div>
-      <h2>El Problema del Reinicio de la VM Anfitriona</h2>
+      <h2>Volatilidad de DevStack y Sesión en AWS</h2>
       <div class="rule"></div>
       <div class="sub">Comprendiendo la volatilidad intencional de DevStack y por qué los servicios no arrancan solos.</div>
       <img alt="CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
@@ -3874,15 +3874,15 @@
   <g transform="translate(790, 105)">
     <rect x="0" y="0" width="350" height="340" rx="8" fill="#fff" stroke="#ddd" stroke-width="1.5"/>
     <rect x="0" y="0" width="350" height="40" rx="8" fill="#eaf5ea"/>
-    <text x="175" y="26" font-size="14" font-weight="700" fill="#2f7d4f" text-anchor="middle">3. La Solución Definitiva</text>
+    <text x="175" y="26" font-size="14" font-weight="700" fill="#2f7d4f" text-anchor="middle">3. Protocolo Oficial AWS</text>
     <g transform="translate(20, 60)">
-      <text x="0" y="20" font-size="13" font-weight="700" fill="#2f7d4f">Snapshot del Hipervisor</text>
-      <text x="0" y="42" font-size="12" fill="#333">Si tomaste el snapshot preventivo en la</text>
-      <text x="0" y="62" font-size="12" fill="#333">Parte 2, basta con pulsar «Restaurar».</text>
+      <text x="0" y="20" font-size="13" font-weight="700" fill="#2f7d4f">Una Sola Sesión de 3 Horas</text>
+      <text x="0" y="42" font-size="12" fill="#333">Completar todas las evidencias sin</text>
+      <text x="0" y="62" font-size="12" fill="#333">apagar ni reiniciar la instancia EC2.</text>
 
-      <text x="0" y="95" font-size="13" font-weight="700" fill="#333">Re-ejecución de stack.sh</text>
-      <text x="0" y="117" font-size="12" fill="#555">Si no hay snapshot, se debe eliminar la marca</text>
-      <text x="0" y="137" font-size="12" fill="#555">y correr ./stack.sh como usuario stack.</text>
+      <text x="0" y="95" font-size="13" font-weight="700" fill="#333">Recrear si la Sesión Expira</text>
+      <text x="0" y="117" font-size="12" fill="#555">Terminar la instancia dañada y lanzar</text>
+      <text x="0" y="137" font-size="12" fill="#555">una nueva máquina desde el paso 1.</text>
 
       <rect x="0" y="175" width="310" height="70" rx="6" fill="#eaf5ea"/>
       <text x="10" y="200" font-size="11.5" fill="#2f7d4f" font-weight="700">En la siguiente diapositiva:</text>
@@ -3896,7 +3896,7 @@
       <span class="src">Fuente: actividades/lab-openstack/index.html</span>
       <span class="pg">49 / 60</span>
     </div>
-    <aside class="guion">Uno de los escenarios más desconcertantes ocurre cuando terminan la instalación, apagan la máquina virtual para continuar al día siguiente y al encenderla descubren que Horizon no abre y la terminal da error de conexión. ¿Qué sucedió? Como explicamos en los principios de diseño, DevStack es intencionalmente volátil. El instalador no habilita las unidades systemd para que arranquen solas tras el inicio del sistema operativo; las deja inactivas. Además, si el router asignó una nueva dirección IP a la máquina virtual, el catálogo de Keystone queda desalineado, dejando los microservicios incomunicados. Esto no es un fallo de su equipo: es el comportamiento previsto de un entorno efímero. Por ello la mejor práctica es suspender la máquina o restaurar el snapshot que guardamos tras la instalación. Este paso es esencial para asegurar que la arquitectura de nuestra nube privada mantenga consistencia, aislamiento y total adherencia a las mejores prácticas de ingeniería de sistemas.</aside>
+    <aside class="guion">Uno de los aspectos fundamentales que deben comprender sobre DevStack es su volatilidad intencional. Por diseño, DevStack no configura el autoarranque de los microservicios en systemd. Si la máquina virtual EC2 se detiene o se reinicia, los demonios de cómputo y red no levantarán de forma autónoma. En el Sandbox de AWS Academy cada sesión ofrece tres horas continuas y veinte dólares de crédito temporal. La regla de oro es realizar la instalación y capturar las cinco evidencias en un único bloque de trabajo continuo. Si la sesión expira o la máquina se apaga por inactividad, DevStack no recupera su estado; en ese caso la solución oficial consiste en terminar la instancia y crear otra desde el paso uno. El Sandbox permite lanzar hasta nueve instancias; recuerden que intentar superar ese límite suspende su cuenta del laboratorio.</aside>
   </section>
 
   <!-- Diapositiva 50 -->
@@ -3919,25 +3919,25 @@
 
   <!-- 2 Rutas de Rescate -->
   <g transform="translate(40, 95)">
-    <!-- Ruta A: Snapshot (La vía rápida) -->
+    <!-- Ruta A: Terminar y Recrear -->
     <rect x="0" y="0" width="520" height="370" rx="10" fill="#fff" stroke="#2f7d4f" stroke-width="2"/>
     <rect x="0" y="0" width="520" height="42" rx="10" fill="#eaf5ea"/>
-    <text x="260" y="27" font-size="15" font-weight="700" fill="#2f7d4f" text-anchor="middle">Camino A (Recomendado): Restaurar Snapshot</text>
+    <text x="260" y="27" font-size="15" font-weight="700" fill="#2f7d4f" text-anchor="middle">Protocolo de Falla: Terminar y Recrear</text>
     
     <g transform="translate(25, 60)">
       <rect x="0" y="0" width="470" height="80" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="25" font-size="13" font-weight="700" fill="#2f7d4f">Paso 1: Apagar la VM en el Hipervisor</text>
-      <text x="15" y="48" font-size="12" fill="#555">Cerrar la máquina virtual (Power Off) en VirtualBox o VMware.</text>
+      <text x="15" y="25" font-size="13" font-weight="700" fill="#2f7d4f">Paso 1: Terminate Instance en AWS</text>
+      <text x="15" y="48" font-size="12" fill="#555">En la consola EC2 seleccionar la instancia y aplicar Terminate.</text>
 
       <rect x="0" y="95" width="470" height="85" rx="6" fill="#fdfdfd" stroke="#ddd"/>
-      <text x="15" y="120" font-size="13" font-weight="700" fill="#2f7d4f">Paso 2: Revertir al Snapshot</text>
-      <text x="15" y="143" font-size="12" fill="#555">Seleccionar la instantánea «DevStack-Instalado-OK» y pulsar</text>
-      <text x="15" y="163" font-size="12" fill="#555">el botón «Restaurar / Revert».</text>
+      <text x="15" y="120" font-size="13" font-weight="700" fill="#2f7d4f">Paso 2: Lanzar Nueva Instancia EC2</text>
+      <text x="15" y="143" font-size="12" fill="#555">Crear nueva t3.medium (35 GB) y relanzar el script en tmux:</text>
+      <text x="15" y="163" font-size="12" font-family="monospace" fill="#A6192E">bash devstack-lab-install.sh --aws --yes</text>
 
       <rect x="0" y="195" width="470" height="75" rx="6" fill="#eaf5ea" stroke="#2f7d4f"/>
-      <text x="15" y="220" font-size="13" font-weight="700" fill="#2f7d4f">Resultado Inmediato:</text>
-      <text x="15" y="243" font-size="12" fill="#333">La máquina enciende con todos los servicios en memoria activos.</text>
-      <text x="15" y="261" font-size="12" font-weight="700" fill="#2f7d4f">Tiempo de rescate: ¡Solo 15 segundos!</text>
+      <text x="15" y="220" font-size="13" font-weight="700" fill="#2f7d4f">Límite de Instancias en el Sandbox:</text>
+      <text x="15" y="243" font-size="12" fill="#333">Se permiten hasta 9 instancias; intentar más suspende la cuenta.</text>
+      <text x="15" y="261" font-size="12" font-weight="700" fill="#2f7d4f">Tiempo de despliegue fresco: ~40 minutos</text>
     </g>
   </g>
 
@@ -3971,7 +3971,7 @@
       <span class="src">Fuente: actividades/lab-openstack/index.html</span>
       <span class="pg">50 / 60</span>
     </div>
-    <aside class="guion">Si por algún descuido o corte de conectividad la máquina virtual sufre un reinicio o expira la sesión, disponen de un protocolo de contingencia claro. En el Sandbox de AWS Academy, lo más eficiente es abrir nuevamente el Entorno de pruebas, lanzar una nueva instancia EC2 t3 punto medium y relanzar el script automatizado; en unos cuarenta minutos tendrán el laboratorio completamente restaurado. Si trabajan en PC y tomaron la instantánea recomendada con la máquina encendida, regresan al estado operativo en apenas quince segundos. Finalmente, cuando hayan obtenido las cinco capturas y redactado su análisis, deben realizar la acción obligatoria de cierre en AWS: dirigirse a la consola de EC2, seleccionar la instancia y aplicar Terminate instance. Esto elimina los recursos temporales y preserva su saldo de prueba, consolidando la disciplina profesional de gobernanza en la nube.</aside>
+    <aside class="guion">Si sufren una desconexión prolongada o vence la sesión de tres horas, el protocolo de contingencia consiste en terminar la máquina afectada e iniciar una nueva desde el paso uno de la guía. En la consola de EC2 seleccionan la instancia inactiva, aplican Terminate instance y lanzan una nueva máquina t3 punto medium repitiendo la ejecución con el script dentro de tmux. Tienen margen de hasta nueve instancias en el Sandbox antes de que el sistema aplique una suspensión automática por exceso de cuota. Al concluir las cinco evidencias fotográficas y redactar el párrafo analítico sobre las equivalencias conceptuales con Amazon Web Services, deben dirigirse a la consola de AWS y terminar la máquina de forma obligatoria para no gastar el saldo de veinte dólares y completar la actividad de manera impecable.</aside>
   </section>
 
   <!-- Diapositiva 51 -->
@@ -4498,7 +4498,7 @@
     <text x="175" y="26" font-size="14" font-weight="700" fill="#2f7d4f" text-anchor="middle">3. Resiliencia Operativa</text>
     <g transform="translate(20, 60)">
       <text x="0" y="20" font-size="13" font-weight="700" fill="#333">• Cultura de Recuperación</text>
-      <text x="0" y="42" font-size="12" fill="#555">El manejo de contingencias y snapshots en el lab</text>
+      <text x="0" y="42" font-size="12" fill="#555">El despliegue automatizado y control de costos en la nube</text>
       <text x="0" y="62" font-size="12" fill="#555">preparó a los ingenieros para enfrentar caídas.</text>
 
       <text x="0" y="115" font-size="13" font-weight="700" fill="#333">• Cero Tiempo de Inactividad</text>
@@ -4539,7 +4539,7 @@
       <text x="0" y="20" font-size="13" font-weight="700" fill="#333">All-in-One para Experimentar, Nunca para Producción</text>
       <text x="0" y="42" font-size="12" fill="#555">Permite correr una nube completa en una sola máquina virtual de 8 GB,</text>
       <text x="0" y="62" font-size="12" fill="#555">compartiendo las mismas APIs REST y CLI que los clústeres gigantescos.</text>
-      <text x="0" y="85" font-size="12" fill="#A6192E" font-weight="600">Requiere snapshots inmediatos para protegerse contra reinicios no persistentes.</text>
+      <text x="0" y="85" font-size="12" fill="#A6192E" font-weight="600">Completar en 1 sesión de 3h y aplicar Terminate instance al finalizar.</text>
     </g>
   </g>
 
