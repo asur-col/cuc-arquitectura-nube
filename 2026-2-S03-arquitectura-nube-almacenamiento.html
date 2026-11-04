@@ -1220,7 +1220,7 @@
   function fit(){
     const st=document.getElementById('stage');
     const k=Math.min(window.innerWidth/1280, window.innerHeight/720);
-    st.style.transform = k<1 ? `scale(${k})` : 'none';
+    st.style.transform = `scale(${k})`;
   }
   window.addEventListener('resize', fit); fit();
   const h=parseInt(location.hash.slice(1)); show(h>0&&h<=slides.length ? h-1 : 0);
