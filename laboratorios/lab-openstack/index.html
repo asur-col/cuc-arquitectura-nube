@@ -122,7 +122,7 @@
 tmux new -s lab
 bash devstack-lab-install.sh --aws --yes</code></pre>
   <p>Tarda unos 40 minutos. Si se cierra la pestaña, vuelve a conectarte y escribe <code>tmux attach -t lab</code>. Al final verás un resumen con la URL de Horizon (con la IP pública), el usuario <code>admin</code> y la clave. Si lo pierdes, recupéralo con <code>cat ~/devstack-credenciales.txt</code>.</p>
-  <div class="warn">Haz la instalación y todas las evidencias en <b>una sola sesión</b> (3 horas). Si la sesión termina, la VM se detiene y DevStack no vuelve bien: tendrías que crear otra VM. Al terminar, usa <b>Terminate instance</b> para no gastar tu crédito.</div>
+  <div class="warn">Haz la instalación y todas las evidencias en <b>una sola sesión</b> (3 horas). Si la sesión termina, la VM se detiene y DevStack no vuelve bien: tendrías que crear otra VM. Al terminar, usa <b>Terminate instance</b> para no gastar tu crédito. Lanza solo la instancia que necesitas: el Sandbox permite hasta 9, e intentar lanzar más suspende tu cuenta del laboratorio.</div>
   <div class="tip">En este camino Cirros corre emulada (sin KVM), así que va más lenta. El SSH a la IP flotante se hace desde la terminal de la propia EC2.</div>
 </section>
 
