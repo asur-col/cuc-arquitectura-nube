@@ -78,7 +78,7 @@
   <h1>Tu propia nube: OpenStack en una VM</h1>
   <p class="sub">Instala OpenStack (DevStack) en Ubuntu 24.04, abre Horizon y lanza una instancia con IP flotante</p>
   <div class="accent-bar"></div>
-  <p class="meta"><b>Arquitectura en la Nube</b> · Universidad de la Costa (CUC) · Ingeniería de Sistemas · 2026-2<br>Individual · Sandbox de AWS Academy o tu PC</p>
+  <p class="meta"><b>Arquitectura en la Nube</b> · Universidad de la Costa (CUC) · Ingeniería de Sistemas · 2026-2<br>Individual · Se hace en el Sandbox de AWS Academy</p>
 </header>
 <div class="wrap">
 
@@ -89,7 +89,7 @@
     <rect x="12" y="30" width="150" height="180" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
     <text x="87" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Tu navegador</text>
     <rect x="30" y="70" width="114" height="44" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="87" y="97" text-anchor="middle" font-size="12" fill="var(--ink)">Navegador</text>
-    <rect x="30" y="130" width="114" height="60" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="87" y="155" text-anchor="middle" font-size="12" fill="var(--ink)">AWS Academy</text><text x="87" y="171" text-anchor="middle" font-size="12" fill="var(--ink)">o VirtualBox</text>
+    <rect x="30" y="130" width="114" height="60" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="87" y="155" text-anchor="middle" font-size="12" fill="var(--ink)">AWS Academy</text><text x="87" y="171" text-anchor="middle" font-size="12" fill="var(--ink)">Sandbox + EC2</text>
     <rect x="215" y="30" width="400" height="180" rx="10" fill="var(--surface-2)" stroke="var(--vino)" stroke-width="2"/>
     <text x="415" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Una VM con Ubuntu Server 24.04</text>
     <rect x="232" y="68" width="150" height="124" rx="8" fill="var(--surface)" stroke="var(--line)"/>
@@ -105,12 +105,12 @@
     <text x="680" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vino)">Resultado</text>
     <text x="680" y="120" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">consola en Horizon</text><text x="680" y="138" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">+ SSH a la IP flotante</text>
   </svg>
-  <p>OpenStack es la plataforma de nube open source: los mismos conceptos de EC2, VPC, Security Groups y Elastic IP que ya viste, ahora en una nube privada propia. Todo corre <b>dentro de una sola VM</b>: en el Sandbox de AWS Academy (camino recomendado) o en tu PC.</p>
+  <p>OpenStack es la plataforma de nube open source: los mismos conceptos de EC2, VPC, Security Groups y Elastic IP que ya viste, ahora en una nube privada propia. Todo corre <b>dentro de una sola VM EC2</b> del Sandbox de AWS Academy.</p>
 </section>
 
 <section>
-  <h2><span class="paso">★</span>Camino recomendado: Sandbox de AWS Academy</h2>
-  <p>No depende de tu PC: solo necesitas el navegador. Usa el <b>Entorno de pruebas</b> del curso en AWS Academy. Si haces este camino, sáltate los pasos 1 a 4 y sigue desde el paso 5.</p>
+  <h2><span class="paso">1</span>Instalar OpenStack en el Sandbox de AWS Academy</h2>
+  <p>No depende de tu PC: solo necesitas el navegador. Usa el <b>Entorno de pruebas</b> del curso en AWS Academy. </p>
   <ol>
     <li>Abre <b>Entorno de pruebas → Start Lab</b>, espera el punto verde y haz clic en <b>AWS</b>.</li>
     <li>En EC2 → <b>Launch instance</b>: Ubuntu Server 24.04 LTS (x86), tipo <code>t3.medium</code>, par de claves: <b>Proceed without a key pair</b>, disco de <b>35 GB gp2</b>, IP pública activada.</li>
@@ -127,89 +127,9 @@ bash devstack-lab-install.sh --aws --yes</code></pre>
 </section>
 
 <section>
-  <h2><span class="paso">1</span>Requisitos (si lo haces en tu PC)</h2>
-  <table>
-    <tr><th>Recurso</th><th>Mínimo</th></tr>
-    <tr><td>PC</td><td>16 GB de RAM (8 GB para la VM), virtualización activada en BIOS (VT-x / AMD-V), 60 GB libres</td></tr>
-    <tr><td>Hipervisor</td><td>VirtualBox o VMware Workstation/Player</td></tr>
-    <tr><td>VM</td><td><b>8 GB RAM · 4 vCPU · 50 GB disco</b> · Ubuntu Server 24.04 LTS</td></tr>
-    <tr><td>Internet</td><td>Estable: el script descarga varios GB. Reserva 45–90 min.</td></tr>
-  </table>
-  <div class="warn">Activa la <b>virtualización anidada</b> (VirtualBox: Sistema → Procesador → «Habilitar VT-x/AMD-V anidado»; VMware: «Virtualizar Intel VT-x/EPT»). Si no está disponible, OpenStack usará emulación (QEMU) y será más lento, pero Cirros arranca igual.</div>
-</section>
-
-<section>
-  <h2><span class="paso">2</span>Red de la VM: puente o NAT</h2>
-  <svg viewBox="0 0 760 170" role="img" aria-label="Red puente frente a NAT con reenvío de puertos" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px">
-    <defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/></marker></defs>
-    <text x="190" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Opción A · Adaptador puente</text>
-    <rect x="30" y="50" width="100" height="50" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="80" y="80" text-anchor="middle" font-size="12" fill="var(--ink)">PC 192.168.1.20</text>
-    <rect x="250" y="50" width="120" height="50" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="310" y="80" text-anchor="middle" font-size="12" fill="var(--ink)">VM 192.168.1.50</text>
-    <line x1="130" y1="75" x2="248" y2="75" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar2)"/>
-    <text x="190" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Navegas a http://192.168.1.50/dashboard</text>
-    <text x="190" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">(la VM recibe IP de tu router/WiFi)</text>
-    <text x="570" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Opción B · NAT + reenvío de puertos</text>
-    <rect x="420" y="50" width="100" height="50" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="470" y="80" text-anchor="middle" font-size="12" fill="var(--ink)">PC 127.0.0.1</text>
-    <rect x="640" y="50" width="100" height="50" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="690" y="80" text-anchor="middle" font-size="12" fill="var(--ink)">VM 10.0.2.15</text>
-    <line x1="520" y1="75" x2="638" y2="75" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar2)"/>
-    <text x="580" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">8080→80 (Horizon) · 2222→22 (SSH)</text>
-    <text x="580" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">http://127.0.0.1:8080/dashboard</text>
-  </svg>
-  <h3>Opción A (recomendada): puente</h3>
-  <p>VirtualBox: Configuración → Red → Adaptador 1 → «Adaptador puente». VMware: «Bridged». Úsala en WiFi de casa. En redes de la universidad o con portal cautivo puede no dar IP: usa la B.</p>
-  <h3>Opción B: NAT con reenvío de puertos</h3>
-  <p>VirtualBox: Red → Avanzado → Reenvío de puertos. Crea tres reglas (IP anfitrión 127.0.0.1, IP invitado vacía):</p>
-  <table>
-    <tr><th>Nombre</th><th>Puerto anfitrión</th><th>Puerto invitado</th></tr>
-    <tr><td>horizon</td><td>8080</td><td>80</td></tr>
-    <tr><td>ssh</td><td>2222</td><td>22</td></tr>
-    <tr><td>consola</td><td>6080</td><td>6080</td></tr>
-  </table>
-  <p>VMware: Editor de red virtual → VMnet8 (NAT) → Reenvío de puertos, mismas reglas.</p>
-  <div class="tip">Con NAT, el script detecta la IP interna (10.0.2.15) y funciona igual; solo cambia la URL que abres desde tu PC. Para que abra la consola de Horizon, ejecuta el script con <code>--public-ip 127.0.0.1</code> (aún no probado en VirtualBox). Si Horizon te rechaza el acceso por el nombre del host, usa el modo puente.</div>
-</section>
-
-<section>
-  <h2><span class="paso">3</span>Instalar Ubuntu Server 24.04</h2>
+  <h2><span class="paso">2</span>Entrar a Horizon</h2>
   <ol class="steps">
-    <li>Descarga la ISO «Ubuntu Server 24.04 LTS» desde <a href="https://ubuntu.com/download/server" target="_blank">ubuntu.com/download/server</a>.</li>
-    <li>Crea la VM (8 GB RAM, 4 vCPU, 50 GB, red puente o NAT) e inicia desde la ISO.</li>
-    <li>En el instalador: idioma inglés, instalación mínima, disco completo (sin LVM cifrado), activa <b>OpenSSH server</b>, y crea un usuario normal (por ejemplo <code>estudiante</code>). <b>No uses root.</b></li>
-    <li>Reinicia, entra y verifica: <pre><code>lsb_release -d      # Ubuntu 24.04...
-ip -4 addr          # anota tu IP
-free -h             # ~8 GB</code></pre></li>
-  </ol>
-  <div class="tip">Tómale un <b>snapshot</b> a la VM ahora. Si algo sale mal, vuelves aquí sin reinstalar Ubuntu.</div>
-</section>
-
-<section>
-  <h2><span class="paso">4</span>Descargar y correr el script</h2>
-  <p>Descarga <a href="devstack-lab-install.sh" download><code>devstack-lab-install.sh</code></a> dentro de la VM y ejecútalo como usuario normal (no root):</p>
-  <pre><code>sudo apt-get update &amp;&amp; sudo apt-get install -y curl tmux
-curl -fsSLO \
-  https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh</code></pre>
-  <pre><code>chmod +x devstack-lab-install.sh
-./devstack-lab-install.sh</code></pre>
-  <p>Si tu PC tiene <b>solo 8 GB</b>, dale 4–5 GB a la VM y usa el modo reducido: <code>./devstack-lab-install.sh --lite</code>. Se probó con 4 GB en AWS; en VirtualBox aún no se ha probado.</p>
-  <p>El script verifica Ubuntu 24.04, RAM, disco e Internet, detecta tu IP, crea el usuario <code>stack</code>, instala OpenStack y deja listos Cirros, el flavor <code>m1.tiny</code>, una red, un grupo de seguridad (SSH/ICMP) y una llave <code>lab-key</code>. Tarda 30–60 min.</p>
-  <table>
-    <tr><th>Opción</th><th>Para qué</th></tr>
-    <tr><td><code>--ip 10.0.2.15</code></td><td>Forzar la IP si la detección se equivoca</td></tr>
-    <tr><td><code>--password MiClave2026</code></td><td>Elegir la clave de admin (si no, se genera una aleatoria)</td></tr>
-    <tr><td><code>--branch stable/2026.1</code></td><td>Rama de OpenStack (ya es el valor por defecto)</td></tr>
-    <tr><td><code>--public-ip 127.0.0.1</code></td><td>IP con la que tu navegador llega a la VM (para NAT)</td></tr>
-    <tr><td><code>--lite</code></td><td>Modo reducido para 4–5 GB de RAM (sin Cinder, con swap de 8 GB)</td></tr>
-    <tr><td><code>--no-post</code></td><td>No crear imagen/red/llave: lo harás tú en Horizon</td></tr>
-  </table>
-  <div class="danger">Si cierras la terminal o se corta SSH, la instalación se interrumpe. Ejecútala desde la consola de la VM o dentro de <code>tmux</code>. Si falla, revisa el log; lo más seguro es volver al snapshot del paso 3 (en AWS, crear otra VM) y empezar de nuevo.</div>
-  <p>Al final verás un recuadro con la <b>URL de Horizon</b>, el usuario <code>admin</code> y la <b>clave generada</b>. También queda en <code>~/devstack-credenciales.txt</code>. Guárdala.</p>
-  <div class="tip">Toma un segundo snapshot <strong>con la VM encendida</strong> apenas termine la instalación. Ese es el que recupera OpenStack funcionando; el del paso 3 te devuelve a Ubuntu sin instalar.</div>
-</section>
-
-<section>
-  <h2><span class="paso">5</span>Entrar a Horizon</h2>
-  <ol class="steps">
-    <li>Abre en el navegador: Sandbox de AWS → <code>http://&lt;IP-pública&gt;/dashboard</code>; puente → <code>http://&lt;IP-de-la-VM&gt;/dashboard</code>; NAT → <code>http://127.0.0.1:8080/dashboard</code>.</li>
+    <li>Abre en el navegador <code>http://&lt;IP-pública&gt;/dashboard</code>, con la IP pública de tu EC2.</li>
     <li>Dominio <code>Default</code>, usuario <code>admin</code>, la clave del resumen final.</li>
     <li>Ve a <b>Proyecto → Compute → Visión general</b> y comprueba que ves cuotas y el proyecto <code>admin</code>.</li>
   </ol>
@@ -217,7 +137,7 @@ curl -fsSLO \
 </section>
 
 <section>
-  <h2><span class="paso">6</span>Crear tu primera VM (Cirros, m1.tiny)</h2>
+  <h2><span class="paso">3</span>Crear tu primera VM (Cirros, m1.tiny)</h2>
   <svg viewBox="0 0 760 90" role="img" aria-label="Flujo: red, instancia, IP flotante, acceso" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px">
     <defs><marker id="ar3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/></marker></defs>
     <g font-size="12" fill="var(--ink)" text-anchor="middle">
@@ -239,7 +159,7 @@ curl -fsSLO \
 </section>
 
 <section>
-  <h2><span class="paso">7</span>Acceder a la instancia</h2>
+  <h2><span class="paso">4</span>Acceder a la instancia</h2>
   <h3>Por la consola de Horizon</h3>
   <p>Instancia → pestaña <b>Consola</b> → «Haz clic aquí para mostrar solo la consola». Usuario <code>cirros</code>; la contraseña aparece en el banner de la propia consola. Ejecuta <code>ip a</code> y <code>ping -c3 192.168.50.1</code>.</p>
   <div class="warn"><b>Evidencia 4:</b> consola con sesión iniciada y salida de <code>ip a</code>.</div>
@@ -247,14 +167,12 @@ curl -fsSLO \
   <p>La IP flotante (172.24.4.x) vive <b>dentro</b> de la VM Ubuntu. Desde la propia VM Ubuntu:</p>
   <pre><code>ping -c3 172.24.4.XX
 ssh -i ~/lab-key.pem cirros@172.24.4.XX</code></pre>
-  <p>Desde tu PC, salta a través de la VM Ubuntu (ajusta IP/puerto: puente → <code>-p 22</code>; NAT → <code>-p 2222 estudiante@127.0.0.1</code>):</p>
-  <pre><code>scp -P 2222 estudiante@127.0.0.1:lab-key.pem .
-ssh -i lab-key.pem -o ProxyCommand="ssh -W %h:%p -p 2222 estudiante@127.0.0.1" cirros@172.24.4.XX</code></pre>
+  
   <div class="warn"><b>Evidencia 5:</b> terminal con el SSH a Cirros exitoso, mostrando <code>hostname</code> y <code>ip a</code>.</div>
 </section>
 
 <section>
-  <h2><span class="paso">8</span>Qué entregar</h2>
+  <h2><span class="paso">5</span>Qué entregar</h2>
   <p>Un PDF o documento con las 5 capturas (con tu nombre visible en el nombre de la instancia) y un párrafo corto (máx. 8 líneas) que responda: <i>¿qué equivalente tiene en AWS cada pieza que creaste (instancia, red, grupo de seguridad, IP flotante, llave)?</i> Súbelo al aula virtual antes del cierre de la semana 13.</p>
   <h3>Rúbrica (10 % de la nota)</h3>
   <table>
@@ -269,17 +187,16 @@ ssh -i lab-key.pem -o ProxyCommand="ssh -W %h:%p -p 2222 estudiante@127.0.0.1" c
 </section>
 
 <section>
-  <h2><span class="paso">9</span>Problemas comunes</h2>
+  <h2><span class="paso">6</span>Problemas comunes</h2>
   <table>
     <tr><th>Síntoma</th><th>Causa y solución</th></tr>
-    <tr><td>El script avisa de poca RAM</td><td>Es un aviso. Con 8 GB o más, instalación normal; con 4–5 GB, usa <code>--lite</code>.</td></tr>
-    <tr><td>«Sin DNS/Internet»</td><td>Revisa el adaptador de red; con NAT debe haber salida. Prueba <code>ping opendev.org</code>.</td></tr>
-    <tr><td>stack.sh falla a medio camino</td><td>Casi siempre red intermitente. Relanza el script; el log está en <code>~/devstack-install.log</code>.</td></tr>
-    <tr><td>Horizon no abre</td><td>Verifica IP/puerto (NAT: 8080) y <code>systemctl status apache2</code> en la VM.</td></tr>
-    <tr><td>Instancia en «Error»</td><td>Pocos recursos o falta de virtualización anidada; borra y recrea. Mira «Registro» de la instancia.</td></tr>
-    <tr><td>Consola dice «Failed to connect»</td><td>Con NAT, revisa el reenvío del puerto 6080 y que instalaste con <code>--public-ip 127.0.0.1</code>. En AWS, que el puerto 6080 esté abierto. Con puente, confirma que el navegador llega a la IP de la VM.</td></tr>
+    <tr><td>«Sin DNS/Internet»</td><td>Revisa que la EC2 tenga IP pública y prueba <code>ping opendev.org</code>.</td></tr>
+    <tr><td>stack.sh falla a medio camino</td><td>Revisa <code>~/devstack-install.log</code>. Lo más seguro es terminar la instancia y empezar con una nueva.</td></tr>
+    <tr><td>Horizon no abre</td><td>Verifica la IP pública, el puerto 80 del grupo de seguridad y <code>systemctl status apache2</code> en la VM.</td></tr>
+    <tr><td>Instancia en «Error»</td><td>Pocos recursos: borra y recrea. Mira «Registro» de la instancia.</td></tr>
+    <tr><td>Consola dice «Failed to connect»</td><td>Revisa que el puerto 6080 esté abierto en el grupo de seguridad de la EC2.</td></tr>
     <tr><td>SSH «Permission denied»</td><td>Usuario debe ser <code>cirros</code> y <code>chmod 600 lab-key.pem</code>.</td></tr>
-    <tr><td>Tras reiniciar la VM nada funciona</td><td>DevStack no es persistente. Restaura el snapshot tomado después de instalar (recomendado), o borra la marca con <code>sudo rm -f /opt/stack/.stack-done-*</code> y vuelve a ejecutar el script.</td></tr>
+    <tr><td>Tras detener la EC2 o vencer la sesión nada funciona</td><td>DevStack no es persistente. Termina esa instancia y crea otra desde el paso 1.</td></tr>
   </table>
 </section>
 
