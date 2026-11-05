@@ -117,3 +117,71 @@ Rediseño del deck S14 con el estándar aprobado en S13. Las licencias de las fo
 | Puerto 11434 de Ollama | 52 | Respaldada (verificación pendiente) | Documentación de Ollama (github.com/ollama/ollama) |
 | Artículo 26 de la Ley 1581 de 2012 | 53 | Respaldada | Ley 1581 de 2012, art. 26 (texto del Gestor Normativo) |
 | Listado de países «adecuados» de la SIC | 53 | Quitado | El listado no se verificó. La diapositiva dice que hay que verificarlo |
+
+## Piloto S15 (2026-11-05): GPU, cuantización y despliegue
+
+Rediseño del deck S15 con el estándar de S13 y S14. Los guiones no cambiaron (idénticos a HEAD). Las licencias de las fotos son las ya registradas en las secciones S13 y S14 de este archivo; no se volvieron a consultar en la API en esta pasada.
+
+### Fotos (assets/fotos/)
+
+| Archivo local | Diapositiva | Autor (Commons) | Licencia | Estado frente a S14 | Modificación |
+|---|---|---|---|---|---|
+| `nvidia-h100-nvlink-geekerwan-002-recorte.png` (derivada de `nvidia-h100-nvlink-geekerwan-002.png`) | S15 diap. 5 | Geekerwan (极客湾) | CC BY 3.0 (https://creativecommons.org/licenses/by/3.0) | Reutilizada | Recorte sin estirar a las cuatro tarjetas (píxeles 440–960 × 60–274 de la original, 520 × 214); se oculta el precio impreso «约300,000元». La original no se modificó |
+| `coolit-rack-refrigeracion-liquida.jpg` | S15 diap. 10 | Barbara Massolin (CoolIT) | CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0) | Reutilizada | `slice` |
+| `switches-rack-patch-panels.jpg` | S15 diap. 8 (redes EFA) | Dsimic | CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0) | **Nueva** | `slice` |
+| `rubin-sala-computo-cumbre.jpg` | S15 diap. 41 (nube privada OpenStack) | Rubin Observatory/NSF/AURA | CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) | **Nueva** | `slice` |
+| `amravati-racks-datacenter.jpg` | S15 diap. 44 (caso self-hosted) | PiDatacenters | CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0) | **Nueva** | `slice` |
+| `noirlab-sala-servidores-racks.jpg` | S15 diap. 50 (seguridad y ZDR) | NOIRLab/NSF/AURA, T. Slovinský | CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) | Reutilizada | `slice` |
+
+Son seis fotos: tres nuevas frente a S14 (la regla pedía al menos dos). Las URL de las páginas de archivo están en la tabla de S13 y S14.
+
+### Íconos
+
+Los íconos de `assets/iconos/` se usan sin modificar. Marcas: solo para el servicio que representan (AWS, Bedrock, EC2, PrivateLink, KMS, SQS, Budgets, VPC, CloudWatch, IAM; Azure no se usa como marca de otro servicio). Íconos de OpenStack (Nova, Cinder, Neutron, Octavia): la nota de política de marca de S13 sigue sin decisión de CUC; el uso es el mismo de S13.
+
+### Cifras de S15: decisión sobre cada cifra
+
+| Cifra (versión anterior) | Diap. | Decisión | Fuente / motivo |
+|---|---|---|---|
+| «Aire: PUE ≈ 1,5» y «Líquido: PUE ≈ 1,15» | 10 | **Quitadas**; se muestra el PUE medio mundial de 1,54 | Uptime Institute, Global Data Center Survey 2025 (1,54, según cobertura secundaria; el informe primario no se abrió) |
+| «más de 100 kW por rack», «40 a más de 100 kW» | 10 | **Quitadas** | Las fuentes consultadas dan límites del aire entre 30 y 50 kW con criterios distintos; no hay una cifra homogénea |
+| «Límite del aire: 10 a 15 kW por rack» | 10 | **Quitada** (cualitativa) | Misma razón |
+| 1 servidor DGX H100 (8 GPU, máx.): 10,2 kW; 4 servidores ≈ 41 kW | 10 | **Respaldada** | NVIDIA, DGX H100 (10,2 kW máx.); 4 × 10,2 = 40,8 (cálculo propio) |
+| «70 mil a 405 mil millones de parámetros» | 5, 25, 38 | **Respaldada** como «Llama 3.1: 70B y 405B» | Meta, Llama 3.1 model card (tamaños 8B, 70B y 405B, verificado en vivo) |
+| «> 3 TB/s en A100/H100» | 15 | **Corregida**: H100 SXM 3,35 TB/s; A100 SXM 2,04 TB/s (PCIe 1,94) | NVIDIA, páginas de A100 y H100 (verificado en vivo) |
+| «600 a 900 GB/s» (GDDR6, A10G) | 3 | **Corregida**: A10G 600 GB/s | NVIDIA, A10 (cifra ya registrada en `docs/cifras-S15.md` §1.1; no reverificada en vivo) |
+| «50 a 100 GB/s» (DDR5 del host), «> 10 TB/s» (SRAM), «512 GB a 2 TB», «50 a 256 MB», «80 a 141 GB» | 3 | **Quitadas** (cualitativas) | Sin fuente |
+| «16 veces» (Tensor Core frente a unidades tradicionales) | 4 | **Quitada** | Sin fuente |
+| FP8 frente a FP16: «duplica» | 4 | **Respaldada** | NVIDIA, H100: FP8 3 958 TFLOPS frente a FP16 1 979 TFLOPS, ambos con sparsity (verificado en vivo) |
+| «Hasta 50 %» de ahorro en Inf2 | 6 | **Quitada** | Sin fuente en el repositorio |
+| g5.xlarge $1,006 / h | 7, 54 | **Respaldada** | AWS Price List, us-east-1 (ya registrada en S14; consulta 2026-11-05) |
+| p5.48xlarge $55,04 / h | 7 | **Quitada** | Pendiente de verificar en vivo (igual que S14) |
+| «Latencia sub-microsegundo» y «unos pocos microsegundos» (EFA) | 8 | **Quitadas** (cualitativas) | Sin fuente |
+| «Pérdida menor al 1 %» (passthrough) | 11 | **Quitada** | Sin fuente; el texto dice que se valida en laboratorio |
+| «30 % a 55 %» de MFU en inferencia | 12 | **Quitada**; se explica que el MFU de decodificación es bajo | Sin fuente en el repositorio; la longitud de la barra del MFU real es ilustrativa |
+| «Cada 5 a 10 s» (DCGM) | 13 | **Quitada** | Sin fuente |
+| «1 a 2 GB» reservados para CUDA | 17 | **Quitada** | Sin fuente |
+| «> 3,5 GB/s» y «40 GB en < 15 s» (Cinder) | 41 | **Quitadas** | Sin fuente |
+| Precios p4de.24xlarge «$15 a $20 / h» y g5.12xlarge «$5,60 / h»; ahorro «> 65 %» | 29 | **Quitados** | No verificados; la comparación queda en memoria: 140 GB frente a 35 GB, 320 GB frente a 48 GB (cálculo propio) |
+| «PPL sube < 0,2» y «retiene > 98 % del benchmark» | 23 | **Quitadas**; el umbral se declara como criterio del equipo | Sin fuente en el repositorio |
+| «> 99 % de retención» (GPTQ) y «128 a 512 secuencias» de calibración | 20 | **Quitadas** | Sin fuente verificada en esta pasada |
+| «100 veces» (activaciones salientes) | 21 | **Quitada**; se conserva «1 %» | Lin et al. (2023), arXiv:2306.00978 |
+| «2 GB de caché por usuario» (32 000 tokens) | 27 | **Corregida**: 4 GB por sesión en FP16 y 2 GB en FP8; dos sesiones frente a cuatro | Cálculo propio: 2 × 32 capas × 8 cabezas KV × 128 × 2 bytes × 32 000 = 4,2 × 10⁹ bytes. Configuración de Llama 3 8B: 32 capas, 8 KV, dimensión 128 (Dubey et al. 2024, arXiv:2407.21783, verificado en vivo) |
+| «8x de ahorro» (GQA) | 26 | **Quitada** la cifra; se explica la relación general | El factor depende del número de consultas por par K/V |
+| «Hasta 2,5x menor latencia» (TensorRT-LLM) | 28 | **Quitada** | Sin fuente verificada |
+| «Más de 2 000 tokens/s» con 4 nodos A10G (caso) | 44 | **Rotulada como supuesto** de diseño | Caso ilustrativo |
+| TTFT < 800 ms, TPOT < 40 ms, 1 500 tokens/s por nodo | 39 | **Rotuladas como objetivos de ejemplo** (1 500 tokens/s quitado) | Supuestos de diseño, no medidos |
+| «Reducción de costo de más del 70 %» con el enrutador | 57 | **Quitada**; 70 % y 30 % del tráfico quedan como supuesto | Sin fuente |
+| «Circular Externa 007 (2025)» | 58 | **Corregida** a «de 2018» | Denominación de la circular; **verificar la fecha en la fuente** (no abierta en vivo) |
+| Códigos XID 31, 45 y 79 con causas distintas a las del catálogo | 13, 42 | **Corregidos** | NVIDIA, catálogo de errores XID (verificado en vivo): 31 = GPU memory page fault; 45 = preemptive cleanup, due to previous errors; 79 = GPU has fallen off the bus |
+| Límite de rack «ventiladores» en la diap. 10 | 10 | Descripción cualitativa | Sin cifra única |
+| Tarifa de Bedrock, caché 90 % | 48, 53 | **Respaldadas** | `_arq-material/docs/fuentes/precios-bedrock-us-east-1.txt`: Haiku 5.5 $0,10 / $0,50, caché $0,01; Sonnet 5.5 $2 / $10, caché $0,10; Nova Micro $0,035 / $0,14 y Nova Lite $0,06 / $0,24 (Nova en la unidad por 1 000 tokens del archivo) |
+| 183 M tokens/mes de punto de equilibrio | 54 | **Respaldada** (cálculo) | $734,4 ÷ $4,00 por millón (mezcla 3:1 con Sonnet 5.5) |
+| ~12 000 M tokens/mes con Nova Micro | 54 | **Respaldada** (cálculo) | $734,4 ÷ $0,06125 (mezcla 3:1 con Nova Micro) |
+| «SLA 99,9 %» de Bedrock | 55 | Mantenida con la cita de documentación oficial | Pendiente de verificar en vivo |
+
+### Diapositivas afectadas
+
+- S15 diap. 2–15, 17–30, 32–45 y 47–60: rediseño con diagramas propios del mecanismo e íconos de `assets/iconos/`.
+- Diap. 45: el título pasó de «Decálogo» a «Cuatro reglas de operación» (la diapositiva muestra cuatro reglas).
+- Portadas 1, 16, 31 y 46: sin cambios de contenido; la portada 46 agrega «TCO = costo total de propiedad» al pie de siglas.
