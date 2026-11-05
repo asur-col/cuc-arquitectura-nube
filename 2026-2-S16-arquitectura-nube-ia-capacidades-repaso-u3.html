@@ -4,121 +4,62 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Semana 16 — IA en la Nube III: Capacidades y Repaso Unidad 3</title>
-<link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    width: 100%; height: 100%;
-    background: #0A192F;
-    color: #0F172A;
-    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-    overflow: hidden;
+  :root{
+    --vino:#A6192E;
+    --dorado:#D4AF37;
+    --texto:#2A2A2A;
+    --vino-tint:#f9eef0;
+    --dorado-tint:#fbf6e7;
   }
-  #stage {
-    width: 1280px; height: 720px;
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    transform-origin: center center;
-    background: #FFFFFF;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  }
-  .slide {
-    width: 1280px; height: 720px;
-    position: absolute; top: 0; left: 0;
-    display: none;
-    padding: 30px 48px 24px 48px;
-    background: #FFFFFF;
-  }
-  .slide.active { display: block; }
-  .topline-g { position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: #FFD100; }
-  .topline-v { position: absolute; top: 6px; left: 0; width: 100%; height: 4px; background: #A6192E; }
-  .s-head { margin-top: 4px; margin-bottom: 8px; }
-  .s-kicker {
-    font-size: 13px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 1.5px;
-    color: #A6192E; margin-bottom: 2px;
-  }
-  .s-title {
-    font-size: 26px; font-weight: 700;
-    color: #0B2341; line-height: 1.15;
-  }
-  .s-sub {
-    font-size: 14px; color: #475569;
-    margin-top: 2px; line-height: 1.3;
-  }
-  .dgm-container {
-    width: 1184px; height: 535px;
-    position: absolute; top: 125px; left: 48px;
-    display: flex; align-items: center; justify-content: center;
-    background: #FAFAFA;
-    border: 1px solid #E2E8F0;
-    border-radius: 8px;
-  }
-  svg.dgm { width: 100%; height: 100%; }
-  .s-foot {
-    position: absolute; bottom: 12px; left: 48px; right: 48px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 11px; color: #64748B;
-    border-top: 1px solid #E2E8F0; padding-top: 6px;
-  }
-  .s-foot .src { font-style: italic; }
-  .s-foot .pg { font-weight: 700; color: #0B2341; }
-  .cover {
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    text-align: center;
-    background: radial-gradient(circle at 50% 30%, #F8FAFC 0%, #EDF2F7 100%);
-    padding: 60px 80px;
-  }
-  .cover .cover-kicker {
-    font-size: 16px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 2px;
-    color: #A6192E; margin-bottom: 12px;
-  }
-  .cover h1 {
-    font-size: 42px; font-weight: 700;
-    color: #0B2341; line-height: 1.15;
-    margin-bottom: 12px; max-width: 1000px;
-  }
-  .cover h3 {
-    font-size: 20px; font-weight: 400;
-    color: #475569; margin-bottom: 24px;
-    max-width: 900px;
-  }
-  .cover .bar { width: 120px; height: 4px; background: #FFD100; margin-bottom: 24px; }
-  .cover .author { font-size: 14px; color: #1E293B; line-height: 1.5; }
-  .cover .cover-sub { font-size: 13px; color: #64748B; margin-top: 8px; }
-  .logo-main {
-    position: absolute; top: 24px; right: 48px;
-    height: 42px; width: auto; object-fit: contain;
-  }
-  aside.guion { display: none; }
-  #progress {
-    position: absolute; bottom: 0; left: 0;
-    height: 3px; background: #A6192E; width: 0%;
-    transition: width 0.2s ease; z-index: 99;
-  }
-  #nav {
-    position: fixed; bottom: 16px; right: 16px;
-    display: flex; gap: 8px; align-items: center;
-    background: rgba(11,35,65,0.85); color: #FFF;
-    padding: 6px 12px; border-radius: 20px;
-    font-size: 13px; z-index: 1000;
-    backdrop-filter: blur(4px);
-  }
-  #nav button {
-    background: transparent; border: none;
-    color: #FFF; font-size: 16px; cursor: pointer;
-    padding: 0 4px; line-height: 1;
-  }
-  #nav button:hover { color: #FFD100; }
-  @media print {
-    html, body { height: auto !important; overflow: visible !important; background: #fff !important; }
-    #stage { width: 1280px !important; height: auto !important; overflow: visible !important; transform: none !important; box-shadow: none !important; position: static !important; }
-    .slide { display: block !important; position: relative !important; width: 1280px !important; height: 720px !important; page-break-after: always !important; page-break-inside: avoid !important; }
-    #nav, #progress { display: none !important; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#fff;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--texto);}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+  #stage{width:1280px;height:720px;position:relative;flex:0 0 auto;transform-origin:center center;box-shadow:0 0 0 1px #ddd,0 8px 30px rgba(0,0,0,.12);background:#fff;}
+  .slide{position:absolute;inset:0;background:#fff;display:none;padding:36px 50px 54px;}
+  .slide.active{display:block;}
+
+  .s-head{position:relative;margin-bottom:10px;padding-right:110px;}
+  .s-head .kicker{font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--dorado);margin-bottom:2px;}
+  .s-head h2{font-size:27px;font-weight:700;color:var(--vino);line-height:1.14;}
+  .s-head .rule{width:110px;height:4px;border-radius:3px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin-top:7px;}
+  .s-head .sub{font-size:14.5px;color:#555;line-height:1.35;margin-top:6px;}
+  .logo-corner{position:absolute;top:0;right:0;height:46px;}
+  
+  .s-body{margin-top:12px;height:490px;position:relative;}
+  svg.dgm{display:block;width:100%;height:100%;}
+
+  .s-foot{position:absolute;left:50px;right:50px;bottom:12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#6b6b6b;border-top:2px solid var(--dorado);padding-top:6px;gap:14px;}
+  .s-foot .src{font-style:italic;text-align:center;flex:1;}
+  .s-foot .pg{font-weight:700;color:var(--vino);}
+
+  .cover{display:none;text-align:center;padding-top:44px;}
+  .cover.active{display:block;}
+  .cover .topline-g{position:absolute;top:0;left:0;right:0;height:4px;background:var(--dorado);}
+  .cover .topline-v{position:absolute;top:4px;left:0;right:0;height:7px;background:var(--vino);}
+  .cover img.logo-main{height:112px;margin-bottom:18px;}
+  .cover .cover-kicker{font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dorado);margin-bottom:10px;}
+  .cover h1{font-size:40px;color:var(--vino);font-weight:700;letter-spacing:.3px;line-height:1.16;max-width:1050px;margin:0 auto;}
+  .cover h3{font-size:19px;font-weight:400;color:var(--texto);margin-top:12px;}
+  .cover .bar{width:240px;height:6px;border-radius:3px;margin:20px auto;background:var(--dorado);}
+  .cover .author{font-size:16px;line-height:1.55;}
+  .cover .author b{color:var(--vino);}
+  .cover .cover-sub{margin-top:18px;font-size:14.5px;color:#555;max-width:900px;margin-left:auto;margin-right:auto;line-height:1.45;}
+
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;font-family:inherit;z-index:10;}
+  #nav button{width:38px;height:38px;border:none;border-radius:50%;background:var(--vino);color:#fff;font-size:18px;cursor:pointer;}
+  #nav button:hover{background:#7d1223;}
+  #nav #counter{font-size:14px;color:var(--texto);min-width:56px;text-align:center;}
+  #progress{position:fixed;top:0;left:0;height:4px;background:var(--dorado);width:0;z-index:10;transition:width .25s;}
+
+  .guion{display:none!important;}
+
+  @media print{
+    body{display:block;}
+    #stage{transform:none!important;box-shadow:none;}
+    .slide{display:block!important;position:relative;page-break-after:always;}
+    #nav,#progress{display:none;}
   }
 </style>
 </head>
@@ -141,14 +82,14 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 <aside class="guion">Bienvenidos a la décimo sexta y última semana de nuestra asignatura Arquitectura en la Nube. En esta primera parte analizaremos el salto cualitativo hacia los modelos de razonamiento profundo. Examinaremos el escalado del cómputo en tiempo de prueba, la generación de cadenas de pensamiento ocultas, los árboles de búsqueda heurística, los mecanismos de aprendizaje por refuerzo con verificación determinista, la anatomía de los tokens de pensamiento y las implicaciones directas en latencia y costos de servicio en la nube. Comencemos.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Evolución de Paradigma</div>
-<div class="s-title">Del Reconocimiento de Patrones al Razonamiento</div>
-<div class="s-sub">De respuestas intuitivas inmediatas a procesos deliberativos de deducción lógica paso a paso</div>
+<div class="kicker">Evolución de Paradigma</div>
+<h2>Del Reconocimiento de Patrones al Razonamiento</h2>
+<div class="rule"></div>
+<div class="sub">De respuestas intuitivas inmediatas a procesos deliberativos de deducción lógica paso a paso</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -165,7 +106,7 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 
     <rect x="30" y="250" width="440" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
     <text x="45" y="280" fill="#0F172A" font-size="16" font-weight="700">Modelos Típicos</text>
-    <text x="45" y="305" fill="#1E40AF" font-size="16">LLMs autorregresivos clásicos (GPT-4o, Claude 3.5 Sonnet)</text>
+    <text x="45" y="305" fill="#1E40AF" font-size="16">LLMs autorregresivos (Claude Sonnet 5.5, GPT-6.1 Sol)</text>
   </g>
 
   <g transform="translate(620, 60)">
@@ -188,20 +129,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: OpenAI — Learning to Reason with LLMs (Research Report 2024)</span>
 <span class="pg">2 / 15</span>
 </div>
 <aside class="guion">Iniciamos analizando la transición desde los modelos de lenguaje puramente asociativos hacia los sistemas de razonamiento deliberativo. Inspirándonos en la teoría cognitiva de dos sistemas de Daniel Kahneman, a la izquierda observamos el funcionamiento del Sistema Uno: los modelos clásicos operan como un reflejo intuitivo rápido, seleccionando el token más probable según patrones sintácticos aprendidos. Aunque son extraordinarios para redactar y resumir, fallan de forma impredecible en problemas que requieren demostraciones formales o verificación de invariantes en código. A la derecha presentamos el Sistema Dos: modelos modernos que dedican tiempo y computación a reflexionar antes de emitir la respuesta final. Estos modelos generan una cadena de pensamiento interna donde formulan hipótesis, detectan callejones sin salida, retroceden sobre sus pasos y validan cada afirmación intermedia, alcanzando niveles de exactitud inéditos en ciencias e ingeniería de software.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Leyes de Escalamiento</div>
-<div class="s-title">Escalado del Cómputo en Tiempo de Prueba</div>
-<div class="s-sub">Invertir más tokens durante la inferencia incrementa la precisión sin agrandar el modelo</div>
+<div class="kicker">Leyes de Escalamiento</div>
+<h2>Escalado del Cómputo en Tiempo de Prueba</h2>
+<div class="rule"></div>
+<div class="sub">Invertir más tokens durante la inferencia incrementa la precisión sin agrandar el modelo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -241,20 +183,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Snell et al. — Scaling LLM Test-Time Compute (UC Berkeley & Google DeepMind 2024)</span>
 <span class="pg">3 / 15</span>
 </div>
 <aside class="guion">Durante años, la creencia dominante en la industria asumió que la única forma de volver más inteligente a un modelo de inteligencia artificial consistía en duplicar sus parámetros y entrenarlo con clústeres de miles de GPUs bajo las leyes de escala de Chinchilla. Sin embargo, como muestra la columna izquierda, este camino ha entrado en una fase de rendimientos decrecientes debido a los descomunales costos energéticos. A la derecha examinamos el nuevo paradigma del cómputo en tiempo de prueba o Test-Time Compute: en lugar de agrandar el tamaño del archivo binario del modelo, se le permite generar un mayor número de tokens de análisis interno antes de emitir su conclusión. Investigaciones recientes demuestran que un modelo compacto de treinta y dos mil millones de parámetros dotado de cómputo extendido de inferencia puede superar en precisión lógica a modelos gigantescos de más de cuatrocientos mil millones de parámetros tradicionales.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Mecanismo Interno</div>
-<div class="s-title">Cadena de Pensamiento Oculta (Hidden CoT)</div>
-<div class="s-sub">Generación de trazas de razonamiento no visibles para el usuario final mediante etiquetas de control</div>
+<div class="kicker">Mecanismo Interno</div>
+<h2>Cadena de Pensamiento Oculta (Hidden CoT)</h2>
+<div class="rule"></div>
+<div class="sub">Generación de trazas de razonamiento no visibles para el usuario final mediante etiquetas de control</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr161" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -321,20 +264,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: DeepSeek-R1 Technical Report & OpenAI Reasoning Architecture (2025)</span>
 <span class="pg">4 / 15</span>
 </div>
 <aside class="guion">En esta diapositiva desglosamos la estructura interna de una interacción con modelos de razonamiento profundo. A la izquierda, el usuario envía su problema sin necesidad de incluir instrucciones de ingeniería de prompts tipo piensa paso a paso, ya que el comportamiento reflexivo está codificado en los pesos del modelo. En el bloque central ocurre el proceso deliberativo: el modelo abre un bloque delimitado comúnmente por etiquetas especiales de control tipo think. Dentro de este espacio privado, el sistema redacta un monólogo interior que puede abarcar miles de tokens, examinando distintas vías de solución, verificando cálculos aritméticos y descartando hipótesis erróneas. Al cerrar la etiqueta think, el modelo pasa al bloque derecho donde redacta la respuesta final visible para el usuario, caracterizada por una síntesis limpia y rigurosa. Como arquitectos de nube debemos recordar que aunque estos tokens de pensamiento no se muestren en la interfaz, sí consumen recursos de GPU y son facturados por la API como tokens de salida generados.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Búsqueda Heurística</div>
-<div class="s-title">Árboles de Pensamiento y Backtracking</div>
-<div class="s-sub">Exploración sistemática de caminos alternativos y retroceso ante callejones sin salida lógicos</div>
+<div class="kicker">Búsqueda Heurística</div>
+<h2>Árboles de Pensamiento y Backtracking</h2>
+<div class="rule"></div>
+<div class="sub">Exploración sistemática de caminos alternativos y retroceso ante callejones sin salida lógicos</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr162" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -380,20 +324,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Yao et al. — Tree of Thoughts: Deliberate Problem Solving with Large Language Models (2024)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">Para resolver problemas multidimensionales, los modelos de razonamiento adoptan estructuras de búsqueda similares a los algoritmos clásicos de grafos. A la izquierda analizamos la debilidad de la decodificación voraz o greedy: el modelo tradicional solo puede avanzar hacia adelante; si en el tercer paso comete un error deductivo, queda atrapado en su propia premisa falsa y genera una respuesta errónea intentando justificar su paso inicial. A la derecha explicamos el patrón Tree of Thoughts o Árbol de Pensamientos: el modelo ramifica el problema en varias líneas de deducción simultáneas. Si al explorar una rama el verificador detecta una contradicción matemática o una violación de tipos en código, el sistema ejecuta una operación de retroceso o backtracking, descartando la rama estéril y reanudando el razonamiento desde el último estado válido conocido. Esto convierte a la inferencia en un proceso estructurado de búsqueda heurística con garantías de convergencia lógica.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Algoritmos de Entrenamiento</div>
-<div class="s-title">Entrenamiento sin Supervisión Humana: GRPO</div>
-<div class="s-sub">Optimización por políticas de grupo con recompensas basadas en reglas verificables</div>
+<div class="kicker">Algoritmos de Entrenamiento</div>
+<h2>Entrenamiento sin Supervisión Humana: GRPO</h2>
+<div class="rule"></div>
+<div class="sub">Optimización por políticas de grupo con recompensas basadas en reglas verificables</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr163" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -460,20 +405,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Shao et al. — DeepSeekMath & DeepSeek-R1: Group Relative Policy Optimization (2025)</span>
 <span class="pg">6 / 15</span>
 </div>
 <aside class="guion">Uno de los hitos científicos más notables de la inteligencia artificial contemporánea es el algoritmo GRPO, u Optimización de Política Relativa de Grupo, desarrollado por el equipo de DeepSeek. A diferencia del entrenamiento convencional con refuerzo humano o RLHF que dependía de miles de anotadores para calificar respuestas, GRPO opera de forma completamente autónoma. En el primer paso a la izquierda, el modelo genera un grupo de ocho respuestas independientes ante un mismo problema. En el segundo paso interviene una función de recompensa basada en reglas deterministas: por ejemplo, comprobar si el código compila y pasa las pruebas unitarias, o si el resultado numérico coincide exactamente con la solución. En el tercer paso a la derecha, el algoritmo calcula el rendimiento relativo de cada intento frente a la media del grupo y actualiza los pesos sin requerir un modelo crítico secundario en memoria. De manera espontánea, el modelo descubre que auto-corregirse dentro de las etiquetas think incrementa su tasa de éxito, desarrollando capacidades de razonamiento profundo por puro refuerzo.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Funciones de Recompensa</div>
-<div class="s-title">Verificación Determinista y Recompensas</div>
-<div class="s-sub">Sustitución de juicios humanos subjetivos por compiladores y evaluadores formales de software</div>
+<div class="kicker">Funciones de Recompensa</div>
+<h2>Verificación Determinista y Recompensas</h2>
+<div class="rule"></div>
+<div class="sub">Sustitución de juicios humanos subjetivos por compiladores y evaluadores formales de software</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#DC2626" stroke-width="2"/>
@@ -513,20 +459,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Lambert et al. — Reward Modeling and Rule-Based Verification in LLMs (HuggingFace 2024)</span>
 <span class="pg">7 / 15</span>
 </div>
 <aside class="guion">Para comprender por qué los modelos de razonamiento destacan en programación y matemáticas frente a los modelos conversacionales tradicionales, debemos examinar la naturaleza de sus funciones de recompensa. A la izquierda analizamos el modelo de recompensa clásico basado en juicios humanos: los evaluadores humanos tienden a premiar respuestas extensas, elocuentes y educadas, lo que provocaba que el modelo desarrollara sesgos de adulación o inventara datos con tono seguro, un fenómeno conocido como hackeo de recompensa. A la derecha mostramos el enfoque moderno de verificación determinista: cuando el modelo resuelve un problema de código, su propuesta se ejecuta dentro de un contenedor seguro aislado contra una batería de pruebas unitarias automatizadas. Si el código compila y devuelve la salida esperada, recibe una recompensa positiva; si lanza una excepción o un timeout, recibe cero. Este criterio objetivo elimina toda ambigüedad e impulsa al modelo a verificar cada paso de su lógica interna.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Facturación y Métricas</div>
-<div class="s-title">Anatomía de los Tokens de Razonamiento</div>
-<div class="s-sub">Diferenciación estricta entre tokens de pensamiento (ocultos) y tokens de respuesta (visibles)</div>
+<div class="kicker">Facturación y Métricas</div>
+<h2>Anatomía de los Tokens de Razonamiento</h2>
+<div class="rule"></div>
+<div class="sub">Diferenciación estricta entre tokens de pensamiento (ocultos) y tokens de respuesta (visibles)</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -566,20 +513,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Amazon Bedrock API Documentation — Reasoning Tokens Breakdown (2025)</span>
 <span class="pg">8 / 15</span>
 </div>
 <aside class="guion">Para gestionar adecuadamente los costos de las aplicaciones con modelos de razonamiento, los arquitectos deben comprender con exactitud la anatomía de los tokens generados. A la izquierda analizamos los tokens de pensamiento: representan el texto generado por el modelo durante su proceso deliberativo interno. En consultas complejas, este bloque puede oscilar entre dos mil y más de diez mil tokens para resolver un único problema, superando en un factor de diez el tamaño de la conclusión final. Aunque la interfaz web oculte este contenido para mayor comodidad del usuario, el proveedor de nube factura cada uno de estos tokens a la tarifa plena de salida de la API. A la derecha observamos los tokens de salida visibles: es el mensaje que efectivamente se entrega a la aplicación consumidora. Como consecuencia directa, una petición cuya respuesta final son solo cincuenta palabras puede terminar costando lo mismo que un documento de quince páginas si no se configuran límites de presupuesto de razonamiento.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">FinOps y Latencia</div>
-<div class="s-title">Costos y Retardos en Entornos de Producción</div>
-<div class="s-sub">Trade-off directo: mayor calidad cognitiva a cambio de mayor latencia TTFT y costo por llamada</div>
+<div class="kicker">FinOps y Latencia</div>
+<h2>Costos y Retardos en Entornos de Producción</h2>
+<div class="rule"></div>
+<div class="sub">Trade-off directo: mayor calidad cognitiva a cambio de mayor latencia TTFT y costo por llamada</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -619,20 +567,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: AWS Bedrock Performance Benchmarks & Real-World Pricing Analysis (2025)</span>
 <span class="pg">9 / 15</span>
 </div>
-<aside class="guion">El despliegue de modelos de razonamiento profundo introduce un compromiso técnico y financiero ineludible que redefine los acuerdos de nivel de servicio. A la izquierda analizamos el comportamiento de un modelo conversacional convencional como Claude 3.5 Sonnet: el tiempo hasta el primer token es inferior a un segundo y genera aproximadamente cuatrocientas palabras de respuesta inmediata, con un costo por invocación inferior a un centavo de dólar. A la derecha examinamos la misma consulta procesada por un modelo de razonamiento: el usuario debe esperar entre ocho y cuarenta y cinco segundos mientras el sistema reflexiona y valida sus hipótesis en silencio. Durante este intervalo se generan más de cuatro mil tokens de monólogo interno, multiplicando el costo de la petición casi por diez. Como arquitectos, debemos reservar este tipo de modelos para flujos de trabajo asíncronos o tareas de alto valor agregado, evitando su uso en interfaces interactivas donde la inmediatez sea prioritaria.</aside>
+<aside class="guion">El despliegue de modelos de razonamiento profundo introduce un compromiso técnico y financiero ineludible que redefine los acuerdos de nivel de servicio. A la izquierda analizamos el comportamiento de un modelo conversacional convencional como Claude Sonnet 5.5: el tiempo hasta el primer token es inferior a un segundo y genera aproximadamente cuatrocientas palabras de respuesta inmediata, con un costo por invocación inferior a un centavo de dólar. A la derecha examinamos la misma consulta procesada por un modelo de razonamiento: el usuario debe esperar entre ocho y cuarenta y cinco segundos mientras el sistema reflexiona y valida sus hipótesis en silencio. Durante este intervalo se generan más de cuatro mil tokens de monólogo interno, multiplicando el costo de la petición casi por diez. Como arquitectos, debemos reservar este tipo de modelos para flujos de trabajo asíncronos o tareas de alto valor agregado, evitando su uso en interfaces interactivas donde la inmediatez sea prioritaria.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Gobernanza de Inferencia</div>
-<div class="s-title">Control de Presupuesto de Razonamiento</div>
-<div class="s-sub">Parámetros de API para regular la profundidad del pensamiento según el SLA y el costo</div>
+<div class="kicker">Gobernanza de Inferencia</div>
+<h2>Control de Presupuesto de Razonamiento</h2>
+<div class="rule"></div>
+<div class="sub">Parámetros de API para regular la profundidad del pensamiento según el SLA y el costo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr164" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -699,20 +648,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Anthropic API — Extended Thinking & Reasoning Budget Configuration (2025)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">Para evitar que el costo de las aplicaciones se dispare sin control, las plataformas modernas de inferencia incorporan parámetros explícitos para gobernar el presupuesto de razonamiento. En el bloque izquierdo observamos la configuración de presupuesto bajo, fijando un tope de mil veinticuatro tokens de pensamiento; esto restringe el tiempo de reflexión a menos de cinco segundos, resultando óptimo para consultas interactivas donde se requiere una pequeña dosis de deducción lógica sin degradar la experiencia de usuario. En el bloque central encontramos el presupuesto medio, configurado en cuatro mil noventa y seis tokens; es el equilibrio ideal para tareas de ingeniería como revisión de código o resolución de incidencias en canalizaciones de integración continua. En el bloque derecho situamos el presupuesto máximo, que permite superar los dieciséis mil tokens de deliberación profunda; este régimen debe orquestarse mediante colas de procesamiento asíncrono para tareas de alta complejidad donde la precisión absoluta justifica el costo computacional.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Patrones Colaborativos</div>
-<div class="s-title">Auto-Corrección y Debate Multi-Agente</div>
-<div class="s-sub">Enfrentamiento dialéctico entre agentes especializados para erradicar sesgos y errores lógicos</div>
+<div class="kicker">Patrones Colaborativos</div>
+<h2>Auto-Corrección y Debate Multi-Agente</h2>
+<div class="rule"></div>
+<div class="sub">Enfrentamiento dialéctico entre agentes especializados para erradicar sesgos y errores lógicos</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr165" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -779,20 +729,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Du et al. — Improving Factuality and Reasoning in Language Models through Multiagent Debate (2024)</span>
 <span class="pg">11 / 15</span>
 </div>
 <aside class="guion">Cuando la criticidad del sistema exige erradicar cualquier posibilidad de error en arquitecturas de misión crítica, la ingeniería recurre al patrón de debate multi-agente. En el primer paso a la izquierda, un modelo proponente elabora el diseño inicial justificando sus decisiones técnicas. En el segundo paso interviene un modelo crítico o red team cuyo prompt del sistema le ordena actuar como revisor implacable, buscando condiciones de carrera en bases de datos, vulnerabilidades de seguridad o violaciones de invariantes de red. En el tercer bloque interviene un tercer agente en calidad de juez neutral: sopesa las objeciones del crítico contra las explicaciones del proponente, descarta los contraejemplos inválidos y consolida una solución técnica depurada. Las investigaciones demuestran que someter las decisiones complejas a dos o tres rondas de debate cruzado reduce drásticamente las alucinaciones frente a cualquier modelo individual aislado.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Infraestructura de Nube</div>
-<div class="s-title">Arquitectura de Servicio para Modelos de Razonamiento</div>
-<div class="s-sub">Patrones asíncronos y desacoplados con colas SQS y Webhooks para absorber largas esperas</div>
+<div class="kicker">Infraestructura de Nube</div>
+<h2>Arquitectura de Servicio para Modelos de Razonamiento</h2>
+<div class="rule"></div>
+<div class="sub">Patrones asíncronos y desacoplados con colas SQS y Webhooks para absorber largas esperas</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr166" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -870,20 +821,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: AWS Architecture Center — Asynchronous Generative AI Pattern (2025)</span>
 <span class="pg">12 / 15</span>
 </div>
 <aside class="guion">Servir modelos de razonamiento profundo exige abandonar el paradigma tradicional síncrono de petición y respuesta web debido a los tiempos de deliberación que fácilmente superan el minuto. En este diagrama recorremos la arquitectura asíncrona de referencia. En el primer paso a la izquierda, la pasarela API Gateway recibe la consulta y responde inmediatamente al cliente con un código HTTP doscientos dos de petición aceptada junto a un identificador único de tarea, evitando que los balanceadores intermedios cierren la conexión por inactividad. En el segundo paso, la solicitud se deposita en una cola Amazon SQS que absorbe picos de tráfico. En el tercer bloque, trabajadores especializados alojados en instancias GPU consumen las peticiones de la cola, ejecutan el razonamiento exhaustivo y persisten el resultado en Amazon DynamoDB o S3. Finalmente, en el cuarto bloque a la derecha, un servicio de eventos notifica a la aplicación mediante webhooks o canales WebSocket, entregando la solución final con total resiliencia.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Criterios de Selección</div>
-<div class="s-title">¿Cuándo Usar Razonamiento Profundo?</div>
-<div class="s-sub">Matriz de selección: alta complejidad lógica justifica la latencia; tareas rutinarias exigen inmediatez</div>
+<div class="kicker">Criterios de Selección</div>
+<h2>¿Cuándo Usar Razonamiento Profundo?</h2>
+<div class="rule"></div>
+<div class="sub">Matriz de selección: alta complejidad lógica justifica la latencia; tareas rutinarias exigen inmediatez</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#16A34A" stroke-width="2"/>
@@ -923,20 +875,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Guía de Selección de Modelos Cognitivos — Universidad de la Costa (2026)</span>
 <span class="pg">13 / 15</span>
 </div>
 <aside class="guion">Como arquitectos de soluciones, la responsabilidad primordial consiste en asignar la herramienta computacional adecuada para cada caso de uso. A la izquierda resumimos los escenarios donde el razonamiento profundo está plenamente justificado: demostraciones matemáticas formales, optimización combinatoria de recursos en centros de cómputo, diagnóstico de caídas de infraestructura donde interactúan múltiples subsistemas complejos y canalizaciones asíncronas de auditoría de seguridad donde el usuario no se encuentra esperando en pantalla. A la derecha delimitamos los escenarios donde resulta un grave error arquitectónico implementarlo: chatbots de atención al cliente donde pausas de treinta segundos provocarían el abandono inmediato de la sesión, aplicaciones de resumen o extracción de entidades en contratos donde los modelos convencionales poseen precisión intachable y sistemas masivos de alto volumen donde el sobrecosto de tokens de pensamiento comprometería la rentabilidad financiera del proyecto.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Caso Ilustrativo de Arquitectura</div>
-<div class="s-title">Caso Ilustrativo: Diagnóstico en Nube Privada</div>
-<div class="s-sub">Caso ilustrativo de arquitectura, no es una empresa real — Resolución de fallos en OpenStack</div>
+<div class="kicker">Caso Ilustrativo de Arquitectura</div>
+<h2>Caso Ilustrativo: Diagnóstico en Nube Privada</h2>
+<div class="rule"></div>
+<div class="sub">Caso ilustrativo de arquitectura, no es una empresa real — Resolución de fallos en OpenStack</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#DC2626" stroke-width="2"/>
@@ -976,20 +929,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Metodología de Diagnóstico de Infraestructura — Laboratorio CUC (2026)</span>
 <span class="pg">14 / 15</span>
 </div>
 <aside class="guion">Para apreciar el valor real de estos sistemas, presentamos este caso ilustrativo de arquitectura sobre diagnóstico de infraestructura. Aclaramos que se trata de un escenario metodológico de análisis y no de una empresa real. A la izquierda planteamos una incidencia crítica en un clúster de nube privada OpenStack: múltiples máquinas virtuales pierden conectividad y el planificador Nova Scheduler comienza a rechazar aprovisionamientos. Un modelo convencional al que se suministran los registros ofrece respuestas genéricas recomendando reiniciar los servicios de cómputo, sin advertir el problema de fondo. A la derecha observamos la intervención del modelo de razonamiento: en su espacio deliberativo interno cruza las marcas de tiempo de las alertas de RabbitMQ con los mensajes de sincronización de Galera Cluster, deduciendo que una partición de red aisló al controlador primario generando una condición de split-brain. Como resultado, emite un plan de remediación quirúrgico paso a paso para restaurar el quórum de la base de datos sin causar corrupción de datos.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Checklist de Arquitectura</div>
-<div class="s-title">Principios Clave de Razonamiento en la Nube</div>
-<div class="s-sub">Cuatro directrices fundamentales para integrar modelos cognitivos en producción</div>
+<div class="kicker">Checklist de Arquitectura</div>
+<h2>Principios Clave de Razonamiento en la Nube</h2>
+<div class="rule"></div>
+<div class="sub">Cuatro directrices fundamentales para integrar modelos cognitivos en producción</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 4 Pilares -->
   <g transform="translate(60, 60)">
@@ -1050,6 +1004,7 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 1 de 4</span>
 <span class="src">Fuente: Síntesis de Arquitectura en la Nube — Universidad de la Costa (2026)</span>
 <span class="pg">15 / 15</span>
 </div>
@@ -1071,14 +1026,14 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 <aside class="guion">Bienvenidos a la segunda parte de nuestra sesión sobre capacidades de inteligencia artificial en la nube. En este bloque exploraremos la generación y edición automatizada de código en repositorios reales. Analizaremos los modelos líderes en tareas de desarrollo, los estándares de evaluación como SWE-bench, la indexación semántica del árbol sintáctico y el aislamiento crítico mediante microVMs con Firecracker para ejecutar código no confiable de forma segura en la infraestructura. Avancemos.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Capacidades de Desarrollo</div>
-<div class="s-title">Modelos Especializados en Código</div>
-<div class="s-sub">Entrenamiento con sintaxis formal, pruebas unitarias y repositorios versionados</div>
+<div class="kicker">Capacidades de Desarrollo</div>
+<h2>Modelos Especializados en Código</h2>
+<div class="rule"></div>
+<div class="sub">Entrenamiento con sintaxis formal, pruebas unitarias y repositorios versionados</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1086,11 +1041,11 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
     <text x="20" y="32" fill="#1E40AF" font-size="18" font-weight="700">Modelos Fundacionales</text>
     
     <rect x="20" y="70" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
-    <text x="35" y="100" fill="#0F172A" font-size="16" font-weight="700">Claude 3.5 Sonnet</text>
+    <text x="35" y="100" fill="#0F172A" font-size="16" font-weight="700">Claude Sonnet 5.5</text>
     <text x="35" y="125" fill="#64748B" font-size="16">Líder en SWE-bench Verified</text>
 
     <rect x="20" y="160" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
-    <text x="35" y="190" fill="#0F172A" font-size="16" font-weight="700">OpenAI o1 / GPT-4o</text>
+    <text x="35" y="190" fill="#0F172A" font-size="16" font-weight="700">OpenAI o1 / GPT-6.1 Sol</text>
     <text x="35" y="215" fill="#64748B" font-size="16">Razonamiento algorítmico formal</text>
 
     <rect x="20" y="250" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
@@ -1108,7 +1063,7 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
     <text x="35" y="125" fill="#64748B" font-size="16">Arquitectura MoE para 338 lenguajes</text>
 
     <rect x="20" y="160" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
-    <text x="35" y="190" fill="#0F172A" font-size="16" font-weight="700">Llama 3 Code / StarCoder</text>
+    <text x="35" y="190" fill="#0F172A" font-size="16" font-weight="700">Qwen 2.5 Coder / StarCoder</text>
     <text x="35" y="215" fill="#64748B" font-size="16">Auto-alojamiento empresarial local</text>
 
     <rect x="20" y="250" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
@@ -1136,20 +1091,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: Anthropic / Meta AI — Code Generation Technical Reports (2024)</span>
 <span class="pg">2 / 15</span>
 </div>
-<aside class="guion">En esta diapositiva contrastamos las familias de modelos orientados a desarrollo de software. A la izquierda observamos los modelos propietarios líderes accesibles mediante APIs gestionadas como Amazon Bedrock. Destacan Claude 3.5 Sonnet por su destreza en edición quirúrgica de repositorios y OpenAI o1 por su capacidad de deducción algorítmica estricta. En el panel central presentamos las alternativas de peso abierto, como DeepSeek Coder y StarCoder, diseñadas con arquitecturas de mezcla de expertos capaces de ser desplegadas en clústeres propios de cómputo GPU. En el panel derecho resumimos las tres habilidades clave que un arquitecto de software debe evaluar: la consistencia al editar múltiples archivos sin romper referencias, la capacidad de interpretar salidas de suites de prueba unitaria y la generación autónoma de casos límite. Comprender estas diferencias permite elegir el motor adecuado según el nivel de aislamiento y costo requerido.</aside>
+<aside class="guion">En esta diapositiva contrastamos las familias de modelos orientados a desarrollo de software. A la izquierda observamos los modelos propietarios líderes accesibles mediante APIs gestionadas como Amazon Bedrock. Destacan Claude Sonnet 5.5 por su destreza en edición quirúrgica de repositorios y OpenAI o1 por su capacidad de deducción algorítmica estricta. En el panel central presentamos las alternativas de peso abierto, como DeepSeek Coder y StarCoder, diseñadas con arquitecturas de mezcla de expertos capaces de ser desplegadas en clústeres propios de cómputo GPU. En el panel derecho resumimos las tres habilidades clave que un arquitecto de software debe evaluar: la consistencia al editar múltiples archivos sin romper referencias, la capacidad de interpretar salidas de suites de prueba unitaria y la generación autónoma de casos límite. Comprender estas diferencias permite elegir el motor adecuado según el nivel de aislamiento y costo requerido.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Métricas de Evaluación</div>
-<div class="s-title">Evolución de Benchmarks: De Funciones a Repositorios</div>
-<div class="s-sub">De acertijos sintéticos aislados a resolución de incidencias en proyectos reales de GitHub</div>
+<div class="kicker">Métricas de Evaluación</div>
+<h2>Evolución de Benchmarks: De Funciones a Repositorios</h2>
+<div class="rule"></div>
+<div class="sub">De acertijos sintéticos aislados a resolución de incidencias en proyectos reales de GitHub</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -1189,20 +1145,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: Princeton NLP — SWE-bench: Can Language Models Resolve Real-World GitHub Issues? (2024)</span>
 <span class="pg">3 / 15</span>
 </div>
 <aside class="guion">Examinemos la evolución en los métodos de prueba para evaluar capacidades de programación en inteligencia artificial. A la izquierda encontramos las primeras pruebas estandarizadas como HumanEval, diseñadas en 2021. Estas pruebas evaluaban la capacidad del modelo para completar una función aislada a partir de un comentario, sin interactuar con librerías complejas ni archivos secundarios. Al alcanzar tasas superiores al noventa por ciento, dichas pruebas perdieron capacidad discriminatoria. En el panel derecho vemos el estándar actual adoptado por la industria: SWE-bench Verified. Este benchmark enfrenta al modelo con incidencias reales publicadas en repositorios populares de Python como Django o SymPy. El modelo debe clonar el proyecto, buscar los archivos afectados, generar un parche git limpio y hacer pasar las pruebas unitarias que antes fallaban. Lograr tasas del cuarenta al cincuenta por ciento en este entorno refleja verdaderas capacidades de ingeniería de software.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Mecanismo de Evaluación</div>
-<div class="s-title">Ciclo de Resolución en SWE-bench</div>
-<div class="s-sub">Flujo de trabajo autónomo desde la recepción del issue hasta la validación de tests</div>
+<div class="kicker">Mecanismo de Evaluación</div>
+<h2>Ciclo de Resolución en SWE-bench</h2>
+<div class="rule"></div>
+<div class="sub">Flujo de trabajo autónomo desde la recepción del issue hasta la validación de tests</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(40, 100)">
     <rect x="0" y="0" width="240" height="260" rx="8" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1266,20 +1223,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: Princeton NLP — SWE-bench Evaluation Harness Architecture (2024)</span>
 <span class="pg">4 / 15</span>
 </div>
 <aside class="guion">Este diagrama de flujo describe el ciclo operativo estricto de SWE-bench. El proceso inicia en la caja azul, donde el harness de evaluación entrega la descripción textual del problema y sitúa al agente en el árbol de directorios exacto del commit previo a la corrección. En la segunda fase, en morado, el agente ejecuta comandos de terminal para buscar referencias en el código, inspeccionando archivos y determinando la causa raíz del error. En la tercera etapa, en naranja, el modelo genera un diff unificado y aplica el parche con git apply. Finalmente, en la caja verde de verificación, el harness ejecuta dos suites de prueba automatizadas: primero confirma que el test que antes fallaba ahora pasa exitosamente; luego valida que ninguna prueba previa del repositorio se haya roto. Si ambas condiciones se cumplen, la tarea se califica como exitosa. Este estándar reproduce fielmente la rutina diaria de un ingeniero en su estación de trabajo.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Comprensión Estructural</div>
-<div class="s-title">Indexación Semántica y Árboles Sintácticos</div>
-<div class="s-sub">De búsqueda ingenua de texto a navegación por grafo de símbolos y dependencias</div>
+<div class="kicker">Comprensión Estructural</div>
+<h2>Indexación Semántica y Árboles Sintácticos</h2>
+<div class="rule"></div>
+<div class="sub">De búsqueda ingenua de texto a navegación por grafo de símbolos y dependencias</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -1337,20 +1295,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: GitHub Next / Tree-sitter — Semantic Code Search Architecture (2024)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">Para que un modelo de inteligencia artificial comprenda un proyecto de gran tamaño, no basta con inyectar código de manera desordenada. En esta gráfica comparamos tres niveles de indexación semántica. A la izquierda vemos la búsqueda ingenua de texto mediante expresiones regulares: rápida pero saturada de falsos positivos al no distinguir entre comentarios, cadenas de texto y código ejecutable. En el centro presentamos el análisis gramatical mediante parsers modernos como Tree-sitter. Esta herramienta construye un árbol de sintaxis abstracta que permite segmentar el código respetando los límites de cada función o clase, evitando fragmentar bloques lógicos. En el panel derecho alcanzamos el nivel óptimo de arquitectura: el grafo de dependencias y símbolos mediante formatos como LSIF o SCIP. Este grafo permite resolver referencias cruzadas e inyectar en la ventana de contexto únicamente las firmas y tipos estrictamente invocados por la función bajo análisis, optimizando el consumo de memoria y reduciendo alucinaciones.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Eficiencia en Ventana</div>
-<div class="s-title">Edición Quirúrgica vs Reescritura Completa</div>
-<div class="s-sub">Minimizar tokens generados y evitar corrupción de archivos grandes</div>
+<div class="kicker">Eficiencia en Ventana</div>
+<h2>Edición Quirúrgica vs Reescritura Completa</h2>
+<div class="rule"></div>
+<div class="sub">Minimizar tokens generados y evitar corrupción de archivos grandes</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#991B1B" stroke-width="2"/>
@@ -1390,20 +1349,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: Aider.chat / Anthropic — Code Editing Benchmarks and Formats (2024)</span>
 <span class="pg">6 / 15</span>
 </div>
 <aside class="guion">Cuando integramos un modelo en un flujo de trabajo de programación, el formato de salida es una decisión arquitectónica determinante. A la izquierda analizamos la reescritura completa del archivo fuente. Si el archivo tiene mil líneas y cambiamos solo dos, forzar al modelo a reescribir todo el contenido dispara el consumo de tokens de salida, que son hasta cinco veces más costosos que los de entrada. Además, aumenta la latencia y genera el peligro común de que el modelo decida truncar partes del código con frases como el resto del código permanece igual. A la derecha mostramos el estándar de edición quirúrgica mediante bloques de búsqueda y reemplazo o parches de git. En este esquema el modelo solo emite un ancla de texto previa, la línea corregida y el cierre. El agente local comprueba que el bloque objetivo coincida exactamente y aplica la modificación sin arriesgar la integridad del resto del repositorio.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Seguridad en Infraestructura</div>
-<div class="s-title">El Riesgo de Código No Confiable en la Nube</div>
-<div class="s-sub">Vectores de ataque al permitir que modelos ejecuten comandos o scripts en servidores</div>
+<div class="kicker">Seguridad en Infraestructura</div>
+<h2>El Riesgo de Código No Confiable en la Nube</h2>
+<div class="rule"></div>
+<div class="sub">Vectores de ataque al permitir que modelos ejecuten comandos o scripts en servidores</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#991B1B" stroke-width="2"/>
@@ -1461,20 +1421,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: OWASP — Top 10 for Large Language Model Applications (2025)</span>
 <span class="pg">7 / 15</span>
 </div>
 <aside class="guion">Permitir que un modelo de lenguaje ejecute código de forma autónoma introduce riesgos severos de seguridad que todo arquitecto de nube debe mitigar. En el panel izquierdo observamos el peligro de escape y destrucción de datos. Un script generado con alucinaciones o intenciones maliciosas puede ejecutar comandos destructivos en el sistema de archivos o abusar de permisos si se ejecuta directamente sobre el host. En el panel central destacamos la exfiltración de secretos: el código ejecutado puede consultar variables de entorno que contengan credenciales de base de datos o tokens de APIs corporativas, e intentar transmitirlos hacia endpoints públicos o abusar de la dirección de metadatos de la nube. Finalmente, a la derecha advertimos sobre el agotamiento de recursos del servidor mediante bucles infinitos, saturación de memoria RAM o bombas de bifurcación de procesos. Por estas razones, jamás se debe ejecutar código generado por IA directamente en los servidores de producción.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Modelos de Aislamiento</div>
-<div class="s-title">Aislamiento: Contenedores vs MicroVMs</div>
-<div class="s-sub">Comparativa entre namespaces de Linux y virtualización por hardware liviana</div>
+<div class="kicker">Modelos de Aislamiento</div>
+<h2>Aislamiento: Contenedores vs MicroVMs</h2>
+<div class="rule"></div>
+<div class="sub">Comparativa entre namespaces de Linux y virtualización por hardware liviana</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -1514,20 +1475,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: AWS Open Source — Firecracker: Lightweight Virtualization for Serverless (2024)</span>
 <span class="pg">8 / 15</span>
 </div>
 <aside class="guion">Para aislar la ejecución de código no confiable, la arquitectura debe elegir la frontera de contención adecuada. A la izquierda evaluamos los contenedores tradicionales basados en namespaces y grupos de control de Linux. Aunque aíslan las vistas de procesos y limitan recursos, todos los contenedores comparten el mismo kernel del sistema operativo anfitrión. Cualquier vulnerabilidad de elevación de privilegios en el kernel permite un escape completo hacia el host. A la derecha encontramos las microVMs, tecnología impulsada por AWS en Firecracker y utilizada en servicios serverless como AWS Lambda y Fargate. Las microVMs ofrecen su propio kernel de Linux exclusivo y se ejecutan sobre las extensiones de virtualización del procesador. Lo fascinante de Firecracker es que combina la seguridad estricta de una máquina virtual tradicional con un tiempo de arranque de solo cinco a diez milisegundos y un consumo mínimo de memoria, convirtiéndose en el estándar de facto para la ejecución de sandboxes de inteligencia artificial.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Virtualización Liviana</div>
-<div class="s-title">Arquitectura de Firecracker MicroVM</div>
-<div class="s-sub">Monitor de máquinas virtuales minimalista escrito en Rust sobre KVM</div>
+<div class="kicker">Virtualización Liviana</div>
+<h2>Arquitectura de Firecracker MicroVM</h2>
+<div class="rule"></div>
+<div class="sub">Monitor de máquinas virtuales minimalista escrito en Rust sobre KVM</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="1060" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1567,20 +1529,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: AWS Open Source — Firecracker Design and Implementation (2024)</span>
 <span class="pg">9 / 15</span>
 </div>
 <aside class="guion">En esta diapositiva desglosamos la arquitectura interna de Firecracker para comprender su nivel de seguridad. A la izquierda vemos los procesos en el espacio de usuario del host. Cada microVM corre envuelta por un proceso jailer que aplica filtros de llamadas al sistema seccomp y espacios de nombres estrictos. Firecracker fue desarrollado en lenguaje Rust, garantizando seguridad de memoria y eliminando errores de desbordamiento. En el bloque central vemos la frontera de aislamiento por hardware gestionada por el módulo KVM del kernel. A diferencia de hipervisores pesados como QEMU, Firecracker eliminó casi toda la emulación de dispositivos PCI antiguos, conservando únicamente soporte virtio para bloques y red. Esto reduce la superficie de ataque en más del noventa y cinco por ciento. En el bloque derecho mostramos la microVM huésped: contiene un kernel propio y monta el repositorio de código en un sistema de archivos efímero sin conexión a internet externa. Si el código ejecutado falla o intenta propagar malware, la máquina virtual se destruye de inmediato sin afectar al host.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Patrón de Diseño</div>
-<div class="s-title">Ciclo de Ejecución Segura en Nube</div>
-<div class="s-sub">Flujo desacoplado: Agente de IA -> Orquestador de Sandboxes -> Resultado de Pruebas</div>
+<div class="kicker">Patrón de Diseño</div>
+<h2>Ciclo de Ejecución Segura en Nube</h2>
+<div class="rule"></div>
+<div class="sub">Flujo desacoplado: Agente de IA -> Orquestador de Sandboxes -> Resultado de Pruebas</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 100)">
     <rect x="0" y="0" width="220" height="260" rx="8" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1642,20 +1605,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: AWS Architecture Center — Secure Sandboxing for Generative AI (2024)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">Este diagrama de secuencia ilustra el patrón arquitectónico para ejecutar código generado de forma segura. El flujo comienza en la caja azul con el agente inteligente, que genera un parche de código y solicita su validación mediante una llamada de procedimiento remoto. En la segunda etapa, el orquestador de sandboxes extrae una microVM precalentada de un pool dinámico, montando una capa de archivos de copia en escritura que contiene el proyecto, e impone un límite de tiempo estricto de treinta segundos para impedir bloqueos. En la tercera etapa se ejecuta la suite de pruebas unitarias dentro de la máquina virtual aislada, capturando las salidas estándar de error sin conceder ningún acceso a la red externa ni a llaves del servidor. Al finalizar la prueba, en la cuarta etapa, la microVM se destruye por completo y su memoria se libera. Este patrón garantiza que cada iteración del agente ocurra en un estado prístino e inviolable.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Automatización DevOps</div>
-<div class="s-title">Revisión Asistida de Pull Requests en CI/CD</div>
-<div class="s-sub">Agentes que analizan diffs, comentan fallas y proponen parches en el pipeline</div>
+<div class="kicker">Automatización DevOps</div>
+<h2>Revisión Asistida de Pull Requests en CI/CD</h2>
+<div class="rule"></div>
+<div class="sub">Agentes que analizan diffs, comentan fallas y proponen parches en el pipeline</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1713,20 +1677,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: GitHub / GitLab — Automated Code Review with AI in Pipelines (2024)</span>
 <span class="pg">11 / 15</span>
 </div>
-<aside class="guion">La integración continua moderna incorpora agentes de inteligencia artificial para acelerar el ciclo de revisión de código en los equipos de desarrollo. A la izquierda vemos el disparador del pipeline: cuando un desarrollador abre un pull request, un webhook notifica al servicio de revisión, el cual extrae el diff del commit y filtra archivos autogenerados para optimizar el contexto. En el panel central se ejecuta el análisis mediante modelos de alta velocidad y costo moderado, como Claude 3.5 Haiku o Amazon Nova Lite. El agente evalúa las modificaciones contra las guías de estilo, busca posibles cuellos de botella y analiza si se alteraron contratos de interfaces existentes. En el panel derecho el sistema publica la retroalimentación: genera comentarios específicos en las líneas afectadas, ofrece sugerencias de commit aplicables con un solo clic y, en caso de detectar riesgos de seguridad, marca el check en estado fallido para impedir que la rama se fusione sin la supervisión del equipo de arquitectura.</aside>
+<aside class="guion">La integración continua moderna incorpora agentes de inteligencia artificial para acelerar el ciclo de revisión de código en los equipos de desarrollo. A la izquierda vemos el disparador del pipeline: cuando un desarrollador abre un pull request, un webhook notifica al servicio de revisión, el cual extrae el diff del commit y filtra archivos autogenerados para optimizar el contexto. En el panel central se ejecuta el análisis mediante modelos de alta velocidad y costo moderado, como Claude Haiku 5.5 o Amazon Nova Lite. El agente evalúa las modificaciones contra las guías de estilo, busca posibles cuellos de botella y analiza si se alteraron contratos de interfaces existentes. En el panel derecho el sistema publica la retroalimentación: genera comentarios específicos en las líneas afectadas, ofrece sugerencias de commit aplicables con un solo clic y, en caso de detectar riesgos de seguridad, marca el check en estado fallido para impedir que la rama se fusione sin la supervisión del equipo de arquitectura.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Seguridad Aplicada</div>
-<div class="s-title">SAST Híbrido: Reglas Deterministas y Modelos</div>
-<div class="s-sub">Complementar linters tradicionales con razonamiento semántico para eliminar falsos positivos</div>
+<div class="kicker">Seguridad Aplicada</div>
+<h2>SAST Híbrido: Reglas Deterministas y Modelos</h2>
+<div class="rule"></div>
+<div class="sub">Complementar linters tradicionales con razonamiento semántico para eliminar falsos positivos</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -1766,20 +1731,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: Snyk / SonarQube — AI-Assisted Vulnerability Detection Reports (2024)</span>
 <span class="pg">12 / 15</span>
 </div>
 <aside class="guion">El análisis estático de seguridad de aplicaciones, conocido como SAST, experimenta una transformación radical al combinarse con inteligencia artificial. A la izquierda observamos las herramientas tradicionales de escaneo de código basadas en expresiones regulares y reglas rígidas. Aunque son muy veloces y deterministas, generan una gran cantidad de falsos positivos, alertando por ejemplo sobre el uso de sentencias SQL dinámicas aun cuando los parámetros fueron validados en una capa previa. Esto genera fatiga de alertas en los equipos. A la derecha mostramos la arquitectura híbrida moderna. En ella, el escáner tradicional actúa como primer filtro de bajo costo. Luego, las alertas dudosas se envían a un modelo de lenguaje que analiza el flujo completo de datos entre módulos. Si el modelo constata que los datos provienen de una fuente segura, descarta la alerta; si confirma la vulnerabilidad, genera automáticamente la consulta parametrizada para remediar el problema.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Tolerancia a Fallos</div>
-<div class="s-title">Bucle de Retroalimentación de Error</div>
-<div class="s-sub">Mecanismo autoreparador: Compilación/Test -> Error -> Re-prompting -> Parche</div>
+<div class="kicker">Tolerancia a Fallos</div>
+<h2>Bucle de Retroalimentación de Error</h2>
+<div class="rule"></div>
+<div class="sub">Mecanismo autoreparador: Compilación/Test -> Error -> Re-prompting -> Parche</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 100)">
     <rect x="0" y="0" width="240" height="260" rx="8" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1843,20 +1809,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: Princeton NLP / SWE-bench Engineering Guide (2024)</span>
 <span class="pg">13 / 15</span>
 </div>
 <aside class="guion">Los sistemas autónomos de desarrollo no aciertan en el primer intento en todas las ocasiones; su fortaleza radica en el bucle cerrado de retroalimentación de error que mostramos aquí. En el paso inicial, el modelo genera una primera versión del código a partir del requerimiento técnico. En el segundo paso, la microVM ejecuta los tests y captura un fallo de aserción o error de sintaxis en la salida estándar. En lugar de abortar la ejecución, en el tercer paso el orquestador toma las últimas líneas del traceback y las inyecta en una nueva petición hacia el modelo, indicándole con precisión la línea y condición que fallaron. El modelo reflexiona sobre su propuesta previa, identifica el error y emite una versión corregida. Para proteger los costos operativos en la nube, el bucle incluye un cortacircuito estricto limitado a tres o cuatro reintentos. Si el modelo logra que todos los tests pasen a verde, el parche se consolida como commit definitivo.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Caso Ilustrativo</div>
-<div class="s-title">Caso: Plataforma de Evaluación Automatizada de Código</div>
-<div class="s-sub">Caso ilustrativo de arquitectura, no es una empresa real</div>
+<div class="kicker">Caso Ilustrativo</div>
+<h2>Caso: Plataforma de Evaluación Automatizada de Código</h2>
+<div class="rule"></div>
+<div class="sub">Caso ilustrativo de arquitectura, no es una empresa real</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1914,20 +1881,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: Patrón de referencia de arquitectura de sandboxing para educación superior (2024)</span>
 <span class="pg">14 / 15</span>
 </div>
 <aside class="guion">Para consolidar estos conceptos, analizamos un caso ilustrativo de arquitectura para evaluar tareas de programación en entornos universitarios o corporativos. Subrayamos que es un modelo de referencia didáctico y no una empresa real. A la izquierda vemos la recepción de entregas mediante una API protegida con firmas criptográficas, que encola los envíos en un servicio como Amazon SQS. Esto permite absorber cientos de entregas simultáneas sin saturar el sistema. En el centro, los nodos de trabajo extraen los mensajes e instancian una microVM Firecracker efímera por cada entrega, asignando exactamente un núcleo virtual, medio gigabyte de RAM y diez segundos de tiempo de ejecución, bloqueando cualquier acceso a la red externa para impedir trampas o ataques. A la derecha, una vez evaluada la suite de pruebas, un modelo de lenguaje ligero analiza los fallos del estudiante y redacta una explicación conceptual constructiva sin revelar el código solución, guardando el informe cifrado en S3.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Resumen Ejecutivo</div>
-<div class="s-title">Síntesis de Parte 2: Principios de Código Seguro</div>
-<div class="s-sub">Directrices esenciales de arquitectura para integración de modelos de desarrollo</div>
+<div class="kicker">Resumen Ejecutivo</div>
+<h2>Síntesis de Parte 2: Principios de Código Seguro</h2>
+<div class="rule"></div>
+<div class="sub">Directrices esenciales de arquitectura para integración de modelos de desarrollo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="160" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1967,6 +1935,7 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 2 de 4</span>
 <span class="src">Fuente: Guía de Arquitectura de Sistemas de IA en la Nube (2026)</span>
 <span class="pg">15 / 15</span>
 </div>
@@ -1988,14 +1957,14 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 <aside class="guion">Bienvenidos a la tercera parte de nuestra sesión de hoy. En este módulo nos adentraremos en los sistemas agénticos en la nube. Analizaremos la transición de modelos estáticos a actores autónomos mediante el patrón de razonamiento y acción ReAct, la invocación estructurada de herramientas con JSON Schema, el protocolo abierto Model Context Protocol desarrollado por Anthropic, las arquitecturas de memoria persistente y los guardrails indispensables para acotar el radio de impacto de un agente en producción. Iniciemos.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">De la Conversación a la Acción</div>
-<div class="s-title">Del Chatbot Estático al Agente Autónomo</div>
-<div class="s-sub">Integración de modelo fundacional, herramientas del entorno, memoria y bucle de decisión</div>
+<div class="kicker">De la Conversación a la Acción</div>
+<h2>Del Chatbot Estático al Agente Autónomo</h2>
+<div class="rule"></div>
+<div class="sub">Integración de modelo fundacional, herramientas del entorno, memoria y bucle de decisión</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -2035,20 +2004,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: Anthropic — Building Effective Agents (Architectural Guide 2024)</span>
 <span class="pg">2 / 15</span>
 </div>
 <aside class="guion">En esta diapositiva contrastamos conceptualmente un chatbot convencional frente a un agente de inteligencia artificial. A la izquierda representamos el chatbot clásico: un sistema puramente pasivo basado en un intercambio unívoco de pregunta y respuesta. Este esquema carece de interacción con el entorno exterior, depende exclusivamente de los datos con los que fue entrenado y no puede consultar el saldo de un cliente ni modificar el estado de un recurso en la nube. A la derecha presentamos el agente inteligente: una entidad dinámica donde el modelo fundacional actúa como motor de razonamiento central. El agente dispone de herramientas externas para consultar APIs, bases de datos relacionales y sistemas de tickets; opera dentro de un bucle que observa los resultados de sus acciones y rectifica su plan hasta cumplir el objetivo encomendado, conservando memoria contextual a lo largo de múltiples pasos de ejecución.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Patrón de Razonamiento</div>
-<div class="s-title">El Patrón ReAct: Thought, Action, Observation</div>
-<div class="s-sub">Bucle continuo de deliberación interna, ejecución instrumental y retroalimentación empírica</div>
+<div class="kicker">Patrón de Razonamiento</div>
+<h2>El Patrón ReAct: Thought, Action, Observation</h2>
+<div class="rule"></div>
+<div class="sub">Bucle continuo de deliberación interna, ejecución instrumental y retroalimentación empírica</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 100)">
     <rect x="0" y="0" width="240" height="260" rx="8" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2101,20 +2071,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: Yao et al. — ReAct: Synergizing Reasoning and Acting in Language Models (ICLR 2023)</span>
 <span class="pg">3 / 15</span>
 </div>
 <aside class="guion">El patrón ReAct, acrónimo de Reasoning and Acting, es la base operativa de la gran mayoría de agentes autónomos. El ciclo se divide en tres fases secuenciales representadas en pantalla. En la fase uno, Thought o pensamiento, el modelo reflexiona sobre la meta solicitada, evalúa la información con la que cuenta y determina qué herramienta debe convocar. En la fase dos, Action, el modelo interrumpe la emisión de texto libre y genera un bloque JSON con el nombre de la función que desea ejecutar y los argumentos requeridos. El entorno de ejecución en la nube intercepta esta llamada, invoca la API correspondiente y entrega el resultado en la fase tres, Observation. Esta observación se reinyecta en el contexto del modelo con un rol especial de herramienta. El bucle se repite tantas veces como sea necesario hasta que el agente constata que dispone de toda la información para responder de forma definitiva al usuario o completar la transacción asignada.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Invocación de Herramientas</div>
-<div class="s-title">Mecanismo Técnico de Function Calling</div>
-<div class="s-sub">Cómo el modelo pasa de lenguaje natural a generar estructuras de datos formales</div>
+<div class="kicker">Invocación de Herramientas</div>
+<h2>Mecanismo Técnico de Function Calling</h2>
+<div class="rule"></div>
+<div class="sub">Cómo el modelo pasa de lenguaje natural a generar estructuras de datos formales</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2172,20 +2143,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: AWS Bedrock / OpenAI — Function Calling Specification (2024)</span>
 <span class="pg">4 / 15</span>
 </div>
 <aside class="guion">Para que un modelo invoque una herramienta de manera confiable se requiere un contrato técnico formal. En el panel izquierdo observamos cómo la aplicación suministra al modelo un catálogo estructurado mediante JSON Schema. Cada herramienta incluye un nombre único, una descripción que explica cuándo y para qué debe usarse, y la especificación de tipos de datos requeridos. En el panel central vemos la respuesta del modelo: cuando decide utilizar una herramienta, emite una señal de detención especial indicando que el motivo de fin fue el uso de herramienta, y produce un objeto JSON que respeta exactamente la estructura tipada solicitada, asignando un identificador de llamada único. En el panel derecho el backend de la nube recibe este mensaje, verifica que el usuario autenticado posea los privilegios necesarios para ejecutar dicha acción, despacha la función en la infraestructura y devuelve el resultado al modelo. El modelo jamás ejecuta código por su cuenta; es el backend quien mantiene el control absoluto de la ejecución.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Contrato de Datos</div>
-<div class="s-title">Diseño Riguroso de JSON Schema para Herramientas</div>
-<div class="s-sub">Descripciones semánticas claras y tipado estricto para evitar alucinaciones en parámetros</div>
+<div class="kicker">Contrato de Datos</div>
+<h2>Diseño Riguroso de JSON Schema para Herramientas</h2>
+<div class="rule"></div>
+<div class="sub">Descripciones semánticas claras y tipado estricto para evitar alucinaciones en parámetros</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#991B1B" stroke-width="2"/>
@@ -2225,20 +2197,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: JSON Schema Specification (Draft 2020-12) / Anthropic Tool Use Guide (2024)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">La efectividad de un agente depende directamente de la calidad en la ingeniería de sus esquemas JSON. A la izquierda ilustramos un esquema con graves defectos de diseño: herramientas con nombres genéricos como ejecutar consulta, sin descripciones que orienten al modelo y con campos de texto libres sin restricciones. Esto induce al modelo a generar cadenas SQL arbitrarias o parámetros inventados que fallan en tiempo de ejecución y abren vulnerabilidades críticas de inyección de código. A la derecha mostramos el estándar recomendado de arquitectura de software: nombres específicos con verbos de dominio como consultar saldo de cuenta, acompañados de descripciones pedagógicas que aclaran el propósito y alcance. Los parámetros deben utilizar tipos primitivos estrictos, expresiones regulares para validar formatos como números de identificación o identificadores de cuenta bancaria, y enumeraciones para opciones fijas. Un esquema rigurosamente tipado eleva la tasa de éxito de invocación por encima del noventa y ocho por ciento.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Estándar de Interoperabilidad</div>
-<div class="s-title">Model Context Protocol (MCP): El Puerto USB-C de la IA</div>
-<div class="s-sub">Estándar abierto para desacoplar modelos de fuentes de datos y servidores de herramientas</div>
+<div class="kicker">Estándar de Interoperabilidad</div>
+<h2>Model Context Protocol (MCP): El Puerto USB-C de la IA</h2>
+<div class="rule"></div>
+<div class="sub">Estándar abierto para desacoplar modelos de fuentes de datos y servidores de herramientas</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -2278,20 +2251,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: Anthropic — Model Context Protocol Specification (Nov 2024)</span>
 <span class="pg">6 / 15</span>
 </div>
 <aside class="guion">Hasta finales de 2024, conectar modelos con herramientas provocaba una explosión de complejidad arquitectónica de orden N por M, como observamos a la izquierda. Si teníamos cuatro entornos de desarrollo y seis fuentes de datos, era necesario codificar y mantener veinticuatro integraciones propietarias. Para resolver este problema, la industria adoptó el Model Context Protocol o MCP, presentado formalmente por Anthropic. A la derecha vemos cómo MCP actúa como el puerto USB-C para aplicaciones de inteligencia artificial. Define un protocolo abierto basado en JSON-RPC 2.0 que desacopla por completo a los clientes de las fuentes de datos. Cualquier empresa que desarrolle un servidor MCP para su base de datos Postgres o su clúster de Kubernetes permite que cualquier cliente compatible, ya sea Claude Desktop, IDEs modernas o agentes empresariales en la nube, se conecte de forma inmediata sin escribir una sola línea de código adaptador adicional.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Topología MCP</div>
-<div class="s-title">Arquitectura Cliente-Host-Servidor en MCP</div>
-<div class="s-sub">Tres primitivas de exposición: Resources (datos), Tools (acciones) y Prompts (plantillas)</div>
+<div class="kicker">Topología MCP</div>
+<h2>Arquitectura Cliente-Host-Servidor en MCP</h2>
+<div class="rule"></div>
+<div class="sub">Tres primitivas de exposición: Resources (datos), Tools (acciones) y Prompts (plantillas)</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 80)">
     <rect x="0" y="0" width="300" height="300" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2347,20 +2321,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: Anthropic — Model Context Protocol Architecture (2024)</span>
 <span class="pg">7 / 15</span>
 </div>
 <aside class="guion">En esta diapositiva desglosamos la topología interna del Model Context Protocol. A la izquierda encontramos el host o cliente MCP: la aplicación principal que orquesta al modelo de lenguaje y administra los canales de comunicación hacia los servidores conectados. A la derecha se ubican los servidores MCP, los cuales exponen tres primitivas esenciales. La primera son los Recursos, identificados mediante URIs como postgres://schema/usuarios. Son canales de solo lectura que entregan datos contextuales pasivos. La segunda son las Herramientas, que representan acciones con efectos secundarios sobre la infraestructura, como aprovisionar una máquina virtual en OpenStack, reiniciar un contenedor o ejecutar una transacción. La tercera son los Prompts, que exponen plantillas estandarizadas para guiar al modelo en tareas complejas como auditorías de seguridad o revisión de incidentes. Esta separación modular permite una arquitectura limpia, auditable y de fácil mantenimiento.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Capa de Transporte</div>
-<div class="s-title">Mecanismos de Transporte MCP: STDIO vs SSE</div>
-<div class="s-sub">De procesos hijos en el host local a microservicios distribuidos en la nube</div>
+<div class="kicker">Capa de Transporte</div>
+<h2>Mecanismos de Transporte MCP: STDIO vs SSE</h2>
+<div class="rule"></div>
+<div class="sub">De procesos hijos en el host local a microservicios distribuidos en la nube</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -2400,20 +2375,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: Model Context Protocol — Transports and Security Specification (2024)</span>
 <span class="pg">8 / 15</span>
 </div>
 <aside class="guion">El protocolo MCP soporta dos medios de transporte adaptados a diferentes escenarios de arquitectura. A la izquierda analizamos el transporte local mediante STDIO. En este modo, el cliente ejecuta el servidor MCP como un subproceso hijo en la misma máquina y dialoga a través de la entrada y salida estándar del sistema operativo. Es la modalidad más segura y sencilla para herramientas locales, ya que no expone ningún puerto TCP a la red. A la derecha vemos el transporte remoto diseñado para entornos de nube empresarial, implementado mediante Server-Sent Events para la recepción de eventos y peticiones HTTP POST para el envío de comandos. Este esquema permite alojar servidores MCP como microservicios en Kubernetes o AWS ECS, atendiendo múltiples agentes simultáneamente. Al cruzar la red, esta arquitectura exige cifrado mTLS de extremo a extremo, autenticación con tokens portadores OAuth 2.0 y control de acceso basado en roles para evitar peticiones no autorizadas.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Persistencia Cognitiva</div>
-<div class="s-title">Jerarquía de Memoria en Sistemas Agénticos</div>
-<div class="s-sub">De buffers volátiles en contexto a almacenes vectoriales y relacionales persistentes</div>
+<div class="kicker">Persistencia Cognitiva</div>
+<h2>Jerarquía de Memoria en Sistemas Agénticos</h2>
+<div class="rule"></div>
+<div class="sub">De buffers volátiles en contexto a almacenes vectoriales y relacionales persistentes</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2471,20 +2447,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: CoALA Architecture — Cognitive Architectures for Language Agents (Sumers et al. 2024)</span>
 <span class="pg">9 / 15</span>
 </div>
 <aside class="guion">Al diseñar un agente autónomo debemos concebir una jerarquía de memoria análoga a la de los sistemas computacionales. A la izquierda encontramos la memoria de trabajo: reside dentro de la ventana de contexto del modelo. Es de acceso inmediato pero tiene capacidad limitada y desaparece en cuanto la llamada a la API concluye. En el panel central presentamos la memoria episódica: implementada con motores de búsqueda vectorial como pgvector u OpenSearch. Permite al agente recordar cómo resolvió incidencias técnicas similares en el pasado mediante búsqueda semántica por similitud de cosenos. En el panel derecho tenemos la memoria semántica y declarativa: almacenada en bases de datos relacionales o clave-valor como DynamoDB. Aquí se guardan los perfiles de usuario, las preferencias operativas y las reglas de negocio inmutables. Combinar estas tres capas permite que el agente mantenga coherencia sin saturar innecesariamente la ventana de tokens.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Gestión de Contexto</div>
-<div class="s-title">Compactación y Ventana Deslizante de Contexto</div>
-<div class="s-sub">Estrategias para sostener sesiones largas de agente sin agotar la memoria del modelo</div>
+<div class="kicker">Gestión de Contexto</div>
+<h2>Compactación y Ventana Deslizante de Contexto</h2>
+<div class="rule"></div>
+<div class="sub">Estrategias para sostener sesiones largas de agente sin agotar la memoria del modelo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -2524,20 +2501,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: Anthropic / OpenAI — Long-Running Agent Sessions Guide (2024)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">En tareas de larga duración que involucran cientos de pasos, el historial de conversación puede sobrepasar el límite de la ventana de contexto. En esta gráfica comparamos dos enfoques de gestión de memoria. A la izquierda vemos la ventana deslizante elemental: al llenarse el búfer, elimina ciegamente los mensajes más antiguos. Esto provoca desastres operativos, pues el modelo pierde el prompt de sistema y olvida las directrices de seguridad o el objetivo principal encomendado. A la derecha presentamos la compactación jerárquica: las reglas esenciales de rol y seguridad quedan permanentemente ancladas al inicio. Cuando el volumen de herramientas intermedias crece, un modelo rápido como Haiku resume los turnos anteriores extrayendo únicamente las decisiones clave, los IDs creados y el estado alcanzado, reemplazando veinte mensajes verbosos por un solo párrafo sintético. Esto reduce el consumo de tokens en un ochenta por ciento y mantiene al agente perfectamente alineado.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Mitigación de Riesgos</div>
-<div class="s-title">Acotando el Radio de Impacto (Blast Radius)</div>
-<div class="s-sub">Principio de mínimo privilegio, credenciales con alcance limitado y aprobaciones humanas</div>
+<div class="kicker">Mitigación de Riesgos</div>
+<h2>Acotando el Radio de Impacto (Blast Radius)</h2>
+<div class="rule"></div>
+<div class="sub">Principio de mínimo privilegio, credenciales con alcance limitado y aprobaciones humanas</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2595,20 +2573,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: AWS Security Best Practices for Generative AI Applications (2024)</span>
 <span class="pg">11 / 15</span>
 </div>
 <aside class="guion">El radio de impacto define el daño máximo que un agente puede ocasionar en la infraestructura ante una falla o vulnerabilidad. En esta diapositiva presentamos tres barreras arquitectónicas para acotarlo. La primera es el principio de mínimo privilegio: los conectores del agente deben iniciar siempre en modo de solo lectura, estar restringidos a prefijos de recursos específicos y emplear credenciales efímeras con expiración de pocos minutos. La segunda barrera es el patrón de intervención humana en el bucle: las acciones irreversibles como eliminar una base de datos, reconfigurar una regla de firewall o transferir fondos jamás deben ejecutarse de forma 100% desatendida; el agente formula la propuesta y queda en pausa hasta recibir la confirmación de un operador autorizado. La tercera barrera impone límites de tasa y cuotas presupuestales, garantizando que un bucle infinito no sature las APIs ni genere cobros inesperados en la factura de nube.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Gobernanza de Modelos</div>
-<div class="s-title">Guardrails: Filtros de Entrada y Salida</div>
-<div class="s-sub">Capas de validación deterministas y semánticas antes y después del modelo</div>
+<div class="kicker">Gobernanza de Modelos</div>
+<h2>Guardrails: Filtros de Entrada y Salida</h2>
+<div class="rule"></div>
+<div class="sub">Capas de validación deterministas y semánticas antes y después del modelo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 100)">
     <rect x="0" y="0" width="240" height="260" rx="8" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2672,20 +2651,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: AWS Bedrock Guardrails / NeMo Guardrails Documentation (2024)</span>
 <span class="pg">12 / 15</span>
 </div>
 <aside class="guion">Los guardrails representan los mecanismos de defensa en profundidad que envuelven las llamadas a los modelos de lenguaje. En el paso uno vemos el guardrail de entrada: antes de que el texto del usuario llegue al modelo, filtros especializados detectan intentos de inyección de prompt que pretendan alterar las directrices del sistema. Asimismo, se enmascaran datos de identificación personal como números de documento o tarjetas de crédito para cumplir con regulaciones de privacidad. El modelo procesa la petición saneada en el paso dos. Luego, en el paso tres, entra en acción el guardrail de salida: evalúa si la respuesta generada tiene fundamento fáctico en los documentos recuperados para evitar alucinaciones, y verifica que no contenga accidentalmente credenciales internas, cadenas de conexión o lenguaje inapropiado. Solo tras aprobar ambas compuertas de seguridad, el mensaje se entrega al usuario final con trazabilidad completa.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Arquitectura Distribuida</div>
-<div class="s-title">Patrones de Orquestación Multi-Agente</div>
-<div class="s-sub">De agentes solitarios a equipos cooperativos: Supervisor central vs Enrutamiento dinámico</div>
+<div class="kicker">Arquitectura Distribuida</div>
+<h2>Patrones de Orquestación Multi-Agente</h2>
+<div class="rule"></div>
+<div class="sub">De agentes solitarios a equipos cooperativos: Supervisor central vs Enrutamiento dinámico</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2725,20 +2705,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: LangChain / AutoGen — Multi-Agent Systems Architectural Patterns (2024)</span>
 <span class="pg">13 / 15</span>
 </div>
 <aside class="guion">Cuando una tarea excede la especialidad de un único agente, recurrimos a patrones de orquestación multi-agente. A la izquierda analizamos el patrón jerárquico con agente supervisor. En este esquema, un modelo directivo desglosa un requerimiento complejo en subtareas específicas y las delega en agentes dedicados: uno para consultar bases de datos, otro para generar código y otro para redactar la documentación. Cada especialista devuelve su informe al supervisor, quien sintetiza la respuesta final. Este modelo destaca por su alta auditabilidad y orden estricto. A la derecha presentamos el enrutamiento por especialidad o handoff. Aquí, un clasificador inicial de muy bajo costo evalúa la intención del usuario y delega directamente la sesión completa en el agente especializado en facturación, soporte técnico o configuración de red. Este enfoque reduce la sobrecarga de coordinación, ahorra tokens y minimiza la latencia percibida por el usuario.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Caso Ilustrativo</div>
-<div class="s-title">Caso: Mesa de Ayuda Agéntica con Servidores MCP</div>
-<div class="s-sub">Caso ilustrativo de arquitectura, no es una empresa real</div>
+<div class="kicker">Caso Ilustrativo</div>
+<h2>Caso: Mesa de Ayuda Agéntica con Servidores MCP</h2>
+<div class="rule"></div>
+<div class="sub">Caso ilustrativo de arquitectura, no es una empresa real</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2796,20 +2777,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: Patrón de referencia para mesa de ayuda asistida por IA y MCP (2024)</span>
 <span class="pg">14 / 15</span>
 </div>
 <aside class="guion">Para integrar estos conocimientos analizamos un caso ilustrativo de arquitectura de mesa de ayuda asistida por agentes y protocolo MCP. Aclaramos que corresponde a un diseño conceptual de referencia y no representa a una empresa real. A la izquierda vemos la recepción de incidencias desde un portal web, donde un guardrail clasifica la temática y remueve posibles contraseñas escritas por error. En el panel central, el agente interactúa con tres servidores MCP desacoplados: uno conectado a Jira para revisar si el problema es recurrente; otro enlazado al directorio activo para consultar si la cuenta del usuario se encuentra bloqueada por intentos fallidos; y un tercero conectado al sistema de monitoreo para comprobar si existe alguna interrupción en los enlaces de comunicaciones. A la derecha observamos la resolución: si la cuenta está bloqueada, el agente puede ordenar el desbloqueo únicamente tras validar un token de segundo factor con el usuario, registrando cada acción en el registro inmutable de auditoría.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Resumen Ejecutivo</div>
-<div class="s-title">Síntesis de Parte 3: Principios de Sistemas Agénticos</div>
-<div class="s-sub">Reglas de oro para construir y desplegar agentes confiables en la nube</div>
+<div class="kicker">Resumen Ejecutivo</div>
+<h2>Síntesis de Parte 3: Principios de Sistemas Agénticos</h2>
+<div class="rule"></div>
+<div class="sub">Reglas de oro para construir y desplegar agentes confiables en la nube</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="160" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2849,6 +2831,7 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 3 de 4</span>
 <span class="src">Fuente: Guía de Arquitectura de Sistemas de IA en la Nube (2026)</span>
 <span class="pg">15 / 15</span>
 </div>
@@ -2870,14 +2853,14 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 <aside class="guion">Bienvenidos a la cuarta y última parte de nuestra sesión y de la Unidad 3 de Arquitectura en la Nube. En este bloque integraremos los conceptos fundamentales abordados a lo largo del curso. Repasaremos el ciclo de peticiones en OpenStack, el aislamiento de redes con OVN, la alta disponibilidad del clúster, el cómputo acelerado con GPUs, la compresión de modelos con AWQ, el motor vLLM, la inferencia serverless en Bedrock y la soberanía de datos en Colombia. Comencemos esta síntesis final.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Visión Holística</div>
-<div class="s-title">Mapa de Ruta: De la Infraestructura Base a la IA</div>
-<div class="s-sub">Cuatro semanas articuladas: Nube privada, inferencia básica, aceleración y sistemas agénticos</div>
+<div class="kicker">Visión Holística</div>
+<h2>Mapa de Ruta: De la Infraestructura Base a la IA</h2>
+<div class="rule"></div>
+<div class="sub">Cuatro semanas articuladas: Nube privada, inferencia básica, aceleración y sistemas agénticos</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(40, 100)">
     <rect x="0" y="0" width="240" height="260" rx="8" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2939,20 +2922,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: Silabo de Arquitectura en la Nube — Universidad de la Costa (2026)</span>
 <span class="pg">2 / 15</span>
 </div>
 <aside class="guion">En este mapa conceptual observamos la progresión pedagógica y arquitectónica de toda la Unidad 3. Comenzamos en la Semana 13 estudiando la infraestructura de nube privada con OpenStack, donde dominamos el aprovisionamiento de máquinas virtuales, la orquestación de redes superpuestas y la alta disponibilidad del clúster. En la Semana 14 entramos al dominio de la inteligencia artificial, aprendiendo cómo los modelos procesan tokens, cómo dimensionar costos con las tarifas oficiales de Amazon Bedrock y qué recaudos exige la Ley 1581 de protección de datos. En la Semana 15 profundizamos en el hardware de aceleración GPU, los formatos de cuantización para comprimir pesos en VRAM y los motores de inferencia como vLLM. Finalmente, en esta Semana 16 consolidamos los modelos deliberativos, las pruebas en SWE-bench con microVMs Firecracker y el estándar MCP para agentes autónomos. Cada semana construyó los cimientos de la siguiente.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Repaso OpenStack</div>
-<div class="s-title">OpenStack: Ciclo de Vida de Creación de una VM</div>
-<div class="s-sub">Secuencia coordinada: Keystone -> Nova API -> Glance -> Neutron -> Cinder -> Nova Compute</div>
+<div class="kicker">Repaso OpenStack</div>
+<h2>OpenStack: Ciclo de Vida de Creación de una VM</h2>
+<div class="rule"></div>
+<div class="sub">Secuencia coordinada: Keystone -> Nova API -> Glance -> Neutron -> Cinder -> Nova Compute</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="1060" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3012,20 +2996,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
-<span class="src">Fuente: OpenStack Architecture Guide (2024.2 Caracal)</span>
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
+<span class="src">Fuente: OpenStack Architecture Guide (2024.1 Caracal)</span>
 <span class="pg">3 / 15</span>
 </div>
 <aside class="guion">Recordemos el recorrido fundamental de una petición en OpenStack cuando un usuario solicita crear una máquina virtual. El proceso se inicia en el paso uno con Keystone, que valida las credenciales y genera un token criptográfico de tipo Fernet. En el paso dos, Nova API recibe el requerimiento, consulta la base de datos para verificar que el proyecto no exceda sus cuotas de núcleos y memoria RAM, y convoca a Nova Scheduler para seleccionar el hipervisor de cómputo más idóneo mediante filtros y ponderaciones. En el paso tres entran en acción Neutron y Cinder en paralelo: Neutron reserva una dirección IP fija y crea el puerto virtual, mientras Cinder aprovisiona el volumen de bloques persistente si la instancia lo requiere. En el paso cuatro, Glance provee la imagen base del sistema operativo en formato qcow2 o raw. Finalmente, en el paso cinco, el agente Nova Compute en el nodo físico instruye al hipervisor libvirt KVM, conecta la interfaz al conmutador virtual OVN e inicia el sistema operativo huésped, reportando el estado como ACTIVE.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Topología de Red</div>
-<div class="s-title">Redes de Proyecto (Overlay) vs Proveedor (Flat/VLAN)</div>
-<div class="s-sub">Aislamiento multi-inquilino con túneles Geneve frente a conectividad física directa</div>
+<div class="kicker">Topología de Red</div>
+<h2>Redes de Proyecto (Overlay) vs Proveedor (Flat/VLAN)</h2>
+<div class="rule"></div>
+<div class="sub">Aislamiento multi-inquilino con túneles Geneve frente a conectividad física directa</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3065,20 +3050,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: OpenStack Neutron Documentation — Networking Concepts (2024)</span>
 <span class="pg">4 / 15</span>
 </div>
 <aside class="guion">En la capa de conectividad de OpenStack, un arquitecto debe distinguir claramente entre redes de proyecto y redes de proveedor. A la izquierda analizamos las redes de proyecto o redes superpuestas: operan encapsulando tráfico de capa dos dentro de datagramas UDP utilizando protocolos como Geneve o VXLAN. Esto otorga libertad a cada departamento para elegir sus propios esquemas de direccionamiento IP sin generar colisiones con otros inquilinos del centro de datos. Para comunicarse con el exterior, estas redes requieren un enrutador virtual de Neutron y la asignación de IPs flotantes. A la derecha observamos las redes de proveedor: se conectan directamente a las interfaces de red física y switches mediante redes planas o etiquetado VLAN convencional. No sufren la sobrecarga de MTU que introduce el encapsulamiento, ofreciendo menor latencia y máximo rendimiento de transferencia. Por motivos de seguridad y control, estas redes son aprovisionadas exclusivamente por los administradores de infraestructura.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Resiliencia de Nube</div>
-<div class="s-title">Alta Disponibilidad: Galera, RabbitMQ y STONITH</div>
-<div class="s-sub">Tolerancia a fallos en el plano de control: Quórum de base de datos, colas espejo y esgrima de nodos</div>
+<div class="kicker">Resiliencia de Nube</div>
+<h2>Alta Disponibilidad: Galera, RabbitMQ y STONITH</h2>
+<div class="rule"></div>
+<div class="sub">Tolerancia a fallos en el plano de control: Quórum de base de datos, colas espejo y esgrima de nodos</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3136,20 +3122,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: OpenStack High Availability Guide (2024.2)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">La resiliencia en un centro de datos de producción exige eliminar puntos únicos de falla en el plano de control. En el panel izquierdo recordamos MariaDB Galera Cluster: proporciona replicación síncrona de base de datos multi-maestro. Para evitar el escenario de cerebro dividido o split-brain ante particiones de red, se requiere un quórum impar de al menos tres nodos de control; si uno se aísla, la minoría cesa operaciones protegiendo la consistencia de los datos. En el centro vemos RabbitMQ, el bus de mensajería que interconecta todos los servicios de OpenStack mediante llamadas RPC. En arquitecturas modernas se emplean Quorum Queues basadas en el consenso de Raft, asegurando que ningún mensaje de creación o borrado se pierda. En el panel derecho destacamos el gestor de clúster Pacemaker con STONITH, acrónimo de Shoot The Other Node In The Head. Si un nodo deja de responder pero continúa con acceso al almacenamiento compartido, el mecanismo de esgrima corta su suministro eléctrico por hardware IPMI antes de reasignar sus servicios, impidiendo la corrupción de discos compartidos.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Cómputo Especializado</div>
-<div class="s-title">Hardware de Aceleración: GPUs y Memoria HBM3</div>
-<div class="s-sub">Superar el cuello de botella de memoria: Ancho de banda extremo e interconexiones de baja latencia</div>
+<div class="kicker">Cómputo Especializado</div>
+<h2>Hardware de Aceleración: GPUs y Memoria HBM3</h2>
+<div class="rule"></div>
+<div class="sub">Superar el cuello de botella de memoria: Ancho de banda extremo e interconexiones de baja latencia</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -3189,20 +3176,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: NVIDIA H100 Tensor Core GPU Architecture Whitepaper (2024)</span>
 <span class="pg">6 / 15</span>
 </div>
 <aside class="guion">Al migrar hacia cargas de trabajo de inteligencia artificial, el procesador tradicional se convierte en un cuello de botella. A la izquierda evaluamos la arquitectura basada en CPU: aunque sus núcleos alcanzan frecuencias de reloj muy altas, su bus de memoria DDR5 entrega anchos de banda cercanos a los trescientos gigabytes por segundo. En la fase de decodificación autorregresiva de un modelo de lenguaje, donde cada token requiere leer todos los pesos de la memoria hacia los núcleos de cómputo, este bus se satura de inmediato. A la derecha vemos por qué el acelerador GPU moderno domina la inferencia. Dispositivos como la NVIDIA H100 integran memoria apilada HBM3 conectada mediante interposers de silicio, alcanzando un ancho de banda descomunal de tres punto treinta y cinco terabytes por segundo. Además, incorporan núcleos Tensor Core optimizados para matemática matricial y enlaces NVLink que transfieren hasta novecientos gigabytes por segundo entre tarjetas del mismo servidor, permitiendo dividir modelos de gran escala entre múltiples GPUs sin latencia.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Compresión de Modelos</div>
-<div class="s-title">Cuantización: AWQ vs GPTQ en Inferencia</div>
-<div class="s-sub">Reducción de memoria a 4 bits protegiendo los pesos salientes del modelo</div>
+<div class="kicker">Compresión de Modelos</div>
+<h2>Cuantización: AWQ vs GPTQ en Inferencia</h2>
+<div class="rule"></div>
+<div class="sub">Reducción de memoria a 4 bits protegiendo los pesos salientes del modelo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -3242,20 +3230,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: Lin et al. — AWQ: Activation-aware Weight Quantization (MLSys 2024)</span>
 <span class="pg">7 / 15</span>
 </div>
 <aside class="guion">Para ejecutar modelos de lenguaje de decenas de miles de millones de parámetros en servidores con hardware accesible, la cuantización post-entrenamiento es un pilar arquitectónico indispensable. A la izquierda repasamos GPTQ: un método que procesa el modelo capa por capa, cuantizando pesos a cuatro bits y ajustando los pesos adyacentes para minimizar el error cuadrático. Funciona con gran eficacia en cargas mono-usuario, pero puede mostrar cierta fragilidad en tareas complejas de razonamiento y programación si los datos de calibración no fueron representativos. A la derecha vemos AWQ, acrónimo de Activation-aware Weight Quantization. Los investigadores descubrieron que no todos los pesos son igualmente importantes: solo el uno por ciento de ellos corresponde a canales con activaciones de gran magnitud que sostienen el conocimiento del modelo. AWQ protege ese uno por ciento crítico escalando sus valores antes de redondear a cuatro bits. Como resultado, un modelo de 70B cabe en dos GPUs de 24 GB conservando prácticamente el cien por ciento de su precisión original.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Infraestructura de Inferencia</div>
-<div class="s-title">vLLM: PagedAttention y Batching Continuo</div>
-<div class="s-sub">Eliminación de la fragmentación de memoria y saturación óptima del cómputo GPU</div>
+<div class="kicker">Infraestructura de Inferencia</div>
+<h2>vLLM: PagedAttention y Batching Continuo</h2>
+<div class="rule"></div>
+<div class="sub">Eliminación de la fragmentación de memoria y saturación óptima del cómputo GPU</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#991B1B" stroke-width="2"/>
@@ -3295,20 +3284,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: Kwon et al. — Efficient Memory Management for LLM Serving with PagedAttention (SOSP 2023)</span>
 <span class="pg">8 / 15</span>
 </div>
 <aside class="guion">En la capa de software de inferencia, la innovación más trascendental ha sido el algoritmo PagedAttention implementado en vLLM. A la izquierda vemos la limitación clásica: los servidores convencionales asignaban memoria física contigua para almacenar las llaves y valores calculados del contexto del usuario. Como no sabían cuántos tokens emitiría el cliente, reservaban el tamaño máximo permitido por adelantado. Esto provocaba un desperdicio del sesenta al ochenta por ciento de la memoria de la tarjeta, limitando severamente la concurrencia. A la derecha observamos cómo vLLM adaptó el principio clásico de memoria virtual por páginas de los sistemas operativos al KV Cache. Divide la memoria en bloques no contiguos de dieciséis tokens que se asignan estrictamente a demanda, reduciendo la fragmentación a menos del cuatro por ciento. Junto con el batching continuo a nivel de token, vLLM multiplica por cuatro la capacidad de procesamiento simultáneo de peticiones en el mismo clúster de tarjetas gráficas.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">IA Serverless</div>
-<div class="s-title">Amazon Bedrock: Catálogo Multimodelo Serverless</div>
-<div class="s-sub">Inferencia elástica bajo demanda sin gestión de servidores, clusters ni GPUs físicas</div>
+<div class="kicker">IA Serverless</div>
+<h2>Amazon Bedrock: Catálogo Multimodelo Serverless</h2>
+<div class="rule"></div>
+<div class="sub">Inferencia elástica bajo demanda sin gestión de servidores, clusters ni GPUs físicas</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3338,12 +3328,12 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
     <text x="35" y="125" fill="#166534" font-size="16">$0.035 / $0.06 in | $0.14 / $0.24 out</text>
 
     <rect x="20" y="160" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
-    <text x="35" y="190" fill="#0F172A" font-size="16" font-weight="700">Claude 3.5 Haiku</text>
-    <text x="35" y="215" fill="#7C3AED" font-size="16">$0.80 entrada | $4.00 salida</text>
+    <text x="35" y="190" fill="#0F172A" font-size="16" font-weight="700">Claude Haiku 5.5</text>
+    <text x="35" y="215" fill="#7C3AED" font-size="16">$0.10 entrada | $0.50 salida</text>
 
     <rect x="20" y="250" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
-    <text x="35" y="280" fill="#0F172A" font-size="16" font-weight="700">Claude 3.5 Sonnet</text>
-    <text x="35" y="305" fill="#2563EB" font-size="16">$3.00 entrada | $15.00 salida</text>
+    <text x="35" y="280" fill="#0F172A" font-size="16" font-weight="700">Claude Sonnet 5.5</text>
+    <text x="35" y="305" fill="#2563EB" font-size="16">$2.00 entrada | $10.00 salida</text>
   </g>
 
   <g transform="translate(800, 60)">
@@ -3366,20 +3356,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Bedrock Documentation & Official Pricing (Consultado Noviembre 2026)</span>
 <span class="pg">9 / 15</span>
 </div>
-<aside class="guion">Frente a la complejidad operativa de mantener servidores propios, los servicios gestionados como Amazon Bedrock ofrecen una alternativa serverless de alta elasticidad. En el panel izquierdo repasamos su catálogo unificado: a través de la API Converse, los desarrolladores pueden invocar modelos de Anthropic, Meta o Amazon cambiando únicamente el identificador del modelo, permitiendo implementar enrutamiento automático de peticiones según costo o criticidad. En el panel central contrastamos las tarifas oficiales vigentes para la región US-East a noviembre de 2026 por millón de tokens: desde modelos de extrema economía como Amazon Nova Micro a tres punto cinco centavos de dólar la entrada, pasando por Claude 3.5 Haiku a ochenta centavos, hasta Claude 3.5 Sonnet a tres dólares la entrada y quince la salida. En el panel derecho destacamos las garantías de cumplimiento: los datos transmitidos jamás se utilizan para entrenar los modelos, el tráfico transita de forma privada por AWS PrivateLink y tecnologías como el caché de prompts ahorran un noventa por ciento en las lecturas de contexto recurrente.</aside>
+<aside class="guion">Frente a la complejidad operativa de mantener servidores propios, los servicios gestionados como Amazon Bedrock ofrecen una alternativa serverless de alta elasticidad. En el panel izquierdo repasamos su catálogo unificado: a través de la API Converse, los desarrolladores pueden invocar modelos de Anthropic, Meta o Amazon cambiando únicamente el identificador del modelo, permitiendo implementar enrutamiento automático de peticiones según costo o criticidad. En el panel central contrastamos las tarifas oficiales vigentes para la región US-East a noviembre de 2026 por millón de tokens: desde modelos de extrema economía como Amazon Nova Micro a tres punto cinco centavos de dólar la entrada, pasando por Claude Haiku 5.5 a diez centavos de entrada y cincuenta de salida, hasta Claude Sonnet 5.5 a dos dólares la entrada y diez la salida. En el panel derecho destacamos las garantías de cumplimiento: los datos transmitidos jamás se utilizan para entrenar los modelos, el tráfico transita de forma privada por AWS PrivateLink y tecnologías como el caché de prompts ahorran un noventa por ciento en las lecturas de contexto recurrente.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Evaluación Financiera</div>
-<div class="s-title">Evaluación de TCO: ¿Cuándo Auto-Alojar vs API?</div>
-<div class="s-sub">Análisis del punto de equilibrio entre costos fijos de infraestructura y costos variables por token</div>
+<div class="kicker">Evaluación Financiera</div>
+<h2>Evaluación de TCO: ¿Cuándo Auto-Alojar vs API?</h2>
+<div class="rule"></div>
+<div class="sub">Análisis del punto de equilibrio entre costos fijos de infraestructura y costos variables por token</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3419,20 +3410,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Cloud Economics — Total Cost of Ownership for LLMs (2024)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">Una de las decisiones más estratégicas para un arquitecto de soluciones radica en calcular el costo total de propiedad o TCO. A la izquierda evaluamos las APIs gestionadas como Amazon Bedrock: representan un modelo financiero cien por ciento operativo. Si la aplicación no recibe usuarios durante la noche o los fines de semana, el gasto en inferencia es exactamente cero. No se incurre en costos de mantenimiento de controladores gráficos, actualización de librerías ni monitorización de hardware. Este enfoque es óptimo para validar nuevos productos y atender cargas de trabajo con variabilidad o volúmenes moderados. A la derecha analizamos el auto-alojamiento de modelos abiertos en instancias con GPU propia o servidores locales en OpenStack. En este caso la empresa asume un costo fijo continuo por el alquiler o amortización del hardware, requiriendo además un equipo de ingeniería capaz de optimizar servidores como vLLM. Esta opción solo es financieramente viable cuando el volumen de tokens diario supera con creces el punto de equilibrio o cuando mandatos regulatorios estrictos impiden transferir información fuera de la red local.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Marco Normativo</div>
-<div class="s-title">Soberanía de Datos y Cumplimiento: Ley 1581</div>
-<div class="s-sub">Requisitos legales en Colombia para procesamiento de datos personales en la nube</div>
+<div class="kicker">Marco Normativo</div>
+<h2>Soberanía de Datos y Cumplimiento: Ley 1581</h2>
+<div class="rule"></div>
+<div class="sub">Requisitos legales en Colombia para procesamiento de datos personales en la nube</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3490,20 +3482,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: Superintendencia de Industria y Comercio (SIC) — Guías de Cumplimiento Ley 1581 (2024)</span>
 <span class="pg">11 / 15</span>
 </div>
 <aside class="guion">La arquitectura tecnológica no opera en un vacío legal; en Colombia, el tratamiento de datos personales está estrictamente regulado por la Ley Estatutaria 1581 de 2012 y vigilado por la Superintendencia de Industria y Comercio. En el panel uno vemos el principio de finalidad: cualquier dato transmitido a un modelo de lenguaje requiere la autorización previa del titular y solo puede utilizarse para el propósito específico pactado, quedando prohibido que los proveedores utilicen dicha información para re-entrenar modelos fundacionales. En el panel dos abordamos la transferencia internacional de datos: si los servidores de inferencia se localizan fuera de Colombia, el país de destino debe cumplir los estándares adecuados fijados por la SIC o suscribirse un acuerdo de procesamiento de datos con el proveedor. En el panel tres destacamos las salvaguardas técnicas: cifrado mandatorio en reposo y tránsito, enmascaramiento previo de información sensible mediante guardrails locales y registro inmutable en pistas de auditoría como AWS CloudTrail para respaldar cualquier inspección regulatoria.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Guía de Decisión</div>
-<div class="s-title">Matriz de Selección: ¿Qué Tecnología Elegir?</div>
-<div class="s-sub">Árbol de criterios según latencia, presupuesto, volumen de datos y criticidad de seguridad</div>
+<div class="kicker">Guía de Decisión</div>
+<h2>Matriz de Selección: ¿Qué Tecnología Elegir?</h2>
+<div class="rule"></div>
+<div class="sub">Árbol de criterios según latencia, presupuesto, volumen de datos y criticidad de seguridad</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="1060" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3557,20 +3550,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: Guía de Arquitectura de Sistemas de IA en la Nube (2026)</span>
 <span class="pg">12 / 15</span>
 </div>
 <aside class="guion">Esta matriz resume los criterios arquitectónicos clave para elegir la combinación de tecnologías adecuada según el problema. Si la organización gestiona registros altamente restringidos que por ley no pueden salir del país ni residir en nubes públicas, la solución canónica es OpenStack desplegado sobre servidores propios, garantizando soberanía total sobre el plano de control. Si la prioridad es acelerar el tiempo de lanzamiento al mercado sin invertir capital inicial en hardware, Amazon Bedrock ofrece la ruta más eficiente con pago por token y seguridad empresarial integrada. Si enfrentamos un volumen masivo y predecible de millones de peticiones continuas donde la factura de API resultaría inviable, la respuesta óptima es un clúster dedicado con vLLM y cuantización AWQ sobre instancias de cómputo especializadas. Por último, si el requerimiento exige que la inteligencia artificial ejecute tareas e interactúe con sistemas corporativos, debemos adoptar la arquitectura de agentes gobernados por el protocolo MCP y confinados en micro-sandboxes.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Perfil Profesional</div>
-<div class="s-title">El Arquitecto de Soluciones en la Era de la IA</div>
-<div class="s-sub">De simple aprovisionador de máquinas virtuales a diseñador de sistemas cognitivos confiables</div>
+<div class="kicker">Perfil Profesional</div>
+<h2>El Arquitecto de Soluciones en la Era de la IA</h2>
+<div class="rule"></div>
+<div class="sub">De simple aprovisionador de máquinas virtuales a diseñador de sistemas cognitivos confiables</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="320" height="340" rx="10" fill="#FFF" stroke="#64748B" stroke-width="2"/>
@@ -3628,20 +3622,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Certified Solutions Architect Professional Framework (2026)</span>
 <span class="pg">13 / 15</span>
 </div>
 <aside class="guion">El rol profesional del arquitecto de tecnología ha evolucionado de forma acelerada. A la izquierda recordamos el perfil tradicional: centrado en la configuración de redes virtuales, balanceadores de carga y dimensionamiento de almacenamiento en disco, tratando las aplicaciones como cajas negras que solo demandaban CPU y memoria. En el centro presentamos el nuevo perfil que ustedes ahora ostentan: arquitectos de nube e inteligencia artificial. Su labor consiste en modelar los flujos de inferencia, optimizar ventanas de contexto, reducir el tiempo hasta el primer token y garantizar la exactitud de los datos generados. En el panel derecho resumimos las tres competencias que los distinguen en la industria: la capacidad de diseñar guardrails robustos para mitigar ataques y errores, la maestría financiera para seleccionar la arquitectura más eficiente entre APIs y hardware dedicado, y el rigor ético y normativo para proteger la privacidad de los ciudadanos en cualquier implementación.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Checklist de Entrega</div>
-<div class="s-title">Checklist de Arquitectura: Listos para Producción</div>
-<div class="s-sub">Seis preguntas obligatorias antes de poner en marcha un sistema de IA en la nube</div>
+<div class="kicker">Checklist de Entrega</div>
+<h2>Checklist de Arquitectura: Listos para Producción</h2>
+<div class="rule"></div>
+<div class="sub">Seis preguntas obligatorias antes de poner en marcha un sistema de IA en la nube</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="90" rx="8" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3681,20 +3676,21 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Well-Architected Framework — Generative AI Lens (2024)</span>
 <span class="pg">14 / 15</span>
 </div>
 <aside class="guion">Antes de autorizar el despliegue de un sistema de inteligencia artificial en producción, todo arquitecto de soluciones debe someter el diseño a esta lista rigurosa de verificación de seis puntos. Primero: ¿está acotado el radio de impacto de las herramientas mediante permisos de solo lectura y esquemas tipados? Segundo: ¿se ejecuta el código generado en micro-sandboxes aislados con Firecracker sin conexión a internet externa? Tercero: ¿hemos implementado topes presupuestales y cortacircuitos de reintentos para prevenir consumos astronómicos en la nube? Cuarto: ¿están activos los guardrails que detectan inyecciones maliciosas y filtran información confidencial a la entrada y a la salida? Quinto: ¿el flujo de datos respeta plenamente la Ley 1581 con acuerdos de procesamiento suscritos con el proveedor? Y sexto: ¿tenemos un análisis financiero sólido de TCO que justifique la elección entre servicios gestionados y clústeres propios? Si las seis respuestas son afirmativas, el sistema se encuentra listo para operar con excelencia.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Cierre de Curso</div>
-<div class="s-title">Conclusión de la Unidad 3: El Futuro de la Nube</div>
-<div class="s-sub">Integración armónica entre infraestructura sólida, modelos deliberativos y gobernanza responsable</div>
+<div class="kicker">Cierre de Curso</div>
+<h2>Conclusión de la Unidad 3: El Futuro de la Nube</h2>
+<div class="rule"></div>
+<div class="sub">Integración armónica entre infraestructura sólida, modelos deliberativos y gobernanza responsable</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="1060" height="340" rx="10" fill="#FFF" stroke="#16A34A" stroke-width="2"/>
@@ -3734,18 +3730,20 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 16 · Parte 4 de 4</span>
 <span class="src">Fuente: Cierre de Cátedra de Arquitectura en la Nube — Universidad de la Costa (2026)</span>
 <span class="pg">15 / 15</span>
 </div>
 <aside class="guion">Llegamos al final de la Unidad 3 y de nuestra asignatura Arquitectura en la Nube. A lo largo de este camino formativo hemos integrado tres pilares inseparables representados en pantalla. El primer pilar: los fundamentos de infraestructura; ninguna solución de inteligencia artificial puede operar sin redes elásticas, planos de control tolerantes a fallos en OpenStack y hardware especializado con interconexiones ultrarrápidas. El segundo pilar: la eficiencia computacional y financiera; lograda mediante compresión inteligente de pesos con AWQ, gestión de memoria sin fragmentación con vLLM y consumo serverless elástico en Amazon Bedrock. Y el tercer pilar: la gobernanza y autonomía responsable; materializada en protocolos universales como MCP, aislamiento estricto por microVMs y apego incondicional a la ley y la ética en la protección de la privacidad ciudadana. Con estas herramientas técnicas y conceptuales, están plenamente preparados para liderar la transformación digital y diseñar la arquitectura de los sistemas inteligentes del mañana. ¡Muchos éxitos en su camino profesional!</aside>
-</section></div>
+</section>
+</div>
 <div id="nav">
-  <button onclick="prev()" title="Anterior (←)">&#x2039;</button>
-  <span id="counter">1 / 60</span>
-  <button onclick="next()" title="Siguiente (→)">&#x203A;</button>
+<button onclick="prev()">‹</button>
+<span id="counter">1 / 60</span>
+<button onclick="next()">›</button>
 </div>
 <script>
-  const slides = Array.from(document.querySelectorAll('.slide'));
+  const slides = document.querySelectorAll('.slide');
   const counter = document.getElementById('counter');
   const progress = document.getElementById('progress');
   let current = 0;
