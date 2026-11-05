@@ -4,122 +4,59 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Semana 15 — IA en la Nube II: GPU, Cuantización y Despliegue</title>
-<link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    width: 100%; height: 100%;
-    background: #0A192F;
-    color: #0F172A;
-    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-    overflow: hidden;
+  :root{
+    --vino:#A6192E;
+    --dorado:#D4AF37;
+    --texto:#2A2A2A;
+    --vino-tint:#f9eef0;
+    --dorado-tint:#fbf6e7;
   }
-  #stage {
-    width: 1280px; height: 720px;
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    transform-origin: center center;
-    background: #FFFFFF;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  }
-  .slide {
-    width: 1280px; height: 720px;
-    position: absolute; top: 0; left: 0;
-    display: none;
-    padding: 30px 48px 24px 48px;
-    background: #FFFFFF;
-  }
-  .slide.active { display: block; }
-  .topline-g { position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: #FFD100; }
-  .topline-v { position: absolute; top: 6px; left: 0; width: 100%; height: 4px; background: #A6192E; }
-  .s-head { margin-top: 4px; margin-bottom: 8px; }
-  .s-kicker {
-    font-size: 13px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 1.5px;
-    color: #A6192E; margin-bottom: 2px;
-  }
-  .s-title {
-    font-size: 26px; font-weight: 700;
-    color: #0B2341; line-height: 1.15;
-  }
-  .s-sub {
-    font-size: 14px; color: #475569;
-    margin-top: 2px; line-height: 1.3;
-  }
-  .dgm-container {
-    width: 1184px; height: 535px;
-    position: absolute; top: 125px; left: 48px;
-    display: flex; align-items: center; justify-content: center;
-    background: #FAFAFA;
-    border: 1px solid #E2E8F0;
-    border-radius: 8px;
-  }
-  svg.dgm { width: 100%; height: 100%; }
-  .s-foot {
-    position: absolute; bottom: 12px; left: 48px; right: 48px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 11px; color: #64748B;
-    border-top: 1px solid #E2E8F0; padding-top: 6px;
-  }
-  .s-foot .src { font-style: italic; }
-  .s-foot .pg { font-weight: 700; color: #0B2341; }
-  .cover {
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    text-align: center;
-    background: radial-gradient(circle at 50% 30%, #F8FAFC 0%, #EDF2F7 100%);
-    padding: 60px 80px;
-  }
-  .cover .cover-kicker {
-    font-size: 16px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 2px;
-    color: #A6192E; margin-bottom: 12px;
-  }
-  .cover h1 {
-    font-size: 42px; font-weight: 700;
-    color: #0B2341; line-height: 1.15;
-    margin-bottom: 12px; max-width: 1000px;
-  }
-  .cover h3 {
-    font-size: 20px; font-weight: 400;
-    color: #475569; margin-bottom: 24px;
-    max-width: 900px;
-  }
-  .cover .bar { width: 120px; height: 4px; background: #FFD100; margin-bottom: 24px; }
-  .cover .author { font-size: 14px; color: #1E293B; line-height: 1.5; }
-  .cover .cover-sub { font-size: 13px; color: #64748B; margin-top: 8px; }
-  .logo-main {
-    position: absolute; top: 24px; right: 48px;
-    height: 42px; width: auto; object-fit: contain;
-  }
-  aside.guion { display: none; }
-  #progress {
-    position: absolute; bottom: 0; left: 0;
-    height: 3px; background: #A6192E; width: 0%;
-    transition: width 0.2s ease; z-index: 99;
-  }
-  #nav {
-    position: fixed; bottom: 16px; right: 16px;
-    display: flex; gap: 8px; align-items: center;
-    background: rgba(11,35,65,0.85); color: #FFF;
-    padding: 6px 12px; border-radius: 20px;
-    font-size: 13px; z-index: 1000;
-    backdrop-filter: blur(4px);
-  }
-  #nav button {
-    background: transparent; border: none;
-    color: #FFF; font-size: 16px; cursor: pointer;
-    padding: 0 4px; line-height: 1;
-  }
-  #nav button:hover { color: #FFD100; }
-  @media print {
-    html, body { height: auto !important; overflow: visible !important; background: #fff !important; }
-    #stage { width: 1280px !important; height: auto !important; overflow: visible !important; transform: none !important; box-shadow: none !important; position: static !important; }
-    .slide { display: block !important; position: relative !important; width: 1280px !important; height: 720px !important; page-break-after: always !important; page-break-inside: avoid !important; }
-    #nav, #progress { display: none !important; }
-  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#fff;font-family:"Segoe UI",Arial,Helvetica,sans-serif;color:var(--texto);}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+  #stage{width:1280px;height:720px;position:relative;flex:0 0 auto;transform-origin:center center;box-shadow:0 0 0 1px #ddd,0 8px 30px rgba(0,0,0,.12);background:#fff;}
+  .slide{position:absolute;inset:0;background:#fff;display:none;padding:36px 50px 54px;}
+  .slide.active{display:block;}
+
+  .s-head{position:relative;margin-bottom:10px;padding-right:110px;}
+  .s-head .kicker{font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--dorado);margin-bottom:2px;}
+  .s-head h2{font-size:27px;font-weight:700;color:var(--vino);line-height:1.14;}
+  .s-head .rule{width:110px;height:4px;border-radius:3px;background:linear-gradient(90deg,var(--vino),var(--dorado));margin-top:7px;}
+  .s-head .sub{font-size:14.5px;color:#555;line-height:1.35;margin-top:6px;}
+  .logo-corner{position:absolute;top:0;right:0;height:46px;}
+  
+  .s-body{margin-top:12px;height:490px;position:relative;}
+  svg.dgm{display:block;width:100%;height:100%;}
+
+  .s-foot{position:absolute;left:50px;right:50px;bottom:12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#6b6b6b;border-top:2px solid var(--dorado);padding-top:6px;gap:14px;}
+  .s-foot .src{font-style:italic;text-align:center;flex:1;}
+  .s-foot .pg{font-weight:700;color:var(--vino);}
+
+  .cover{display:none;text-align:center;padding-top:44px;}
+  .cover.active{display:block;}
+  .cover .topline-g{position:absolute;top:0;left:0;right:0;height:4px;background:var(--dorado);}
+  .cover .topline-v{position:absolute;top:4px;left:0;right:0;height:7px;background:var(--vino);}
+  .cover img.logo-main{height:112px;margin-bottom:18px;}
+  .cover .cover-kicker{font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dorado);margin-bottom:10px;}
+  .cover h1{font-size:40px;color:var(--vino);font-weight:700;letter-spacing:.3px;line-height:1.16;max-width:1050px;margin:0 auto;}
+  .cover h3{font-size:19px;font-weight:400;color:var(--texto);margin-top:12px;}
+  .cover .bar{width:240px;height:6px;border-radius:3px;margin:20px auto;background:var(--dorado);}
+  .cover .author{font-size:16px;line-height:1.55;}
+  .cover .author b{color:var(--vino);}
+  .cover .cover-sub{margin-top:18px;font-size:14.5px;color:#555;max-width:900px;margin-left:auto;margin-right:auto;line-height:1.45;}
+
+  #nav{position:fixed;bottom:14px;right:18px;display:flex;gap:8px;align-items:center;font-family:inherit;z-index:10;}
+  #nav button{width:38px;height:38px;border:none;border-radius:50%;background:var(--vino);color:#fff;font-size:18px;cursor:pointer;}
+  #nav button:hover{background:#7d1223;}
+  #nav #counter{font-size:14px;color:var(--texto);min-width:56px;text-align:center;}
+  #progress{position:fixed;top:0;left:0;height:4px;background:var(--dorado);width:0;z-index:10;transition:width .25s;}
+
+  .guion{display:none!important;}
+
+  @media print{
+    body{display:block;}
     #stage{transform:none!important;box-shadow:none;}
     .slide{display:block!important;position:relative;page-break-after:always;}
     #nav,#progress{display:none;}
@@ -145,14 +82,14 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 <aside class="guion">Bienvenidos a la décimo quinta semana de Arquitectura en la Nube. Hoy profundizamos en los componentes de hardware que hacen viable la inteligencia artificial moderna. En esta primera parte examinaremos la microarquitectura de GPUs frente a CPUs tradicionales, la jerarquía de memoria de alto ancho de banda HBM, los núcleos Tensor Cores, las redes de interconexión NVLink, el particionamiento con MIG y el dimensionamiento de instancias en centros de datos y nube privada. Comencemos.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Arquitectura de Cómputo</div>
-<div class="s-title">CPU frente a GPU en Cómputo de IA</div>
-<div class="s-sub">De núcleos complejos optimizados para latencia secuencial a miles de núcleos paralelos SIMT</div>
+<div class="kicker">Arquitectura de Cómputo</div>
+<h2>CPU frente a GPU en Cómputo de IA</h2>
+<div class="rule"></div>
+<div class="sub">De núcleos complejos optimizados para latencia secuencial a miles de núcleos paralelos SIMT</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="350" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -192,20 +129,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: NVIDIA Developer — GPU Architecture Overview (2025)</span>
 <span class="pg">2 / 15</span>
 </div>
 <aside class="guion">Comparamos en este diagrama las dos filosofías fundamentales de procesamiento en centros de datos. A la izquierda, la unidad central de procesamiento o CPU destina la mayor parte de su superficie de silicio a circuitos de control de flujo, lógica de predicción de bifurcaciones y memorias caché de baja latencia. Esto la hace insuperable para ejecutar sistemas operativos y algoritmos secuenciales donde cada instrucción depende del resultado anterior. En contraste, a la derecha, la unidad de procesamiento gráfico o GPU sacrifica la complejidad individual de cada núcleo para integrar miles de unidades aritméticas bajo el modelo de ejecución SIMT, una sola instrucción sobre múltiples datos. Como las operaciones de redes neuronales consisten en billones de multiplicaciones de matrices independientes, la GPU logra un rendimiento órdenes de magnitud superior al procesar millones de cálculos en paralelo de forma simultánea.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Ancho de Banda</div>
-<div class="s-title">Jerarquía de Memoria en Aceleradores de IA</div>
-<div class="s-sub">El verdadero cuello de botella en inferencia es transferir datos de memoria al silicio</div>
+<div class="kicker">Ancho de Banda</div>
+<h2>Jerarquía de Memoria en Aceleradores de IA</h2>
+<div class="rule"></div>
+<div class="sub">El verdadero cuello de botella en inferencia es transferir datos de memoria al silicio</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr15" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -271,20 +209,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: JEDEC — HBM3 Standard JESD238A & Micron Technology (2025)</span>
 <span class="pg">3 / 15</span>
 </div>
 <aside class="guion">En esta diapositiva analizamos la jerarquía de memoria en los servidores acelerados. En inferencia de modelos de lenguaje grandes, el cuello de botella fundamental no es la velocidad de cálculo matemático, sino la tasa a la que los parámetros pueden trasladarse desde los módulos de almacenamiento hacia los núcleos lógicos. A la izquierda observamos la memoria RAM del servidor host que ofrece cientos de gigabytes pero a velocidades inferiores a cien gigabytes por segundo a través del enlace PCIe. En el segundo bloque vemos la memoria GDDR6, común en tarjetas como la NVIDIA A10G, que ronda los seiscientos gigabytes por segundo. En el tercer bloque se sitúa la memoria de alto ancho de banda o HBM3, ensamblada verticalmente sobre el mismo encapsulado del silicio mediante un interposer de silicio, alcanzando más de tres terabytes por segundo. Finalmente, en el extremo derecho se encuentra la memoria SRAM integrada en el chip con rendimientos superiores a diez terabytes por segundo, pero con capacidades muy limitadas.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Unidades de Cómputo</div>
-<div class="s-title">Tensor Cores y Formatos Numéricos</div>
-<div class="s-sub">De precisión simple FP32 a formatos especializados FP16, BF16 y FP8 para maximizar rendimiento</div>
+<div class="kicker">Unidades de Cómputo</div>
+<h2>Tensor Cores y Formatos Numéricos</h2>
+<div class="rule"></div>
+<div class="sub">De precisión simple FP32 a formatos especializados FP16, BF16 y FP8 para maximizar rendimiento</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -326,20 +265,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: IEEE Micro — NVIDIA Hopper Tensor Core Architecture (2024)</span>
 <span class="pg">4 / 15</span>
 </div>
 <aside class="guion">En esta diapositiva desglosamos los formatos numéricos y las unidades de cómputo matricial especializadas. A la izquierda observamos la transición histórica desde el estándar de coma flotante de precisión simple FP32, que ocupa cuatro bytes por parámetro, hacia formatos compactos de dieciséis bits como FP16 y Bfloat16. Bfloat16 mantiene el mismo rango dinámico de exponentes que FP32, lo que evita desbordamientos numéricos durante el entrenamiento y la inferencia. Las arquitecturas modernas han introducido soporte nativo para FP8, logrando duplicar el rendimiento por vatio frente a FP16 al requerir solo un byte por parámetro. A la derecha mostramos el mecanismo del Tensor Core, una unidad especializada que ejecuta la multiplicación acumulada de matrices pequeñas en un solo ciclo de reloj. Esto permite multiplicar matrices de dimensiones fijas con una velocidad hasta dieciséis veces mayor que las unidades aritméticas tradicionales de coma flotante.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Topología de Servidor</div>
-<div class="s-title">Interconexiones Multi-GPU: NVLink frente a PCIe</div>
-<div class="s-sub">El paralelismo de tensores requiere comunicación inter-GPU sin pasar por el bus del procesador</div>
+<div class="kicker">Topología de Servidor</div>
+<h2>Interconexiones Multi-GPU: NVLink frente a PCIe</h2>
+<div class="rule"></div>
+<div class="sub">El paralelismo de tensores requiere comunicación inter-GPU sin pasar por el bus del procesador</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr16" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -385,20 +325,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: NVIDIA — NVLink and NVSwitch Architecture Specification (2024)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">Cuando un modelo de lenguaje excede la capacidad de memoria de una sola tarjeta GPU, es imperativo distribuir sus capas o cabezas de atención a través de múltiples procesadores. En este punto, la tecnología de interconexión se convierte en el componente arquitectónico determinante. A la izquierda observamos la conexión por bus PCIe Gen 5, que ofrece un ancho de banda teórico de sesenta y cuatro gigabytes por segundo. Si intentamos sincronizar capas intermedias de un modelo grande a través de PCIe, la latencia de transferencia bloquea los núcleos de cómputo, degradando drásticamente el rendimiento general. A la derecha encontramos la tecnología NVLink, que proporciona hasta novecientos gigabytes por segundo por GPU en tarjetas Hopper H100 y hasta uno punto ocho terabytes en Blackwell. Mediante conmutadores físicos NVSwitch integrados en el chasis del servidor, las ocho GPUs de un clúster pueden acceder a la memoria de las demás como si fuera un espacio de memoria unificado, haciendo posible el paralelismo tensorial.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Aceleradores Específicos</div>
-<div class="s-title">Silicio Propietario de Nube: AWS Inferentia y Trainium</div>
-<div class="s-sub">Alternativas a GPUs comerciales optimizadas para costo y rendimiento en cargas de trabajo de IA</div>
+<div class="kicker">Aceleradores Específicos</div>
+<h2>Silicio Propietario de Nube: AWS Inferentia y Trainium</h2>
+<div class="rule"></div>
+<div class="sub">Alternativas a GPUs comerciales optimizadas para costo y rendimiento en cargas de trabajo de IA</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr17" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -463,20 +404,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: AWS Documentation — Annapurna Labs NeuronCore Overview (2025)</span>
 <span class="pg">6 / 15</span>
 </div>
 <aside class="guion">Además de las tarjetas gráficas comerciales de propósito general, los principales proveedores de nube han desarrollado aceleradores dedicados para optimizar el retorno de inversión en inteligencia artificial. En esta diapositiva examinamos la familia de silicio desarrollada por Annapurna Labs dentro de Amazon Web Services. A la izquierda presentamos AWS Inferentia 2, disponible en instancias inf2, un acelerador diseñado exclusivamente para inferencia de modelos grandes que incluye memoria HBM integrada y ofrece una reducción de costos sustancial frente a instancias basadas en GPUs estándar. En el centro encontramos AWS Trainium, diseñado para el preentrenamiento y afinamiento a escala masiva con redes de anillo directo denominadas NeuronLink. A la derecha describimos el SDK Neuron, la capa de software que compila los grafos de PyTorch para convertirlos en instrucciones optimizadas para los núcleos NeuronCore. Como arquitectos debemos evaluar este silicio cuando los volúmenes de inferencia son estables y se busca reducir costos fijos de cómputo.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Catálogo de Cómputo</div>
-<div class="s-title">Familias de Instancias GPU en AWS EC2</div>
-<div class="s-sub">Selección del tamaño de máquina adecuado según el tamaño del modelo y el volumen de tráfico</div>
+<div class="kicker">Catálogo de Cómputo</div>
+<h2>Familias de Instancias GPU en AWS EC2</h2>
+<div class="rule"></div>
+<div class="sub">Selección del tamaño de máquina adecuado según el tamaño del modelo y el volumen de tráfico</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 50)">
     <rect x="0" y="0" width="500" height="175" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -516,20 +458,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: AWS Documentation — Amazon EC2 Accelerated Computing Instances (2025)</span>
 <span class="pg">7 / 15</span>
 </div>
 <aside class="guion">En esta diapositiva presentamos el mapa de selección de instancias aceleradas en Amazon Web Services. Arriba a la izquierda se ubica la familia G5, basada en tarjetas NVIDIA A10G de veinticuatro gigabytes. Es la opción más popular y costo-eficiente para servir modelos ligeros como Llama ocho mil millones de parámetros cuantizados, con un costo que ronda un dólar por hora. Arriba a la derecha encontramos la familia G6, construida sobre chips NVIDIA L4 con microarquitectura Ada Lovelace, excelente para cargas combinadas de visión e inferencia de texto con soporte para precisión numérica FP8. En la fila inferior se sitúan las familias de clúster de gama alta. A la izquierda, la P4de con ocho tarjetas A100 de ochenta gigabytes y memoria HBM2e, diseñada para modelos densos de setenta mil millones de parámetros. Finalmente, a la derecha, la familia P5 equipada con procesadores H100 Hopper y redes de tres mil doscientos gigabits por segundo mediante EFA versión dos, reservada para cargas de inferencia distribuida de gran escala.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Conectividad de Clúster</div>
-<div class="s-title">Redes de Ultra-Baja Latencia: EFA y RoCEv2</div>
-<div class="s-sub">Transferencia directa de memoria entre servidores eliminando la sobrecarga del kernel del SO</div>
+<div class="kicker">Conectividad de Clúster</div>
+<h2>Redes de Ultra-Baja Latencia: EFA y RoCEv2</h2>
+<div class="rule"></div>
+<div class="sub">Transferencia directa de memoria entre servidores eliminando la sobrecarga del kernel del SO</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr18" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -575,20 +518,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: AWS Whitepaper — High Performance Computing on AWS & EFA Architecture (2024)</span>
 <span class="pg">8 / 15</span>
 </div>
 <aside class="guion">Cuando escalamos la inferencia o el entrenamiento a través de múltiples servidores físicos, la red de interconexión se convierte en el cuello de botella crítico. A la izquierda analizamos la pila TCP convencional del sistema operativo. En este modelo tradicional, cada paquete debe copiarse desde la memoria de la tarjeta de video hacia la memoria principal del servidor, luego al espacio de memoria del núcleo del sistema operativo y finalmente a la tarjeta de red, generando múltiples interrupciones y variabilidad en la latencia. A la derecha examinamos la tecnología Elastic Fabric Adapter o EFA de AWS, que implementa acceso directo a memoria remota o RDMA con GPUDirect. Mediante este mecanismo, la tarjeta de red lee directamente los tensores desde la memoria VRAM de la GPU y los transfiere a través de la infraestructura física hacia la memoria de la GPU remota sin intervención de la CPU, reduciendo la latencia de red a unos pocos microsegundos.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Aislamiento de Cómputo</div>
-<div class="s-title">Particionamiento de GPU: NVIDIA Multi-Instance GPU (MIG)</div>
-<div class="s-sub">División por hardware de una GPU de 80GB en hasta 7 instancias independientes con SLAs garantizados</div>
+<div class="kicker">Aislamiento de Cómputo</div>
+<h2>Particionamiento de GPU: NVIDIA Multi-Instance GPU (MIG)</h2>
+<div class="rule"></div>
+<div class="sub">División por hardware de una GPU de 80GB en hasta 7 instancias independientes con SLAs garantizados</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr19" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -638,20 +582,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: NVIDIA — Multi-Instance GPU User Guide (2025)</span>
 <span class="pg">9 / 15</span>
 </div>
 <aside class="guion">En muchas arquitecturas corporativas, reservar una tarjeta gráfica completa de ochenta gigabytes para un único servicio de baja demanda resulta económicamente ineficiente. En esta diapositiva analizamos la tecnología NVIDIA Multi-Instance GPU o MIG, disponible en procesadores A100 y H100. A diferencia de las soluciones de particionamiento por software como los perfiles vGPU convencionales que comparten recursos mediante multiplexación por tiempo, MIG divide físicamente la tarjeta a nivel de hardware. Cada perfil recibe una asignación exclusiva de multiprocesadores de cómputo, una fracción dedicada de la memoria HBM con su propio controlador y un canal de comunicación independiente. Esto garantiza un aislamiento estricto contra el problema del vecino ruidoso. Si un contenedor experimenta un consumo masivo o un fallo que provoca un desbordamiento de memoria, las otras instancias MIG en la misma tarjeta continúan operando sin ninguna degradación en su tiempo de respuesta ni en su disponibilidad.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Infraestructura Física</div>
-<div class="s-title">Eficiencia Energética y Refrigeración en Centros de Datos</div>
-<div class="s-sub">Densidades de más de 40 kW por rack exigen transición de aire forzado a refrigeración líquida directa</div>
+<div class="kicker">Infraestructura Física</div>
+<h2>Eficiencia Energética y Refrigeración en Centros de Datos</h2>
+<div class="rule"></div>
+<div class="sub">Densidades de más de 40 kW por rack exigen transición de aire forzado a refrigeración líquida directa</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -691,20 +636,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: Uptime Institute — Data Center Cooling & AI Power Density Trends (2025)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">El despliegue de infraestructura de inteligencia artificial ha transformado las exigencias físicas de los centros de datos. A la izquierda observamos las limitaciones de la refrigeración clásica por aire. Los centros de cómputo tradicionales fueron diseñados para disipar entre diez y quince kilovatios por bastidor o rack. Sin embargo, un solo servidor moderno equipado con ocho tarjetas aceleradoras H100 consume más de diez kilovatios de potencia eléctrica. Instalar cuatro de estos servidores en un mismo gabinete generaría una densidad térmica inmanejable para ventiladores convencionales, provocando la reducción automática de frecuencia por sobrecalentamiento. A la derecha mostramos la solución adoptada por las regiones de nube pública modernas: la refrigeración líquida directa al chip. Mediante placas de cobre con microcanales internos por donde circula agua desionizada, el calor se extrae de forma continua, permitiendo densidades superiores a los cuarenta kilovatios por rack y logrando un índice de efectividad energética PUE notablemente más bajo.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Nube Privada</div>
-<div class="s-title">GPU Passthrough en Entornos OpenStack</div>
-<div class="s-sub">Asignación directa de dispositivos PCI desde el hipervisor KVM a máquinas virtuales de cómputo</div>
+<div class="kicker">Nube Privada</div>
+<h2>GPU Passthrough en Entornos OpenStack</h2>
+<div class="rule"></div>
+<div class="sub">Asignación directa de dispositivos PCI desde el hipervisor KVM a máquinas virtuales de cómputo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr20" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -771,20 +717,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: OpenStack Docs — PCI Passthrough and SR-IOV Configuration (2025)</span>
 <span class="pg">11 / 15</span>
 </div>
 <aside class="guion">Para organizaciones que operan su propia nube privada con OpenStack, entregar aceleración por GPU a las cargas de trabajo de los proyectos requiere configurar el mecanismo de PCI Passthrough. En el bloque izquierdo vemos la preparación del nodo de cómputo físico. El hipervisor KVM utiliza el controlador VFIO para desacoplar la tarjeta gráfica del sistema operativo anfitrión, aislándola en su propio grupo IOMMU para evitar accesos indebidos a memoria. En el bloque central interviene el componente Nova Scheduler, que analiza las especificaciones del flavor solicitado mediante la directiva de alias PCI, localizando un hipervisor que disponga de la tarjeta requerida. En el bloque derecho, la máquina virtual invitada recibe el control directo del bus PCI. Desde la perspectiva del sistema operativo de la máquina virtual, la tarjeta se comporta exactamente igual que en un servidor físico dedicado, lo que permite instalar el controlador oficial de NVIDIA, el toolkit de CUDA y motores como vLLM con un rendimiento casi idéntico al metal pelado.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Métricas de Rendimiento</div>
-<div class="s-title">Rendimiento Real frente a Teórico: MFU y Throughput</div>
-<div class="s-sub">Diferencia entre FLOPS pico en hoja técnica y la utilización efectiva real del silicio en inferencia</div>
+<div class="kicker">Métricas de Rendimiento</div>
+<h2>Rendimiento Real frente a Teórico: MFU y Throughput</h2>
+<div class="rule"></div>
+<div class="sub">Diferencia entre FLOPS pico en hoja técnica y la utilización efectiva real del silicio en inferencia</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -824,20 +771,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: Chowdhery et al. — PaLM: Scaling Language Modeling with Pathways (MFU Definition) (2024)</span>
 <span class="pg">12 / 15</span>
 </div>
 <aside class="guion">Al diseñar infraestructura para inteligencia artificial, un error habitual consiste en calcular la capacidad del sistema multiplicando los teraflops teóricos prometidos en el manual del fabricante por el número de tarjetas. A la izquierda presentamos la métrica fundamental de eficiencia: la utilización de FLOPS del modelo o MFU. Esta métrica mide el cociente entre las operaciones de coma flotante estrictamente requeridas para evaluar el modelo y la capacidad pico teórica del silicio. En sistemas de inferencia en producción, un MFU entre el treinta y el cincuenta y cinco por ciento se considera un resultado excelente. A la derecha explicamos por qué se produce esta discrepancia. Durante la fase de decodificación autorregresiva generamos los tokens uno a uno; por cada token emitido, el acelerador debe transferir la totalidad de los parámetros del modelo desde la memoria HBM hasta los núcleos de cómputo. En esa fase, los procesadores pasan la mayor parte del ciclo esperando la llegada de datos de memoria, lo que limita la saturación matemática del silicio.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Operaciones y Telemetría</div>
-<div class="s-title">Monitorización de GPUs con NVIDIA DCGM</div>
-<div class="s-sub">Métricas esenciales para detectar saturación de memoria, sobrecalentamiento y estrangulamiento térmico</div>
+<div class="kicker">Operaciones y Telemetría</div>
+<h2>Monitorización de GPUs con NVIDIA DCGM</h2>
+<div class="rule"></div>
+<div class="sub">Métricas esenciales para detectar saturación de memoria, sobrecalentamiento y estrangulamiento térmico</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr21" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -903,20 +851,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: NVIDIA — Data Center GPU Manager (DCGM) User Guide (2025)</span>
 <span class="pg">13 / 15</span>
 </div>
 <aside class="guion">Para operar clústeres de servidores acelerados con alta confiabilidad, es obligatorio implementar telemetría especializada a bajo nivel. En este diagrama recorremos la arquitectura de observabilidad con NVIDIA Data Center GPU Manager o DCGM. A la izquierda, la tarjeta recopila continuamente métricas desde sus sensores térmicos, controladores de potencia y registros de memoria, alertando sobre errores XID que señalan fallos físicos. En el segundo paso, el servicio DCGM Exporter, desplegado típicamente como DaemonSet en Kubernetes, lee estos contadores a través de la interfaz del controlador y los publica en formato Prometheus. En el tercer bloque, el servidor Prometheus realiza el raspado periódico y evalúa reglas de alerta sobre consumo excesivo de memoria o reducción de frecuencia de reloj por temperatura. Finalmente, a la derecha, estas métricas alimentan paneles de control en Grafana y activadores de autoescalado horizontal para garantizar que ningún servidor alcance saturación crítica sin activar alertas operativas.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Caso Ilustrativo de Arquitectura</div>
-<div class="s-title">Caso Ilustrativo: Selección de Hardware para Inferencia</div>
-<div class="s-sub">Caso ilustrativo de arquitectura, no es una empresa real — Matriz de decisión por tamaño de modelo</div>
+<div class="kicker">Caso Ilustrativo de Arquitectura</div>
+<h2>Caso Ilustrativo: Selección de Hardware para Inferencia</h2>
+<div class="rule"></div>
+<div class="sub">Caso ilustrativo de arquitectura, no es una empresa real — Matriz de decisión por tamaño de modelo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -956,20 +905,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: AWS Architecture Center — Generative AI Sizing Reference Pattern (2025)</span>
 <span class="pg">14 / 15</span>
 </div>
 <aside class="guion">Para consolidar los principios examinados, presentamos este caso ilustrativo de arquitectura de hardware. Aclaramos que se trata de un escenario metodológico de diseño y no de una empresa real. A la izquierda evaluamos el requerimiento para desplegar un modelo de ocho mil millones de parámetros. En precisión FP16, los pesos ocupan aproximadamente dieciséis gigabytes; agregando la memoria para la caché de claves y valores con concurrencia moderada, el presupuesto total ronda los veinte gigabytes de VRAM. Una sola tarjeta gráfica NVIDIA A10G de veinticuatro gigabytes en una máquina virtual g5.xlarge satisface la necesidad holgadamente, sin requerir paralelismo ni redes complejas. A la derecha enfrentamos el caso de un modelo de setenta mil millones de parámetros. En FP16 los pesos consumen ciento cuarenta gigabytes, superando la capacidad de cualquier tarjeta individual. La solución exige desplegar un clúster de al menos cuatro tarjetas A100 de ochenta gigabytes interconectadas por enlaces NVLink directos para permitir la división tensorial de las matrices.</aside>
 </section>
 <section class="slide" data-parte="1">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Síntesis Conceptual</div>
-<div class="s-title">Principios Clave de Cómputo Acelerado</div>
-<div class="s-sub">Cuatro reglas fundamentales para el diseño de infraestructura física y en la nube para IA</div>
+<div class="kicker">Síntesis Conceptual</div>
+<h2>Principios Clave de Cómputo Acelerado</h2>
+<div class="rule"></div>
+<div class="sub">Cuatro reglas fundamentales para el diseño de infraestructura física y en la nube para IA</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 4 Pilares -->
   <g transform="translate(60, 60)">
@@ -1030,6 +980,7 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
 <span class="src">Fuente: Síntesis de Arquitectura en la Nube — Universidad de la Costa (2026)</span>
 <span class="pg">15 / 15</span>
 </div>
@@ -1051,14 +1002,14 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 <aside class="guion">Bienvenidos a la segunda parte de la sesión sobre infraestructura de inteligencia artificial. Una vez comprendidas las limitaciones físicas de la memoria de video y del ancho de banda en los aceleradores, examinaremos las técnicas algorítmicas de compresión que permiten servir modelos masivos en hardware más económico. Analizaremos el presupuesto de memoria VRAM, los fundamentos de la cuantización numérica, los métodos AWQ y GPTQ, el ecosistema GGUF, la atención agrupada GQA y la optimización de grafos con compiladores de inferencia. Continuemos.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Capacidad de Memoria</div>
-<div class="s-title">Presupuesto de Memoria VRAM en Inferencia</div>
-<div class="s-sub">Desglose estricto de componentes para evitar errores de falta de memoria (Out-Of-Memory)</div>
+<div class="kicker">Capacidad de Memoria</div>
+<h2>Presupuesto de Memoria VRAM en Inferencia</h2>
+<div class="rule"></div>
+<div class="sub">Desglose estricto de componentes para evitar errores de falta de memoria (Out-Of-Memory)</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 4 Bloques de Memoria VRAM -->
   <g transform="translate(60, 60)">
@@ -1127,20 +1078,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: HuggingFace Documentation — Model Memory Estimation Guide (2025)</span>
 <span class="pg">2 / 15</span>
 </div>
 <aside class="guion">Para dimensionar correctamente un servidor de inferencia sin provocar errores de memoria insuficiente, debemos descomponer la memoria de video en cuatro bloques conceptuales. En el primer bloque observamos los pesos del modelo, que constituyen un costo de memoria fijo e inmutable una vez arrancado el servicio; un modelo de ocho mil millones de parámetros en formato FP16 ocupa exactamente dieciséis gigabytes. En el segundo bloque se encuentra la memoria de la caché de claves y valores o KV-Cache, cuyo tamaño es dinámico y escala linealmente con el número de usuarios concurrentes y la longitud de sus conversaciones. En el tercer bloque situamos los tensores de activación transitorios generados durante el procesamiento del prompt en la fase de prefill. Finalmente, en el cuarto bloque debemos reservar entre uno y dos gigabytes para las estructuras internas del controlador de CUDA y las librerías de ejecución. Como regla de oro, la memoria combinada nunca debe sobrepasar el noventa por ciento de la VRAM total.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Compresión Numérica</div>
-<div class="s-title">Fundamentos de Cuantización: De FP16 a Enteros</div>
-<div class="s-sub">Mapeo de valores continuos de coma flotante a una cuadrícula discreta de menor resolución</div>
+<div class="kicker">Compresión Numérica</div>
+<h2>Fundamentos de Cuantización: De FP16 a Enteros</h2>
+<div class="rule"></div>
+<div class="sub">Mapeo de valores continuos de coma flotante a una cuadrícula discreta de menor resolución</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr22" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1186,20 +1138,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Gholami et al. — A Survey of Quantization Methods for Efficient Neural Network Inference (2024)</span>
 <span class="pg">3 / 15</span>
 </div>
 <aside class="guion">La cuantización es la técnica primordial para reducir los requisitos de memoria y cómputo de las redes neuronales sin necesidad de reentrenarlas desde cero. A la izquierda representamos el formato de coma flotante FP16, donde cada parámetro se expresa con dieciséis bits, permitiendo más de sesenta y cinco mil representaciones numéricas distintas. Si bien ofrece alta precisión analítica, genera una carga masiva sobre el ancho de banda de memoria. A la derecha mostramos el mecanismo de cuantización uniforme. Los valores continuos se proyectan sobre una cuadrícula discreta definida por un factor de escala y un valor de desplazamiento o punto cero. Al cuantizar a enteros de ocho bits, disponemos de doscientos cincuenta y seis valores posibles reduciendo la memoria a la mitad; si cuantizamos a cuatro bits, cada peso ocupa únicamente medio byte, comprimiendo el modelo original en un setenta y cinco por ciento y permitiendo ejecutar modelos de setenta mil millones de parámetros en una única máquina virtual.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Estrategias de Compresión</div>
-<div class="s-title">Post-Training Quantization (PTQ) vs QAT</div>
-<div class="s-sub">Compresión directa de modelos preentrenados frente a entrenamiento consciente de la cuantización</div>
+<div class="kicker">Estrategias de Compresión</div>
+<h2>Post-Training Quantization (PTQ) vs QAT</h2>
+<div class="rule"></div>
+<div class="sub">Compresión directa de modelos preentrenados frente a entrenamiento consciente de la cuantización</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1239,20 +1192,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Jacob et al. — Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference (2024)</span>
 <span class="pg">4 / 15</span>
 </div>
 <aside class="guion">Al implementar compresión de modelos en la nube, los equipos de arquitectura deben escoger entre dos aproximaciones metodológicas. A la izquierda analizamos la cuantización posterior al entrenamiento o PTQ. Esta técnica toma los pesos originales en coma flotante y utiliza un pequeño conjunto de datos de calibración, típicamente entre cien y quinientos textos representativos, para calcular los factores de escala óptimos. Su gran ventaja radica en que se ejecuta en cuestión de minutos sobre una única tarjeta gráfica sin requerir acceso al dataset completo de entrenamiento ni alterar la arquitectura del modelo. A la derecha encontramos el entrenamiento consciente de la cuantización o QAT. En este método, los errores de redondeo se simulan durante las pasadas de propagación del entrenamiento para que los gradientes compensen la pérdida de precisión. Aunque QAT retiene una precisión ligeramente superior en compresiones extremas por debajo de tres bits, su elevadísimo costo computacional hace que PTQ sea el estándar absoluto en despliegues empresariales modernos.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Compresión de Pesos</div>
-<div class="s-title">Algoritmo GPTQ: Compensación de Error por Capas</div>
-<div class="s-sub">Ajuste dinámico de los parámetros no cuantizados para neutralizar la pérdida de precisión</div>
+<div class="kicker">Compresión de Pesos</div>
+<h2>Algoritmo GPTQ: Compensación de Error por Capas</h2>
+<div class="rule"></div>
+<div class="sub">Ajuste dinámico de los parámetros no cuantizados para neutralizar la pérdida de precisión</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr23" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1319,20 +1273,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Frantar et al. — GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers (2023)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">El algoritmo GPTQ representó un salto fundamental en la compresión de modelos fundacionales al introducir un método analítico para cuantizar pesos a cuatro bits sin perder coherencia sintáctica. En el primer paso a la izquierda, el proceso toma unas pocas secuencias de texto para observar cómo se propagan las activaciones a través de las capas del Transformer. En el bloque central observamos su mecanismo intuitivo: en lugar de redondear todos los pesos de forma aislada, el algoritmo avanza columna por columna. Al cuantizar una columna a cuatro bits, calcula la pequeña diferencia o error residual frente al valor original de coma flotante y ajusta matemáticamente las columnas adyacentes que aún no han sido cuantizadas para neutralizar el impacto del redondeo. En el tercer bloque vemos el resultado final: un modelo con cuatro veces menos requerimiento de memoria VRAM que retiene prácticamente el cien por ciento de su precisión original, permitiendo ejecutar inferencia de alto rendimiento con descompresión instantánea en los núcleos de la GPU.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Cuantización Avanzada</div>
-<div class="s-title">Algoritmo AWQ: Protección de Canales Salientes</div>
-<div class="s-sub">El 1 % de los parámetros concentra la inteligencia del modelo y debe protegerse de la compresión</div>
+<div class="kicker">Cuantización Avanzada</div>
+<h2>Algoritmo AWQ: Protección de Canales Salientes</h2>
+<div class="rule"></div>
+<div class="sub">El 1 % de los parámetros concentra la inteligencia del modelo y debe protegerse de la compresión</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#DC2626" stroke-width="2"/>
@@ -1372,20 +1327,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Lin et al. — AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration (2024)</span>
 <span class="pg">6 / 15</span>
 </div>
 <aside class="guion">Investigadores del MIT demostraron que en los modelos de lenguaje modernos no todos los parámetros tienen la misma relevancia funcional. En esta diapositiva comparamos la cuantización uniforme clásica frente al algoritmo AWQ o cuantización consciente de las activaciones. A la izquierda observamos lo que ocurre cuando aplicamos una escala lineal homogénea: aproximadamente el uno por ciento de las activaciones del Transformer presentan magnitudes cien veces superiores a la media; al redondear estos canales salientes u outliers con la misma escala que el noventa y nueve por ciento restante, el error se magnifica y el modelo pierde su capacidad de razonamiento lógico. A la derecha mostramos cómo resuelve este dilema AWQ: el algoritmo identifica cuáles pesos corresponden a las activaciones más prominentes y les aplica un factor de multiplicación protector antes de cuantizar el conjunto. Al mantener protegidos estos canales críticos, AWQ ofrece una calidad superior y permite una implementación de descompresión extremadamente eficiente en librerías modernas como vLLM.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Formatos Portables</div>
-<div class="s-title">Formato GGUF y Ecosistema llama.cpp</div>
-<div class="s-sub">Inferencia híbrida dividiendo capas del modelo entre CPU de servidor y memoria de tarjeta gráfica</div>
+<div class="kicker">Formatos Portables</div>
+<h2>Formato GGUF y Ecosistema llama.cpp</h2>
+<div class="rule"></div>
+<div class="sub">Inferencia híbrida dividiendo capas del modelo entre CPU de servidor y memoria de tarjeta gráfica</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr24" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1431,20 +1387,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Gerganov et al. — llama.cpp & GGUF Binary Specification (2025)</span>
 <span class="pg">7 / 15</span>
 </div>
 <aside class="guion">Para escenarios donde no se dispone de servidores de clúster con múltiples aceleradores de gama alta, el formato binario GGUF y el motor llama punto cpp se han convertido en la herramienta de referencia para despliegues locales y en el borde de la red. A la izquierda analizamos la estructura del archivo GGUF. A diferencia de los formatos clásicos de PyTorch que separan la configuración en múltiples archivos JSON, un archivo GGUF empaqueta de forma autocontenida todos los hiperparámetros, el vocabulario del tokenizador y los tensores cuantizados mediante técnicas K-quants, permitiendo utilizar la llamada al sistema mmap para mapear el archivo instantáneamente desde almacenamiento persistente a memoria RAM. A la derecha detallamos su funcionalidad de descarga por capas a la GPU. Si un modelo cuantizado requiere treinta gigabytes pero el servidor solo posee una tarjeta de dieciséis gigabytes, llama punto cpp carga las primeras capas en la GPU para aprovechar su velocidad y resuelve las capas restantes en la memoria RAM del procesador anfitrión de forma coordinada.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Validación de Precisión</div>
-<div class="s-title">Métricas de Degradación: Perplejidad y Benchmarks</div>
-<div class="s-sub">Evaluación rigurosa de la pérdida de calidad sintáctica y de razonamiento tras la compresión</div>
+<div class="kicker">Validación de Precisión</div>
+<h2>Métricas de Degradación: Perplejidad y Benchmarks</h2>
+<div class="rule"></div>
+<div class="sub">Evaluación rigurosa de la pérdida de calidad sintáctica y de razonamiento tras la compresión</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1484,20 +1441,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Hendrycks et al. — Measuring Massive Multitask Language Understanding (MMLU) (2024)</span>
 <span class="pg">8 / 15</span>
 </div>
 <aside class="guion">Antes de autorizar el paso a producción de un modelo comprimido, el arquitecto de soluciones debe validar que la pérdida de resolución numérica no haya deteriorado las facultades cognitivas del sistema. A la izquierda presentamos la perplejidad, la métrica estándar para medir qué tan sorprendido resulta el modelo al predecir cada nueva palabra sobre un corpus de referencia como WikiText. Una menor perplejidad indica mayor certeza y fluidez; en despliegues empresariales se considera aceptable una cuantización cuando la perplejidad se incrementa en menos de dos décimas respecto al modelo original no comprimido. A la derecha mostramos los bancos de pruebas de razonamiento complejo, destacando MMLU para conocimientos interdisciplinarios y GSM8K para problemas aritméticos de múltiples pasos. Las pruebas empíricas demuestran que tanto AWQ como GPTQ en cuatro bits retienen más del noventa y ocho por ciento del puntaje de exactitud de la versión completa en FP16, validando su idoneidad para entornos de producción corporativos.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Optimización Estructural</div>
-<div class="s-title">Poda (Pruning) y Dispersión Estructurada 2:4</div>
-<div class="s-sub">Aceleración por hardware eliminando pesos redundantes en bloques regulares de matrices</div>
+<div class="kicker">Optimización Estructural</div>
+<h2>Poda (Pruning) y Dispersión Estructurada 2:4</h2>
+<div class="rule"></div>
+<div class="sub">Aceleración por hardware eliminando pesos redundantes en bloques regulares de matrices</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1537,20 +1495,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: NVIDIA Developer — Structured Sparsity in Ampere and Hopper Architecture (2024)</span>
 <span class="pg">9 / 15</span>
 </div>
 <aside class="guion">Además de reducir el número de bits asignados a cada peso, otra vía fundamental para optimizar modelos consiste en eliminar parámetros superfluos mediante poda o pruning. A la izquierda analizamos la dispersión no estructurada, donde simplemente se fijan a cero aquellos pesos cuyo valor absoluto es inferior a un umbral determinado. Aunque este enfoque reduce el tamaño del archivo binario comprimido, genera una matriz dispersa con índices aleatorios que las unidades SIMT de las GPUs no pueden procesar eficientemente, sin lograr reducir el tiempo de latencia. A la derecha examinamos la dispersión estructurada dos a cuatro introducida en las arquitecturas Ampere, Hopper y Blackwell. Bajo esta regla estricta, de cada cuatro valores contiguos en una fila matricial, exactamente dos deben ser cero. Los Tensor Cores incorporan circuitería dedicada que almacena únicamente los dos valores no nulos junto con un mapa de índices de dos bits, duplicando de forma instantánea el rendimiento de cálculo matemático al omitir multiplicaciones innecesarias.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Compresión Funcional</div>
-<div class="s-title">Destilación de Conocimiento: Profesor a Estudiante</div>
-<div class="s-sub">Transferencia de la distribución probabilística de un modelo masivo a un modelo compacto</div>
+<div class="kicker">Compresión Funcional</div>
+<h2>Destilación de Conocimiento: Profesor a Estudiante</h2>
+<div class="rule"></div>
+<div class="sub">Transferencia de la distribución probabilística de un modelo masivo a un modelo compacto</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr25" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1617,20 +1576,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Hinton et al. — Distilling the Knowledge in a Neural Network & TinyLlama Project (2024)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">Cuando la compresión numérica de pesos alcanza su límite físico, la ingeniería recurre a la destilación de conocimiento para obtener modelos más ágiles conservando las facultades adquiridas durante el preentrenamiento masivo. En el primer bloque a la izquierda situamos al modelo profesor, un sistema de gran tamaño que posee un razonamiento refinado pero requiere una infraestructura de servidores altamente costosa. Durante el proceso, el profesor evalúa textos utilizando una temperatura de muestreo elevada para emitir probabilidades suaves sobre todo el vocabulario. En el bloque central observamos el proceso de transferencia: el modelo estudiante se entrena no solo para acertar la respuesta correcta, sino para reproducir fielmente la distribución completa de probabilidades del profesor, asimilando qué opciones secundarias eran plausibles y cuáles absurdas. En el bloque derecho obtenemos el modelo estudiante resultante, un sistema compacto de uno a ocho mil millones de parámetros que puede ejecutarse en una instancia individual g5.xlarge multiplicando la velocidad de inferencia a una fracción del costo operativo.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Optimización de Memoria</div>
-<div class="s-title">Evolución de la Atención: MHA, MQA y GQA</div>
-<div class="s-sub">Reducción drástica del tamaño de la memoria KV-Cache compartiendo cabezas de claves y valores</div>
+<div class="kicker">Optimización de Memoria</div>
+<h2>Evolución de la Atención: MHA, MQA y GQA</h2>
+<div class="rule"></div>
+<div class="sub">Reducción drástica del tamaño de la memoria KV-Cache compartiendo cabezas de claves y valores</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 3 Variantes de Atención -->
   <g transform="translate(60, 60)">
@@ -1689,20 +1649,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Ainslie et al. — GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints (2023)</span>
 <span class="pg">11 / 15</span>
 </div>
 <aside class="guion">El cuello de botella de la memoria VRAM durante la inferencia prolongada no solo se combate comprimiendo los pesos, sino rediseñando la arquitectura interna de atención para contener el crecimiento de la caché de claves y valores. A la izquierda observamos la atención clásica Multi-Head o MHA: cada cabeza de consulta dispone de su propio par de cabezas para claves y valores, lo que multiplica exponencialmente la memoria consumida conforme se amplía la ventana de contexto o la concurrencia. En el centro encontramos la atención Multi-Query o MQA, que obliga a todas las cabezas de consulta a compartir un único par de claves y valores; si bien reduce drásticamente la memoria, introduce degradaciones notables en tareas complejas. A la derecha presentamos Grouped-Query Attention o GQA, el estándar adoptado en arquitecturas modernas como Llama 3 y Mistral. Al agrupar las consultas en bloques de ocho cabezas por cada par de claves y valores, se reduce el tamaño de la memoria KV-Cache en un factor de ocho sin experimentar pérdidas apreciables en la calidad del modelo.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Memoria Dinámica</div>
-<div class="s-title">Cuantización de la KV-Cache: FP8 e INT8</div>
-<div class="s-sub">Compresión en tiempo real de los estados pasados de la conversación en contextos de más de 32k tokens</div>
+<div class="kicker">Memoria Dinámica</div>
+<h2>Cuantización de la KV-Cache: FP8 e INT8</h2>
+<div class="rule"></div>
+<div class="sub">Compresión en tiempo real de los estados pasados de la conversación en contextos de más de 32k tokens</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1742,20 +1703,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: vLLM Documentation — KV-Cache Quantization (FP8 and INT8) Benchmarks (2025)</span>
 <span class="pg">12 / 15</span>
 </div>
 <aside class="guion">Una de las optimizaciones operativas más impactantes introducidas recientemente en motores de inferencia como vLLM y TensorRT-LLM es la cuantización de la propia memoria de la caché KV. A la izquierda analizamos el comportamiento convencional en formato FP16: cada par de clave y valor almacena dos bytes por parámetro. En aplicaciones empresariales de consulta documental o RAG con contextos extensos de treinta y dos mil tokens, una única sesión activa puede consumir dos gigabytes de VRAM exclusivamente en su caché histórica; como resultado, un servidor dotado con una tarjeta de veinticuatro gigabytes colapsa al intentar procesar cuatro usuarios en paralelo. A la derecha detallamos la solución: cuantizar dinámicamente las claves y valores a formato FP8 o INT8 en el momento exacto en que se almacenan en el buffer. Esto reduce el consumo de memoria dinámica a la mitad sin alterar los pesos del modelo ni degradar la calidad semántica, permitiendo duplicar de forma inmediata el volumen de usuarios concurrentes.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Optimización de Silicio</div>
-<div class="s-title">Compiladores de Inferencia: NVIDIA TensorRT-LLM</div>
-<div class="s-sub">Fusión de operaciones matemáticas y optimización de kernels a nivel de ensamblador de GPU</div>
+<div class="kicker">Optimización de Silicio</div>
+<h2>Compiladores de Inferencia: NVIDIA TensorRT-LLM</h2>
+<div class="rule"></div>
+<div class="sub">Fusión de operaciones matemáticas y optimización de kernels a nivel de ensamblador de GPU</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr26" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1822,20 +1784,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: NVIDIA Developer — TensorRT-LLM Architecture and Kernel Fusion (2025)</span>
 <span class="pg">13 / 15</span>
 </div>
 <aside class="guion">Para exprimir el máximo rendimiento posible del silicio, no basta con cuantizar los parámetros; es imperativo optimizar la forma en que las operaciones matemáticas se programan sobre los multiprocesadores de la GPU. En este diagrama examinamos el funcionamiento de compiladores especializados como TensorRT-LLM. A la izquierda observamos un grafo de ejecución interpretado tradicional en PyTorch, donde cada capa ejecuta múltiples llamadas independientes a funciones CUDA, escribiendo y leyendo tensores intermedios en la memoria VRAM y saturando el ancho de banda. En el bloque central interviene la técnica de fusión de kernels: operaciones continuas como la normalización de capa, la multiplicación matricial y la función de activación se combinan en una sola rutina que mantiene los datos en la memoria caché SRAM ultrarrápida del procesador. En el bloque derecho obtenemos el motor compilado final, logrando una reducción de latencia de hasta dos veces y media, con la salvedad arquitectónica de que el artefacto compilado queda ligado a la microarquitectura de tarjeta específica utilizada.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Caso Ilustrativo de Arquitectura</div>
-<div class="s-title">Caso Ilustrativo: Compresión de Llama-70B</div>
-<div class="s-sub">Caso ilustrativo de arquitectura, no es una empresa real — Reducción de 140 GB a 40 GB VRAM</div>
+<div class="kicker">Caso Ilustrativo de Arquitectura</div>
+<h2>Caso Ilustrativo: Compresión de Llama-70B</h2>
+<div class="rule"></div>
+<div class="sub">Caso ilustrativo de arquitectura, no es una empresa real — Reducción de 140 GB a 40 GB VRAM</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -1875,20 +1838,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Metodología de Dimensionamiento de Inferencia — Universidad de la Costa (2026)</span>
 <span class="pg">14 / 15</span>
 </div>
 <aside class="guion">Para ilustrar el impacto arquitectónico y financiero de las técnicas descritas, analizamos este escenario comparativo. Aclaramos que es un caso metodológico de dimensionamiento y no representa a ninguna entidad corporativa real. A la izquierda evaluamos el despliegue del modelo Llama setenta mil millones en formato original FP16. Solo para alojar los pesos se requieren ciento cuarenta gigabytes de VRAM física; sumando el buffer para la memoria dinámica de KV-Cache, el sistema exige contratar una máquina virtual con cuatro tarjetas A100 de ochenta gigabytes interconectadas por NVLink, con una tarifa horaria que oscila entre quince y veinte dólares. A la derecha aplicamos cuantización AWQ a cuatro bits: el volumen de pesos colapsa a treinta y cinco gigabytes. Esto permite desplegar el mismo modelo sobre una instancia económica g5.12xlarge equipada con dos tarjetas A10G de veinticuatro gigabytes, reduciendo el costo de infraestructura en más de un sesenta y cinco por ciento sin sacrificar la capacidad de respuesta interactiva del servicio.</aside>
 </section>
 <section class="slide" data-parte="2">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Síntesis de Métodos</div>
-<div class="s-title">Comparativa de Métodos de Cuantización</div>
-<div class="s-sub">Matriz de selección arquitectónica según hardware disponible, formato de archivo y motor de inferencia</div>
+<div class="kicker">Síntesis de Métodos</div>
+<h2>Comparativa de Métodos de Cuantización</h2>
+<div class="rule"></div>
+<div class="sub">Matriz de selección arquitectónica según hardware disponible, formato de archivo y motor de inferencia</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 4 Métodos en Columnas -->
   <g transform="translate(60, 60)">
@@ -1953,6 +1917,7 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 2 de 4</span>
 <span class="src">Fuente: Guía de Selección de Cuantización para Arquitectura de IA — CUC (2026)</span>
 <span class="pg">15 / 15</span>
 </div>
@@ -1974,14 +1939,14 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 <aside class="guion">Bienvenidos a la tercera parte de nuestra sesión sobre arquitectura de inteligencia artificial en la nube. En este bloque abordaremos los servidores de inferencia auto-alojados en entornos productivos. Examinaremos la anatomía de un motor moderno, el mecanismo de PagedAttention para eliminar la fragmentación de memoria, el procesamiento continuo por lotes, la decodificación especulativa, la orquestación con Kubernetes y GPU Operator, los acuerdos de nivel de servicio y la resiliencia ante fallos físicos de hardware. Comencemos.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Arquitectura de Software</div>
-<div class="s-title">Anatomía de un Servidor de Inferencia Moderno</div>
-<div class="s-sub">Desacoplamiento entre la capa de red, el planificador de lotes y el motor de ejecución en GPU</div>
+<div class="kicker">Arquitectura de Software</div>
+<h2>Anatomía de un Servidor de Inferencia Moderno</h2>
+<div class="rule"></div>
+<div class="sub">Desacoplamiento entre la capa de red, el planificador de lotes y el motor de ejecución en GPU</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr27" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -2059,20 +2024,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Kwon et al. — Efficient Memory Management for Large Language Model Serving with PagedAttention (2023)</span>
 <span class="pg">2 / 15</span>
 </div>
 <aside class="guion">Para servir modelos masivos con alta concurrencia, la arquitectura del software de inferencia debe desacoplar estrictamente sus funciones en capas especializadas. En el primer bloque a la izquierda encontramos el servidor de interfaz API, implementado comúnmente sobre FastAPI o gRPC, que expone puntos finales compatibles con el estándar de OpenAI y mantiene conexiones HTTP persistentes para la transmisión continua o streaming de tokens. En el segundo bloque opera el planificador o scheduler de peticiones; a diferencia de los balanceadores web tradicionales, este componente analiza dinámicamente la memoria restante de la GPU para formar lotes en tiempo real y evitar sobrecargas. En el tercer bloque se sitúa el motor de ejecución, como vLLM o TensorRT, responsable de administrar la memoria paginada y coordinar las llamadas a los kernels de CUDA. Finalmente, en el cuarto bloque a la derecha, el hardware acelerador ejecuta las operaciones tensoriales en silicio y devuelve las probabilidades del próximo token al cliente sin bloqueos.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Gestión de Memoria</div>
-<div class="s-title">vLLM y PagedAttention: Cero Fragmentación</div>
-<div class="s-sub">Inspirado en la memoria virtual paginada de los sistemas operativos para maximizar la VRAM</div>
+<div class="kicker">Gestión de Memoria</div>
+<h2>vLLM y PagedAttention: Cero Fragmentación</h2>
+<div class="rule"></div>
+<div class="sub">Inspirado en la memoria virtual paginada de los sistemas operativos para maximizar la VRAM</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr28" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -2118,20 +2084,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Kwon et al. — PagedAttention Paper, SOSP 2023 & UC Berkeley Sky Computing Lab (2024)</span>
 <span class="pg">3 / 15</span>
 </div>
 <aside class="guion">Antes de la aparición del algoritmo PagedAttention, los sistemas de inferencia desperdiciaban la mayor parte de la memoria de video. A la izquierda analizamos el problema de la asignación contigua tradicional. Dado que no se podía predecir con exactitud cuántos tokens generaría cada usuario, los motores reservaban un bloque contiguo en la VRAM para la longitud máxima posible del contexto, por ejemplo cuatro mil tokens. Si el usuario completaba su consulta con solo doscientas palabras, el resto de la memoria asignada quedaba completamente bloqueada e inaccesible para otras peticiones, generando hasta un ochenta por ciento de fragmentación interna. A la derecha observamos cómo PagedAttention traslada el concepto de memoria virtual de los sistemas operativos a las GPUs. La memoria KV-Cache se fragmenta en bloques lógicos pequeños, típicamente de dieciséis tokens. Mediante una tabla de páginas dinámica, los bloques físicos pueden ubicarse en regiones no contiguas de la VRAM, asignando memoria estrictamente a medida que se emite cada token y eliminando casi por completo el desperdicio de capacidad.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Planificación Dinámica</div>
-<div class="s-title">Continuous Batching (In-Flight Batching)</div>
-<div class="s-sub">Inserción y retiro de peticiones a nivel de token individual en cada iteración del ciclo</div>
+<div class="kicker">Planificación Dinámica</div>
+<h2>Continuous Batching (In-Flight Batching)</h2>
+<div class="rule"></div>
+<div class="sub">Inserción y retiro de peticiones a nivel de token individual en cada iteración del ciclo</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#DC2626" stroke-width="2"/>
@@ -2171,20 +2138,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Yu et al. — Orca: A Distributed Serving System for Transformer-Based Generative Models (OSDI 2022 / vLLM 2024)</span>
 <span class="pg">4 / 15</span>
 </div>
 <aside class="guion">El segundo pilar para alcanzar alto rendimiento en servidores auto-alojados es el procesamiento dinámico por lotes o Continuous Batching, originalmente introducido en el sistema Orca. A la izquierda observamos la limitación de los lotes estáticos tradicionales heredados del procesamiento de imágenes. En ese esquema antiguo, si agrupamos cuatro consultas y una de ellas genera quinientos tokens mientras las otras tres terminan en diez palabras, las ranuras de cómputo de las peticiones breves deben permanecer vacías esperando a que la consulta más larga finalice. A la derecha detallamos cómo opera Continuous Batching: la planificación se realiza a nivel de cada paso iterativo de decodificación. En cuanto una consulta emite su token final de parada, se libera su memoria y se incorpora de inmediato una nueva petición entrante desde la cola de espera, sin detener la ejecución de las demás secuencias. Esto multiplica el rendimiento global de procesamiento y reduce la variabilidad de la latencia en interfaces de usuario interactivas.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Aceleración de Decodificación</div>
-<div class="s-title">Decodificación Especulativa (Speculative Decoding)</div>
-<div class="s-sub">Modelo borrador rápido propone candidatos y el modelo principal verifica en una pasada</div>
+<div class="kicker">Aceleración de Decodificación</div>
+<h2>Decodificación Especulativa (Speculative Decoding)</h2>
+<div class="rule"></div>
+<div class="sub">Modelo borrador rápido propone candidatos y el modelo principal verifica en una pasada</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr29" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -2251,20 +2219,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Leviathan et al. — Fast Inference from Transformers via Speculative Decoding (Google Research 2023)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">La decodificación especulativa es una técnica revolucionaria que rompe la dependencia de generar los tokens estrictamente uno a uno en la fase de decodificación. En el primer paso a la izquierda interviene un modelo borrador o draft model, típicamente de uno o dos mil millones de parámetros de la misma familia arquitectónica. Por ser tan liviano, el borrador genera con gran rapidez una ráfaga de tres a cinco palabras tentativas. En el segundo paso, el modelo principal de gran escala evalúa todos los tokens propuestos de forma simultánea en una única pasada de cómputo matricial, operando en modo compute-bound. Si el modelo principal coincide con las tres primeras palabras propuestas por el borrador pero rechaza la cuarta, acepta de golpe las tres correctas, genera su propia cuarta palabra y descarta el resto. En el tercer bloque observamos el beneficio: la tasa de generación de tokens se multiplica entre dos y tres veces, manteniendo una distribución de probabilidad idéntica a la que habría producido el modelo grande de forma individual.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Selección de Motor</div>
-<div class="s-title">Comparativa de Motores: vLLM, TGI y Triton</div>
-<div class="s-sub">Evaluación de las plataformas de inferencia dominantes en despliegues auto-alojados</div>
+<div class="kicker">Selección de Motor</div>
+<h2>Comparativa de Motores: vLLM, TGI y Triton</h2>
+<div class="rule"></div>
+<div class="sub">Evaluación de las plataformas de inferencia dominantes en despliegues auto-alojados</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 3 Motores en Comparación -->
   <g transform="translate(60, 60)">
@@ -2323,20 +2292,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Benchmarks Oficiales de Rendimiento de Inferencia — MLCommons / Sky Computing (2025)</span>
 <span class="pg">6 / 15</span>
 </div>
 <aside class="guion">Para implementar servidores auto-alojados en centros de datos o en máquinas virtuales en la nube, el equipo de arquitectura debe seleccionar el motor de inferencia adecuado. En la primera columna evaluamos vLLM: es la solución de código abierto con mayor tracción en la industria gracias a su soporte nativo de PagedAttention, compatibilidad con la interfaz de OpenAI y su capacidad insuperable para maximizar el throughput global en entornos con cientos de usuarios concurrentes. En la segunda columna analizamos Text Generation Inference o TGI, desarrollado por HuggingFace en lenguaje Rust con comunicación interna gRPC; ofrece controles avanzados de límites de tokens de parada y constituye el contenedor oficial de inferencia utilizado en las instancias administradas de AWS SageMaker. En la tercera columna encontramos NVIDIA Triton Inference Server: es la plataforma de mayor complejidad operativa pero permite ensamblar pipelines heterogéneos donde un modelo de audio alimenta un modelo de visión y finalmente un Transformer, integrando el motor TensorRT-LLM.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Orquestación Cloud-Native</div>
-<div class="s-title">Despliegue en Kubernetes con GPU Operator y KEDA</div>
-<div class="s-sub">Autoescalado horizontal basado en la profundidad de colas y utilización real de VRAM</div>
+<div class="kicker">Orquestación Cloud-Native</div>
+<h2>Despliegue en Kubernetes con GPU Operator y KEDA</h2>
+<div class="rule"></div>
+<div class="sub">Autoescalado horizontal basado en la profundidad de colas y utilización real de VRAM</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr30" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -2414,20 +2384,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: CNCF — Kubernetes GPU Scheduling & KEDA AI Scaler Patterns (2025)</span>
 <span class="pg">7 / 15</span>
 </div>
 <aside class="guion">Para gestionar servidores de inferencia con elasticidad de nube, el patrón estándar de la industria consiste en desplegarlos sobre clústeres de Kubernetes integrando cuatro componentes esenciales. En el primer bloque a la izquierda, el operador de GPUs de NVIDIA automatiza la inyección del controlador en el sistema operativo del nodo y expone los recursos físicos a los pods mediante el complemento de dispositivos. En el segundo bloque se despliegan los pods del motor vLLM montando los volúmenes persistentes que contienen los pesos y ejecutando pruebas de salud para asegurar que los modelos estén precalentados en la VRAM antes de recibir tráfico de red. En el tercer bloque interviene KEDA, el autoescalador dirigido por eventos: en lugar de basarse en métricas tradicionales de CPU que resultan inútiles para predecir la saturación de IA, KEDA monitorea la longitud de la cola de peticiones en vLLM. Finalmente, en el cuarto bloque, orquestadores como Karpenter o los grupos de autoescalado aprovisionan instancias de cómputo acelerado en minutos según la demanda real.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Cómputo Distribuido</div>
-<div class="s-title">Paralelismo Tensorial y de Pipeline</div>
-<div class="s-sub">Técnicas de partición de modelos masivos a través de múltiples GPUs y múltiples servidores</div>
+<div class="kicker">Cómputo Distribuido</div>
+<h2>Paralelismo Tensorial y de Pipeline</h2>
+<div class="rule"></div>
+<div class="sub">Técnicas de partición de modelos masivos a través de múltiples GPUs y múltiples servidores</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -2467,20 +2438,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Shoeybi et al. — Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism (2024)</span>
 <span class="pg">8 / 15</span>
 </div>
 <aside class="guion">Cuando nos enfrentamos a modelos de lenguaje de escala masiva como Llama setenta o cuatrocientos cinco mil millones de parámetros, una sola tarjeta resulta insuficiente y debemos aplicar estrategias de computación distribuida. A la izquierda analizamos el paralelismo tensorial. En este esquema, las grandes matrices de proyección lineal de las capas de atención y de las redes neuronales feed-forward se dividen por columnas o por filas entre las diferentes tarjetas del mismo servidor. Cada token emitido exige realizar operaciones de reducción de suma o All-Reduce entre todas las GPUs para sincronizar los resultados parciales; por esta razón, el paralelismo tensorial solo es viable dentro de un mismo chasis físico conectado por enlaces NVLink ultrarrápidos. A la derecha encontramos el paralelismo de tubería o Pipeline Parallelism: en este modelo, las capas secuenciales del Transformer se distribuyen entre servidores distintos a través de la red del centro de datos. Aunque tolera el ancho de banda de redes de cuatrocientos gigabits mediante adaptadores EFA, introduce burbujas de espera si no se administra un flujo de peticiones continuo.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Métricas y SLAs</div>
-<div class="s-title">Métricas de Servicio: TTFT, TPOT y Throughput</div>
-<div class="s-sub">Los tres indicadores determinantes para definir acuerdos de nivel de servicio en inferencia</div>
+<div class="kicker">Métricas y SLAs</div>
+<h2>Métricas de Servicio: TTFT, TPOT y Throughput</h2>
+<div class="rule"></div>
+<div class="sub">Los tres indicadores determinantes para definir acuerdos de nivel de servicio en inferencia</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 3 Métricas Cards -->
   <g transform="translate(60, 60)">
@@ -2539,20 +2511,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: AWS Generative AI Lens — SLA and Performance Tuning for LLMs (2025)</span>
 <span class="pg">9 / 15</span>
 </div>
 <aside class="guion">El éxito de un servicio de inferencia en producción se mide mediante tres indicadores clave de rendimiento que determinan los acuerdos de nivel de servicio. En la primera columna encontramos el tiempo hasta el primer token o TTFT, que mide la latencia transcurrida desde que el cliente transmite su consulta hasta que el servidor devuelve el primer byte por la conexión SSE. El TTFT depende casi en su totalidad de la fase de prefill y en aplicaciones conversacionales interactivas debe mantenerse por debajo de ochocientos milisegundos para evitar la percepción de lentitud. En la segunda columna se ubica el tiempo por token de salida o TPOT, que cuantifica la cadencia de emisión durante la decodificación continua; para que la lectura en pantalla resulte fluida, el sistema debe entregar entre veinticinco y cuarenta tokens por segundo, lo que equivale a un TPOT menor a cuarenta milisegundos. En la tercera columna se sitúa el throughput agregado, el indicador financiero fundamental que expresa cuántos miles de tokens procesa el servidor por segundo dividiendo el costo fijo de la máquina.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Estabilidad Operativa</div>
-<div class="s-title">Control de Latencia P99: Chunked Prefill</div>
-<div class="s-sub">Partición de prompts gigantescos en bloques para evitar congelamientos en peticiones concurrentes</div>
+<div class="kicker">Estabilidad Operativa</div>
+<h2>Control de Latencia P99: Chunked Prefill</h2>
+<div class="rule"></div>
+<div class="sub">Partición de prompts gigantescos en bloques para evitar congelamientos en peticiones concurrentes</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#DC2626" stroke-width="2"/>
@@ -2592,20 +2565,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Agrawal et al. — Sarathi: Efficient LLM Inference by Chunked-Prefills (2024)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">En entornos de producción corporativos donde coexisten usuarios realizando consultas cortas con analistas que envían documentos de dieciséis mil tokens, la latencia percentil noventa y nueve puede degradarse drásticamente. A la izquierda analizamos el problema del prefill monolítico tradicional: cuando un usuario remite un texto muy extenso, el motor detiene la emisión de tokens de todos los demás clientes para dedicar la totalidad de los multiprocesadores a calcular las matrices de atención del documento entrante durante más de un segundo. A la derecha mostramos la técnica de prefill fragmentado o Chunked Prefill implementada en vLLM. El texto extenso se secciona en bloques fijos de quinientos doce tokens. En cada iteración del planificador, la GPU procesa un único bloque del documento junto con un token de decodificación para cada uno de los usuarios interactivos en paralelo. De este modo se estabiliza la latencia percentil noventa y nueve, evitando pausas perceptibles en las interfaces conversacionales.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Infraestructura On-Premise</div>
-<div class="s-title">vLLM en Nube Privada OpenStack</div>
-<div class="s-sub">Aprovisionamiento de servidores de inferencia sobre hipervisores KVM con almacenamiento Cinder</div>
+<div class="kicker">Infraestructura On-Premise</div>
+<h2>vLLM en Nube Privada OpenStack</h2>
+<div class="rule"></div>
+<div class="sub">Aprovisionamiento de servidores de inferencia sobre hipervisores KVM con almacenamiento Cinder</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr31" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -2683,20 +2657,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Guía de Arquitectura de IA en OpenStack — Laboratorio CUC (2026)</span>
 <span class="pg">11 / 15</span>
 </div>
 <aside class="guion">Integrar motores de inferencia de alto rendimiento como vLLM dentro de una nube privada gobernada por OpenStack constituye la arquitectura de referencia para organizaciones que por mandato regulatorio deben custodiar datos sensibles dentro de su propio centro de datos. En el primer bloque, Nova Compute entrega una máquina virtual que accede directamente a la tarjeta GPU mediante el mecanismo de PCI Passthrough. En el segundo bloque, el almacenamiento por bloques Cinder, respaldado sobre volúmenes de estado sólido NVMe, permite transferir los cuarenta gigabytes de un modelo cuantizado a la memoria principal en menos de quince segundos durante el arranque inicial. En el tercer bloque, la red de Neutron aísla completamente el tráfico del servicio dentro de un segmento seguro, permitiendo el acceso únicamente a los servidores web autorizados a través del balanceador Octavia. Finalmente, en el cuarto bloque a la derecha, la entidad garantiza el cumplimiento pleno de la normativa colombiana de protección de datos personales al no transferir ningún prompt al exterior.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Alta Disponibilidad</div>
-<div class="s-title">Recuperación de Fallos y Errores XID de GPU</div>
-<div class="s-sub">Detección temprana de anomalías en silicio y aislamiento automático de nodos degradados</div>
+<div class="kicker">Alta Disponibilidad</div>
+<h2>Recuperación de Fallos y Errores XID de GPU</h2>
+<div class="rule"></div>
+<div class="sub">Detección temprana de anomalías en silicio y aislamiento automático de nodos degradados</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#DC2626" stroke-width="2"/>
@@ -2736,20 +2711,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: NVIDIA Developer — GPU XID Error Code Reference Guide (2025)</span>
 <span class="pg">12 / 15</span>
 </div>
 <aside class="guion">En clústeres acelerados de alta densidad, las tarjetas GPU sometidas a cargas de trabajo continuas están expuestas a fallos físicos que el sistema operativo registra como códigos XID. A la izquierda resumimos los tres errores críticos más frecuentes: el código XID treinta y uno, que señala corrupción irrecuperable en las celdas de memoria; el código cuarenta y cinco, producido por la caída de un enlace en el bus PCIe o en la malla de interconexión NVLink; y el código setenta y nueve, activado por los circuitos de protección cuando la temperatura del silicio supera los noventa y cinco grados Celsius. A la derecha detallamos el mecanismo de resiliencia automatizado: un agente de monitorización captura el evento en el registro del sistema del host y activa una rutina de aislamiento operativo. El nodo se marca inmediatamente para drenar sus conexiones activas, el balanceador redirige las consultas hacia los servidores sanos del clúster y el grupo de autoescalado reemplaza el hardware averiado sin provocar caídas en el servicio para los usuarios finales.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Gobernanza Financiera</div>
-<div class="s-title">Auditoría de Tokens y FinOps en IA</div>
-<div class="s-sub">Control de costos unitarios y atribución de consumo por centro de costos en servidores propios</div>
+<div class="kicker">Gobernanza Financiera</div>
+<h2>Auditoría de Tokens y FinOps en IA</h2>
+<div class="rule"></div>
+<div class="sub">Control de costos unitarios y atribución de consumo por centro de costos en servidores propios</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr32" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -2816,20 +2792,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: FinOps Foundation — AI and Machine Learning FinOps Framework (2025)</span>
 <span class="pg">13 / 15</span>
 </div>
 <aside class="guion">Operar infraestructura de inteligencia artificial con recursos propios exige adoptar las disciplinas de gobernanza financiera o FinOps. En el primer bloque a la izquierda establecemos la atribución estricta de consumo: mediante llaves de API o encabezados de autorización en el gateway de entrada, se audita cuántos tokens de entrada y salida genera cada departamento de la organización, permitiendo implementar esquemas formales de imputación de costos internos. En el bloque central explicamos el cálculo del costo unitario: a diferencia de las APIs gestionadas que cobran una tarifa fija por cada millón de tokens, en un servidor dedicado el costo por token varía en función inversa a la tasa de ocupación. Si el servidor procesa millones de consultas al día, el costo unitario colapsa a niveles insignificantes; pero si el servidor pasa la noche ocioso, el costo unitario se dispara. En el bloque derecho implementamos controles preventivos de cuotas máximas para evitar que bucles infinitos en aplicaciones de agentes consuman la capacidad del clúster.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Caso Ilustrativo de Arquitectura</div>
-<div class="s-title">Caso Ilustrativo: Arquitectura Self-Hosted de Producción</div>
-<div class="s-sub">Caso ilustrativo de arquitectura, no es una empresa real — Flujo integral de inferencia en clúster privado</div>
+<div class="kicker">Caso Ilustrativo de Arquitectura</div>
+<h2>Caso Ilustrativo: Arquitectura Self-Hosted de Producción</h2>
+<div class="rule"></div>
+<div class="sub">Caso ilustrativo de arquitectura, no es una empresa real — Flujo integral de inferencia en clúster privado</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr33" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -2907,20 +2884,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Patrón de Referencia de Servidores de Inferencia en Producción — CUC (2026)</span>
 <span class="pg">14 / 15</span>
 </div>
 <aside class="guion">Para unificar todos los conceptos técnicos expuestos en esta tercera parte, presentamos este caso ilustrativo de arquitectura de producción auto-alojada. Aclaramos expresamente que se trata de un diseño metodológico de referencia y no de una entidad corporativa real. En el primer paso a la izquierda, las peticiones externas atraviesan un gateway Envoy que autentica las identidades y aplica políticas de limitación de tasa para proteger la infraestructura interna. En el segundo paso, un enrutador inteligente de balanceo distribuye las consultas hacia el nodo con menor profundidad de cola y aplica afinidad de sesión cuando es posible para aprovechar la caché KV previamente calculada. En el tercer bloque, un clúster de cuatro máquinas equipadas con tarjetas A10G ejecuta el modelo Llama de ocho mil millones cuantizado con AWQ, entregando más de dos mil cuatrocientos tokens por segundo de forma sostenida. En el cuarto bloque, la telemetría unificada confirma un tiempo hasta el primer token inferior a trescientos cincuenta milisegundos con alta disponibilidad operativa.</aside>
 </section>
 <section class="slide" data-parte="3">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Checklist de Operaciones</div>
-<div class="s-title">Decálogo de Operación para Inferencia Self-Hosted</div>
-<div class="s-sub">Buenas prácticas indispensables para mantener servidores de inferencia estables y económicos</div>
+<div class="kicker">Checklist de Operaciones</div>
+<h2>Decálogo de Operación para Inferencia Self-Hosted</h2>
+<div class="rule"></div>
+<div class="sub">Buenas prácticas indispensables para mantener servidores de inferencia estables y económicos</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 4 Pilares Operativos -->
   <g transform="translate(60, 60)">
@@ -2981,6 +2959,7 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 3 de 4</span>
 <span class="src">Fuente: Síntesis de Operaciones de IA — Universidad de la Costa (2026)</span>
 <span class="pg">15 / 15</span>
 </div>
@@ -3002,14 +2981,14 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 <aside class="guion">Bienvenidos a la cuarta y última parte de nuestra sesión sobre inteligencia artificial en la nube. En este bloque abordaremos la decisión arquitectónica fundamental: cuándo conviene consumir modelos a través de servicios gestionados como Amazon Bedrock y cuándo resulta más rentable y seguro desplegar servidores dedicados auto-alojados. Analizaremos las modalidades de facturación, la seguridad y retención cero de datos, la responsabilidad compartida, el cálculo del punto de equilibrio económico, el enrutamiento dinámico y el marco regulatorio en Colombia. Comencemos.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Dilema Arquitectónico</div>
-<div class="s-title">El Dilema: Gestionado frente a Auto-Alojado</div>
-<div class="s-sub">Comparativa de responsabilidades, costos fijos vs variables y tiempo de salida al mercado</div>
+<div class="kicker">Dilema Arquitectónico</div>
+<h2>El Dilema: Gestionado frente a Auto-Alojado</h2>
+<div class="rule"></div>
+<div class="sub">Comparativa de responsabilidades, costos fijos vs variables y tiempo de salida al mercado</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3049,20 +3028,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Prescriptive Guidance — Choosing Between Managed and Self-Hosted LLMs (2025)</span>
 <span class="pg">2 / 15</span>
 </div>
 <aside class="guion">Comenzamos nuestro análisis comparando las dos filosofías operativas para servir modelos de lenguaje en las organizaciones. A la izquierda encontramos los servicios de Modelo como Servicio o MaaS, encabezados por plataformas serverless como Amazon Bedrock. Bajo este esquema no se aprovisionan servidores ni se gestionan controladores de GPU; la facturación es estrictamente proporcional a los millones de tokens procesados y el tiempo de salida al mercado es inmediato, permitiendo acceder a los modelos comerciales más avanzados sin inversión de capital previa. A la derecha se ubica la modalidad auto-alojada sobre instancias dedicadas de cómputo acelerado o nubes privadas. Esta opción impone un costo fijo mensual independientemente del uso y exige un equipo de ingeniería capaz de gestionar la pila de CUDA, la orquestación de contenedores y la resiliencia física de las tarjetas. Sin embargo, entrega control absoluto sobre los pesos, garantiza que los datos confidenciales permanezcan en la red local y resulta financieramente imbatible ante volúmenes masivos de tráfico continuo.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Servicios Gestionados</div>
-<div class="s-title">Arquitectura de Amazon Bedrock</div>
-<div class="s-sub">Punto de acceso serverless unificado con aislamiento multi-tenant y sin gestión de servidores</div>
+<div class="kicker">Servicios Gestionados</div>
+<h2>Arquitectura de Amazon Bedrock</h2>
+<div class="rule"></div>
+<div class="sub">Punto de acceso serverless unificado con aislamiento multi-tenant y sin gestión de servidores</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr34" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -3140,20 +3120,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Documentation — Amazon Bedrock User Guide & Security Architecture (2025)</span>
 <span class="pg">3 / 15</span>
 </div>
 <aside class="guion">En esta diapositiva desglosamos la arquitectura interna de Amazon Bedrock, el servicio gestionado líder para consumo de modelos fundacionales. En el primer bloque a la izquierda, las aplicaciones corporativas alojadas en sus respectivas VPCs se comunican con el servicio a través de puntos de enlace privados de AWS PrivateLink, asegurando que los datos sensibles nunca transiten por la red pública de Internet. En el segundo bloque opera el plano de control, que valida permisos granulares mediante AWS IAM y evalúa las políticas de seguridad de Bedrock Guardrails para bloquear fugas de información personal identificable. En el tercer bloque se sitúa la infraestructura serverless de inferencia, una flota global de miles de tarjetas GPU administrada por AWS que asigna capacidad bajo demanda y gestiona la caché de prompts de forma transparente. En el cuarto bloque a la derecha, la plataforma entrega acceso unificado a través de una única API a modelos de diferentes proveedores como Amazon Nova, Anthropic Claude y Meta Llama.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Modalidades de Contratación</div>
-<div class="s-title">On-Demand frente a Capacidad Aprovisionada</div>
-<div class="s-sub">Pago elástico por token individual frente a reserva de unidades de rendimiento (PTUs)</div>
+<div class="kicker">Modalidades de Contratación</div>
+<h2>On-Demand frente a Capacidad Aprovisionada</h2>
+<div class="rule"></div>
+<div class="sub">Pago elástico por token individual frente a reserva de unidades de rendimiento (PTUs)</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3193,20 +3174,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Bedrock Documentation — Provisioned Throughput Guidelines (2025)</span>
 <span class="pg">4 / 15</span>
 </div>
 <aside class="guion">Dentro de las plataformas gestionadas como Bedrock existen dos modalidades de contratación fundamentales que el arquitecto debe evaluar según el perfil de tráfico del negocio. A la izquierda analizamos la modalidad bajo demanda u On-Demand: la organización paga estrictamente por cada token que entra y sale del servicio. Es el modelo idóneo para fases de experimentación, aplicaciones internas con horarios laborales o cargas con picos esporádicos, ya que en periodos de inactividad nocturna el costo se reduce a cero; no obstante, el servicio comparte recursos con otros clientes y queda sujeto a techos de cuotas por minuto. A la derecha encontramos la Capacidad Aprovisionada: la empresa reserva unidades de cómputo dedicadas denominadas Model Units por periodos de uno a seis meses. Esta modalidad garantiza un caudal de tokens por segundo constante sin variaciones de latencia, siendo obligatoria si se planea desplegar modelos afinados a medida o soportar cargas críticas con estrictos acuerdos de nivel de servicio corporativos.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Seguridad y Cumplimiento</div>
-<div class="s-title">Aislamiento y Retención Cero de Datos (ZDR)</div>
-<div class="s-sub">Garantías contractuales y técnicas de que los datos no se utilizan para entrenar modelos</div>
+<div class="kicker">Seguridad y Cumplimiento</div>
+<h2>Aislamiento y Retención Cero de Datos (ZDR)</h2>
+<div class="rule"></div>
+<div class="sub">Garantías contractuales y técnicas de que los datos no se utilizan para entrenar modelos</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 4 Pilares de Seguridad Bedrock -->
   <g transform="translate(60, 60)">
@@ -3235,7 +3217,7 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
     <text x="35" y="150" fill="#64748B" font-size="16">extremo a extremo</text>
     <text x="35" y="185" fill="#0F172A" font-size="16" font-weight="700">En Reposo (KMS)</text>
     <text x="35" y="210" fill="#166534" font-size="16">Llaves propias CMK</text>
-    <text x="35" y="235" fill="#166534" font-size="16">gestionadas en AWS KMS</text>
+    <text x="35" y="235" fill="#166534" font-size="16">gestionadas en KMS</text>
     <text x="35" y="265" fill="#0F172A" font-size="16" font-weight="700">Rotación de llaves</text>
   </g>
 
@@ -3271,20 +3253,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Bedrock Security & Data Protection Policy (2025)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">Una preocupación recurrente de los oficiales de seguridad al adoptar inteligencia artificial en la nube radica en el destino de los datos confidenciales remitidos en los prompts. En esta diapositiva desglosamos las cuatro garantías técnicas y contractuales que ofrece Amazon Bedrock. En la primera columna encontramos la política de retención cero de datos o Zero Data Retention: AWS y sus proveedores asociados garantizan por contrato que las consultas y respuestas no se almacenan de forma persistente en los servidores y jamás se utilizan para reentrenar o mejorar los modelos base. En la segunda columna observamos el cifrado integral: todo el tráfico viaja mediante TLS uno punto tres y los artefactos temporales se cifran con llaves maestras controladas por el cliente a través de AWS KMS. En la tercera columna, el tráfico permanece confinado en la red privada de la organización mediante AWS PrivateLink sin tocar Internet. En la cuarta columna, estas garantías se validan formalmente mediante certificaciones internacionales de cumplimiento como SOC dos, ISO veintisiete mil uno e HIPAA.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">FinOps y Control</div>
-<div class="s-title">Gestión de Cuotas y Límites de Tasa en MaaS</div>
-<div class="s-sub">Políticas de protección contra costos imprevistos y estrangulamiento de peticiones (Throttling)</div>
+<div class="kicker">FinOps y Control</div>
+<h2>Gestión de Cuotas y Límites de Tasa en MaaS</h2>
+<div class="rule"></div>
+<div class="sub">Políticas de protección contra costos imprevistos y estrangulamiento de peticiones (Throttling)</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3324,20 +3307,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Bedrock Quotas and Service Limits Documentation (2025)</span>
 <span class="pg">6 / 15</span>
 </div>
 <aside class="guion">En entornos de alta concurrencia, las APIs de inferencia gestionada imponen techos operativos que deben ser gobernados arquitectónicamente para evitar interrupciones de servicio o desbordamientos presupuestales. A la izquierda examinamos las métricas de control de Bedrock: las peticiones por minuto o RPM y los tokens por minuto o TPM. Si una aplicación dispara ráfagas de consultas que superan estas cuotas regionales, la plataforma responde con el código de error HTTP cuatrocientos veintinueve por exceso de tasa. A la derecha mostramos los patrones de diseño indispensables para mitigar este riesgo. En primer lugar, implementar lógica de reintentos con retroceso exponencial y variación aleatoria en el código cliente para no saturar la red. En segundo lugar, desacoplar los procesos por lotes utilizando colas de mensajes como Amazon SQS para regular la cadencia de despacho. En tercer lugar, configurar alarmas en AWS Budgets que notifiquen inmediatamente al equipo de operaciones si el consumo mensual alcanza el ochenta por ciento de la asignación presupuestal prevista.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Gobernanza de Nube</div>
-<div class="s-title">Responsabilidad Compartida en Inteligencia Artificial</div>
-<div class="s-sub">Delimitación clara entre el proveedor de nube, el creador del modelo y el arquitecto consumidor</div>
+<div class="kicker">Gobernanza de Nube</div>
+<h2>Responsabilidad Compartida en Inteligencia Artificial</h2>
+<div class="rule"></div>
+<div class="sub">Delimitación clara entre el proveedor de nube, el creador del modelo y el arquitecto consumidor</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 3 Capas de Responsabilidad -->
   <g transform="translate(60, 60)">
@@ -3396,20 +3380,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Shared Responsibility Model for Generative AI (2025)</span>
 <span class="pg">7 / 15</span>
 </div>
 <aside class="guion">El modelo de responsabilidad compartida clásico de la computación en la nube adquiere nuevas dimensiones al incorporar modelos de lenguaje generativo. En la primera columna a la izquierda se ubica el proveedor de infraestructura, como AWS: su deber es garantizar la seguridad física de los centros de cómputo, el aislamiento de hipervisores y redes, y el acuerdo de nivel de servicio de la API. En la segunda columna interviene el creador del modelo fundacional, como Anthropic o Meta: su responsabilidad comprende la curaduría ética de los datos de preentrenamiento y la alineación mediante aprendizaje por refuerzo para reducir sesgos. En la tercera columna se sitúa el cliente y el arquitecto de soluciones: es nuestra estricta responsabilidad clasificar la confidencialidad de los datos enviados en los prompts, implementar defensas contra inyecciones maliciosas de instrucciones, configurar los permisos de acceso IAM y validar que las respuestas no contengan alucinaciones antes de entregarlas a usuarios finales o bases de datos corporativas.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Economía de Nube</div>
-<div class="s-title">Estructura de Precios Reales en Amazon Bedrock</div>
-<div class="s-sub">Tarifas por millón de tokens en región US-East (N. Virginia), vigentes a noviembre de 2026</div>
+<div class="kicker">Economía de Nube</div>
+<h2>Estructura de Precios Reales en Amazon Bedrock</h2>
+<div class="rule"></div>
+<div class="sub">Tarifas por millón de tokens en región US-East (N. Virginia), vigentes a noviembre de 2026</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 50)">
     <rect x="0" y="0" width="500" height="175" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3431,38 +3416,39 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 
   <g transform="translate(60, 250)">
     <rect x="0" y="0" width="500" height="175" rx="10" fill="#FFF" stroke="#D97706" stroke-width="2"/>
-    <text x="25" y="35" fill="#92400E" font-size="18" font-weight="700">Claude 3.5 Haiku (Alta Velocidad)</text>
-    <text x="25" y="65" fill="#0F172A" font-size="16">Entrada (Input): $0.800 USD por 1M tokens</text>
-    <text x="25" y="95" fill="#0F172A" font-size="16">Salida (Output): $4.000 USD por 1M tokens</text>
-    <text x="25" y="125" fill="#166534" font-size="16">Prompt Caching: $0.080 USD por 1M lectura (90 % ahorro)</text>
-    <text x="25" y="155" fill="#D97706" font-size="16">Claude 3 Haiku ($0.25/$1.25) rotulado modelo histórico</text>
+    <text x="25" y="35" fill="#92400E" font-size="18" font-weight="700">Claude Haiku 5.5 (Alta Velocidad)</text>
+    <text x="25" y="65" fill="#0F172A" font-size="16">Entrada (Input): $0.100 USD por 1M tokens</text>
+    <text x="25" y="95" fill="#0F172A" font-size="16">Salida (Output): $0.500 USD por 1M tokens</text>
+    <text x="25" y="125" fill="#166534" font-size="16">Prompt Caching: $0.010 USD por 1M lectura (90 % ahorro)</text>
+    <text x="25" y="155" fill="#D97706" font-size="16">Claude 3.5 Sonnet ($3/$15) rotulado como histórico</text>
   </g>
 
   <g transform="translate(620, 250)">
     <rect x="0" y="0" width="500" height="175" rx="10" fill="#FFF" stroke="#9333EA" stroke-width="2"/>
-    <text x="25" y="35" fill="#6B21A8" font-size="18" font-weight="700">Claude 3.5 Sonnet (Razonamiento de Frontera)</text>
-    <text x="25" y="65" fill="#0F172A" font-size="16">Entrada (Input): $3.000 USD por 1M tokens</text>
-    <text x="25" y="95" fill="#0F172A" font-size="16">Salida (Output): $15.000 USD por 1M tokens</text>
-    <text x="25" y="125" fill="#166534" font-size="16">Prompt Caching: $0.300 USD por 1M lectura (90 % ahorro)</text>
+    <text x="25" y="35" fill="#6B21A8" font-size="18" font-weight="700">Claude Sonnet 5.5 (Razonamiento de Frontera)</text>
+    <text x="25" y="65" fill="#0F172A" font-size="16">Entrada (Input): $2.000 USD por 1M tokens</text>
+    <text x="25" y="95" fill="#0F172A" font-size="16">Salida (Output): $10.000 USD por 1M tokens</text>
+    <text x="25" y="125" fill="#166534" font-size="16">Prompt Caching: $0.200 USD por 1M lectura (90 % ahorro)</text>
     <text x="25" y="155" fill="#6B21A8" font-size="16">Uso: Programación, análisis y agentes avanzados</text>
   </g>
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Bedrock Official Pricing (Consultado Noviembre 2026)</span>
 <span class="pg">8 / 15</span>
 </div>
-<aside class="guion">Para fundamentar nuestras decisiones de diseño en realidades económicas, presentamos en esta diapositiva las tarifas comerciales oficiales de Amazon Bedrock en la región de Virginia del Norte, verificadas a noviembre de 2026. Arriba a la izquierda se ubica Amazon Nova Micro, el modelo de texto ultraligero con una tarifa de tres centavos y medio por millón de tokens de entrada y catorce centavos por millón de salida. Arriba a la derecha, Amazon Nova Lite añade capacidades multimodales a seis centavos de entrada y veinticuatro centavos de salida. En la fila inferior observamos la familia Claude tres punto cinco. A la izquierda, Claude 3.5 Haiku se sitúa en ochenta centavos por millón de tokens de entrada y cuatro dólares de salida, destacando que su predecesor Claude 3 Haiku original figura hoy catalogado como modelo histórico. Finalmente, a la derecha, el modelo de frontera Claude 3.5 Sonnet mantiene una tarifa de tres dólares por millón de entrada y quince dólares de salida, ofreciendo un ahorro del noventa por ciento en lecturas mediante la función de almacenamiento en caché de prompts.</aside>
+<aside class="guion">Para fundamentar nuestras decisiones de diseño en realidades económicas, presentamos en esta diapositiva las tarifas comerciales oficiales de Amazon Bedrock en la región de Virginia del Norte, verificadas a noviembre de 2026. Arriba a la izquierda se ubica Amazon Nova Micro, el modelo de texto ultraligero con una tarifa de tres centavos y medio por millón de tokens de entrada y catorce centavos por millón de salida. Arriba a la derecha, Amazon Nova Lite añade capacidades multimodales a seis centavos de entrada y veinticuatro centavos de salida. En la fila inferior observamos la familia Claude cinco punto cinco. A la izquierda, Claude Haiku 5.5 se sitúa en diez centavos por millón de tokens de entrada y cincuenta centavos de salida. Finalmente, a la derecha, el modelo de frontera Claude Sonnet 5.5 mantiene una tarifa de dos dólares por millón de entrada y diez dólares de salida, ofreciendo un ahorro del noventa por ciento en lecturas mediante la función de almacenamiento en caché de prompts.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">FinOps y TCO</div>
-<div class="s-title">Punto de Equilibrio: Gestionado frente a GPU</div>
-<div class="s-sub">Fórmula matemática para determinar el volumen de tokens mensual que justifica un servidor dedicado</div>
+<div class="kicker">FinOps y TCO</div>
+<h2>Punto de Equilibrio: Gestionado frente a GPU</h2>
+<div class="rule"></div>
+<div class="sub">Fórmula matemática para determinar el volumen de tokens mensual que justifica un servidor dedicado</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(100, 60)">
     <rect x="0" y="0" width="980" height="350" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3491,20 +3477,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: Metodología de FinOps para Arquitectura de IA — CUC (2026)</span>
 <span class="pg">9 / 15</span>
 </div>
 <aside class="guion">Para determinar con rigor financiero cuándo abandonar las APIs gestionadas y contratar instancias dedicadas, aplicamos la fórmula del punto de equilibrio. El volumen de cruce mensual en millones de tokens se obtiene dividiendo el costo fijo del servidor reservado entre el costo medio ponderado por millón de tokens en la API. A la izquierda comparamos un servidor g5.xlarge, cuyo costo operativo ronda setecientos treinta dólares mensuales, frente a un modelo de frontera con costo medio de seis dólares por millón de tokens. El volumen de cruce se alcanza en ciento veinte millones de tokens al mes; si la empresa supera esa cota de forma continua, el servidor dedicado genera un ahorro económico sustancial. A la derecha realizamos la misma comparación frente a modelos ultraligeros como Nova Micro: para amortizar el mismo servidor se requeriría procesar doce mil millones de tokens mensuales. En este escenario, la API gestionada serverless resulta infinitamente más económica y flexible para cualquier carga corporativa típica.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Calidad de Servicio</div>
-<div class="s-title">Perfil de Latencia y SLAs: Gestionado vs GPU</div>
-<div class="s-sub">Comportamiento del tiempo de respuesta bajo ráfagas de tráfico y fallos de zona</div>
+<div class="kicker">Calidad de Servicio</div>
+<h2>Perfil de Latencia y SLAs: Gestionado vs GPU</h2>
+<div class="rule"></div>
+<div class="sub">Comportamiento del tiempo de respuesta bajo ráfagas de tráfico y fallos de zona</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <g transform="translate(60, 60)">
     <rect x="0" y="0" width="500" height="340" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
@@ -3544,20 +3531,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: AWS Service Level Agreements & Real-world AI Benchmark Analysis (2025)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">El perfil de latencia y la consistencia en el cumplimiento de SLAs constituyen el segundo factor crítico de diferenciación. A la izquierda analizamos los servicios gestionados: al contar con respaldos en múltiples zonas de disponibilidad, ofrecen un compromiso contractual de disponibilidad del noventa y nueve punto nueve por ciento. Las ráfagas de tráfico repentinas son absorbidas elásticamente por la flota del proveedor sin necesidad de precalentar máquinas; no obstante, durante horas de alta demanda global, el cliente puede experimentar pequeñas variaciones o jitter en el tiempo hasta el primer token debido a la contención en la infraestructura multi-tenant. A la derecha examinamos los servidores propios: la latencia base para cargas nominales es excepcionalmente baja y determinista, pero si se produce un pico que desborde la capacidad de la tarjeta, las peticiones se acumulan en la cola elevando drásticamente el tiempo de respuesta percentil noventa y nueve a menos que se hayan configurado pools tibios de autoescalado.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Estrategia Multi-Nube</div>
-<div class="s-title">Mitigación del Bloqueo de Proveedor (Vendor Lock-in)</div>
-<div class="s-sub">Capas de abstracción y adopción de la especificación OpenAI API para desacoplar el código</div>
+<div class="kicker">Estrategia Multi-Nube</div>
+<h2>Mitigación del Bloqueo de Proveedor (Vendor Lock-in)</h2>
+<div class="rule"></div>
+<div class="sub">Capas de abstracción y adopción de la especificación OpenAI API para desacoplar el código</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr35" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -3611,7 +3599,7 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
     
     <rect x="20" y="70" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
     <text x="35" y="100" fill="#0F172A" font-size="16" font-weight="700">Amazon Bedrock</text>
-    <text x="35" y="125" fill="#64748B" font-size="16">Claude 3.5 Sonnet y Nova</text>
+    <text x="35" y="125" fill="#64748B" font-size="16">Claude Sonnet 5.5 y Nova</text>
 
     <rect x="20" y="155" width="280" height="75" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
     <text x="35" y="185" fill="#0F172A" font-size="16" font-weight="700">Servidores Propios vLLM</text>
@@ -3624,20 +3612,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: The Open-Source AI Gateway Framework & LiteLLM Documentation (2025)</span>
 <span class="pg">11 / 15</span>
 </div>
 <aside class="guion">Acoplar el código de nuestras aplicaciones a los métodos propietarios de un único proveedor de nube representa un grave riesgo estratégico conocido como Vendor Lock-in. En este diagrama presentamos el patrón de pasarela de abstracción para independizar la lógica de negocio. En el primer bloque, las aplicaciones empresariales consumen exclusivamente la especificación estándar de chat completions de OpenAI sin importar librerías propietarias en el código fuente. En el segundo bloque opera una pasarela intermedia como LiteLLM Proxy o un gateway basado en Envoy: este componente intercepta las peticiones, normaliza los formatos JSON y aplica políticas de conmutación por error ante caídas. En el tercer bloque se sitúan los destinos de ejecución: según las directrices operativas o de costos, el gateway puede despachar la consulta hacia Amazon Bedrock, hacia un clúster privado de vLLM en OpenStack o hacia otra nube pública modificando únicamente una regla de enrutamiento sin reescribir una sola línea de código.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Arquitectura Híbrida</div>
-<div class="s-title">Ruteo Dinámico Inteligente de Inferencia</div>
-<div class="s-sub">Enrutamiento selectivo por complejidad: modelos ligeros para el 70 % y modelos avanzados para el resto</div>
+<div class="kicker">Arquitectura Híbrida</div>
+<h2>Ruteo Dinámico Inteligente de Inferencia</h2>
+<div class="rule"></div>
+<div class="sub">Enrutamiento selectivo por complejidad: modelos ligeros para el 70 % y modelos avanzados para el resto</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <defs>
     <marker id="arr36" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -3692,27 +3681,28 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
   <g transform="translate(640, 245)">
     <rect x="0" y="0" width="480" height="155" rx="10" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
     <text x="25" y="32" fill="#1E40AF" font-size="18" font-weight="700">Destino B: Razonamiento Complejo (30 % del tráfico)</text>
-    <text x="25" y="65" fill="#0F172A" font-size="16">Modelo: Claude 3.5 Sonnet ($3.00 / $15.00) o Nova Pro</text>
+    <text x="25" y="65" fill="#0F172A" font-size="16">Modelo: Claude Sonnet 5.5 ($2.00 / $10.00) o Nova Pro</text>
     <text x="25" y="95" fill="#1E40AF" font-size="16">Resultado: Máxima precisión lógica, matemática y de código</text>
     <text x="25" y="125" fill="#64748B" font-size="16">Casos: Análisis de contratos y código avanzado</text>
   </g>
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: RouteLLM Framework & Berkeley Sky Computing Lab (2024)</span>
 <span class="pg">12 / 15</span>
 </div>
-<aside class="guion">El enrutamiento inteligente de inferencia representa el pináculo de la optimización arquitectónica moderna al combinar lo mejor de ambos mundos. En el primer paso a la izquierda, la petición entrante es recibida por un enrutador ligero como RouteLLM. En el segundo paso, un modelo clasificador diminuto evalúa el prompt en menos de quince milisegundos para cuantificar su complejidad semántica y técnica. Si la consulta corresponde a una tarea conversacional rutinaria o una clasificación estándar, el sistema la despacha hacia el Destino A: un modelo ultraligero como Nova Micro o un servidor propio vLLM, resolviendo la petición con costo prácticamente nulo. Si por el contrario la solicitud involucra razonamiento matemático complejo, generación de código o análisis legal detallado, el clasificador la redirige al Destino B: un modelo de frontera como Claude 3.5 Sonnet. Este patrón híbrido reduce el costo global de la plataforma en más de un setenta por ciento manteniendo intacta la percepción de máxima calidad cognitiva para el usuario final.</aside>
+<aside class="guion">El enrutamiento inteligente de inferencia representa el pináculo de la optimización arquitectónica moderna al combinar lo mejor de ambos mundos. En el primer paso a la izquierda, la petición entrante es recibida por un enrutador ligero como RouteLLM. En el segundo paso, un modelo clasificador diminuto evalúa el prompt en menos de quince milisegundos para cuantificar su complejidad semántica y técnica. Si la consulta corresponde a una tarea conversacional rutinaria o una clasificación estándar, el sistema la despacha hacia el Destino A: un modelo ultraligero como Nova Micro o un servidor propio vLLM, resolviendo la petición con costo prácticamente nulo. Si por el contrario la solicitud involucra razonamiento matemático complejo, generación de código o análisis legal detallado, el clasificador la redirige al Destino B: un modelo de frontera como Claude Sonnet 5.5. Este patrón híbrido reduce el costo global de la plataforma en más de un setenta por ciento manteniendo intacta la percepción de máxima calidad cognitiva para el usuario final.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Marco Normativo</div>
-<div class="s-title">Soberanía de Datos y Cumplimiento en Colombia</div>
-<div class="s-sub">Exigencias regulatorias de la Ley 1581 de 2012 y Circulares de la Superfinanciera para IA</div>
+<div class="kicker">Marco Normativo</div>
+<h2>Soberanía de Datos y Cumplimiento en Colombia</h2>
+<div class="rule"></div>
+<div class="sub">Exigencias regulatorias de la Ley 1581 de 2012 y Circulares de la Superfinanciera para IA</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 3 Pilares Normativos -->
   <g transform="translate(60, 60)">
@@ -3771,20 +3761,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: Ley 1581 de 2012 — Congreso de Colombia & Circular Externa 007 de la SFC (2025)</span>
 <span class="pg">13 / 15</span>
 </div>
 <aside class="guion">En el contexto corporativo colombiano, ninguna decisión técnica de inteligencia artificial puede adoptarse al margen del marco regulatorio vigente. En la primera columna analizamos la Ley estatutaria 1581 de 2012 sobre protección de datos personales: su régimen prohíbe taxativamente la transferencia internacional de datos personales hacia jurisdicciones que no ofrezcan niveles adecuados de protección, exigiendo el consentimiento previo e informado del titular y tipificando multas severas impuestas por la Superintendencia de Industria y Comercio. En la segunda columna examinamos la Circular Externa 007 de la Superintendencia Financiera de Colombia para entidades vigiladas, la cual impone la custodia indelegable de las llaves de cifrado y pistas de auditoría inmutables. En la tercera columna proponemos la respuesta arquitectónica: implementar capas de anonimización previa que enmascaren números de cédula, nombres y datos financieros antes de invocar servicios gestionados en el exterior, o bien canalizar la información sensible hacia clústeres propios de vLLM alojados en territorio nacional.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Guía de Decisión</div>
-<div class="s-title">Matriz de Decisión: ¿Gestionado o Auto-Alojado?</div>
-<div class="s-sub">Árbol de criterios arquitectónicos para seleccionar la estrategia de despliegue óptima</div>
+<div class="kicker">Guía de Decisión</div>
+<h2>Matriz de Decisión: ¿Gestionado o Auto-Alojado?</h2>
+<div class="rule"></div>
+<div class="sub">Árbol de criterios arquitectónicos para seleccionar la estrategia de despliegue óptima</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 3 Opciones en Columnas -->
   <g transform="translate(60, 60)">
@@ -3834,20 +3825,21 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: Guía de Decisión de Inferencia en Nube — Universidad de la Costa (2026)</span>
 <span class="pg">14 / 15</span>
 </div>
 <aside class="guion">Sintetizamos el proceso de toma de decisiones en esta matriz arquitectónica integral. En la primera columna, la elección natural para proyectos nuevos, pruebas de concepto, aplicaciones departamentales con horarios de oficina o sistemas RAG con demanda inferior a cincuenta millones de tokens mensuales es el consumo de APIs gestionadas como Amazon Bedrock, minimizando el tiempo de desarrollo y eliminando los costos de operación de servidores. En la segunda columna, cuando la organización alcanza escala de producción masiva con cientos de miles de usuarios diarios, la arquitectura híbrida con enrutador inteligente representa la mejor práctica, absorbiendo la mayoría del tráfico en modelos ultraligeros y reservando los modelos avanzados únicamente para casos complejos. En la tercera columna, el despliegue auto-alojado con vLLM sobre nubes privadas o instancias dedicadas resulta imperativo cuando existen mandatos regulatorios estrictos de soberanía de datos o volúmenes masivos con utilización continua del hardware.</aside>
 </section>
 <section class="slide" data-parte="4">
-<div class="topline-g"></div><div class="topline-v"></div>
-<img alt="Logo CUC" class="logo-main" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 <div class="s-head">
-<div class="s-kicker">Cierre de Sesión</div>
-<div class="s-title">Conclusiones y Conexión con la Semana 16</div>
-<div class="s-sub">De la infraestructura de cómputo y compresión hacia las capacidades avanzadas de agentes y razonamiento</div>
+<div class="kicker">Cierre de Sesión</div>
+<h2>Conclusiones y Conexión con la Semana 16</h2>
+<div class="rule"></div>
+<div class="sub">De la infraestructura de cómputo y compresión hacia las capacidades avanzadas de agentes y razonamiento</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
-<div class="dgm-container">
+<div class="s-body">
 <svg viewBox="0 0 1180 490" class="dgm">
   <!-- 4 Pilares de Cierre -->
   <g transform="translate(60, 60)">
@@ -3908,18 +3900,20 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </svg>
 </div>
 <div class="s-foot">
+<span>Arquitectura en la Nube · Semana 15 · Parte 4 de 4</span>
 <span class="src">Fuente: Síntesis de Arquitectura en la Nube — Universidad de la Costa (2026)</span>
 <span class="pg">15 / 15</span>
 </div>
 <aside class="guion">Llegamos al final de la décimo quinta semana consolidando una visión integral de la infraestructura de inteligencia artificial en la nube. Hemos transitado desde las propiedades físicas del silicio y la memoria HBM en las tarjetas aceleradoras, pasando por las matemáticas de compresión de modelos mediante AWQ y atención agrupada GQA, hasta los motores de inferencia de alto rendimiento como vLLM que eliminan el desperdicio de memoria y permiten atender miles de usuarios concurrentes. Asimismo, establecimos los criterios financieros y regulatorios para balancear servicios gestionados serverless con nodos propios en nubes privadas. Con esta sólida base de infraestructura y dimensionamiento, estaremos plenamente preparados para abordar en la Semana 16 las capacidades avanzadas de los modelos: modelos de razonamiento profundo, generación de código, sistemas agénticos, uso de herramientas y el repaso integral de la Unidad Tres. Muchas gracias por su atención.</aside>
-</section></div>
+</section>
+</div>
 <div id="nav">
-  <button onclick="prev()" title="Anterior (←)">&#x2039;</button>
-  <span id="counter">1 / 60</span>
-  <button onclick="next()" title="Siguiente (→)">&#x203A;</button>
+<button onclick="prev()">‹</button>
+<span id="counter">1 / 60</span>
+<button onclick="next()">›</button>
 </div>
 <script>
-  const slides = Array.from(document.querySelectorAll('.slide'));
+  const slides = document.querySelectorAll('.slide');
   const counter = document.getElementById('counter');
   const progress = document.getElementById('progress');
   let current = 0;
