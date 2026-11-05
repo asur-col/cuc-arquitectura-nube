@@ -2313,14 +2313,14 @@ Semana 14 · Periodo 2026-2 · Barranquilla, Colombia
 <text x="450" y="75" fill="#15803D" font-size="16" font-weight="700">Bedrock Variable</text>
 <circle cx="320" cy="210" r="8" fill="#FEF3C7" stroke="#B45309" stroke-width="2"/>
 <line x1="320" y1="210" x2="320" y2="310" stroke="#64748B" stroke-width="2" stroke-dasharray="6 5"/>
-<text x="320" y="190" fill="#78350F" font-size="16" font-weight="700" text-anchor="middle">Cruce: ~120M Tokens/mes</text>
+<text x="320" y="190" fill="#78350F" font-size="16" font-weight="700" text-anchor="middle">Cruce: ~183M Tokens/mes</text>
 <rect x="660" y="70" width="460" height="110" rx="8" fill="#DCFCE7" stroke="#15803D" stroke-width="2"/>
-<text x="890" y="94" fill="#14532D" font-size="17" font-weight="700" text-anchor="middle">Zona A: Menos de 120M tokens / mes</text>
+<text x="890" y="94" fill="#14532D" font-size="17" font-weight="700" text-anchor="middle">Zona A: Menos de 183M tokens / mes</text>
 <text x="890" y="118" fill="#14532D" font-size="16" text-anchor="middle">Tráfico bajo o fluctuante</text>
 <text x="890" y="142" fill="#14532D" font-size="16" text-anchor="middle">Amazon Bedrock es MUCHO más económico</text>
 <text x="890" y="166" fill="#14532D" font-size="16" text-anchor="middle">Cero desperdicio de capacidad ociosa</text>
 <rect x="660" y="200" width="460" height="110" rx="8" fill="#FEE2E2" stroke="#A6192E" stroke-width="2"/>
-<text x="890" y="224" fill="#7F1D1D" font-size="17" font-weight="700" text-anchor="middle">Zona B: Más de 120M tokens / mes</text>
+<text x="890" y="224" fill="#7F1D1D" font-size="17" font-weight="700" text-anchor="middle">Zona B: Más de 183M tokens / mes</text>
 <text x="890" y="248" fill="#7F1D1D" font-size="16" text-anchor="middle">Tráfico continuo y predecible 24/7</text>
 <text x="890" y="272" fill="#7F1D1D" font-size="16" text-anchor="middle">El servidor EC2 satura su capacidad</text>
 <text x="890" y="296" fill="#7F1D1D" font-size="16" text-anchor="middle">El costo marginal por token es inferior</text>
@@ -2335,7 +2335,7 @@ Semana 14 · Periodo 2026-2 · Barranquilla, Colombia
 <span class="src">Fuente: AWS Price List API (EC2 g5.xlarge y Bedrock us-east-1, consulta oficial 2026-11-05); cálculo matemático de arquitectura</span>
 <span class="pg">9 / 15</span>
 </div>
-<aside class="guion">El cálculo del punto de equilibrio es la herramienta matemática que permite dirimir entre la nube gestionada y la infraestructura propia. En el plano cartesiano observamos la recta roja horizontal que representa el costo fijo de operar una instancia g5.xlarge de forma continua: setecientos treinta y cuatro dólares al mes pase lo que pase. La recta verde inclinada ilustra el costo variable de Amazon Bedrock, que arranca en cero y crece en proporción a los tokens consumidos. Ambas líneas se cruzan en torno a los ciento veinte millones de tokens mensuales. A la izquierda del cruce, en la zona A, el servicio gestionado es rotundamente más rentable porque evita pagar recursos inactivos. A la derecha, en la zona B, si el tráfico satura la máquina durante todo el día, el servidor propio comienza a amortizarse. La regla de oro para el arquitecto es nunca desplegar servidores dedicados hasta que la factura variable rebase con holgura el costo fijo.</aside>
+<aside class="guion">El cálculo del punto de equilibrio es la herramienta matemática que permite dirimir entre la nube gestionada y la infraestructura propia. En el plano cartesiano observamos la recta roja horizontal que representa el costo fijo de operar una instancia g5.xlarge de forma continua: setecientos treinta y cuatro dólares al mes pase lo que pase. La recta verde inclinada ilustra el costo variable de Amazon Bedrock, que arranca en cero y crece en proporción a los tokens consumidos. Ambas líneas se cruzan en torno a los ciento ochenta y tres millones de tokens mensuales, tomando Claude Sonnet 5.5 con un costo medio de cuatro dólares por millón. A la izquierda del cruce, en la zona A, el servicio gestionado es rotundamente más rentable porque evita pagar recursos inactivos. A la derecha, en la zona B, si el tráfico satura la máquina durante todo el día, el servidor propio comienza a amortizarse. La regla de oro para el arquitecto es nunca desplegar servidores dedicados hasta que la factura variable rebase con holgura el costo fijo.</aside>
 </section>
 <section class="slide" data-parte="4">
 <div class="s-head">
