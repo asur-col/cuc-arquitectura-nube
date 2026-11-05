@@ -8,6 +8,7 @@ Recursos nuevos o usados en las diapositivas rediseñadas (rama `arq-piloto-u3`)
 |---|---|---|---|---|---|
 | `nvidia-h100-nvlink-geekerwan-002.png` | S15 diap. 5 | Geekerwan (极客湾) | CC BY 3.0 (https://creativecommons.org/licenses/by/3.0) | https://commons.wikimedia.org/wiki/File:NVIDIA_H100_(%E6%9E%81%E5%AE%A2%E6%B9%BEGeekerwan)_002.png | Ninguna en el archivo. En la diapositiva: recorte `slice` (≈20 % del ancho) y pie «4 tarjetas H100 apiladas». La descripción de Commons dice «Here you can see 4 stacked cards» y no menciona conectores NVLink, por eso se retiró ese rótulo (verificado 2026-11-05) |
 | `coolit-rack-refrigeracion-liquida.jpg` | S15 diap. 10 | Barbara Massolin (CoolIT) | CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0) | https://commons.wikimedia.org/wiki/File:%C2%A9_CoolIT_Rack_DCLC_AHx_Liquid_Cooling_Solution.jpg | Ninguna (600×394 original) |
+| `cern-sala-servidores-02.jpg` | S13 diap. 13 (caso de dimensionamiento: hipervisores físicos) | Florian Hirzinger (CERN) | CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0) | https://commons.wikimedia.org/wiki/File:CERN_Server_02.jpg | Recorte `slice` a ≈460×118 px en la diapositiva. Título, autor y licencia confirmados por la API de Commons el 2026-11-05; el archivo local está redimensionado, por eso su SHA-1 no coincide con el original |
 
 ## Íconos (assets/iconos/, ya existentes en el repositorio)
 
@@ -24,6 +25,8 @@ Se usan sin modificar. Origen declarado en el commit `ea9e664` (2026-10-04): lib
 
 ## Diapositivas afectadas
 
+- S13 diap. 2–5, 7–15, 17–24, 26–30, 32–45 y 47–60: rediseño con íconos oficiales de `assets/iconos/` (sin modificar) y diagramas propios. Diap. 6 y 25 sin cambios (diseño piloto aprobado).
+- S13 diap. 13: foto `cern-sala-servidores-02.jpg` (ver tabla de fotos).
 - S13 diap. 6 (Nova Scheduler): íconos OpenStack y servidores on-prem.
 - S13 diap. 25 (IP flotante): usuario, switch, Nova.
 - S15 diap. 5 (NVLink frente a PCIe): foto H100 + diagramas propios.
