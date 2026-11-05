@@ -72,3 +72,48 @@ Descargadas desde los thumbnails de 1280 px de Commons (sin modificar salvo redi
 Nota: la URL del pie de diap. 55 pasó de `admin/configuration/schedulers.html` (301) a `admin/scheduling.html`.
 
 Cifras de S15 (PUE 1,5 / 1,15; >100 kW; 70–405 mil millones de parámetros) **no se tocaron**: S14–S16 están fuera del alcance de esta pasada y siguen pendientes de respaldo.
+
+## Piloto S14 (2026-11-05): Modelos, tokens e inferencia
+
+Rediseño del deck S14 con el estándar aprobado en S13. Las licencias de las fotos se volvieron a verificar en la API de Wikimedia Commons (`extmetadata`) el 2026-11-05.
+
+### Fotos (assets/fotos/)
+
+| Archivo local | Diapositiva | Autor (Commons) | Licencia | Página del archivo | Modificación |
+|---|---|---|---|---|---|
+| `nvidia-h100-nvlink-geekerwan-002.png` | S14 diap. 41 (instancias GPU) | Geekerwan (极客湾) | CC BY 3.0 (https://creativecommons.org/licenses/by/3.0) | https://commons.wikimedia.org/wiki/File:NVIDIA_H100_(%E6%9E%81%E5%AE%A2%E6%B9%BEGeekerwan)_002.png | Recorte `xMaxYMid slice` a la zona de las tarjetas. La imagen trae impreso un precio («约300,000元»), que queda fuera del recorte |
+| `noirlab-sala-servidores-racks.jpg` | S14 diap. 50 (servidor dedicado) | NOIRLab/NSF/AURA, T. Slovinský | CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) | https://commons.wikimedia.org/wiki/File:NOIRLab_HQ_Server_Racks_(6V6A0395-CC).jpg | Recorte `slice` |
+| `coolit-rack-refrigeracion-liquida.jpg` | S14 diap. 51 (servidor dedicado: costos y mantenimiento) | Barbara Massolin (CoolIT) | CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0) | https://commons.wikimedia.org/wiki/File:%C2%A9_CoolIT_Rack_DCLC_AHx_Liquid_Cooling_Solution.jpg | Recorte `slice` |
+| `cern-sala-servidores-02.jpg` | S14 diap. 52 (inferencia local) | Florian Hirzinger (CERN) | CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0) | https://commons.wikimedia.org/wiki/File:CERN_Server_02.jpg | Recorte `slice` |
+
+### Cifras de S14: decisión sobre cada cifra
+
+| Cifra (versión anterior) | Diap. | Decisión | Fuente / motivo |
+|---|---|---|---|
+| Precios Nova Micro, Lite y Pro; Haiku, Sonnet y Opus 5.5 | 26, 25, 27, 28 | Respaldadas | Tarifas de Bedrock us-east-1, consulta 2026-11-05 (`docs/fuentes/precios-bedrock-us-east-1.txt` de `_arq-material`). Las tarifas de Claude están en `$/1M`; Nova está en otra unidad en el archivo, y se usaron los valores aprobados por el docente |
+| Claude 3.5 Sonnet a $3 / $15 | 26 | Quitada | No aparece en el archivo de precios |
+| Sobrecosto de tokenización de +75 % y de 25–50 % | 19 | Quitadas | Conteo ilustrativo no medido con un tokenizador real. El diagrama queda como ejemplo rotulado |
+| Vocabulario de 200.000 tokens y «GPT-6» | 20 | Quitadas | Sin fuente en el repositorio. Se conservan 32.000 (Llama 2) y 128.256 (Llama 3), de las model cards de Meta |
+| Contexto de 1 a 2 millones de tokens en 2026 | 22 | Quitada | Sin fuente. Se conserva el par 2.048 (GPT-3, arXiv:2005.14165) y 200.000 (Claude 3.5 Sonnet, documentación de modelos). La URL de esta última está en `docs/cifras-S14.md` y **su verificación en vivo queda pendiente** |
+| «≈ 98 veces más contexto» | 22 | Respaldada (cálculo) | 200.000 ÷ 2.048 |
+| N = 100.000 → 10¹⁰ pares | 23 | Respaldada (cálculo) | N² con N = 100.000 |
+| Descuento de caché de 90 % a 95 % y TTFT −80 % | 24 | Respaldada parcialmente | 95 % = 1 − 0.10/2.00 (cálculo con tarifas). La reducción del TTFT (−80 %) se quitó: sin fuente |
+| Mínimo de 1.024 tokens para caché | 28 | Quitada | No aparece en el archivo de tarifas |
+| Escritura 125 % de la tarifa base | 24 | Respaldada (cálculo) | $2.50 / $2.00 |
+| Ahorro de 52 % frente a Sonnet 5.5 | 27 | Respaldada (cálculo) | 120.40 ÷ 250.00 = 0.48 |
+| Ahorro de 83 % con caché | 28 | Respaldada (cálculo) | 34.00 ÷ 200.00 = 0.17 |
+| «3x a 5x» de salida frente a entrada | 25 | Respaldada (cálculo) | Razón salida/entrada en el archivo: 4 a 5 para Nova, Haiku, Sonnet y Opus |
+| Cold start de 2 a 5 min y cooldown de 300 s | 42 | Quitadas (cualitativo: «minutos») | Sin fuente verificada en esta sesión |
+| Latencia de 8 s y de 400 tokens sin streaming | 39 | Quitadas (cualitativo) | Ejemplo sin fuente |
+| VRAM vacía de más de 60 % y «2 a 4 veces» de batching | 35, 36 | Quitadas | Sin fuente |
+| Legacy de Claude 3.5 Sonnet y Llama 3.3 con fechas de retiro | 12 | Quitadas (cualitativo) | Fechas sin verificar en vivo; la diapositiva solo dice «en estado Legacy» con la URL del ciclo de vida |
+| 1 token ≈ 4 caracteres en inglés y ≈ 3 en español | 17 | Quitada | Sin fuente |
+| g5.xlarge a $1.006 / h; $734 al mes | 41, 50, 51, 54 | Respaldadas | $1.006 × 730 h = $734.38. `docs/investigacion-S14.md` registra $1.0061/h y $734.45/mes |
+| g6e.xlarge a $1.861 / h y p5.48xlarge a $55.04 / h | 41 | Respaldadas por la lista de precios aprobada | **No están en el archivo local de tarifas; verificación en vivo pendiente** |
+| g5.12xlarge a $5.672 / h y g6.xlarge a $0.805 / h | 41 | Quitadas | No verificadas |
+| Punto de equilibrio de 183 M tokens / mes | 54 | Reemplazada por 191 M | Cálculo: $734.38 ÷ (0.005 $ / 1 300 tokens por petición) = 191 M. Supuesto: 1 000 entrada + 300 salida por petición con tarifas de Sonnet 5.5 |
+| Reparto 80/20 entre modelos | 27 | Respaldado como supuesto de arquitectura | Rotulado como supuesto, no como dato de mercado |
+| Reducción de costo de más de 60 % con el enrutador | 55 | Quitada | Sin fuente. Sí aparece la cifra calculada de 52 % en la diapositiva 27 |
+| Puerto 11434 de Ollama | 52 | Respaldada (verificación pendiente) | Documentación de Ollama (github.com/ollama/ollama) |
+| Artículo 26 de la Ley 1581 de 2012 | 53 | Respaldada | Ley 1581 de 2012, art. 26 (texto del Gestor Normativo) |
+| Listado de países «adecuados» de la SIC | 53 | Quitado | El listado no se verificó. La diapositiva dice que hay que verificarlo |
