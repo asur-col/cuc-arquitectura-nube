@@ -185,3 +185,45 @@ Los íconos de `assets/iconos/` se usan sin modificar. Marcas: solo para el serv
 - S15 diap. 2–15, 17–30, 32–45 y 47–60: rediseño con diagramas propios del mecanismo e íconos de `assets/iconos/`.
 - Diap. 45: el título pasó de «Decálogo» a «Cuatro reglas de operación» (la diapositiva muestra cuatro reglas).
 - Portadas 1, 16, 31 y 46: sin cambios de contenido; la portada 46 agrega «TCO = costo total de propiedad» al pie de siglas.
+
+## Piloto S16 (2026-11-05): Capacidades de los modelos y repaso de la Unidad 3
+
+Rediseño del deck S16 con el estándar de S15 v3 (diagramas con íconos reales, máximo 25 palabras por diapositiva, fotos grandes con crédito). Los guiones `<aside class="guion">` no se tocaron.
+
+### Fotos (assets/fotos/, ya registradas en S13/S14; reutilizadas)
+
+| Archivo local | Diapositiva | Autor (Commons) | Licencia |
+|---|---|---|---|
+| `wikimedia-servidores-racks.jpg` | S16 diap. 12 (banda superior) | Victorgrigas | CC BY-SA 3.0 |
+| `switches-rack-patch-panels.jpg` | S16 diap. 49 | Dsimic | CC BY-SA 4.0 |
+| `noirlab-sala-servidores-racks.jpg` | S16 diap. 50 | NOIRLab/NSF/AURA, T. Slovinský | CC BY 4.0 |
+| `nvidia-h100-nvlink-geekerwan-002-recorte.png` | S16 diap. 51 | Geekerwan | CC BY 3.0 |
+
+### Íconos
+
+Íconos oficiales de `assets/iconos/` (AWS, Kubernetes, OpenStack, marcas de software). Cada marca se usa solo para su servicio o proyecto; los conceptos genéricos usan íconos genéricos de `aws/general`, `generic/` y `onprem/`.
+
+### Cifras de S16: decisión sobre cada cifra
+
+| Cifra (versión anterior) | Diap. | Decisión | Fuente / motivo |
+|---|---|---|---|
+| Modelo 32B con razonamiento supera a 405B | 3 | Quitada del diagrama (barras ilustrativas, sin cifras) | Sin fuente en el repositorio; el guion conserva la afirmación y queda pendiente de respaldo docente |
+| 0,5–1,2 s y 8–45 s de latencia; 8 veces más costo | 9 | Latencias quitadas; se conserva el cálculo del costo | Costo: 1 000 × $2/M + 400 × $10/M = $0,006; 1 000 × $2/M + 4 500 × $10/M = $0,047 (≈ 8 veces). Tarifas de `precios-bedrock-us-east-1.txt` |
+| 3x a 10x de tokens de pensamiento | 8 | Quitada | Sin fuente; el diagrama usa solo las etiquetas |
+| budget_tokens 1 024 / 4 096 / 16 384+ con latencias < 5 s, 10–20 s, > 45 s | 10 | Se conservan los valores; latencias quitadas | Mínimo de 1 024 verificado en la documentación de Anthropic (platform.claude.com, extended thinking, consulta 2026-11-05). Esa página indica que `budget_tokens` está deprecado en modelos 4.7 y posteriores (usar thinking adaptativo con effort) |
+| SWE-bench: «40 % a 55 %»; HumanEval «> 90 %» | 18 | Quitadas (cualitativo: «benchmark saturado») | Sin verificar en esta sesión |
+| Firecracker: arranque de 5–10 ms; < 10 ms; ~5 MB | 23, 24 | Quitadas | No verificadas; el guion dice 5–10 ms, la cifra del paper NSDI 2020 que se revisará es distinta (pendiente para el docente) |
+| PagedAttention: 60–80 % de desperdicio y < 4 % | 53 | Quitadas (cualitativo: «desperdicio alto» / «casi cero desperdicio») | El abstract de Kwon et al. (arXiv:2309.06180) confirma «2-4×» de rendimiento y «near-zero waste»; los porcentajes no aparecen en el abstract |
+| 2–4 veces de rendimiento (vLLM) | 53 | Respaldada | Abstract de arXiv:2309.06180 (verificado 2026-11-05) |
+| AWQ: 1 % de pesos salientes | 52 | Respaldada | Abstract de arXiv:2306.00978 («Protecting only 1% salient weights»; verificado 2026-11-05) |
+| 3x de reducción de VRAM (70B: 140 GB → 40 GB) | 52 | Quitada | Cálculo aproximado sin fuente |
+| Ahorro de 80 % de tokens de salida | 30, 40 | Quitadas (cualitativo) | Sin fuente |
+| Éxito de invocación > 98 % | 35 | Quitada | Sin fuente |
+| 15–50 ms de búsqueda vectorial | 39 | Quitada | Sin fuente |
+| Punto de equilibrio de 183 M tokens / mes | 55 | Reemplazada por 191 M | $734 ÷ $0,005 por petición × 1 300 tokens = 191 M tokens/mes; coherente con S14 y S15 |
+| Ruteo 20 % / 80 % | 15 | Quitada (cualitativo: «solo consultas complejas») | Sin fuente |
+| Precios de Bedrock | 8, 9, 54 | Respaldadas | Solo de `precios-bedrock-us-east-1.txt`: Nova Micro $0,035/$0,14; Haiku 5.5 $0,10/$0,50; Sonnet 5.5 $2/$10; Opus 5.5 $4/$20 por millón |
+| GPT-6.1 Sol (guion, diap. 17) | 17 | No aparece en la diapositiva; el guion lo menciona | Sin fuente verificable; pendiente para el docente |
+| H100: 3,35 TB/s; NVLink 900 GB/s | 51 | Respaldadas | NVIDIA H100 (nvidia.com/en-us/data-center/h100) |
+| CPU DDR5 «200 a 300 GB/s» | 51 | Quitada (cualitativo: «ancho de banda bajo») | Sin fuente |
+| Ley 1581 de 2012 | 56 | Respaldada | Ley Estatutaria 1581 de 2012; SIC (sic.gov.co) |
