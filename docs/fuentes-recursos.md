@@ -186,6 +186,39 @@ Los íconos de `assets/iconos/` se usan sin modificar. Marcas: solo para el serv
 - Diap. 45: el título pasó de «Decálogo» a «Cuatro reglas de operación» (la diapositiva muestra cuatro reglas).
 - Portadas 1, 16, 31 y 46: sin cambios de contenido; la portada 46 agrega «TCO = costo total de propiedad» al pie de siglas.
 
+## S15 parte 5 (2026-11-05): IA local, MoE, rankings y delegación
+
+Quinta parte de S15 (diapositivas 61 a 75), excepción autorizada a la norma de cuatro partes. `verificar.py` rechaza cinco partes («partes encontradas [1, 2, 3, 4, 5], se esperan 1..4»); es la única regla incumplida y no se forzó.
+
+### Foto (assets/fotos/)
+
+| Archivo local | Diapositiva | Autor (Commons) | Licencia | Fuente | Modificación |
+|---|---|---|---|---|---|
+| `asus-strix-rtx4090-operational.jpg` | S15 diap. 63 | Benlisquare | CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0) | https://commons.wikimedia.org/wiki/File:Asus_Strix_RTX_4090_operational.jpg (licencia verificada en la API de Commons, 2026-11-05) | Reducida a 1280 px de ancho; en la diapositiva, recorte `slice` |
+
+### Cifras de MoE (model cards y artículo, consulta 2026-11-05)
+
+| Modelo | Total | Activos | Fuente |
+|---|---|---|---|
+| Mixtral 8x7B | 47 mil millones | 13 mil millones (8 expertos por capa, 2 por token) | Jiang et al. (2024), arXiv:2401.04088 (resumen); huggingface.co/mistralai/Mixtral-8x7B-v0.1 (Apache 2.0) |
+| Qwen3-30B-A3B | 30,5 mil millones | 3,3 mil millones (128 expertos, 8 activos) | huggingface.co/Qwen/Qwen3-30B-A3B (Apache 2.0) |
+| DeepSeek-V3 | 671 mil millones | 37 mil millones | huggingface.co/deepseek-ai/DeepSeek-V3 (código MIT; modelo con licencia propia que permite uso comercial) |
+
+Los porcentajes de la diapositiva 65 (28 %, 11 % y 5,5 %) son cálculo propio: 13/47, 3,3/30,5 y 37/671.
+
+### Rankings (diapositiva 67)
+
+- Artificial Analysis, índice de inteligencia (artificialanalysis.ai/leaderboards/models, consulta 2026-11-05; la página solo muestra «Updated», sin fecha de corte): Gemini 4 Carbon (high) 60; Claude Opus 5.5 (max) 59; GPT-6 Astra (max) 57. Lista de pesos abiertos (artificialanalysis.ai/models/open-source, misma fecha): DeepSeek V4.1 Flash 1017 (Max) 33 como el mejor. Lectura hecha con WebFetch; conviene que el docente la confirme en pantalla antes de clase.
+- Arena (antes LMArena, arena.ai/leaderboard): la consulta automática devolvió HTTP 403. Fuentes de terceros encontradas por búsqueda se contradicen entre sí (agosto y octubre de 2026), así que no se muestran posiciones de Arena; la diapositiva solo la describe (votos humanos a ciegas) y el guion lo dice.
+
+### Caso ASUR (diapositivas 71 a 74)
+
+Sin secretos, direcciones, nombres de servidores, puertos, rutas internas ni nombres de estudiantes. Los modelos y herramientas se nombran por producto (Claude Opus, Haiku, Sonnet, opencode, Antigravity). «Vibe coding»: término popularizado por Andrej Karpathy (2025). Íconos de `assets/iconos/` sin modificar; las marcas Ollama, llama.cpp y LM Studio se nombran solo como texto.
+
+### Guiones de las partes 1 a 4 corregidos en esta pasada
+
+Diap. 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 17 a 30 (salvo 25 solo ajustado), 33, 34, 36, 38 a 50, 52 a 55, 57 a 60: cifras sin respaldo quitadas o vueltas cualitativas y texto alineado con lo que muestra la diapositiva. Diap. 27: KV por sesión de 4 GB (FP16) y 2 GB (FP8) para Llama 3 8B con 32 000 tokens (32 capas × 8 cabezas KV × 128 × 2 bytes × 2 = 128 KiB por token). Diap. 42: XID 31 = fallo de memoria de la GPU, 45 = limpieza preventiva, 79 = GPU caída del bus. Diap. 39 y 44: TTFT y objetivos rotulados como supuestos. Diap. 45: cuatro reglas, no decálogo. Diap. 54: 191 millones de tokens al mes ($734,38 ÷ $3,85 por millón; Sonnet 5.5; petición de 1 000 de entrada y 300 de salida = $0,005).
+
 ## Piloto S16 (2026-11-05): Capacidades de los modelos y repaso de la Unidad 3
 
 Rediseño del deck S16 con el estándar de S15 v3 (diagramas con íconos reales, máximo 25 palabras por diapositiva, fotos grandes con crédito). Los guiones `<aside class="guion">` no se tocaron.
