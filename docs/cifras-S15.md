@@ -39,6 +39,14 @@ Tarifas on-demand para región US East (N. Virginia), consultadas oficialmente e
 
 ---
 
+### 1.3 Potencia de un servidor de 8 GPU H100 (Diapositiva 10)
+- **NVIDIA DGX H100 (8 GPU H100)**: potencia máxima del sistema de 10,2 kW (dato de la hoja de especificaciones; la guía de usuario lo muestra en la tabla de potencia).
+  - *Fuente*: NVIDIA DGX H100 Datasheet («System power usage: 10.2 kW max»).
+  - *URL*: `https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html` (consulta: 2026-11-05)
+  - *Uso en diapositiva*: «1 servidor DGX H100 (8 GPU, máx.): 10,2 kW» y «cálculo: 4 × 10,2 kW» para ≈ 41 kW por rack.
+
+---
+
 ## 2. Cuantización y Dimensionamiento de VRAM
 
 ### 2.1 Presupuesto de Memoria (Diapositivas 4, 17, 18, 29)
