@@ -68,6 +68,15 @@
   ol.steps>li{counter-increment:step;position:relative;padding:6px 0 6px 42px;margin-bottom:10px;}
   ol.steps>li::before{content:counter(step);position:absolute;left:0;top:6px;width:28px;height:28px;border-radius:50%;background:var(--vino-tint);color:var(--vino);font-family:var(--mono);font-weight:700;font-size:13px;display:grid;place-items:center;}
 
+  figure.captura{margin:22px 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);}
+  figure.captura img{width:100%;height:auto;display:block;}
+  figure.captura figcaption{padding:10px 16px;font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-top:1px solid var(--line);font-family:var(--mono);line-height:1.4;}
+  figure.captura figcaption b{color:var(--vino);}
+  @media (max-width: 640px) {
+    .wrap{padding:0 14px 60px;}
+    header.top{padding:28px 16px 24px;}
+    table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;}
+  }
   footer.page{max-width:820px;margin:60px auto 0;padding:20px 24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);text-align:center;}
 </style>
 </head>
@@ -114,14 +123,22 @@
   <ol>
     <li>Abre <b>Entorno de pruebas → Start Lab</b>, espera el punto verde y haz clic en <b>AWS</b>.</li>
     <li>En EC2 → <b>Launch instance</b>: Ubuntu Server 24.04 LTS (x86), tipo <code>t3.medium</code>, par de claves: <b>Proceed without a key pair</b>, disco de <b>35 GB gp2</b>, IP pública activada.</li>
-    <li>Grupo de seguridad: abre los puertos <b>22, 80 y 6080</b> (TCP) con origen <code>0.0.0.0/0</code>. Es una VM de laboratorio y desechable.</li>
+    <li>Grupo de seguridad: abre los puertos <b>22, 80, 8080 y 6080</b> (TCP) y <b>Todo ICMP - IPv4</b> con origen <code>0.0.0.0/0</code>. Es una VM de laboratorio y desechable.</li>
     <li>Cuando esté <i>Running</i>: <b>Connect → EC2 Instance Connect → Connect</b> y ejecuta:</li>
   </ol>
+  <figure class="captura">
+    <img src="capturas/01-lanzamiento-instancia.png" alt="Instancia EC2 t3.medium en ejecución con Ubuntu 24.04 y reglas de seguridad configuradas" loading="lazy">
+    <figcaption><b>Figura 1.1:</b> Instancia <code>t3.medium</code> en estado <i>Running</i> con disco gp3 de 35 GB y Security Group con puertos 22, 80, 8080, 6080 e ICMP.</figcaption>
+  </figure>
   <pre><code>curl -fsSLO \
   https://asur-col.github.io/cuc-arquitectura-nube/laboratorios/lab-openstack/devstack-lab-install.sh
 tmux new -s lab
 bash devstack-lab-install.sh --aws --yes</code></pre>
-  <p>Tarda unos 40 minutos. Si se cierra la pestaña, vuelve a conectarte y escribe <code>tmux attach -t lab</code>. Al final verás un resumen con la URL de Horizon (con la IP pública), el usuario <code>admin</code> y la clave. Si lo pierdes, recupéralo con <code>cat ~/devstack-credenciales.txt</code>.</p>
+  <p>Tarda unos <b>24–25 minutos</b> (en una instancia <code>t3.medium</code>). Si se cierra la pestaña, vuelve a conectarte y escribe <code>tmux attach -t lab</code>. Al final verás un resumen con la URL de Horizon (con la IP pública), el usuario <code>admin</code> y la clave. Si lo pierdes, recupéralo con <code>cat ~/devstack-credenciales.txt</code>.</p>
+  <figure class="captura">
+    <img src="capturas/02-instalacion-terminada.png" alt="Resumen de instalación terminada con credenciales y URL de Horizon en terminal" loading="lazy">
+    <figcaption><b>Figura 1.2:</b> Resumen de instalación finalizada con la URL de Horizon, usuario <code>admin</code> y credenciales generadas.</figcaption>
+  </figure>
   <div class="warn">Haz la instalación y todas las evidencias en <b>una sola sesión</b> (3 horas). Si la sesión termina, puedes perder la VM y todo lo que tenga: tendrías que crear otra VM y empezar de nuevo. Al terminar, usa <b>Terminate instance</b> para no gastar tu crédito. Lanza solo la instancia que necesitas: el Sandbox permite hasta 9, e intentar lanzar más suspende tu cuenta del laboratorio.</div>
   <div class="tip">En este camino Cirros corre emulada (sin KVM), así que va más lenta. El SSH a la IP flotante se hace desde la terminal de la propia EC2.</div>
 </section>
@@ -129,11 +146,15 @@ bash devstack-lab-install.sh --aws --yes</code></pre>
 <section>
   <h2><span class="paso">2</span>Entrar a Horizon</h2>
   <ol class="steps">
-    <li>Abre en el navegador <code>http://&lt;IP-pública&gt;/dashboard</code>, con la IP pública de tu EC2.</li>
+    <li>Abre en el navegador <code>http://&lt;IP-pública&gt;/dashboard</code> (o <code>http://&lt;IP-pública&gt;:8080/dashboard</code> si tu navegador bloquea o fuerza HTTPS en el puerto 80).</li>
     <li>Dominio <code>Default</code>, usuario <code>admin</code>, la clave del resumen final.</li>
     <li>Ve a <b>Proyecto → Compute → Visión general</b> y comprueba que ves cuotas y el proyecto <code>admin</code>.</li>
   </ol>
   <div class="warn"><b>Evidencia 1:</b> captura de Horizon ya autenticado, con la URL visible en la barra del navegador.</div>
+  <figure class="captura">
+    <img src="capturas/03-horizon-login.png" alt="Panel de Horizon con sesión iniciada en proyecto admin mostrando cuotas de cómputo y almacenamiento" loading="lazy">
+    <figcaption><b>Evidencia 1:</b> Panel Horizon autenticado con usuario <code>admin</code>, proyecto <code>admin</code> y cuotas visibles en la barra de navegación.</figcaption>
+  </figure>
 </section>
 
 <section>
@@ -156,19 +177,35 @@ bash devstack-lab-install.sh --aws --yes</code></pre>
     <li><b>IP flotante:</b> menú de la instancia → «Asociar IP flotante» → «+» para asignar una del pool <code>public</code> → Asociar. Anota la IP (rango 172.24.4.x).</li>
   </ol>
   <div class="warn"><b>Evidencia 2:</b> lista de instancias mostrando tu VM Activa con IP privada y flotante.<br><b>Evidencia 3:</b> pestaña «Grupos de seguridad» de la instancia con reglas SSH (22) e ICMP.</div>
+  <figure class="captura">
+    <img src="capturas/04-instancia-activa.png" alt="Lista de instancias en Horizon mostrando vm-tunombre en estado Activo con IP privada e IP flotante" loading="lazy">
+    <figcaption><b>Evidencia 2:</b> Instancia Cirros en estado <i>Activo</i> con IP privada <code>192.168.50.x</code> e IP flotante asociada <code>172.24.4.x</code>.</figcaption>
+  </figure>
+  <figure class="captura">
+    <img src="capturas/05-grupos-seguridad.png" alt="Pestaña de grupos de seguridad de la instancia en Horizon mostrando reglas SSH e ICMP" loading="lazy">
+    <figcaption><b>Evidencia 3:</b> Pestaña de grupos de seguridad de la instancia en Horizon con reglas SSH (puerto 22) e ICMP activas.</figcaption>
+  </figure>
 </section>
 
 <section>
   <h2><span class="paso">4</span>Acceder a la instancia</h2>
   <h3>Por la consola de Horizon</h3>
-  <p>Instancia → pestaña <b>Consola</b> → «Haz clic aquí para mostrar solo la consola». Usuario <code>cirros</code>; la contraseña aparece en el banner de la propia consola. Ejecuta <code>ip a</code> y <code>ping -c3 192.168.50.1</code>.</p>
+  <p>Instancia → pestaña <b>Consola</b> → «Haz clic aquí para mostrar solo la consola». Usuario <code>cirros</code>; la contraseña aparece en el banner de la propia consola (en Cirros 0.6.3 es <code>gocubsgo</code>; en versiones anteriores <code>gocirros</code>). Ejecuta <code>ip a</code> y <code>ping -c3 192.168.50.1</code>.</p>
   <div class="warn"><b>Evidencia 4:</b> consola con sesión iniciada y salida de <code>ip a</code>.</div>
+  <figure class="captura">
+    <img src="capturas/06-consola-horizon.png" alt="Consola noVNC en Horizon con sesión cirros iniciada y comandos ip a y ping exitosos" loading="lazy">
+    <figcaption><b>Evidencia 4:</b> Consola web noVNC con sesión iniciada en Cirros, salida de <code>ip a</code> y ping exitoso a la gateway de la red privada.</figcaption>
+  </figure>
   <h3>Por SSH</h3>
   <p>La IP flotante (172.24.4.x) vive <b>dentro</b> de la VM Ubuntu. Desde la propia VM Ubuntu:</p>
   <pre><code>ping -c3 172.24.4.XX
 ssh -i ~/lab-key.pem cirros@172.24.4.XX</code></pre>
   
   <div class="warn"><b>Evidencia 5:</b> terminal con el SSH a Cirros exitoso, mostrando <code>hostname</code> y <code>ip a</code>.</div>
+  <figure class="captura">
+    <img src="capturas/07-ssh-cirros.png" alt="Terminal de Ubuntu con conexión SSH a la IP flotante de Cirros usando lab-key.pem" loading="lazy">
+    <figcaption><b>Evidencia 5:</b> Sesión SSH a la IP flotante desde la VM Ubuntu con <code>lab-key.pem</code>, mostrando <code>hostname</code> y confirmando <code>ip a</code>.</figcaption>
+  </figure>
 </section>
 
 <section>
@@ -192,7 +229,9 @@ ssh -i ~/lab-key.pem cirros@172.24.4.XX</code></pre>
     <tr><th>Síntoma</th><th>Causa y solución</th></tr>
     <tr><td>«Sin DNS/Internet»</td><td>Revisa que la EC2 tenga IP pública y prueba <code>ping opendev.org</code>.</td></tr>
     <tr><td>stack.sh falla a medio camino</td><td>Revisa <code>~/devstack-install.log</code>. Lo más seguro es terminar la instancia y empezar con una nueva.</td></tr>
-    <tr><td>Horizon no abre</td><td>Verifica la IP pública, el puerto 80 del grupo de seguridad y <code>systemctl status apache2</code> en la VM.</td></tr>
+    <tr><td>Horizon da «ERR_BLOCKED_BY_CLIENT» o fuerza HTTPS</td><td>Navegadores Chromium (Chrome/Edge) a veces fuerzan HTTPS en :80 con IPs públicas. Entra por el puerto alternativo habilitado en el script: <code>http://&lt;IP-pública&gt;:8080/dashboard</code> (verifica que el puerto 8080 esté en el grupo de seguridad de la EC2).</td></tr>
+    <tr><td>Horizon no abre</td><td>Verifica la IP pública, los puertos 80 y 8080 del grupo de seguridad y <code>systemctl status apache2</code> en la VM.</td></tr>
+    <tr><td>Contraseña incorrecta en consola de Cirros</td><td>En Cirros 0.6.3 la clave por defecto es <code>gocubsgo</code> (observa el banner que muestra la consola antes del prompt de login).</td></tr>
     <tr><td>Instancia en «Error»</td><td>Pocos recursos: borra y recrea. Mira «Registro» de la instancia.</td></tr>
     <tr><td>Consola dice «Failed to connect»</td><td>Revisa que el puerto 6080 esté abierto en el grupo de seguridad de la EC2.</td></tr>
     <tr><td>SSH «Permission denied»</td><td>Usuario debe ser <code>cirros</code> y <code>chmod 600 lab-key.pem</code>.</td></tr>

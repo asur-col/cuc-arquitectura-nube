@@ -197,6 +197,15 @@ else
   ok "OpenStack instalado."
 fi
 
+# ------------------------------------------------------------- Puerto 8080 ---
+# Navegadores modernos (Chrome/Edge) bloquean o fuerzan HTTPS en :80 con IPs publicas.
+# Habilitamos :8080 en Apache como alternativa directa.
+if [ -f /etc/apache2/ports.conf ] && ! grep -q 'Listen 8080' /etc/apache2/ports.conf 2>/dev/null; then
+  echo 'Listen 8080' | sudo tee -a /etc/apache2/ports.conf >/dev/null
+  sudo sed -i 's/<VirtualHost \*:80>/<VirtualHost *:80 *:8080>/g' /etc/apache2/sites-enabled/*horizon*.conf 2>/dev/null || true
+  sudo systemctl reload apache2 2>/dev/null || true
+fi
+
 # ----------------------------------------------------- Recursos opcionales ---
 if [ "$DO_POST" -eq 1 ]; then
   info "Creando imagen Cirros, flavor, red, grupo de seguridad y keypair..."
@@ -248,7 +257,7 @@ fi
 CRED="$HOME/devstack-credenciales.txt"
 umask 077
 cat >"$CRED" <<RES
-Horizon : http://${BROWSER_IP}/dashboard
+Horizon : http://${BROWSER_IP}/dashboard  (o :8080/dashboard si el navegador fuerza HTTPS en :80)
 Usuario : admin   (tambien existe 'demo')
 Clave   : ${ADMIN_PASSWORD}
 Dominio : Default
