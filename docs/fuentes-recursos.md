@@ -41,3 +41,34 @@ Se usan sin modificar. Origen declarado en el commit `ea9e664` (2026-10-04): lib
 - Diap. 5: «en modelos de 70 mil a 405 mil millones de parámetros»: no aparece en fuentes ni en el guion.
 
 La cifra «10,2 kW» (un DGX H100) sí quedó respaldada en `docs/cifras-S15.md`, sección 1.3.
+
+## Segunda pasada S13 (2026-11-05)
+
+### Fotos nuevas (assets/fotos/), licencias verificadas en la API de Wikimedia Commons
+
+| Archivo local | Diapositiva | Autor (Commons) | Licencia | Página del archivo |
+|---|---|---|---|---|
+| `noirlab-sala-servidores-racks.jpg` | S13 diap. 47 (producción) | NOIRLab/NSF/AURA, T. Slovinský | CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) | https://commons.wikimedia.org/wiki/File:NOIRLab_HQ_Server_Racks_(6V6A0395-CC).jpg |
+| `switches-rack-patch-panels.jpg` | S13 diap. 49 (segmentación) | Dsimic | CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0) | https://commons.wikimedia.org/wiki/File:19-inch_rackmount_Ethernet_switches_and_patch_panels.jpg |
+| `rubin-sala-computo-cumbre.jpg` | S13 diap. 53 (criterios de nube privada) | Rubin Observatory/NSF/AURA | CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) | https://commons.wikimedia.org/wiki/File:Summit_Computer_Room_Installation_(rubin-2018-05-02-110524).jpg |
+| `wikimedia-servidores-racks.jpg` | S13 diap. 37 (topología de control, ilustración) | Victorgrigas | CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0) | https://commons.wikimedia.org/wiki/File:Wikimedia_Foundation_Servers-8055_13.jpg |
+| `amravati-racks-datacenter.jpg` | S13 diap. 60 (práctica guiada) | PiDatacenters | CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0) | https://commons.wikimedia.org/wiki/File:Racks_Amravati_Data_Center.jpg |
+
+Descargadas desde los thumbnails de 1280 px de Commons (sin modificar salvo redimensión). La foto CERN de S13 diap. 13 se mantiene.
+
+### Cifras de S13: qué se quitó y qué quedó respaldado
+
+| Cifra original | Diapositiva | Decisión | Fuente / motivo |
+|---|---|---|---|
+| 70 % de utilización | 53 | Quitada: «utilización sostenida alta» | Cita sin verificar en investigacion-S13.md (openstack.org/user-stories); no se pudo confirmar el número |
+| 75 % de uso (alerta de disco) | 55 | Quitada | Sin fuente |
+| 25 / 100 Gbps | 36, 58 | Quitadas; «bonds LACP» sin velocidad | Sin fuente verificable |
+| 10.0.0.100 (IP virtual) | 40 | Quitada: «IP virtual (VIP)» | Dato de ejemplo sin respaldo |
+| 50 GB y Ubuntu 24.04 | 35 | Quitados: «Ubuntu (LTS)» y «clonación casi instantánea» | Sin fuente |
+| cpu_allocation_ratio = 4.0, ram_allocation_ratio = 1.0, «3:1 a 4:1» | 55 | **Corregida** con los valores por defecto documentados: CPU 16.0, RAM 1.5, disco 1.0 | https://docs.openstack.org/nova/latest/admin/scheduling.html (sección de allocation ratios, verificada el 2026-11-05) |
+| max_attempts = 3 (reintentos del scheduler) | 10 | Conservada | https://docs.openstack.org/nova/latest/configuration/config.html: `max_attempts`, default 3 (verificada el 2026-11-05) |
+| 3:1 de sobresuscripción y 768 vCPU sobre 256 núcleos | 13, 58 | Conservadas como caso ilustrativo (aritmética del caso: 4×64 núcleos, 3:1) | Caso ilustrativo declarado en la diapositiva |
+
+Nota: la URL del pie de diap. 55 pasó de `admin/configuration/schedulers.html` (301) a `admin/scheduling.html`.
+
+Cifras de S15 (PUE 1,5 / 1,15; >100 kW; 70–405 mil millones de parámetros) **no se tocaron**: S14–S16 están fuera del alcance de esta pasada y siguen pendientes de respaldo.
