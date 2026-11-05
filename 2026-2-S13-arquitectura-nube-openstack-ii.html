@@ -315,61 +315,76 @@ Semana 13 · Periodo 2026-2 · Barranquilla, Colombia
 </div>
 <aside class="guion">Nova Conductor extrae la tarea del bus y necesita determinar qué hipervisores tienen capacidad física suficiente para alojar la instancia. Para ello consulta a Placement API. Placement es el inventario centralizado de hardware de OpenStack: modela cada servidor como un proveedor de recursos y lleva el registro en tiempo real de vCPUs consumidas, memoria asignada y disco. Además, filtra según rasgos específicos del hardware, como compatibilidad con virtualización anidada o almacenamiento rápido en estado sólido. Placement devuelve únicamente la lista de nodos que cumplen con todas las restricciones del sabor, evitando que el planificador pierda tiempo evaluando servidores saturados. Este mecanismo matemático previene la contención de recursos en clústeres de gran escala y optimiza la consolidación de servidores físicos en centros de datos modernos.</aside>
 </section>
-<section class="slide" data-parte="1">
-<div class="s-head">
-<div class="kicker">Planificación de Carga</div>
-<h2>Nova Scheduler: Pesaje y Elección</h2>
-<div class="rule"></div>
-<div class="sub">Ponderación de hipervisores según balanceo de memoria y anti-afinidad</div>
-<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
-</div>
-<div class="s-body">
-<svg viewBox="0 0 1180 490" class="dgm">
-  <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 8 5 L 0 9 z" fill="#D4AF37"/>
-    </marker>
-  </defs>
-
-  <!-- Candidatos -->
-  <g transform="translate(80, 160)">
-    <rect x="0" y="0" width="220" height="140" rx="8" fill="#FFF" stroke="#475569" stroke-width="2"/>
-    <text x="110" y="40" fill="#1E293B" font-size="18" font-weight="700" text-anchor="middle">Nodos Candidatos</text>
-    <text x="110" y="75" fill="#475569" font-size="16" text-anchor="middle">Nodo 1: 16 GB libre</text>
-    <text x="110" y="105" fill="#475569" font-size="16" text-anchor="middle">Nodo 3: 64 GB libre</text>
-  </g>
-
-  <line x1="300" y1="230" x2="430" y2="230" stroke="#D4AF37" stroke-width="3" marker-end="url(#arr)"/>
-  <text x="365" y="215" fill="#854D0E" font-size="16" font-weight="700" text-anchor="middle">Ponderación</text>
-
-  <!-- Scheduler Box -->
-  <g transform="translate(440, 120)">
-    <rect x="0" y="0" width="300" height="220" rx="10" fill="#FFF" stroke="#D4AF37" stroke-width="3"/>
-    <text x="150" y="45" fill="#854D0E" font-size="20" font-weight="700" text-anchor="middle">nova-scheduler</text>
-    <rect x="25" y="70" width="250" height="50" rx="6" fill="#FEFCE8"/>
-    <text x="150" y="100" fill="#713F12" font-size="16" font-weight="600" text-anchor="middle">RAM Weigher: Balanceo</text>
-    <rect x="25" y="135" width="250" height="50" rx="6" fill="#FEFCE8"/>
-    <text x="150" y="165" fill="#713F12" font-size="16" font-weight="600" text-anchor="middle">Reglas Anti-Afinidad</text>
-  </g>
-
-  <line x1="740" y1="230" x2="870" y2="230" stroke="#059669" stroke-width="3" marker-end="url(#arr)"/>
-  <text x="805" y="215" fill="#059669" font-size="16" font-weight="700" text-anchor="middle">Seleccionado</text>
-
-  <!-- Ganador -->
-  <g transform="translate(880, 160)">
-    <rect x="0" y="0" width="220" height="140" rx="8" fill="#F0FDF4" stroke="#059669" stroke-width="2"/>
-    <text x="110" y="45" fill="#065F46" font-size="18" font-weight="700" text-anchor="middle">Destino Final</text>
-    <text x="110" y="85" fill="#047857" font-size="20" font-weight="700" text-anchor="middle">compute-node-03</text>
-    <text x="110" y="115" fill="#15803D" font-size="16" text-anchor="middle">Mayor RAM Libre</text>
-  </g>
-</svg>
-</div>
-<div class="s-foot">
-<span>Arquitectura en la Nube · Semana 13 · Parte 1 de 4</span>
-<span class="src">Fuente: docs.openstack.org/nova/latest/user/filter-scheduler.html</span>
-<span class="pg">6 / 15</span>
-</div>
-<aside class="guion">Con la lista depurada de nodos entregada por Placement, interviene nova-scheduler. El planificador aplica funciones de ponderación llamadas weighers para calcular una puntuación numérica para cada hipervisor. En una arquitectura de alta disponibilidad empresarial, se configura habitualmente el pesador de memoria para repartir la carga de manera homogénea entre los servidores. Asimismo, se evalúan políticas de anti-afinidad para asegurar que dos instancias del mismo servicio no queden alojadas en el mismo chasis físico. Como resultado del algoritmo, compute-node-03 obtiene el mayor puntaje y queda formalmente elegido para recibir la nueva máquina virtual. Esta decisión algorítmica se notifica formalmente a Nova Conductor para iniciar la reserva del puerto lógico en Neutron y la asignación del almacenamiento persistente en el backend Cinder, asegurando un despliegue balanceado y resiliente en todo el clúster.</aside>
+<section class="slide" data-parte="1">
+<div class="s-head">
+<div class="kicker">Planificación de Carga</div>
+<h2>Nova Scheduler (asignador de Nova): pesaje y elección</h2>
+<div class="rule"></div>
+<div class="sub">Puntaje de hipervisores (servidores físicos que alojan VM, máquinas virtuales) según memoria y anti-afinidad</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
+</div>
+<div class="s-body">
+<svg viewBox="0 0 1180 490" class="dgm" role="img" aria-label="Nova Scheduler: pesaje y elección"><defs><marker id="s13vv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A6192E"/></marker><marker id="s13vd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D4AF37"/></marker><marker id="s13vn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4d7a00"/></marker><marker id="s13vk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/></marker></defs><rect x="0" y="0" width="290" height="350" rx="10" fill="#fff" stroke="#A6192E" stroke-width="1.5"/>
+<text x="16" y="30" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">Placement</text>
+<text x="16" y="54" font-size="16" fill="#555555" text-anchor="start">RAM (memoria principal) libre</text>
+<rect x="14" y="76" width="262" height="110" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.2"/>
+<image href="assets/iconos/onprem/compute/server.png" x="28" y="94" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="104" y="116" font-size="18" fill="#2A2A2A" text-anchor="start" font-weight="700">Nodo 1</text>
+<text x="104" y="140" font-size="16" fill="#2A2A2A" text-anchor="start">16 GB de RAM libre</text>
+<rect x="104" y="152" width="160" height="14" rx="4" fill="#eeeeee" stroke="none" stroke-width="1.5"/>
+<rect x="104" y="152" width="40" height="14" rx="4" fill="#A6192E" stroke="none" stroke-width="1.5"/>
+<rect x="14" y="200" width="262" height="110" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.2"/>
+<image href="assets/iconos/onprem/compute/server.png" x="28" y="218" width="64" height="64" preserveAspectRatio="xMidYMid meet"/>
+<text x="104" y="240" font-size="18" fill="#2A2A2A" text-anchor="start" font-weight="700">Nodo 3</text>
+<text x="104" y="264" font-size="16" fill="#2A2A2A" text-anchor="start">64 GB de RAM libre</text>
+<rect x="104" y="276" width="160" height="14" rx="4" fill="#eeeeee" stroke="none" stroke-width="1.5"/>
+<rect x="104" y="276" width="160" height="14" rx="4" fill="#A6192E" stroke="none" stroke-width="1.5"/>
+<text x="16" y="336" font-size="16" fill="#555555" text-anchor="start">Placement (inventario de recursos)</text>
+<rect x="350" y="0" width="330" height="350" rx="10" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2"/>
+<text x="370" y="32" font-size="20" fill="#8a6d1d" text-anchor="start" font-weight="700">nova-scheduler</text>
+<text x="370" y="56" font-size="16" fill="#2A2A2A" text-anchor="start">elige el nodo de cada VM</text>
+<rect x="366" y="74" width="298" height="120" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.2"/>
+<text x="382" y="102" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">Pesaje (weigher)</text>
+<text x="382" y="128" font-size="16" fill="#2A2A2A" text-anchor="start">Más RAM (memoria principal) libre</text>
+<text x="382" y="152" font-size="16" fill="#2A2A2A" text-anchor="start">= más puntaje, carga repartida</text>
+<text x="382" y="178" font-size="16" fill="#555555" text-anchor="start">weigher = función de puntaje</text>
+<rect x="366" y="214" width="298" height="120" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="1.2"/>
+<text x="382" y="242" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">Anti-afinidad</text>
+<text x="382" y="268" font-size="16" fill="#2A2A2A" text-anchor="start">Evita que dos instancias del</text>
+<text x="382" y="292" font-size="16" fill="#2A2A2A" text-anchor="start">mismo servicio caigan en el</text>
+<text x="382" y="316" font-size="16" fill="#2A2A2A" text-anchor="start">mismo equipo físico</text>
+<line x1="296" y1="175" x2="344" y2="175" stroke="#A6192E" stroke-width="3" marker-end="url(#s13v)"/>
+<line x1="686" y1="175" x2="734" y2="175" stroke="#A6192E" stroke-width="3" marker-end="url(#s13v)"/>
+<rect x="740" y="0" width="440" height="350" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+<text x="764" y="34" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">Destino final</text>
+<image href="assets/iconos/onprem/compute/server.png" x="764" y="60" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>
+<text x="930" y="110" font-size="22" fill="#A6192E" text-anchor="start" font-weight="700">compute-node-03</text>
+<text x="930" y="140" font-size="18" fill="#2A2A2A" text-anchor="start" font-weight="700">Mayor RAM libre</text>
+<text x="930" y="166" font-size="16" fill="#555555" text-anchor="start">Puntaje más alto</text>
+<text x="930" y="190" font-size="16" fill="#555555" text-anchor="start">entre los candidatos</text>
+<text x="764" y="250" font-size="18" fill="#2A2A2A" text-anchor="start" font-weight="700">Elegido para la nueva VM</text>
+<text x="764" y="278" font-size="16" fill="#2A2A2A" text-anchor="start">Se notifica a Nova Conductor,</text>
+<text x="764" y="302" font-size="16" fill="#2A2A2A" text-anchor="start">que inicia la reserva de red y disco</text>
+<text x="0" y="378" font-size="16" fill="#555555" text-anchor="start" font-weight="700">Después de elegir, Nova coordina otros servicios:</text>
+<rect x="0" y="390" width="380" height="84" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
+<image href="assets/iconos/openstack/compute/nova.png" x="14" y="408" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>
+<text x="74" y="428" font-size="18" fill="#2A2A2A" text-anchor="start" font-weight="700">Nova Conductor</text>
+<text x="74" y="455" font-size="16" fill="#555555" text-anchor="start">coordina la reserva</text>
+<rect x="400" y="390" width="380" height="84" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
+<image href="assets/iconos/openstack/networking/neutron.png" x="414" y="408" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>
+<text x="474" y="428" font-size="18" fill="#2A2A2A" text-anchor="start" font-weight="700">Neutron (red)</text>
+<text x="474" y="455" font-size="16" fill="#555555" text-anchor="start">reserva el puerto de red</text>
+<rect x="800" y="390" width="380" height="84" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
+<image href="assets/iconos/openstack/storage/cinder.png" x="814" y="408" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>
+<text x="874" y="428" font-size="18" fill="#2A2A2A" text-anchor="start" font-weight="700">Cinder (disco)</text>
+<text x="874" y="455" font-size="16" fill="#555555" text-anchor="start">asigna el volumen persistente</text></svg>
+</div>
+<div class="s-foot">
+<span>Arquitectura en la Nube · Semana 13 · Parte 1 de 4</span>
+<span class="src">Fuente: docs.openstack.org/nova/latest/user/filter-scheduler.html</span>
+<span class="pg">6 / 15</span>
+</div>
+<aside class="guion">Con la lista depurada de nodos entregada por Placement, interviene nova-scheduler. El planificador aplica funciones de ponderación llamadas weighers para calcular una puntuación numérica para cada hipervisor. En una arquitectura de alta disponibilidad empresarial, se configura habitualmente el pesador de memoria para repartir la carga de manera homogénea entre los servidores. Asimismo, se evalúan políticas de anti-afinidad para asegurar que dos instancias del mismo servicio no queden alojadas en el mismo chasis físico. Como resultado del algoritmo, compute-node-03 obtiene el mayor puntaje y queda formalmente elegido para recibir la nueva máquina virtual. Esta decisión algorítmica se notifica formalmente a Nova Conductor para iniciar la reserva del puerto lógico en Neutron y la asignación del almacenamiento persistente en el backend Cinder, asegurando un despliegue balanceado y resiliente en todo el clúster.</aside>
 </section>
 <section class="slide" data-parte="1">
 <div class="s-head">
@@ -1255,57 +1270,68 @@ Semana 13 · Periodo 2026-2 · Barranquilla, Colombia
 </div>
 <aside class="guion">El tráfico entre las máquinas virtuales e Internet se denomina tráfico Norte-Sur. Para las instancias que no cuentan con una dirección IP pública dedicada, el acceso saliente se resuelve mediante traducción de direcciones SNAT en el enrutador virtual de Neutron. En OVN, este servicio se aloja en nodos de pasarela configurados con alta disponibilidad activa-pasiva utilizando mecanismos BFD para conmutar en caso de fallo en menos de un segundo. Todos los paquetes salientes reemplazan su IP privada por la IP pública de la interfaz de la pasarela, permitiendo que las máquinas virtuales consuman parches de seguridad y paquetes externos manteniendo su aislamiento perimetral frente a Internet. Esto garantiza que las aplicaciones con tráfico masivo de Internet descarguen su tráfico directamente en la red externa más cercana sin cuellos de botella.</aside>
 </section>
-<section class="slide" data-parte="2">
-<div class="s-head">
-<div class="kicker">Acceso Público</div>
-<h2>Floating IPs: Mapeo Estático 1:1</h2>
-<div class="rule"></div>
-<div class="sub">Enrutamiento público directo programado en el conmutador local del hipervisor</div>
-<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
-</div>
-<div class="s-body">
-<svg viewBox="0 0 1180 490" class="dgm">
-  <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 8 5 L 0 9 z" fill="#059669"/>
-    </marker>
-  </defs>
-
-  <!-- Usuario Externo -->
-  <g transform="translate(80, 160)">
-    <rect x="0" y="0" width="220" height="140" rx="8" fill="#FFF" stroke="#475569" stroke-width="2"/>
-    <text x="110" y="45" fill="#1E293B" font-size="18" font-weight="700" text-anchor="middle">Usuario Externo</text>
-    <text x="110" y="80" fill="#0284C7" font-size="16" font-weight="700" text-anchor="middle">Destino: 181.49.20.5</text>
-  </g>
-
-  <line x1="300" y1="230" x2="430" y2="230" stroke="#059669" stroke-width="3" marker-end="url(#arr)"/>
-
-  <!-- OVS Hipervisor DVR -->
-  <g transform="translate(440, 110)">
-    <rect x="0" y="0" width="340" height="230" rx="10" fill="#F0FDF4" stroke="#059669" stroke-width="3"/>
-    <text x="170" y="45" fill="#065F46" font-size="20" font-weight="700" text-anchor="middle">OVS en Hipervisor (DVR)</text>
-    <rect x="25" y="70" width="290" height="50" rx="4" fill="#FFF"/>
-    <text x="170" y="100" fill="#047857" font-size="16" font-weight="700" text-anchor="middle">DNAT: 181.49.20.5 → 10.0.1.15</text>
-    <text x="170" y="150" fill="#475569" font-size="16" text-anchor="middle">Entrada Directa por Switch Local</text>
-    <text x="170" y="185" fill="#15803D" font-size="16" font-weight="600" text-anchor="middle">Cero Nodos Centrales</text>
-  </g>
-
-  <line x1="780" y1="230" x2="890" y2="230" stroke="#059669" stroke-width="3" marker-end="url(#arr)"/>
-
-  <!-- VM Servidor -->
-  <g transform="translate(900, 160)">
-    <rect x="0" y="0" width="200" height="140" rx="8" fill="#FFF" stroke="#A6192E" stroke-width="2"/>
-    <text x="100" y="45" fill="#A6192E" font-size="18" font-weight="700" text-anchor="middle">Instancia VM</text>
-    <text x="100" y="85" fill="#0F172A" font-size="16" font-weight="600" text-anchor="middle">IP Fija 10.0.1.15</text>
-  </g>
-</svg>
-</div>
-<div class="s-foot">
-<span>Arquitectura en la Nube · Semana 13 · Parte 2 de 4</span>
-<span class="src">Fuente: docs.openstack.org/neutron/latest/admin/ovn/index.html</span>
-<span class="pg">10 / 15</span>
-</div>
-<aside class="guion">Cuando una máquina virtual necesita ser accesible desde el exterior, se le asigna una Floating IP o dirección IP flotante. A diferencia de las IPs tradicionales, no se asigna directamente a la tarjeta de red de la máquina virtual; la instancia sigue operando con su IP privada interna diez punto cero punto uno. En una arquitectura OVN con DVR, la traducción estática uno a uno DNAT se programa directamente en el conmutador Open vSwitch del propio hipervisor donde reside la máquina. El tráfico ingresa desde el switch físico hacia el servidor del hipervisor sin pasar por ningún nodo de red central, garantizando una latencia mínima y una escalabilidad ilimitada de ancho de banda. Esta flexibilidad permite migrar o reasignar servicios entre máquinas virtuales en cuestión de segundos sin alterar la infraestructura externa del centro de datos.</aside>
+<section class="slide" data-parte="2">
+<div class="s-head">
+<div class="kicker">Acceso Público</div>
+<h2>IP flotante (floating IP): mapeo estático 1 a 1</h2>
+<div class="rule"></div>
+<div class="sub">Entrada pública directa, programada en el conmutador virtual del hipervisor (servidor físico)</div>
+<img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
+</div>
+<div class="s-body">
+<svg viewBox="0 0 1180 490" class="dgm" role="img" aria-label="Floating IP: mapeo estático 1 a 1"><defs><marker id="s25vv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A6192E"/></marker><marker id="s25vd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D4AF37"/></marker><marker id="s25vn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4d7a00"/></marker><marker id="s25vk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/></marker></defs><rect x="0" y="40" width="200" height="280" rx="10" fill="#fff" stroke="#6b6b6b" stroke-width="1.2"/>
+<text x="100" y="70" font-size="18" fill="#2A2A2A" text-anchor="middle" font-weight="700">Usuario externo</text>
+<image href="assets/iconos/onprem/client/user.png" x="64" y="84" width="72" height="72" preserveAspectRatio="xMidYMid meet"/>
+<text x="100" y="184" font-size="16" fill="#2A2A2A" text-anchor="middle">Llega a la IP flotante</text>
+<text x="100" y="216" font-size="20" fill="#A6192E" text-anchor="middle" font-weight="700">181.49.20.5</text>
+<text x="100" y="246" font-size="16" fill="#555555" text-anchor="middle">IP (dirección de red)</text>
+<text x="100" y="268" font-size="16" fill="#555555" text-anchor="middle">flotante = pública</text>
+<line x1="204" y1="170" x2="248" y2="170" stroke="#A6192E" stroke-width="3" marker-end="url(#s25v)"/>
+<rect x="252" y="40" width="148" height="280" rx="10" fill="#fff" stroke="#6b6b6b" stroke-width="1.2"/>
+<text x="326" y="70" font-size="18" fill="#2A2A2A" text-anchor="middle" font-weight="700">Switch físico</text>
+<image href="assets/iconos/onprem/network/cisco-switch-l2.png" x="278" y="100" width="96" height="96" preserveAspectRatio="xMidYMid meet"/>
+<text x="326" y="226" font-size="16" fill="#2A2A2A" text-anchor="middle">Entrega el tráfico</text>
+<text x="326" y="250" font-size="16" fill="#2A2A2A" text-anchor="middle">al hipervisor</text>
+<line x1="404" y1="170" x2="446" y2="170" stroke="#A6192E" stroke-width="3" marker-end="url(#s25v)"/>
+<rect x="452" y="40" width="368" height="280" rx="10" fill="#fbf6e7" stroke="#D4AF37" stroke-width="2.5"/>
+<text x="470" y="70" font-size="18" fill="#8a6d1d" text-anchor="start" font-weight="700">Hipervisor (servidor físico)</text>
+<text x="470" y="96" font-size="16" fill="#2A2A2A" text-anchor="start">OVS (Open vSwitch): conmutador virtual</text>
+<text x="470" y="120" font-size="16" fill="#2A2A2A" text-anchor="start">DVR (enrutamiento distribuido):</text>
+<text x="470" y="144" font-size="16" fill="#2A2A2A" text-anchor="start">sin nodos de red centrales</text>
+<rect x="470" y="160" width="332" height="128" rx="8" fill="#fff" stroke="#A6192E" stroke-width="1.5"/>
+<text x="486" y="188" font-size="16" fill="#A6192E" text-anchor="start" font-weight="700">DNAT (cambia el destino)</text>
+<text x="486" y="220" font-size="18" fill="#2A2A2A" text-anchor="start" font-weight="700" font-family="Consolas,Menlo,monospace">181.49.20.5  →  10.0.1.15</text>
+<text x="486" y="248" font-size="16" fill="#555555" text-anchor="start">IP pública → IP fija de la VM</text>
+<text x="486" y="274" font-size="16" fill="#555555" text-anchor="start">regla estática 1 a 1</text>
+<line x1="824" y1="170" x2="866" y2="170" stroke="#A6192E" stroke-width="3" marker-end="url(#s25v)"/>
+<rect x="872" y="40" width="308" height="280" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="2"/>
+<text x="890" y="70" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">Máquina virtual (VM)</text>
+<image href="assets/iconos/openstack/compute/nova.png" x="890" y="84" width="96" height="96" preserveAspectRatio="xMidYMid meet"/>
+<text x="1002" y="114" font-size="16" fill="#555555" text-anchor="start">IP fija</text>
+<text x="1002" y="142" font-size="20" fill="#2A2A2A" text-anchor="start" font-weight="700">10.0.1.15</text>
+<text x="1002" y="166" font-size="16" fill="#555555" text-anchor="start">privada, interna</text>
+<text x="890" y="216" font-size="16" fill="#2A2A2A" text-anchor="start">Sigue con su IP privada;</text>
+<text x="890" y="240" font-size="16" fill="#2A2A2A" text-anchor="start">la IP pública puede</text>
+<text x="890" y="264" font-size="16" fill="#2A2A2A" text-anchor="start">moverse a otra VM</text>
+<rect x="0" y="344" width="380" height="126" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
+<text x="18" y="374" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">Sin nodos centrales</text>
+<text x="18" y="402" font-size="16" fill="#2A2A2A" text-anchor="start">La traducción ocurre en el hipervisor,</text>
+<text x="18" y="428" font-size="16" fill="#2A2A2A" text-anchor="start">no en un nodo de red compartido.</text>
+<rect x="400" y="344" width="380" height="126" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
+<text x="418" y="374" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">Entrada directa</text>
+<text x="418" y="402" font-size="16" fill="#2A2A2A" text-anchor="start">El tráfico llega del switch local</text>
+<text x="418" y="428" font-size="16" fill="#2A2A2A" text-anchor="start">al servidor donde vive la VM.</text>
+<rect x="800" y="344" width="380" height="126" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
+<text x="818" y="374" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">Reasignar en segundos</text>
+<text x="818" y="402" font-size="16" fill="#2A2A2A" text-anchor="start">La IP flotante puede pasar a otra VM</text>
+<text x="818" y="428" font-size="16" fill="#2A2A2A" text-anchor="start">sin alterar la red externa.</text></svg>
+</div>
+<div class="s-foot">
+<span>Arquitectura en la Nube · Semana 13 · Parte 2 de 4</span>
+<span class="src">Fuente: docs.openstack.org/neutron/latest/admin/ovn/index.html</span>
+<span class="pg">10 / 15</span>
+</div>
+<aside class="guion">Cuando una máquina virtual necesita ser accesible desde el exterior, se le asigna una Floating IP o dirección IP flotante. A diferencia de las IPs tradicionales, no se asigna directamente a la tarjeta de red de la máquina virtual; la instancia sigue operando con su IP privada interna diez punto cero punto uno. En una arquitectura OVN con DVR, la traducción estática uno a uno DNAT se programa directamente en el conmutador Open vSwitch del propio hipervisor donde reside la máquina. El tráfico ingresa desde el switch físico hacia el servidor del hipervisor sin pasar por ningún nodo de red central, garantizando una latencia mínima y una escalabilidad ilimitada de ancho de banda. Esta flexibilidad permite migrar o reasignar servicios entre máquinas virtuales en cuestión de segundos sin alterar la infraestructura externa del centro de datos.</aside>
 </section>
 <section class="slide" data-parte="2">
 <div class="s-head">
