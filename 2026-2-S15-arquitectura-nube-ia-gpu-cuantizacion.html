@@ -33,6 +33,7 @@
   .s-foot{position:absolute;left:50px;right:50px;bottom:12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#6b6b6b;border-top:2px solid var(--dorado);padding-top:6px;gap:14px;}
   .s-foot .src{font-style:italic;text-align:center;flex:1;}
   .s-foot .pg{font-weight:700;color:var(--vino);}
+  .s-foot .pg{display:none;} /* en pantalla el contador es #counter (nav); el pie solo sale al imprimir */
 
   .cover{display:none;text-align:center;padding-top:44px;}
   .cover.active{display:block;}
@@ -60,6 +61,7 @@
     #stage{transform:none!important;box-shadow:none;}
     .slide{display:block!important;position:relative;page-break-after:always;}
     #nav,#progress{display:none;}
+    .s-foot .pg{display:inline;}
   }
 </style>
 </head>
@@ -202,70 +204,69 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 <div class="kicker">Topología de Servidor</div>
 <h2>Multi-GPU: NVLink (enlace directo) frente a PCIe (bus de tarjetas)</h2>
 <div class="rule"></div>
-<div class="sub">El paralelismo de tensores (dividir un modelo entre GPU, tarjetas gráficas) exige hablar sin pasar por la CPU (procesador).</div>
+<div class="sub">El paralelismo de tensores (dividir un modelo entre GPU) exige hablar sin pasar por la CPU.</div>
 <img alt="Logo CUC" class="logo-corner" onerror="this.style.display='none'" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png"/>
 </div>
 <div class="s-body">
-<svg viewBox="0 0 1180 490" class="dgm" role="img" aria-label="Interconexiones multi-GPU: NVLink frente a PCIe"><defs><marker id="s15vv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A6192E"/></marker><marker id="s15vd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D4AF37"/></marker><marker id="s15vn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4d7a00"/></marker><marker id="s15vk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/></marker></defs><rect x="0" y="0" width="400" height="392" rx="10" fill="#fff" stroke="#6b6b6b" stroke-width="1.2"/>
+<svg viewBox="0 0 1180 490" class="dgm" role="img" aria-label="Interconexiones multi-GPU: NVLink frente a PCIe"><defs><marker id="s15vv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A6192E"/></marker><marker id="s15vd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D4AF37"/></marker><marker id="s15vn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4d7a00"/></marker><marker id="s15vk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/></marker><marker id="s15vqk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6b6b"/></marker><marker id="s15vqn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4d7a00"/></marker></defs><rect x="0" y="0" width="456" height="392" rx="10" fill="#fff" stroke="#6b6b6b" stroke-width="1.2"/>
 <text x="16" y="30" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">PCIe Gen 5 (bus de tarjetas)</text>
 <text x="16" y="54" font-size="16" fill="#555555" text-anchor="start">todo el tráfico pasa por la CPU</text>
-<rect x="60" y="62" width="280" height="36" rx="6" fill="#eeeeee" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="200" y="86" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">CPU (procesador)</text>
-<line x1="200" y1="98" x2="200" y2="122" stroke="#6b6b6b" stroke-width="3"/>
-<line x1="30" y1="122" x2="370" y2="122" stroke="#6b6b6b" stroke-width="4"/>
-<line x1="59" y1="150" x2="59" y2="122" stroke="#6b6b6b" stroke-width="2.5"/>
-<rect x="24" y="150" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="59" y="181" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 1</text>
-<line x1="155" y1="150" x2="155" y2="122" stroke="#6b6b6b" stroke-width="2.5"/>
-<rect x="120" y="150" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="155" y="181" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 2</text>
-<line x1="251" y1="150" x2="251" y2="122" stroke="#6b6b6b" stroke-width="2.5"/>
-<rect x="216" y="150" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="251" y="181" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 3</text>
-<line x1="347" y1="150" x2="347" y2="122" stroke="#6b6b6b" stroke-width="2.5"/>
-<rect x="312" y="150" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="347" y="181" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 4</text>
-<rect x="60" y="226" width="280" height="36" rx="18" fill="#f9eef0" stroke="#A6192E" stroke-width="1.5"/>
-<text x="200" y="250" font-size="18" fill="#A6192E" text-anchor="middle" font-weight="700">cuello de botella</text>
-<text x="16" y="298" font-size="22" fill="#A6192E" text-anchor="start" font-weight="700">64 GB/s por dirección</text>
-<text x="16" y="320" font-size="16" fill="#555555" text-anchor="start">GB/s = gigabytes por segundo</text>
-<text x="16" y="344" font-size="16" fill="#2A2A2A" text-anchor="start">Sirve para modelos de un solo nodo GPU</text>
-<svg x="420" y="0" width="340" height="392" viewBox="380 0 580 540" preserveAspectRatio="xMidYMid slice"><image href="assets/fotos/nvidia-h100-nvlink-geekerwan-002.png" x="0" y="0" width="960" height="540" preserveAspectRatio="xMidYMid meet"/></svg>
-<rect x="420" y="334" width="340" height="58" rx="0" fill="#A6192E" fill-opacity="0.9" stroke="none" stroke-width="1.5"/>
-<text x="432" y="358" font-size="16" fill="#ffffff" text-anchor="start" font-weight="700">Tarjetas H100 con conectores NVLink</text>
-<text x="432" y="380" font-size="16" fill="#ffffff" text-anchor="start">Foto: Geekerwan (CC BY 3.0)</text>
-<rect x="780" y="0" width="400" height="392" rx="10" fill="#fff" stroke="#6b6b6b" stroke-width="1.2"/>
-<text x="796" y="30" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">NVLink + NVSwitch: punto a punto</text>
-<text x="796" y="54" font-size="16" fill="#555555" text-anchor="start">enlace directo entre GPU</text>
-<rect x="796" y="66" width="368" height="36" rx="6" fill="none" stroke="#6b6b6b" stroke-width="1.5" stroke-dasharray="6 4"/>
-<text x="980" y="90" font-size="16" fill="#555555" text-anchor="middle" font-weight="700">CPU (procesador): no participa</text>
-<rect x="780" y="224" width="400" height="48" rx="8" fill="#eef7d6" stroke="#76B900" stroke-width="2"/>
-<text x="796" y="246" font-size="16" fill="#2A2A2A" text-anchor="start" font-weight="700">NVSwitch (conmutador de NVIDIA)</text>
-<text x="796" y="266" font-size="16" fill="#2A2A2A" text-anchor="start">memoria unificada entre 8 GPU</text>
-<line x1="839" y1="200" x2="839" y2="224" stroke="#76B900" stroke-width="3" marker-end="url(#s15n)" marker-start="url(#s15n)"/>
-<rect x="804" y="150" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="839" y="181" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 1</text>
-<line x1="935" y1="200" x2="935" y2="224" stroke="#76B900" stroke-width="3" marker-end="url(#s15n)" marker-start="url(#s15n)"/>
-<rect x="900" y="150" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="935" y="181" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 2</text>
-<line x1="1031" y1="200" x2="1031" y2="224" stroke="#76B900" stroke-width="3" marker-end="url(#s15n)" marker-start="url(#s15n)"/>
-<rect x="996" y="150" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="1031" y="181" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 3</text>
-<line x1="1127" y1="200" x2="1127" y2="224" stroke="#76B900" stroke-width="3" marker-end="url(#s15n)" marker-start="url(#s15n)"/>
-<rect x="1092" y="150" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="1127" y="181" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 4</text>
-<text x="796" y="298" font-size="22" fill="#4d7a00" text-anchor="start" font-weight="700">900 GB/s a 1,8 TB/s por GPU</text>
-<text x="796" y="320" font-size="16" fill="#555555" text-anchor="start">(TB/s = terabytes por segundo)</text>
-<text x="796" y="344" font-size="16" fill="#2A2A2A" text-anchor="start">Obligatorio con paralelismo tensorial</text>
-<text x="796" y="364" font-size="16" fill="#2A2A2A" text-anchor="start">en modelos de 70 mil a 405 mil</text>
-<text x="796" y="384" font-size="16" fill="#2A2A2A" text-anchor="start">millones de parámetros</text>
+<rect x="98" y="66" width="260" height="40" rx="6" fill="#eeeeee" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="228" y="92" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">CPU (procesador)</text>
+<line x1="228" y1="106" x2="228" y2="130" stroke="#6b6b6b" stroke-width="3" marker-end="url(#s15vqk)" marker-start="url(#s15vqk)"/>
+<line x1="50" y1="130" x2="406" y2="130" stroke="#6b6b6b" stroke-width="4"/>
+<line x1="85" y1="130" x2="85" y2="160" stroke="#6b6b6b" stroke-width="2.5" marker-end="url(#s15vqk)" marker-start="url(#s15vqk)"/>
+<rect x="45" y="160" width="80" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="85" y="191" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 1</text>
+<line x1="180" y1="130" x2="180" y2="160" stroke="#6b6b6b" stroke-width="2.5" marker-end="url(#s15vqk)" marker-start="url(#s15vqk)"/>
+<rect x="140" y="160" width="80" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="180" y="191" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 2</text>
+<line x1="275" y1="130" x2="275" y2="160" stroke="#6b6b6b" stroke-width="2.5" marker-end="url(#s15vqk)" marker-start="url(#s15vqk)"/>
+<rect x="235" y="160" width="80" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="275" y="191" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 3</text>
+<line x1="370" y1="130" x2="370" y2="160" stroke="#6b6b6b" stroke-width="2.5" marker-end="url(#s15vqk)" marker-start="url(#s15vqk)"/>
+<rect x="330" y="160" width="80" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="370" y="191" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 4</text>
+<rect x="60" y="226" width="336" height="40" rx="18" fill="#f9eef0" stroke="#A6192E" stroke-width="1.5"/>
+<text x="228" y="252" font-size="18" fill="#A6192E" text-anchor="middle" font-weight="700">cuello de botella</text>
+<text x="16" y="310" font-size="22" fill="#A6192E" text-anchor="start" font-weight="700">64 GB/s por dirección</text>
+<text x="16" y="334" font-size="16" fill="#555555" text-anchor="start">GB/s = gigabytes por segundo</text>
+<image href="assets/fotos/nvidia-h100-nvlink-geekerwan-002.png" x="472" y="0" width="236" height="392" preserveAspectRatio="xMaxYMid slice"/>
+<rect x="472" y="334" width="236" height="58" rx="0" fill="#A6192E" fill-opacity="0.9" stroke="none" stroke-width="1.5"/>
+<text x="482" y="358" font-size="16" fill="#ffffff" text-anchor="start" font-weight="700">4 tarjetas H100 apiladas</text>
+<text x="482" y="380" font-size="16" fill="#ffffff" text-anchor="start">Foto: Geekerwan (CC BY 3.0)</text>
+<rect x="724" y="0" width="456" height="392" rx="10" fill="#fff" stroke="#6b6b6b" stroke-width="1.2"/>
+<text x="740" y="30" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">NVLink + NVSwitch: punto a punto</text>
+<text x="740" y="54" font-size="16" fill="#555555" text-anchor="start">enlace directo entre GPU</text>
+<rect x="740" y="66" width="424" height="36" rx="6" fill="none" stroke="#6b6b6b" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="952" y="90" font-size="16" fill="#555555" text-anchor="middle" font-weight="700">CPU no participa</text>
+<rect x="740" y="200" width="424" height="48" rx="8" fill="#eef7d6" stroke="#76B900" stroke-width="2"/>
+<text x="756" y="222" font-size="16" fill="#2A2A2A" text-anchor="start" font-weight="700">NVSwitch (conmutador de NVIDIA)</text>
+<text x="756" y="242" font-size="16" fill="#2A2A2A" text-anchor="start">memoria unificada entre 8 GPU</text>
+<line x1="824" y1="180" x2="824" y2="200" stroke="#76B900" stroke-width="3" marker-end="url(#s15vqn)" marker-start="url(#s15vqn)"/>
+<rect x="789" y="130" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="824" y="161" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 1</text>
+<line x1="909" y1="180" x2="909" y2="200" stroke="#76B900" stroke-width="3" marker-end="url(#s15vqn)" marker-start="url(#s15vqn)"/>
+<rect x="874" y="130" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="909" y="161" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 2</text>
+<line x1="994" y1="180" x2="994" y2="200" stroke="#76B900" stroke-width="3" marker-end="url(#s15vqn)" marker-start="url(#s15vqn)"/>
+<rect x="959" y="130" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="994" y="161" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 3</text>
+<line x1="1079" y1="180" x2="1079" y2="200" stroke="#76B900" stroke-width="3" marker-end="url(#s15vqn)" marker-start="url(#s15vqn)"/>
+<rect x="1044" y="130" width="70" height="50" rx="8" fill="#fff" stroke="#6b6b6b" stroke-width="1.5"/>
+<text x="1079" y="161" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">GPU 4</text>
+<text x="740" y="298" font-size="22" fill="#4d7a00" text-anchor="start" font-weight="700">900 GB/s a 1,8 TB/s por GPU</text>
+<text x="740" y="320" font-size="16" fill="#555555" text-anchor="start">(TB/s = terabytes por segundo)</text>
+<text x="740" y="344" font-size="16" fill="#2A2A2A" text-anchor="start">Obligatorio con paralelismo tensorial</text>
+<text x="740" y="364" font-size="16" fill="#2A2A2A" text-anchor="start">en modelos de 70 mil a 405 mil</text>
+<text x="740" y="384" font-size="16" fill="#2A2A2A" text-anchor="start">millones de parámetros</text>
 <rect x="0" y="410" width="1180" height="70" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="1.5"/>
 <text x="590" y="440" font-size="18" fill="#A6192E" text-anchor="middle" font-weight="700">Si dos GPU deben conversar en cada token (trozo de texto),</text>
-<text x="590" y="466" font-size="18" fill="#A6192E" text-anchor="middle" font-weight="700">el enlace define la latencia</text></svg>
+<text x="590" y="466" font-size="18" fill="#A6192E" text-anchor="middle" font-weight="700">el enlace define la latencia.</text></svg>
 </div>
 <div class="s-foot">
 <span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
-<span class="src">Fuente: NVIDIA — NVLink and NVSwitch Architecture Specification (2024) · Foto: Geekerwan, Wikimedia Commons (CC BY 3.0)</span>
+<span class="src">Fuente: NVIDIA — NVLink and NVSwitch Architecture Specification (2024)</span>
 <span class="pg">5 / 15</span>
 </div>
 <aside class="guion">Cuando un modelo de lenguaje excede la capacidad de memoria de una sola tarjeta GPU, es imperativo distribuir sus capas o cabezas de atención a través de múltiples procesadores. En este punto, la tecnología de interconexión se convierte en el componente arquitectónico determinante. A la izquierda observamos la conexión por bus PCIe Gen 5, que ofrece un ancho de banda teórico de sesenta y cuatro gigabytes por segundo. Si intentamos sincronizar capas intermedias de un modelo grande a través de PCIe, la latencia de transferencia bloquea los núcleos de cómputo, degradando drásticamente el rendimiento general. A la derecha encontramos la tecnología NVLink, que proporciona hasta novecientos gigabytes por segundo por GPU en tarjetas Hopper H100 y hasta uno punto ocho terabytes en Blackwell. Mediante conmutadores físicos NVSwitch integrados en el chasis del servidor, las ocho GPUs de un clúster pueden acceder a la memoria de las demás como si fuera un espacio de memoria unificado, haciendo posible el paralelismo tensorial.</aside>
@@ -402,10 +403,11 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 <text x="16" y="54" font-size="16" fill="#555555" text-anchor="start">kW (kilovatios) por rack (armario de servidores)</text>
 <text x="40" y="88" font-size="16" fill="#2A2A2A" text-anchor="start" font-weight="700">Límite del aire: 10 a 15 kW</text>
 <rect x="80" y="96" width="20" height="28" rx="3" fill="#f9eef0" stroke="#A6192E" stroke-width="1.5"/>
-<text x="40" y="150" font-size="16" fill="#2A2A2A" text-anchor="start" font-weight="700">1 servidor, 8 GPU H100 (tarjetas gráficas): 10,2 kW</text>
+<text x="40" y="150" font-size="16" fill="#2A2A2A" text-anchor="start" font-weight="700">1 servidor DGX H100 (8 GPU, máx.): 10,2 kW</text>
 <rect x="40" y="158" width="40.8" height="28" rx="3" fill="#6b6b6b" stroke="none" stroke-width="1.5"/>
 <text x="40" y="216" font-size="16" fill="#A6192E" text-anchor="start" font-weight="700">4 servidores así en un rack: ≈ 41 kW</text>
 <rect x="40" y="224" width="163.2" height="28" rx="3" fill="#A6192E" stroke="none" stroke-width="1.5"/>
+<text x="215.2" y="246" font-size="16" fill="#555555" text-anchor="start">cálculo: 4 × 10,2 kW</text>
 <text x="40" y="284" font-size="16" fill="#A6192E" text-anchor="start" font-weight="700">throttling (baja la velocidad por calor)</text>
 <line x1="40" y1="300" x2="520" y2="300" stroke="#6b6b6b" stroke-width="1.5"/>
 <line x1="40" y1="300" x2="40" y2="306" stroke="#6b6b6b" stroke-width="1.5"/>
@@ -459,7 +461,7 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 </div>
 <div class="s-foot">
 <span>Arquitectura en la Nube · Semana 15 · Parte 1 de 4</span>
-<span class="src">Fuente: Uptime Institute — Data Center Cooling &amp; AI Power Density Trends (2025) · Foto: Barbara Massolin, Wikimedia Commons (CC BY-SA 3.0)</span>
+<span class="src">Fuente: Uptime Institute — Data Center Cooling &amp; AI Power Density Trends (2025)</span>
 <span class="pg">10 / 15</span>
 </div>
 <aside class="guion">El despliegue de infraestructura de inteligencia artificial ha transformado las exigencias físicas de los centros de datos. A la izquierda observamos las limitaciones de la refrigeración clásica por aire. Los centros de cómputo tradicionales fueron diseñados para disipar entre diez y quince kilovatios por bastidor o rack. Sin embargo, un solo servidor moderno equipado con ocho tarjetas aceleradoras H100 consume más de diez kilovatios de potencia eléctrica. Instalar cuatro de estos servidores en un mismo gabinete generaría una densidad térmica inmanejable para ventiladores convencionales, provocando la reducción automática de frecuencia por sobrecalentamiento. A la derecha mostramos la solución adoptada por las regiones de nube pública modernas: la refrigeración líquida directa al chip. Mediante placas de cobre con microcanales internos por donde circula agua desionizada, el calor se extrae de forma continua, permitiendo densidades superiores a los cuarenta kilovatios por rack y logrando un índice de efectividad energética PUE notablemente más bajo.</aside>
@@ -1085,9 +1087,8 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 <text x="473" y="270" font-size="16" fill="#ffffff" text-anchor="middle" font-weight="700">Usuario 4</text>
 <text x="473" y="290" font-size="16" fill="#ffffff" text-anchor="middle">2 GB</text>
 <rect x="40" y="84" width="520" height="220" rx="8" fill="none" stroke="#6b6b6b" stroke-width="1.5"/>
-<text x="16" y="326" font-size="16" fill="#2A2A2A" text-anchor="start">2 GB por usuario con 32 000 tokens</text>
-<text x="16" y="350" font-size="16" fill="#A6192E" text-anchor="start" font-weight="700">Con 4 usuarios la VRAM se llena</text>
-<text x="16" y="374" font-size="16" fill="#2A2A2A" text-anchor="start">y el servidor se queda sin memoria</text>
+<text x="16" y="326" font-size="16" fill="#A6192E" text-anchor="start" font-weight="700">Con 4 usuarios la VRAM se llena</text>
+<text x="16" y="350" font-size="16" fill="#2A2A2A" text-anchor="start">y el servidor se queda sin memoria</text>
 <rect x="600" y="0" width="580" height="388" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
 <text x="616" y="30" font-size="18" fill="#8a6d1d" text-anchor="start" font-weight="700">FP8 (número de 8 bits): 1 byte</text>
 <text x="616" y="54" font-size="16" fill="#555555" text-anchor="start">INT8 (entero de 8 bits) pesa lo mismo</text>
@@ -1120,8 +1121,6 @@ Semana 15 — Periodo 2026-2 — Barranquilla, Colombia
 <text x="1116" y="290" font-size="16" fill="#2A2A2A" text-anchor="middle">1 GB</text>
 <rect x="640" y="84" width="520" height="220" rx="8" fill="none" stroke="#6b6b6b" stroke-width="1.5"/>
 <text x="616" y="326" font-size="16" fill="#2A2A2A" text-anchor="start" font-weight="700">8 usuarios caben en el mismo espacio</text>
-<text x="616" y="350" font-size="16" fill="#2A2A2A" text-anchor="start">1 GB por usuario: la mitad</text>
-<text x="616" y="374" font-size="16" fill="#8a6d1d" text-anchor="start" font-weight="700">Mismo hardware, el doble de usuarios</text>
 <rect x="0" y="402" width="1180" height="36" rx="8" fill="#fbf6e7" stroke="#D4AF37" stroke-width="1.2"/>
 <text x="590" y="426" font-size="16" fill="#2A2A2A" text-anchor="middle" font-weight="700">Activación: --kv-cache-dtype fp8 (en vLLM, motor de inferencia)</text>
 <rect x="0" y="446" width="1180" height="40" rx="10" fill="#f9eef0" stroke="#A6192E" stroke-width="1.5"/>

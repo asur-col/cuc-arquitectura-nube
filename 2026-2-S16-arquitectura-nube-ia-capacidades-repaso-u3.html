@@ -33,6 +33,7 @@
   .s-foot{position:absolute;left:50px;right:50px;bottom:12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#6b6b6b;border-top:2px solid var(--dorado);padding-top:6px;gap:14px;}
   .s-foot .src{font-style:italic;text-align:center;flex:1;}
   .s-foot .pg{font-weight:700;color:var(--vino);}
+  .s-foot .pg{display:none;} /* en pantalla el contador es #counter (nav); el pie solo sale al imprimir */
 
   .cover{display:none;text-align:center;padding-top:44px;}
   .cover.active{display:block;}
@@ -60,6 +61,7 @@
     #stage{transform:none!important;box-shadow:none;}
     .slide{display:block!important;position:relative;page-break-after:always;}
     #nav,#progress{display:none;}
+    .s-foot .pg{display:inline;}
   }
 </style>
 </head>
@@ -1400,20 +1402,20 @@ Semana 16 — Periodo 2026-2 — Barranquilla, Colombia
 <image href="assets/iconos/onprem/vcs/git.png" x="428" y="328" width="28" height="28" preserveAspectRatio="xMidYMid meet"/>
 <text x="464" y="348" font-size="16" fill="#2A2A2A" text-anchor="start" font-weight="700">Git</text>
 <text x="16" y="400" font-size="18" fill="#A6192E" text-anchor="start" font-weight="700">4 × 6 = 24 conectores</text>
-<text x="16" y="424" font-size="16" fill="#555555" text-anchor="start">IDE = entorno de desarrollo; cada par es un conector</text>
+<text x="16" y="424" font-size="16" fill="#555555" text-anchor="start">IDE = entorno de desarrollo</text>
 <rect x="600" y="0" width="580" height="380" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1.5"/>
 <text x="616" y="30" font-size="18" fill="#8a6d1d" text-anchor="start" font-weight="700">Con MCP: un protocolo común</text>
 <text x="616" y="54" font-size="16" fill="#555555" text-anchor="start">mensajes en JSON-RPC 2.0 (texto estructurado)</text>
-<line x1="776" y1="136" x2="890" y2="226" stroke="#D4AF37" stroke-width="2"/>
-<line x1="776" y1="196" x2="890" y2="226" stroke="#D4AF37" stroke-width="2"/>
-<line x1="776" y1="256" x2="890" y2="226" stroke="#D4AF37" stroke-width="2"/>
-<line x1="776" y1="316" x2="890" y2="226" stroke="#D4AF37" stroke-width="2"/>
-<line x1="890" y1="226" x2="1004" y2="112" stroke="#D4AF37" stroke-width="2"/>
-<line x1="890" y1="226" x2="1004" y2="158" stroke="#D4AF37" stroke-width="2"/>
-<line x1="890" y1="226" x2="1004" y2="204" stroke="#D4AF37" stroke-width="2"/>
-<line x1="890" y1="226" x2="1004" y2="250" stroke="#D4AF37" stroke-width="2"/>
-<line x1="890" y1="226" x2="1004" y2="296" stroke="#D4AF37" stroke-width="2"/>
-<line x1="890" y1="226" x2="1004" y2="342" stroke="#D4AF37" stroke-width="2"/>
+<line x1="776" y1="136" x2="838.1977374747938" y2="185.10347695378462" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="776" y1="196" x2="826.1730805406653" y2="209.2034422475435" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="776" y1="256" x2="826.1730805406653" y2="242.7965577524565" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="776" y1="316" x2="838.1977374747938" y2="266.89652304621535" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="936.6690475583122" y1="179.33095244168786" x2="1004" y2="112" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="946.6820873278018" y1="192.18963212025858" x2="1004" y2="158" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="954.8043025277856" y1="213.4939065297256" x2="1004" y2="204" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="954.5842858091254" y1="239.59669174928956" x2="1004" y2="250" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="946.2433008974638" y1="260.53536020019703" x2="1004" y2="296" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
+<line x1="936.2614807702325" y1="273.07308569602606" x2="1004" y2="342" stroke="#D4AF37" stroke-width="2" marker-end="url(#s36vd)"/>
 <rect x="616" y="110" width="160" height="52" rx="8" fill="#fff" stroke="#A6192E" stroke-width="1.5"/>
 <image href="assets/iconos/onprem/client/client.png" x="624" y="122" width="28" height="28" preserveAspectRatio="xMidYMid meet"/>
 <text x="660" y="142" font-size="16" fill="#2A2A2A" text-anchor="start" font-weight="700">Escritorio</text>
