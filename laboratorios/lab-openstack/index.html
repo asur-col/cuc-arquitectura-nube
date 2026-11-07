@@ -649,7 +649,7 @@ ssh -i ~/lab-key.pem cirros@&lt;IP-flotante&gt;</code></pre><p>La primera vez pr
 </section>
 <section>
   <h2>Qué entregar</h2>
-  <p>Un PDF o documento con las 5 capturas (con tu nombre visible en el nombre de la instancia). Cada evidencia corresponde a un paso: 1 = login de Horizon (D2), 2 = instancia activa con IP flotante (D5), 3 = grupo de seguridad (D6), 4 = consola noVNC (D7), 5 = SSH a CirrOS (D8). Súbelo al aula virtual antes del cierre de la semana 13.</p>
+  <p>Un PDF o documento con las 6 capturas (con tu nombre visible en el nombre de la instancia). Cada evidencia corresponde a un paso: 1 = login de Horizon (D2), 2 = instancia activa con IP flotante (D5), 3 = grupo de seguridad (D6), 4 = consola noVNC (D7), 5 = SSH a CirrOS (D8), 6 = instancia EC2 en estado Terminated (E3). Súbelo al aula virtual antes del cierre de la semana 13.</p>
   <h3>Rúbrica (10 % de la nota)</h3>
   <table>
     <tr><th>Criterio</th><th>Evidencia</th><th>Puntos</th></tr>
@@ -657,7 +657,8 @@ ssh -i ~/lab-key.pem cirros@&lt;IP-flotante&gt;</code></pre><p>La primera vez pr
     <tr><td>Instancia Cirros m1.tiny activa en red propia</td><td>2</td><td>25</td></tr>
     <tr><td>Grupo de seguridad correcto (SSH + ICMP)</td><td>3</td><td>15</td></tr>
     <tr><td>Acceso por consola y por SSH con IP flotante</td><td>4 y 5</td><td>20</td></tr>
-    <tr><th colspan="2">Total</th><th>85</th></tr>
+    <tr><td>Lab destruido: instancia EC2 terminada y End Lab</td><td>6</td><td>15</td></tr>
+    <tr><th colspan="2">Total</th><th>100 (= 10 %)</th></tr>
   </table>
 </section>
 
