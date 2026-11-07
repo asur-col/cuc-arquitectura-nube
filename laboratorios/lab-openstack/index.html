@@ -81,19 +81,6 @@
 
   .donde{font-family:var(--mono);font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--dorado);border-radius:6px;padding:7px 12px;margin:0 0 16px;}
   .donde b{color:var(--ink);}
-  .intro{font-size:15.5px;}
-  .cmd{position:relative;margin:14px 0;}
-  .cmd pre{margin:0;padding-top:38px;}
-  .cmd button.copy{position:absolute;top:8px;right:8px;font:600 12px var(--mono);background:var(--surface);color:var(--vino);border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer;}
-  .cmd button.copy:hover{background:var(--vino-tint);}
-  figure.captura.pendiente{border:2px dashed var(--dorado);background:var(--dorado-tint);box-shadow:none;}
-  figure.captura.pendiente img{display:none;}
-  figure.captura.pendiente::before{content:"Captura pendiente: " attr(data-id);display:flex;align-items:center;justify-content:center;min-height:140px;padding:16px;font-family:var(--mono);font-size:14px;font-weight:600;color:var(--dorado);text-align:center;}
-  figure.captura.pendiente figcaption{background:transparent;}
-
-  .donde{font-family:var(--mono);font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--dorado);border-radius:6px;padding:7px 12px;margin:0 0 16px;}
-  .donde b{color:var(--ink);}
-  .intro{font-size:15.5px;}
   .cmd{position:relative;margin:14px 0;}
   .cmd pre{margin:0;padding-top:38px;}
   .cmd button.copy{position:absolute;top:8px;right:8px;font:600 12px var(--mono);background:var(--surface);color:var(--vino);border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer;}
@@ -119,6 +106,32 @@
   <p class="intro">Sigue los pasos en orden, de arriba abajo, sin saltarte ninguno. Vas a crear una máquina virtual (EC2) en el Sandbox de AWS Academy, instalar OpenStack dentro de ella, lanzar una mini máquina (CirrOS) y controlarla desde Horizon, el panel web de OpenStack.</p>
   <div class="warn"><b>Antes de empezar:</b> necesitas el navegador y el curso de AWS Academy abierto. Al final (sección E) debes destruir el laboratorio; si no lo haces, se sigue gastando crédito.</div>
 </section>
+
+<section>
+  <h2><span class="paso">0</span>Qué vas a construir</h2>
+  <svg viewBox="0 0 760 250" role="img" aria-label="Topología: PC, VM Ubuntu, OpenStack, instancia Cirros" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px">
+    <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/></marker></defs>
+    <rect x="12" y="30" width="150" height="180" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+    <text x="87" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Tu navegador</text>
+    <rect x="30" y="70" width="114" height="44" rx="6" fill="var(--dorado-tint)" stroke="var(--dorado)"/><text x="87" y="97" text-anchor="middle" font-size="12" fill="var(--ink)">Navegador</text>
+    <rect x="30" y="130" width="114" height="60" rx="6" fill="var(--vino-tint)" stroke="var(--vino)"/><text x="87" y="155" text-anchor="middle" font-size="12" fill="var(--ink)">AWS Academy</text><text x="87" y="171" text-anchor="middle" font-size="12" fill="var(--ink)">Sandbox + EC2</text>
+    <rect x="215" y="30" width="400" height="180" rx="10" fill="var(--surface-2)" stroke="var(--vino)" stroke-width="2"/>
+    <text x="415" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vino)">Una VM con Ubuntu Server 24.04</text>
+    <rect x="232" y="68" width="150" height="124" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+    <text x="307" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">OpenStack (DevStack)</text>
+    <text x="307" y="112" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Horizon · Keystone</text><text x="307" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Nova · Neutron</text><text x="307" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">Glance</text>
+    <rect x="450" y="68" width="150" height="124" rx="8" fill="var(--ok-tint)" stroke="var(--ok)"/>
+    <text x="525" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Instancia Cirros</text>
+    <text x="525" y="112" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">m1.tiny</text><text x="525" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">IP privada (red lab-net)</text><text x="525" y="148" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">IP flotante (pool public)</text>
+    <line x1="144" y1="92" x2="213" y2="92" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="178" y="82" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">http :80</text>
+    <line x1="382" y1="130" x2="448" y2="130" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="415" y="120" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">crea</text>
+    <text x="680" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vino)">Resultado</text>
+    <text x="680" y="120" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">consola en Horizon</text><text x="680" y="138" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">+ SSH a la IP flotante</text>
+  </svg>
+  <p>OpenStack es la plataforma de nube open source: los mismos conceptos de EC2, VPC, Security Groups y Elastic IP que ya viste, ahora en una nube privada propia. Todo corre <b>dentro de una sola VM EC2</b> del Sandbox de AWS Academy.</p>
+</section>
 <section>
   <h2><span class="paso">A</span>Entrar al Sandbox de AWS Academy</h2>
   <p class="donde"><b>📍 Dónde estás:</b> AWS Academy → Cursos → Módulos → Sandbox</p>
@@ -127,86 +140,86 @@
   
   <figure class="captura" data-id="A1">
     <img src="capturas/A1.png" alt="Lista de cursos activos de AWS Academy" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>A1</b> · Marca roja: la columna de cursos activos; tu curso es «AWS Academy Cloud Architecting (Spanish LATAM)».</figcaption>
+    <figcaption><b>A1</b> · Muestra: la lista de cursos activos de AWS Academy. <br><b>Marca en rojo:</b> la columna de cursos activos. Tu curso es «AWS Academy Cloud Architecting (Spanish LATAM)», cuyo apodo es «Arquitectura en la Nube 2026-2».</figcaption>
   </figure><h3 id="a2">A2 · Módulos y Sandbox</h3>
   <p>Dentro del curso, abre <b>Módulos</b>. Busca el módulo <b>Entorno de pruebas</b>: en este curso así se llama el Sandbox. Ábrelo.</p>
   
   <figure class="captura" data-id="A2">
-    <img src="capturas/A2.png" alt="Lista de módulos del curso con el bloque Evaluación marcado" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>A2</b> · Marca roja: el bloque «Evaluación del curso» (el Sandbox, «Entorno de pruebas», está justo debajo y no aparece marcado).</figcaption>
+    <img src="capturas/A2.png" alt="Lista de módulos del curso" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A2</b> · Muestra: el menú Módulos del curso con sus bloques. <br><b>Marca en rojo:</b> el bloque «Evaluación del curso».<br><b>Ojo:</b> el módulo correcto es «Entorno de pruebas» (el Sandbox), justo debajo del recuadro, sin marcar.</figcaption>
   </figure><h3 id="a3">A3 · Start Lab</h3>
   <p>En la barra superior del laboratorio pulsa <b>Start Lab</b> (a la derecha, con el triángulo ▶) y espera unos segundos.</p>
   
   <figure class="captura" data-id="A3">
     <img src="capturas/A3.png" alt="Barra del laboratorio con el indicador AWS en rojo antes de iniciar" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>A3</b> · Marca roja: el indicador <b>AWS</b>, todavía en rojo antes de iniciar.</figcaption>
+    <figcaption><b>A3</b> · Muestra: la barra del laboratorio con el indicador AWS en rojo antes de iniciar. <br><b>Marca en rojo:</b> el indicador <b>AWS</b> (rojo, sin iniciar).<br><b>Ojo:</b> el botón correcto es <b>Start Lab</b>, arriba a la derecha, sin marcar.</figcaption>
   </figure><h3 id="a4">A4 · Indicador AWS en verde</h3>
   <p>Espera a que el indicador <b>AWS</b> se ponga <b>verde</b>. Si está gris o en amarillo, espera; no sigas todavía.</p>
   
   <figure class="captura" data-id="A4">
     <img src="capturas/A4.png" alt="Indicador AWS en verde en la barra del Sandbox" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>A4</b> · Marca roja: el indicador <b>AWS</b> ya en verde.</figcaption>
+    <figcaption><b>A4</b> · Muestra: el indicador AWS ya en verde, con el cronómetro en marcha. <br><b>Marca en rojo:</b> el indicador <b>AWS</b> en verde.</figcaption>
   </figure><h3 id="a5">A5 · Abrir la consola de AWS</h3>
   <p>Haz clic en <b>AWS</b>, el enlace junto al indicador verde. Se abre la consola de AWS (en una pestaña nueva). Desde ahí harás la sección B.</p>
   
   <figure class="captura" data-id="A5">
     <img src="capturas/A5.png" alt="Terminal del laboratorio con el prompt marcado" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>A5</b> · Marca roja: el prompt de la terminal del laboratorio.</figcaption>
+    <figcaption><b>A5</b> · Muestra: la terminal del laboratorio con el prompt de la instancia del laboratorio. <br><b>Marca en rojo:</b> el prompt de la terminal del laboratorio.<br><b>Ojo:</b> el enlace correcto es <b>AWS</b>, junto al indicador verde (arriba). La marca cae en la terminal.</figcaption>
   </figure>
 </section>
 <section>
   <h2><span class="paso">B</span>Crear la EC2 con el script de instalación</h2>
-  <p class="donde"><b>📍 Dónde estás:</b> AWS → EC2 → Instancias → Launch instance (Lanzar instancia)</p>
+  <p class="donde"><b>📍 Dónde estás:</b> AWS → EC2 → Instancias → Lanzar la instancia</p>
   <h3 id="b1">B1 · Buscar EC2</h3>
   <p>En la barra de búsqueda de la consola de AWS escribe <code>EC2</code> y abre el servicio <b>EC2</b>.</p>
   
   <figure class="captura" data-id="B1">
     <img src="capturas/B1.png" alt="Barra de búsqueda de la consola de AWS con EC2 escrito" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B1</b> · Marca roja: la barra de búsqueda con <b>EC2</b> y el resultado EC2.</figcaption>
-  </figure><h3 id="b2">B2 · Launch instance</h3>
+    <figcaption><b>B1</b> · Muestra: la barra de búsqueda de la consola con EC2 escrito y la lista de resultados. <br><b>Marca en rojo:</b> la barra de búsqueda con <b>EC2</b>.</figcaption>
+  </figure><h3 id="b2">B2 · Lanzar la instancia</h3>
   <p>En el panel de EC2 pulsa <b>Lanzar la instancia</b> (<i>Launch instance</i>).</p>
   
   <figure class="captura" data-id="B2">
-    <img src="capturas/B2.png" alt="Panel de EC2 con el botón Launch instance" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B2</b> · Marca roja: el botón <b>Lanzar la instancia</b>.</figcaption>
+    <img src="capturas/B2.png" alt="Panel de EC2 con el botón Lanzar la instancia" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B2</b> · Muestra: el panel de EC2 con el botón Lanzar la instancia. <br><b>Marca en rojo:</b> el botón <b>Lanzar la instancia</b>.</figcaption>
   </figure><h3 id="b3">B3 · Nombre openstack-lab</h3>
   <p>En <b>Nombre</b> (Name) escribe exactamente <code>openstack-lab</code>. Luego sigue con la imagen (AMI), más abajo.</p>
   
   <figure class="captura" data-id="B3">
-    <img src="capturas/B3.png" alt="Formulario Lanzar una instancia con el nombre openstack-lab y la sección de imágenes" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B3</b> · Marca roja: el encabezado de la sección de imágenes (AMI), marcado en rojo; el nombre openstack-lab queda arriba.</figcaption>
+    <img src="capturas/B3.png" alt="Formulario Lanzar una instancia con el nombre openstack-lab" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B3</b> · Muestra: el formulario con el campo Nombre en openstack-lab y la sección de imágenes (AMI). <br><b>Marca en rojo:</b> el encabezado de la sección de imágenes (AMI).<br><b>Ojo:</b> el campo correcto es <b>Nombre</b> (arriba), que ya dice openstack-lab; la marca cae en el encabezado de AMI.</figcaption>
   </figure><h3 id="b4">B4 · Imagen Ubuntu Server 24.04</h3>
-  <p>En <b>Imágenes de aplicaciones y sistemas operativos (AMI)</b> busca y elige <b>Ubuntu Server 24.04 LTS (HVM), SSD Volume Type</b>, arquitectura 64 bits (x86). Ojo: al abrir la lista aparece por defecto otra versión de Ubuntu (por ejemplo 26.04). <b>No sirve</b>: el script solo funciona con 24.04.</p><div class="warn"><b>Importante:</b> la versión debe ser exactamente 24.04. El script de instalación se detiene con cualquier otra.</div>
+  <p>En <b>Imágenes de aplicaciones y sistemas operativos (AMI)</b> busca y elige <b>Ubuntu Server 24.04 LTS (HVM), SSD Volume Type</b>, arquitectura 64 bits (x86).</p><div class="warn"><b>Importante:</b> la versión debe ser exactamente <b>24.04 LTS</b>. La lista puede mostrar por defecto Ubuntu <b>26.04</b>: no la uses. El script de instalación solo funciona con 24.04 y se detiene con cualquier otra versión.</div>
   
   <figure class="captura" data-id="B4">
-    <img src="capturas/B4.png" alt="Inicio rápido con Ubuntu seleccionado y el cuadro de búsqueda de AMI marcado" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B4</b> · Marca roja: la zona de inicio rápido con Ubuntu. La versión que aparece en la imagen es 26.04: no la uses, elige 24.04 (x86).</figcaption>
+    <img src="capturas/B4.png" alt="Inicio rápido con Ubuntu y el cuadro de búsqueda de AMI" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B4</b> · Muestra: la zona de búsqueda de AMI y el inicio rápido con Ubuntu. <br><b>Marca en rojo:</b> la zona de inicio rápido con Ubuntu.<br><b>Ojo:</b> la imagen muestra <b>Ubuntu Server 26.04 LTS</b>. Ese no sirve: elige <b>Ubuntu Server 24.04 LTS (HVM), SSD Volume Type</b>, 64 bits (x86).</figcaption>
   </figure><h3 id="b5">B5 · Tipo t3.medium</h3>
-  <p>En <b>Instance type</b> elige <code>t3.medium</code>.</p>
+  <p>En <b>Tipo de instancia</b> elige <code>t3.medium</code>.</p>
   
   <figure class="captura" data-id="B5">
-    <img src="capturas/B5.png" alt="Selector de tipo de instancia con t3.medium seleccionado" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B5</b> · Marca roja: el resultado <code>t3.medium</code> en la lista del tipo de instancia (la instancia aún dice t3.micro).</figcaption>
+    <img src="capturas/B5.png" alt="Tipo de instancia con t3.medium en la lista de búsqueda" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B5</b> · Muestra: la lista de búsqueda del tipo de instancia con <code>t3.medium</code>. <br><b>Marca en rojo:</b> el resultado <code>t3.medium</code> en la lista.<br><b>Ojo:</b> el resumen de la derecha dice <code>t3.micro</code>: elige <code>t3.medium</code> de la lista y comprueba que el resumen cambie.</figcaption>
   </figure><h3 id="b6">B6 · Par de claves vockey</h3>
-  <p>En <b>Key pair (login)</b> elige <code>vockey</code>.</p>
+  <p>En <b>Par de claves (inicio de sesión)</b> elige <code>vockey</code>.</p>
   
   <figure class="captura" data-id="B6">
-    <img src="capturas/B6.png" alt="Lista de pares de claves con vockey y la sección Tipo de instancia marcada" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B6</b> · Marca roja: la sección Tipo de instancia; en la lista de pares de claves aparece <code>vockey</code>, sin marcar.</figcaption>
-  </figure><h3 id="b7">B7 · Grupo de seguridad</h3>
-  <p>En <b>Firewall (grupos de seguridad)</b> elige <b>Crear un grupo de seguridad</b> (un grupo nuevo) con estas reglas de entrada (una por fila). Origen: <code>0.0.0.0/0</code> en todas.</p><table><tr><th>Tipo</th><th>Protocolo / puerto</th></tr><tr><td>SSH</td><td>TCP 22</td></tr><tr><td>HTTP</td><td>TCP 80</td></tr><tr><td>Personalizado TCP</td><td>TCP 8080</td></tr><tr><td>Personalizado TCP</td><td>TCP 6080</td></tr><tr><td>Todo ICMP - IPv4</td><td>ICMP</td></tr></table><div class="warn"><b>No uses el grupo «default».</b> Tiene una regla que abre todo el tráfico. Crea un grupo nuevo para esta instancia.</div>
+    <img src="capturas/B6.png" alt="Lista de pares de claves con vockey y la sección Tipo de instancia" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B6</b> · Muestra: la lista de pares de claves desplegada, con <code>vockey</code> como opción. <br><b>Marca en rojo:</b> el recuadro sobre la sección Tipo de instancia.<br><b>Ojo:</b> el par correcto es <code>vockey</code>, en la lista desplegable (sin marcar). La marca cae en la sección Tipo de instancia.</figcaption>
+  </figure><h3 id="b7">B7 · Grupo de seguridad nuevo</h3>
+  <p>En <b>Firewall (grupos de seguridad)</b> elige <b>Crear un grupo de seguridad</b> (un grupo nuevo) y agrega solo estas tres reglas de entrada. Origen: <code>0.0.0.0/0</code> en todas.</p><table><tr><th>Tipo</th><th>Puerto</th><th>Origen</th></tr><tr><td>SSH</td><td>TCP 22</td><td>0.0.0.0/0</td></tr><tr><td>HTTP</td><td>TCP 80</td><td>0.0.0.0/0</td></tr><tr><td>TCP personalizado</td><td>TCP 6080</td><td>0.0.0.0/0</td></tr></table><div class="warn"><b>No uses el grupo «default»</b> y no agregues la regla «Todo el tráfico»: abre la instancia a todo el mundo.</div>
   
   <figure class="captura" data-id="B7">
     <img src="capturas/B7.png" alt="Detalle del grupo de seguridad default con una regla de todo el tráfico" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B7</b> · Marca roja: el detalle del grupo de seguridad «default» con su regla de entrada (todo el tráfico desde 0.0.0.0/0).</figcaption>
-  </figure><h3 id="b8">B8 · Almacenamiento 30 GiB gp2</h3>
-  <p>En <b>Configurar almacenamiento</b> deja el volumen raíz en <b>30 GiB</b> y el tipo de volumen en <b>gp2</b>.</p>
+    <figcaption><b>B7</b> · Muestra: el detalle del grupo de seguridad «default» con su regla de entrada. <br><b>Marca en rojo:</b> el detalle del grupo «default» y su regla de entrada.<br><b>Ojo:</b> <b>no copies esta configuración</b>: el grupo «default» tiene una regla de todo el tráfico. Crea un grupo nuevo con solo SSH 22, HTTP 80 y TCP 6080 desde 0.0.0.0/0.</figcaption>
+  </figure><h3 id="b8">B8 · Almacenamiento 35 GiB gp2</h3>
+  <p>En <b>Configurar almacenamiento</b> cambia el volumen raíz a <b>35 GiB</b> y el tipo de volumen a <b>gp2</b>.</p>
   
   <figure class="captura" data-id="B8">
-    <img src="capturas/B8.png" alt="Sección Firewall marcada y almacenamiento de 30 GiB gp2" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B8</b> · Marca roja: la opción Seleccionar un grupo de seguridad existente, marcada en rojo; el volumen ya aparece en 30 GiB gp2, sin marcar.</figcaption>
-  </figure><h3 id="b9">B9 · User data con el script</h3>
-  <p>Al final del formulario despliega <b>Advanced details</b> (Detalles avanzados). Baja hasta <b>User data</b> y pega el bloque de abajo, completo. Eso es todo lo que hay que escribir.</p><div class="warn"><b>Pégalo completo y sin cambios.</b> El botón <b>Copiar</b> copia todo el bloque. Este texto instala OpenStack solo: no necesitas escribir nada más en la EC2.</div>
+    <img src="capturas/B8.png" alt="Firewall con la opción de grupo existente marcada y almacenamiento de 30 GiB gp2" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B8</b> · Muestra: la sección Firewall y el almacenamiento del volumen raíz. <br><b>Marca en rojo:</b> la opción <b>Seleccionar un grupo de seguridad existente</b>.<br><b>Ojo:</b> el volumen aparece en <b>30 GiB</b>: debes poner <b>35 GiB</b> y tipo <b>gp2</b>. Y el botón correcto es <b>Crear un grupo de seguridad</b> (no el existente).</figcaption>
+  </figure><h3 id="b9b">B9b · User data con el script</h3>
+  <p>Al final del formulario despliega <b>Detalles avanzados</b> (Advanced details). Baja hasta <b>User data</b> y pega el bloque de abajo, completo. Eso es todo lo que hay que escribir.</p><div class="warn"><b>Pégalo completo y sin cambios.</b> El botón <b>Copiar</b> copia todo el bloque. Este texto instala OpenStack solo: no necesitas escribir nada más en la EC2.</div>
   <pre><code>#!/bin/bash
 # Instalacion automatica de DevStack. Se ejecuta una vez al arrancar la EC2.
 cat &gt; /home/ubuntu/devstack-lab-install.sh &lt;&lt;'FIN_DEL_SCRIPT'
@@ -484,56 +497,59 @@ printf '      sudo -u stack -H bash -c "cd %s &amp;&amp; ./stack.sh"  (o tome un
 FIN_DEL_SCRIPT
 sudo -u ubuntu -H bash /home/ubuntu/devstack-lab-install.sh --aws --yes
 </code></pre>
-  <figure class="captura" data-id="B9">
-    <img src="capturas/B9.png" alt="Botón Lanzar la instancia del resumen" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B9</b> · Marca roja: el botón <b>Lanzar la instancia</b> del resumen.</figcaption>
-  </figure><h3 id="b10">B10 · Launch</h3>
+  <figure class="captura pendiente" data-id="B9b">
+    <img src="capturas/B9b.png" alt="Campo User data de Detalles avanzados con el script pegado" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B9b</b> · Debe mostrarse: la sección Detalles avanzados desplegada con el campo User data lleno con el script completo. <br><b>Marca en rojo:</b> el campo <b>User data</b>.</figcaption>
+  </figure><h3 id="b10">B10 · Lanzar</h3>
   <p>Pulsa <b>Lanzar la instancia</b> (botón naranja del resumen, a la derecha). Debe aparecer el mensaje verde <b>Correcto</b>.</p>
-  
+  <figure class="captura" data-id="B9">
+    <img src="capturas/B9.png" alt="Resumen con el botón Lanzar la instancia marcado" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B9</b> · Muestra: el resumen de la derecha con el botón Lanzar la instancia. <br><b>Marca en rojo:</b> el botón <b>Lanzar la instancia</b> del resumen.<br><b>Ojo:</b> esta captura no muestra el campo User data (está en el paso B9b). La instancia aparece como <code>t3.micro</code>: usa <code>t3.medium</code>.</figcaption>
+  </figure>
   <figure class="captura" data-id="B10">
     <img src="capturas/B10.png" alt="Mensaje verde Correcto tras lanzar la instancia" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B10</b> · Marca roja: el mensaje verde <b>Correcto</b> con el ID de la instancia.</figcaption>
-  </figure><h3 id="b11">B11 · Running y 2/2 checks</h3>
+    <figcaption><b>B10</b> · Muestra: el mensaje verde <b>Correcto</b> con el ID de la instancia. <br><b>Marca en rojo:</b> el mensaje verde <b>Correcto</b> (recuadro sobre el banner).</figcaption>
+  </figure><h3 id="b11">B11 · Running y 2/2</h3>
   <p>Vuelve a la lista de instancias (EC2 → Instancias). Espera a que el <b>Estado de la instancia</b> diga <b>En ejecución</b> (Running) y la <b>Comprobación de estado</b> diga <b>2/2</b>.</p><div class="tip">La EC2 está lista, pero OpenStack todavía se está instalando en segundo plano. Eso tarda entre 30 y 60 minutos. Sigue con la sección C.</div>
   
   <figure class="captura" data-id="B11">
-    <img src="capturas/B11.png" alt="Lista de instancias con openstack-lab en ejecución, comprobaciones inicializando" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>B11</b> · Marca roja: la fila de openstack-lab en <b>En ejecución</b>; la comprobación aún dice «Inicializando», espera a <b>2/2</b>.</figcaption>
+    <img src="capturas/B11.png" alt="Lista de instancias con openstack-lab en ejecución" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B11</b> · Muestra: la lista de instancias con la fila de openstack-lab en ejecución; la comprobación aún dice «Inicializando». <br><b>Marca en rojo:</b> la fila de openstack-lab (recuadro).<br><b>Ojo:</b> la imagen muestra <code>t3.micro</code> y comprobaciones «Inicializando». Usa <code>t3.medium</code> y espera a que diga <b>2/2</b>.</figcaption>
   </figure>
 </section>
 <section>
   <h2><span class="paso">C</span>Entrar a la terminal y seguir la instalación</h2>
-  <p class="donde"><b>📍 Dónde estás:</b> EC2 → Instancias → Connect → EC2 Instance Connect (y luego la terminal)</p>
+  <p class="donde"><b>📍 Dónde estás:</b> EC2 → Instancias → Conectar → EC2 Instance Connect (y luego la terminal)</p>
   <h3 id="c1">C1 · Conectarse con EC2 Instance Connect</h3>
   <p>Marca la casilla de <b>openstack-lab</b> → <b>Conectar</b> (Connect) → pestaña <b>EC2 Instance Connect</b>.</p>
   
   <figure class="captura" data-id="C1">
     <img src="capturas/C1.png" alt="Lista de instancias con el botón Conectar marcado" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>C1</b> · Marca roja: el botón <b>Conectar</b> de la lista de instancias (también aparece marcado Lanzar instancias).</figcaption>
+    <figcaption><b>C1</b> · Muestra: la lista de instancias con openstack-lab seleccionada. <br><b>Marca en rojo:</b> el botón <b>Conectar</b> (también aparece marcado Lanzar instancias).<br><b>Ojo:</b> la instancia muestra <code>t3.micro</code>: en el paso B elegiste <code>t3.medium</code>. El botón correcto es <b>Conectar</b>.</figcaption>
   </figure><h3 id="c2">C2 · Confirmar y abrir la terminal</h3>
   <p>Comprueba que el <b>Nombre de usuario</b> sea <code>ubuntu</code> y pulsa <b>Conectar</b> (botón naranja, abajo a la derecha). Se abre la terminal: verás un texto que empieza con <code>ubuntu@</code>. Ahí se escriben los comandos.</p>
   
   <figure class="captura" data-id="C2">
-    <img src="capturas/C2.png" alt="Pantalla EC2 Instance Connect con usuario ubuntu y botón Conectar marcado" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>C2</b> · Marca roja: el botón <b>Conectar</b> final, con el usuario <code>ubuntu</code> escrito.</figcaption>
+    <img src="capturas/C2.png" alt="Pantalla EC2 Instance Connect con usuario ubuntu" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C2</b> · Muestra: la pantalla EC2 Instance Connect con el usuario <code>ubuntu</code> escrito. <br><b>Marca en rojo:</b> el botón <b>Conectar</b> final.</figcaption>
   </figure><h3 id="c3">C3 · Ver el progreso de la instalación</h3>
   <p>Copia y pega este comando en la terminal:</p><pre><code>tail -f ~/devstack-install.log</code></pre><div class="tip">Verás líneas nuevas mientras avanza. Para salir de la vista usa <b>Ctrl + C</b>: eso <b>no</b> detiene la instalación. Si dice <code>No such file</code>, espera un minuto y repite: el archivo aparece cuando el script arranca.</div>
   
   <figure class="captura" data-id="C3">
     <img src="capturas/C3.png" alt="Terminal con líneas de progreso de la instalación de DevStack" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>C3</b> · Marca roja: la salida de la instalación (líneas functions-common de DevStack). El comando tail no aparece en esta captura.</figcaption>
+    <figcaption><b>C3</b> · Muestra: la salida de la terminal con las líneas de progreso de DevStack (functions-common). <br><b>Marca en rojo:</b> la salida de la terminal.<br><b>Ojo:</b> la captura no muestra el comando <code>tail -f ~/devstack-install.log</code>: escríbelo tú en la terminal como indica el paso.</figcaption>
   </figure><h3 id="c4">C4 · Instalación terminada</h3>
   <p>Sabrás que terminó cuando el log deja de avanzar y su última línea empieza por <code>[OK]</code> y dice <b>Recursos creados</b>. Pulsa <b>Ctrl + C</b> para salir de la vista.</p><div class="warn">Si la última línea es <code>[ERROR]</code>, no sigas: ve a la sección F.</div>
   
-  <figure class="captura" data-id="C4">
+  <figure class="captura pendiente" data-id="C4">
     <img src="capturas/C4.png" alt="Última línea del log con [OK] Recursos creados" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>C4</b> · Marca roja: la última línea del log con <code>[OK] Recursos creados</code>.</figcaption>
+    <figcaption><b>C4</b> · Debe mostrarse: la última línea del log con el texto <code>[OK] Recursos creados</code>. <br><b>Marca en rojo:</b> la línea <code>[OK] Recursos creados…</code>.</figcaption>
   </figure><h3 id="c5">C5 · Ver las credenciales</h3>
-  <p>Para ver la dirección de Horizon, el usuario y la clave, ejecuta:</p><pre><code>cat /home/ubuntu/devstack-credenciales.txt</code></pre><div class="warn"><b>No compartas la clave</b> ni la subas a un documento público. En la captura la clave aparece tapada.</div>
+  <p>Para ver la dirección de Horizon, el usuario y la clave, ejecuta:</p><pre><code>cat /home/ubuntu/devstack-credenciales.txt</code></pre><div class="warn"><b>No compartas la clave</b> ni la subas a un documento público.</div>
   
-  <figure class="captura" data-id="C5">
-    <img src="capturas/C5.png" alt="Salida del comando cat con la contraseña tapada" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>C5</b> · Marca roja: el comando <code>cat</code> y la línea <b>Clave</b> tapada.</figcaption>
+  <figure class="captura pendiente" data-id="C5">
+    <img src="capturas/C5.png" alt="Salida del comando cat con la clave tapada" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C5</b> · Debe mostrarse: el comando <code>cat /home/ubuntu/devstack-credenciales.txt</code> y sus líneas Horizon, Usuario, Clave (la clave tapada). <br><b>Marca en rojo:</b> la línea <b>Clave</b> (tapada en la captura).</figcaption>
   </figure>
 </section>
 <section>
@@ -542,52 +558,52 @@ sudo -u ubuntu -H bash /home/ubuntu/devstack-lab-install.sh --aws --yes
   <h3 id="d1">D1 · IP pública</h3>
   <p>En EC2 → <b>Instancias</b>, selecciona <b>openstack-lab</b> y en la pestaña <b>Detalles</b> copia la <b>Dirección IPv4 pública</b>.</p>
   
-  <figure class="captura" data-id="D1">
+  <figure class="captura pendiente" data-id="D1">
     <img src="capturas/D1.png" alt="Detalles de la instancia con la dirección IPv4 pública" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>D1</b> · Marca roja: la <b>Dirección IPv4 pública</b> de la instancia.</figcaption>
+    <figcaption><b>D1</b> · Debe mostrarse: la pestaña Detalles de openstack-lab con la Dirección IPv4 pública. <br><b>Marca en rojo:</b> el campo <b>Dirección IPv4 pública</b>.</figcaption>
   </figure><h3 id="d2">D2 · Iniciar sesión en Horizon</h3>
-  <p>Abre en el navegador la dirección <code>http://&lt;IP-pública&gt;/dashboard</code>. La primera línea de <code>devstack-credenciales.txt</code> trae la dirección exacta. Escribe:</p><ul><li>Dominio: <code>Default</code></li><li>Usuario: <code>admin</code></li><li>Clave: la línea <b>Clave</b> de tu archivo</li></ul><div class="tip">Si el navegador fuerza HTTPS o bloquea la página, usa <code>http://&lt;IP-pública&gt;:8080/dashboard</code>.</div>
+  <p>Abre en el navegador la dirección <code>http://&lt;IP-pública&gt;/dashboard</code>. La primera línea de <code>devstack-credenciales.txt</code> trae la dirección exacta. Escribe:</p><ul><li>Dominio: <code>Default</code></li><li>Usuario: <code>admin</code></li><li>Clave: la línea <b>Clave</b> de tu archivo</li></ul><div class="tip">Si el navegador fuerza HTTPS o bloquea la página, escribe <code>http://</code> al inicio de la dirección y prueba en una ventana de incógnito.</div>
   
-  <figure class="captura" data-id="D2">
-    <img src="capturas/D2.png" alt="Formulario de inicio de sesión de Horizon con Dominio Default y usuario admin" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>D2</b> · Marca roja: los campos <b>Dominio</b> (Default), <b>Usuario</b> (admin) y <b>Clave</b>.</figcaption>
+  <figure class="captura pendiente" data-id="D2">
+    <img src="capturas/D2.png" alt="Formulario de inicio de sesión de Horizon" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>D2</b> · Debe mostrarse: el formulario de inicio de sesión de Horizon con Dominio Default, Usuario admin y el campo Clave (tapado). <br><b>Marca en rojo:</b> los campos <b>Dominio</b>, <b>Usuario</b> y <b>Clave</b>.</figcaption>
   </figure><h3 id="d3">D3 · Vista general</h3>
   <p>En el menú de la izquierda ve a <b>Proyecto → Compute → Visión general</b>. Verás las cuotas de cómputo.</p>
   
-  <figure class="captura" data-id="D3">
+  <figure class="captura pendiente" data-id="D3">
     <img src="capturas/D3.png" alt="Horizon en Proyecto → Compute → Visión general con las cuotas" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>D3</b> · Marca roja: el menú <b>Proyecto → Compute → Visión general</b>.</figcaption>
+    <figcaption><b>D3</b> · Debe mostrarse: el menú Proyecto → Compute → Visión general con las cuotas visibles. <br><b>Marca en rojo:</b> el menú <b>Visión general</b>.</figcaption>
   </figure><h3 id="d4">D4 · Lanzar la instancia CirrOS</h3>
   <p>Ve a <b>Compute → Instancias</b> y pulsa <b>Lanzar instancia</b>. El asistente tiene pestañas; complétalas así:</p><table><tr><th>Pestaña</th><th>Qué elegir</th></tr><tr><td>Detalles</td><td>Nombre: <code>vm-tunombre</code></td></tr><tr><td>Origen</td><td>Imagen <code>cirros</code> (Crear nuevo volumen: <i>No</i>)</td></tr><tr><td>Sabor</td><td><code>m1.tiny</code></td></tr><tr><td>Redes</td><td><code>lab-net</code></td></tr><tr><td>Grupos de seguridad</td><td><code>lab-ssh-icmp</code></td></tr><tr><td>Par de claves</td><td><code>lab-key</code></td></tr></table><div class="warn">Lanza <b>una sola</b> instancia. El Sandbox permite hasta 9 y pasarte suspende tu cuenta del laboratorio.</div>
   
-  <figure class="captura" data-id="D4">
-    <img src="capturas/D4.png" alt="Asistente Lanzar instancia con las pestañas Detalles, Origen, Sabor, Redes, Grupos de seguridad y Par de claves" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>D4</b> · Marca roja: las pestañas del asistente <b>Lanzar instancia</b>.</figcaption>
+  <figure class="captura pendiente" data-id="D4">
+    <img src="capturas/D4.png" alt="Asistente Lanzar instancia con sus pestañas" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>D4</b> · Debe mostrarse: el asistente Lanzar instancia con sus pestañas Detalles, Origen, Sabor, Redes, Grupos de seguridad y Par de claves. <br><b>Marca en rojo:</b> las pestañas del asistente.</figcaption>
   </figure><h3 id="d5">D5 · Instancia activa y IP flotante</h3>
   <p>Espera a que el <b>Estado</b> sea <b>Activo</b> y la <b>Energía</b> sea <b>En ejecución</b> (puede tardar varios minutos). Luego, en el menú de la instancia (▾) elige <b>Asociar IP flotante</b>, pulsa <b>+</b> para asignar una dirección del grupo <code>public</code> y pulsa <b>Asociar</b>. Anota la <b>IP flotante</b>: la usarás en D8.</p>
   
-  <figure class="captura" data-id="D5">
+  <figure class="captura pendiente" data-id="D5">
     <img src="capturas/D5.png" alt="Lista de instancias con estado Activo, energía En ejecución y la IP flotante asociada" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>D5</b> · Marca roja: el estado <b>Activo</b>, la energía <b>En ejecución</b> y la <b>IP flotante</b> asociada.</figcaption>
+    <figcaption><b>D5</b> · Debe mostrarse: la lista de instancias con vm-tunombre en Estado <b>Activo</b>, Energía <b>En ejecución</b> y la IP flotante asociada. <br><b>Marca en rojo:</b> la <b>IP flotante</b> de la instancia.</figcaption>
   </figure><h3 id="d6">D6 · Grupo de seguridad</h3>
   <p>Abre la instancia y revisa la pestaña <b>Grupos de seguridad</b>: debe mostrar <code>lab-ssh-icmp</code> con la regla SSH (22) y la regla ICMP.</p>
   
-  <figure class="captura" data-id="D6">
+  <figure class="captura pendiente" data-id="D6">
     <img src="capturas/D6.png" alt="Pestaña Grupos de seguridad de la instancia con lab-ssh-icmp" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>D6</b> · Marca roja: la pestaña <b>Grupos de seguridad</b> con <code>lab-ssh-icmp</code>.</figcaption>
+    <figcaption><b>D6</b> · Debe mostrarse: la pestaña Grupos de seguridad de la instancia con <code>lab-ssh-icmp</code> y sus reglas SSH 22 e ICMP. <br><b>Marca en rojo:</b> las reglas SSH (22) e ICMP.</figcaption>
   </figure><h3 id="d7">D7 · Consola noVNC</h3>
   <p>Abre la instancia, pestaña <b>Consola</b> → <b>Haz clic aquí para mostrar solo la consola</b>. Inicia sesión con usuario <code>cirros</code> y la contraseña que muestra el banner de la consola. Cuando estés dentro, ejecuta:</p><pre><code>ip a</code></pre>
   
-  <figure class="captura" data-id="D7">
+  <figure class="captura pendiente" data-id="D7">
     <img src="capturas/D7.png" alt="Consola noVNC de Horizon con sesión cirros iniciada y salida de ip a" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>D7</b> · Marca roja: la consola noVNC con la sesión <code>cirros</code> iniciada y la salida de <code>ip a</code>.</figcaption>
+    <figcaption><b>D7</b> · Debe mostrarse: la consola noVNC con la sesión <code>cirros</code> iniciada y la salida del comando <code>ip a</code>. <br><b>Marca en rojo:</b> la salida de <code>ip a</code>.</figcaption>
   </figure><h3 id="d8">D8 · SSH a CirrOS desde la EC2</h3>
   <p>Vuelve a la terminal de EC2 (paso C2). Cambia <code>&lt;IP-flotante&gt;</code> por la IP que anotaste en D5 y ejecuta:</p><pre><code>ping -c3 &lt;IP-flotante&gt;
 ssh -i ~/lab-key.pem cirros@&lt;IP-flotante&gt;</code></pre><p>La primera vez pregunta si confías en el host: escribe <code>yes</code>. Dentro de CirrOS ejecuta <code>hostname</code> y <code>ip a</code>, y luego <code>exit</code> para volver a la terminal de EC2.</p>
   
-  <figure class="captura" data-id="D8">
+  <figure class="captura pendiente" data-id="D8">
     <img src="capturas/D8.png" alt="Terminal de EC2 con ping y ssh a la IP flotante de CirrOS" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>D8</b> · Marca roja: el <code>ssh</code> a la IP flotante y el prompt de CirrOS.</figcaption>
+    <figcaption><b>D8</b> · Debe mostrarse: la terminal de EC2 con el comando <code>ssh</code> a la IP flotante y el prompt de CirrOS. <br><b>Marca en rojo:</b> el comando <code>ssh -i ~/lab-key.pem cirros@…</code>.</figcaption>
   </figure>
 </section>
 <section>
@@ -596,59 +612,72 @@ ssh -i ~/lab-key.pem cirros@&lt;IP-flotante&gt;</code></pre><p>La primera vez pr
   <div class="danger"><b>No lo omitas.</b> Una instancia encendida consume el crédito del laboratorio aunque no la uses. Destrúyela siempre al terminar.</div><h3 id="e1">E1 · Terminar la instancia</h3>
   <p>En EC2 → <b>Instancias</b>, selecciona <b>openstack-lab</b> → <b>Estado de la instancia</b> (Instance state) → <b>Terminar instancia</b> (Terminate instance).</p>
   
-  <figure class="captura" data-id="E1">
+  <figure class="captura pendiente" data-id="E1">
     <img src="capturas/E1.png" alt="Menú Estado de la instancia con la opción Terminar instancia" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>E1</b> · Marca roja: el menú <b>Estado de la instancia</b> → <b>Terminar instancia</b>.</figcaption>
+    <figcaption><b>E1</b> · Debe mostrarse: el menú Estado de la instancia desplegado con la opción Terminar instancia. <br><b>Marca en rojo:</b> la opción <b>Terminar instancia</b>.</figcaption>
   </figure><h3 id="e2">E2 · Confirmar</h3>
   <p>En la ventana de confirmación pulsa <b>Terminar</b> (Terminate).</p>
   
-  <figure class="captura" data-id="E2">
+  <figure class="captura pendiente" data-id="E2">
     <img src="capturas/E2.png" alt="Ventana de confirmación para terminar la instancia" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>E2</b> · Marca roja: el botón <b>Terminar</b> de la ventana de confirmación.</figcaption>
+    <figcaption><b>E2</b> · Debe mostrarse: la ventana de confirmación de terminación de openstack-lab. <br><b>Marca en rojo:</b> el botón <b>Terminar</b>.</figcaption>
   </figure><h3 id="e3">E3 · Estado Terminated</h3>
-  <p>Espera un minuto y revisa que <b>Instance state</b> diga <b>Terminated</b>. Una instancia terminada ya no se puede recuperar.</p>
+  <p>Espera un minuto y revisa que <b>Estado de la instancia</b> diga <b>Terminated</b>. Una instancia terminada ya no se puede recuperar.</p>
   
-  <figure class="captura" data-id="E3">
+  <figure class="captura pendiente" data-id="E3">
     <img src="capturas/E3.png" alt="Lista de instancias con openstack-lab en estado Terminated" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>E3</b> · Marca roja: el estado <b>Terminated</b> de la instancia.</figcaption>
+    <figcaption><b>E3</b> · Debe mostrarse: la lista de instancias con openstack-lab en estado <b>Terminated</b>. <br><b>Marca en rojo:</b> el estado <b>Terminated</b>.</figcaption>
   </figure><h3 id="e4">E4 · Volúmenes vacíos</h3>
   <p>En EC2 → <b>Volumes</b> (Volúmenes) no debe quedar ningún volumen de tu laboratorio. El disco de la instancia se borra al terminarla.</p>
   
-  <figure class="captura" data-id="E4">
+  <figure class="captura pendiente" data-id="E4">
     <img src="capturas/E4.png" alt="Lista de volúmenes de EC2 vacía" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>E4</b> · Marca roja: la lista de <b>Volumes</b> sin volúmenes de tu laboratorio.</figcaption>
+    <figcaption><b>E4</b> · Debe mostrarse: la lista de Volúmenes de EC2 sin volúmenes del laboratorio. <br><b>Marca en rojo:</b> la lista de volúmenes (vacía para tu laboratorio).</figcaption>
   </figure><h3 id="e5">E5 · End Lab en AWS Academy</h3>
   <p>Vuelve a la pestaña de AWS Academy, en el Sandbox, y pulsa <b>End Lab</b>. Confirma con <b>Yes</b>.</p>
   
-  <figure class="captura" data-id="E5">
+  <figure class="captura pendiente" data-id="E5">
     <img src="capturas/E5.png" alt="Botón End Lab del Sandbox de AWS Academy" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>E5</b> · Marca roja: el botón <b>End Lab</b>.</figcaption>
+    <figcaption><b>E5</b> · Debe mostrarse: la barra del Sandbox con el botón End Lab. <br><b>Marca en rojo:</b> el botón <b>End Lab</b>.</figcaption>
   </figure><h3 id="e6">E6 · Indicador rojo</h3>
   <p>El indicador <b>AWS</b> debe quedar en <b>rojo</b> (estado terminado). Ya puedes cerrar el laboratorio.</p>
   
-  <figure class="captura" data-id="E6">
+  <figure class="captura pendiente" data-id="E6">
     <img src="capturas/E6.png" alt="Indicador AWS en rojo al terminar el Sandbox" onerror="this.closest('figure').classList.add('pendiente')">
-    <figcaption><b>E6</b> · Marca roja: el indicador <b>AWS</b> en rojo.</figcaption>
+    <figcaption><b>E6</b> · Debe mostrarse: la barra del Sandbox con el indicador AWS en rojo. <br><b>Marca en rojo:</b> el indicador <b>AWS</b> en rojo.</figcaption>
   </figure>
 </section>
+<section>
+  <h2>Qué entregar</h2>
+  <p>Un PDF o documento con las 5 capturas (con tu nombre visible en el nombre de la instancia). Cada evidencia corresponde a un paso: 1 = login de Horizon (D2), 2 = instancia activa con IP flotante (D5), 3 = grupo de seguridad (D6), 4 = consola noVNC (D7), 5 = SSH a CirrOS (D8). Súbelo al aula virtual antes del cierre de la semana 13.</p>
+  <h3>Rúbrica (10 % de la nota)</h3>
+  <table>
+    <tr><th>Criterio</th><th>Evidencia</th><th>Puntos</th></tr>
+    <tr><td>OpenStack instalado y accesible</td><td>1</td><td>25</td></tr>
+    <tr><td>Instancia Cirros m1.tiny activa en red propia</td><td>2</td><td>25</td></tr>
+    <tr><td>Grupo de seguridad correcto (SSH + ICMP)</td><td>3</td><td>15</td></tr>
+    <tr><td>Acceso por consola y por SSH con IP flotante</td><td>4 y 5</td><td>20</td></tr>
+    <tr><th colspan="2">Total</th><th>85</th></tr>
+  </table>
+</section>
+
 <section>
   <h2><span class="paso">F</span>Problemas frecuentes</h2>
   <p class="donde"><b>📍 Dónde estás:</b> Solución de problemas → vuelve al paso donde te quedaste (B, C o D)</p>
   <table>
   <tr><th>Síntoma</th><th>Qué revisar</th></tr>
-  <tr><td>Horizon no abre</td><td>1) La EC2 debe estar en <b>Running</b> con <b>2/2 checks</b> y la instalación debe haber terminado (C4). 2) La IP pública es la correcta (D1). 3) El grupo de seguridad tiene los puertos 80 y 8080 abiertos (B7). 4) En la terminal de EC2 ejecuta:</td></tr>
-  <tr><td>Horizon da «ERR_BLOCKED_BY_CLIENT» o fuerza HTTPS</td><td>Usa el puerto 8080: <code>http://&lt;IP-pública&gt;:8080/dashboard</code>.</td></tr>
+  <tr><td>Horizon no abre</td><td>1) La EC2 debe estar en <b>En ejecución</b> con <b>2/2</b> y la instalación debe haber terminado (C4). 2) La IP pública es la correcta (D1). 3) El grupo de seguridad tiene abiertos los puertos 80 y 6080 (B7). 4) En la terminal de EC2 ejecuta:</td></tr>
+  <tr><td>Horizon da «ERR_BLOCKED_BY_CLIENT» o fuerza HTTPS</td><td>Escribe la dirección con <code>http://</code> (no https), en una ventana de incógnito. Si el navegador sigue forzando HTTPS, prueba otro navegador.</td></tr>
   <tr><td>La instalación no termina</td><td>Mira el final del log. Si ves <code>[ERROR]</code> o el log no avanza por mucho tiempo, revisa también el registro de arranque de la instancia. Para volver a intentarlo (el script es reanudable):</td></tr>
-  <tr><td>El log dice «Disco libre» o «RAM» insuficiente</td><td>La instancia no tiene el tamaño requerido. Termina la instancia (sección E) y crea otra desde B con el almacenamiento indicado y <code>t3.medium</code>.</td></tr>
+  <tr><td>El log dice «Disco libre» o «RAM» insuficiente</td><td>La instancia no tiene el tamaño requerido. Termina la instancia (sección E) y crea otra desde B con <b>35 GiB gp2</b> y <code>t3.medium</code>.</td></tr>
   <tr><td>En Horizon no aparecen <code>lab-net</code> ni <code>lab-ssh-icmp</code></td><td>El paso de recursos del script no terminó. Revisa el log y relanza el script como arriba.</td></tr>
   <tr><td>Instancia en «Error» en Horizon</td><td>Suele faltar memoria. En Horizon elimina la instancia y crea otra (D4).</td></tr>
   <tr><td>La consola dice «Failed to connect»</td><td>Revisa que el puerto <b>6080</b> esté abierto en el grupo de seguridad de la EC2 (B7).</td></tr>
-  <tr><td>SSH dice «Permission denied»</td><td>El usuario debe ser <code>cirros</code> y la llave debe tener permisos restringidos:<br>
-    <code>chmod 600 ~/lab-key.pem</code></td></tr>
+  <tr><td>SSH dice «Permission denied»</td><td>El usuario debe ser <code>cirros</code> y la llave debe tener permisos restringidos:<br><code>chmod 600 ~/lab-key.pem</code></td></tr>
   <tr><td>Cerré la pestaña o se cortó la conexión</td><td>No pasa nada: la instalación corre dentro de la EC2. Vuelve a conectarte (C1) y sigue con <code>tail -f</code> (C3).</td></tr>
   <tr><td>Se venció la sesión de AWS Academy o la EC2 se detuvo</td><td>DevStack no es persistente: no sobrevive a detener o reiniciar la instancia. Termina esa instancia (E) y crea una nueva desde B. Antes, pulsa <b>Start Lab</b> si el indicador está en rojo.</td></tr>
 </table>
-<pre><code>tail -n 40 ~/devstack-install.log</code></pre><pre><code>sudo tail -n 60 /var/log/cloud-init-output.log</code></pre><pre><code>sudo systemctl status apache2</code></pre><pre><code>bash ~/devstack-lab-install.sh --aws --yes</code></pre>
+<pre><code>sudo systemctl status apache2</code></pre><pre><code>tail -n 40 ~/devstack-install.log</code></pre><pre><code>sudo tail -n 60 /var/log/cloud-init-output.log</code></pre><pre><code>bash ~/devstack-lab-install.sh --aws --yes</code></pre>
 </section>
 
 </div>
@@ -659,15 +688,11 @@ ssh -i ~/lab-key.pem cirros@&lt;IP-flotante&gt;</code></pre><p>La primera vez pr
   document.querySelectorAll('pre').forEach(function(pre){
     var wrap = pre.parentNode;
     if(!(wrap && wrap.classList && wrap.classList.contains('cmd'))){
-      wrap = document.createElement('div');
-      wrap.className = 'cmd';
-      pre.parentNode.insertBefore(wrap, pre);
-      wrap.appendChild(pre);
+      wrap = document.createElement('div'); wrap.className = 'cmd';
+      pre.parentNode.insertBefore(wrap, pre); wrap.appendChild(pre);
     }
     var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'copy';
-    b.textContent = 'Copiar';
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copiar';
     b.addEventListener('click', function(){
       var text = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
       function ok(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1800); }
@@ -681,9 +706,8 @@ ssh -i ~/lab-key.pem cirros@&lt;IP-flotante&gt;</code></pre><p>La primera vez pr
         }catch(e){ b.textContent = 'Selecciona y copia'; }
       }
       try{
-        if(navigator.clipboard && window.isSecureContext){
-          navigator.clipboard.writeText(text).then(ok, fallback);
-        } else { fallback(); }
+        if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(ok, fallback); }
+        else { fallback(); }
       }catch(e){ fallback(); }
     });
     wrap.appendChild(b);
