@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad Semana 14: Lab Inferencia: tokens, temperatura y costo · Arquitectura en la Nube · CUC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --ok:#2f7d4f; --ok-tint:#e9f5ee;
+    --line:#E5DCCB; --code-bg:#F1EADA; --code-ink:#4A4030;
+    --shadow:0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    --mono:'IBM Plex Mono',monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#181411; --surface:#221D18; --surface-2:#2B2520;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C;
+      --ok:#5fbf8a; --ok-tint:#1c3327;
+      --line:#3D352A; --code-bg:#1F1914; --code-ink:#E4D9C3;
+      --shadow:0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+    }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;text-wrap:balance;color:var(--ink);}
+  a{color:var(--vino);}
+  code,.mono{font-family:var(--mono);font-size:.92em;background:var(--code-bg);color:var(--code-ink);padding:1px 5px;border-radius:4px;}
+  pre{font-family:var(--mono);font-size:13.5px;background:var(--code-bg);color:var(--code-ink);padding:14px 16px;border-radius:8px;overflow-x:auto;line-height:1.5;}
+  pre code{background:none;padding:0;}
+
+  .wrap{max-width:820px;margin:0 auto;padding:0 24px 90px;}
+  header.top{background:var(--surface);border-bottom:1px solid var(--line);padding:44px 24px 34px;text-align:center;}
+  header.top img.logo{height:56px;margin:0 auto 20px;display:block;}
+  header.top .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--dorado);font-weight:700;margin:0 0 6px;}
+  header.top h1{color:var(--vino);font-size:clamp(24px,4vw,32px);margin:0 0 8px;}
+  header.top .sub{color:var(--ink-soft);font-size:15px;margin:0 0 14px;}
+  .accent-bar{width:160px;height:4px;margin:0 auto 16px;border-radius:2px;background:linear-gradient(90deg,var(--vino),var(--dorado));}
+  header.top .meta{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+  header.top .meta b{color:var(--ink);}
+
+  section{margin-top:40px;}
+  h2{font-size:22px;border-bottom:2px solid var(--line);padding-bottom:8px;margin-bottom:16px;}
+  h2 .paso{display:inline-block;background:var(--vino);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;margin-right:10px;vertical-align:middle;}
+  h3{font-size:17px;color:var(--vino-strong);margin:22px 0 8px;}
+
+  .tip,.warn,.danger{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px;}
+  .tip{border-color:var(--ok);background:var(--ok-tint);}
+  .tip::before{content:"💡 RECOMENDADO — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok);}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint);}
+  .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado);}
+  .danger{border-color:var(--vino);background:var(--vino-tint);}
+  .danger::before{content:"☠ CAUSA MÁS FRECUENTE — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino);}
+
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
+  th{background:var(--vino);color:#fff;font-weight:600;}
+  tr:nth-child(even) td{background:var(--surface-2);}
+  tr:last-child td{border-bottom:none;}
+
+  ol.steps{padding-left:0;list-style:none;counter-reset:step;}
+  ol.steps>li{counter-increment:step;position:relative;padding:6px 0 6px 42px;margin-bottom:10px;}
+  ol.steps>li::before{content:counter(step);position:absolute;left:0;top:6px;width:28px;height:28px;border-radius:50%;background:var(--vino-tint);color:var(--vino);font-family:var(--mono);font-weight:700;font-size:13px;display:grid;place-items:center;}
+
+  figure.captura{margin:22px 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);}
+  figure.captura img{width:100%;height:auto;display:block;}
+  figure.captura figcaption{padding:10px 16px;font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-top:1px solid var(--line);font-family:var(--mono);line-height:1.4;}
+  figure.captura figcaption b{color:var(--vino);}
+  @media (max-width: 640px) {
+    .wrap{padding:0 14px 60px;}
+    header.top{padding:28px 16px 24px;}
+    table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;}
+  }
+  footer.page{max-width:820px;margin:60px auto 0;padding:20px 24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .donde{font-family:var(--mono);font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--dorado);border-radius:6px;padding:7px 12px;margin:0 0 16px;}
+  .donde b{color:var(--ink);}
+  .cmd{position:relative;margin:14px 0;}
+  .cmd pre{margin:0;padding-top:38px;}
+  .cmd button.copy{position:absolute;top:8px;right:8px;font:600 12px var(--mono);background:var(--surface);color:var(--vino);border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer;}
+  .cmd button.copy:hover{background:var(--vino-tint);}
+  figure.captura.pendiente{border:2px dashed var(--dorado);background:var(--dorado-tint);box-shadow:none;}
+  figure.captura.pendiente img{display:none;}
+  figure.captura.pendiente::before{content:"Captura pendiente: " attr(data-id);display:flex;align-items:center;justify-content:center;min-height:140px;padding:16px;font-family:var(--mono);font-size:14px;font-weight:600;color:var(--dorado);text-align:center;}
+  figure.captura.pendiente figcaption{background:transparent;}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" onerror="this.style.display='none'">
+  <p class="eyebrow">Actividad práctica 10 % · Semana 14 · 9–15 nov 2026</p>
+  <h1>Lab Inferencia: tokens, temperatura y costo</h1>
+  <p class="sub">Guía paso a paso: despliega Ollama y el modelo Qwen 2.5 (1.5B) en una instancia EC2 de AWS Academy, mide el impuesto de tokenización (español vs. inglés), compara temperatura determinista vs. creativa, calcula la velocidad de lectura frente a generación y proyecta costos reales en la nube</p>
+  <div class="accent-bar"></div>
+  <p class="meta"><b>Arquitectura en la Nube</b> · Universidad de la Costa (CUC) · Ingeniería de Sistemas · 2026-2<br>Modalidad individual · Entrega: PDF (Portable Document Format, formato de documento portátil) con evidencias numeradas en el aula virtual · <b>Abierta desde su publicación hasta el domingo 29 de noviembre de 2026</b></p>
+</header>
+<div class="wrap">
+
+<section>
+  <p class="intro">Sigue los pasos en orden, de arriba abajo, sin saltarte ninguno. Vas a lanzar una máquina virtual <b>EC2</b> (<i>Elastic Compute Cloud</i>, nube de cómputo elástico de Amazon Web Services) en el Sandbox de <b>AWS</b> (<i>Amazon Web Services</i>, servicios web de Amazon) Academy, instalar el servidor de inferencia <b>Ollama</b>, descargar un <b>LLM</b> (<i>Large Language Model</i>, gran modelo de lenguaje) ligero (<code>qwen2.5:1.5b</code>) y ejecutar cuatro experimentos cuantitativos sobre su <b>API</b> (<i>Application Programming Interface</i>, interfaz de programación de aplicaciones) local para entender por qué la inferencia de inteligencia artificial cuesta y rinde de forma asimétrica en la nube.</p>
+  <div class="warn"><b>Antes de empezar:</b> necesitas tu navegador web, el curso de AWS Academy abierto y PowerShell en tu computador. Al finalizar tus pruebas (sección E) es obligatorio <b>terminar tu instancia EC2</b> (<code>lab-inferencia</code>) para no agotar el presupuesto del laboratorio.</div>
+</section>
+
+<section>
+  <h2><span class="paso">0</span>Qué vas a construir</h2>
+  <svg viewBox="0 0 800 245" role="img" aria-label="Flujo de arquitectura: Tu PC, AWS Academy Sandbox, Instancia EC2 Ubuntu 24.04, Motor Ollama y Modelo Qwen 2.5 1.5B" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px">
+    <defs>
+      <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/>
+      </marker>
+    </defs>
+
+    <!-- Nodo 1: Tu PC -->
+    <rect x="14" y="34" width="128" height="175" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+    <image href="../../assets/iconos/onprem/client/client.png" x="50" y="48" width="56" height="56"/>
+    <text x="78" y="124" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vino)">Tu PC</text>
+    <text x="78" y="142" text-anchor="middle" font-size="11" fill="var(--ink)">Navegador +</text>
+    <text x="78" y="157" text-anchor="middle" font-size="11" fill="var(--ink)">PowerShell SSH</text>
+    <text x="78" y="176" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--ink-soft)">labsuser.pem</text>
+
+    <!-- Flecha 1 -> 2 -->
+    <line x1="142" y1="115" x2="178" y2="115" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="160" y="105" text-anchor="middle" font-size="9.5" font-family="IBM Plex Mono, monospace" fill="var(--ink-soft)">HTTPS</text>
+
+    <!-- Nodo 2: AWS Academy -->
+    <rect x="180" y="34" width="134" height="175" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+    <image href="../../assets/iconos/aws/management/management-console.png" x="219" y="48" width="56" height="56"/>
+    <text x="247" y="124" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vino)">AWS Academy</text>
+    <text x="247" y="142" text-anchor="middle" font-size="11" fill="var(--ink)">Sandbox</text>
+    <text x="247" y="157" text-anchor="middle" font-size="11" fill="var(--ink)">Consola AWS</text>
+    <text x="247" y="176" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--ink-soft)">us-east-1</text>
+
+    <!-- Flecha 2 -> 3 -->
+    <line x1="314" y1="115" x2="352" y2="115" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="333" y="105" text-anchor="middle" font-size="9.5" font-family="IBM Plex Mono, monospace" fill="var(--ink-soft)">SSH :22</text>
+
+    <!-- Contenedor VPC / EC2 lab-inferencia -->
+    <rect x="354" y="20" width="432" height="205" rx="12" fill="var(--surface-2)" stroke="var(--vino)" stroke-width="2"/>
+    <text x="570" y="40" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vino)">Instancia EC2 lab-inferencia · Ubuntu Server 24.04 LTS (t3.medium · 30 GiB gp3)</text>
+
+    <!-- Subnodo 3: EC2 Instance -->
+    <rect x="368" y="54" width="124" height="154" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+    <image href="../../assets/iconos/aws/compute/ec2-instance.png" x="402" y="64" width="56" height="56"/>
+    <text x="430" y="138" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">VM Ubuntu 24.04</text>
+    <text x="430" y="154" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">2 vCPU · 4 GiB RAM</text>
+    <text x="430" y="170" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--ink-soft)">SG: Mi IP (:22)</text>
+    <text x="430" y="186" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--ok)">CPU-only mode</text>
+
+    <!-- Flecha 3 -> 4 -->
+    <line x1="492" y1="128" x2="518" y2="128" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="505" y="118" text-anchor="middle" font-size="9" font-family="IBM Plex Mono, monospace" fill="var(--ink-soft)">curl</text>
+
+    <!-- Subnodo 4: Motor Ollama -->
+    <rect x="520" y="54" width="118" height="154" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+    <image href="../../assets/iconos/onprem/compute/server.png" x="551" y="64" width="56" height="56"/>
+    <text x="579" y="138" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">Motor Ollama</text>
+    <text x="579" y="154" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">API REST HTTP</text>
+    <text x="579" y="170" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--ink-soft)">localhost:11434</text>
+    <text x="579" y="186" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--vino)">/api/generate</text>
+
+    <!-- Flecha 4 -> 5 -->
+    <line x1="638" y1="128" x2="658" y2="128" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+
+    <!-- Subnodo 5: Modelo Qwen 2.5 1.5B -->
+    <rect x="660" y="54" width="114" height="154" rx="8" fill="var(--ok-tint)" stroke="var(--ok)"/>
+    <image href="../../assets/iconos/aws/ml/bedrock.png" x="689" y="64" width="56" height="56"/>
+    <text x="717" y="138" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">Qwen 2.5 1.5B</text>
+    <text x="717" y="154" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">1.500 M params</text>
+    <text x="717" y="170" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--ink-soft)">Peso: 986 MB</text>
+    <text x="717" y="186" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--ok)">Tokens + Tiempos</text>
+  </svg>
+  <p>A diferencia de una consulta web normal donde el servidor devuelve un registro de base de datos en milisegundos, la inferencia de un <b>LLM</b> exige dos etapas físicas muy distintas sobre la <b>CPU</b> (<i>Central Processing Unit</i>, unidad central de procesamiento) o la <b>GPU</b> (<i>Graphics Processing Unit</i>, unidad de procesamiento gráfico) y su memoria <b>RAM</b> (<i>Random Access Memory</i>, memoria de acceso aleatorio) o <b>VRAM</b> (<i>Video Random Access Memory</i>, memoria de video): primero la <b>lectura o <i>prefill</i></b> (que procesa en paralelo todos los tokens de tu pregunta y determina el <b>TTFT</b>, <i>Time To First Token</i> o tiempo hasta el primer token) y luego la <b>generación o <i>decode</i></b> (que produce un token tras otro de forma autorregresiva y determina el <b>TPOT</b>, <i>Time Per Output Token</i> o tiempo por token de salida).</p>
+</section>
+
+<section>
+  <h2><span class="paso">A</span>Entrar al Sandbox de AWS Academy</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> AWS Academy → Cursos → Módulos → Entorno de pruebas (Sandbox)</p>
+
+  <h3 id="c1">A1 · Panel de cursos activos</h3>
+  <p>En AWS Academy abre tu curso activo <b>«AWS Academy Cloud Architecting (Spanish LATAM)»</b>, cuyo apodo institucional es <b>«Arquitectura en la Nube 2026-2»</b>.</p>
+  <figure class="captura" data-id="C1">
+    <img src="capturas/C1.png" alt="Panel de cursos activos de AWS Academy" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C1</b> · Muestra: la lista de cursos activos de AWS Academy con «AWS Academy Cloud Architecting (Spanish LATAM)» / «Arquitectura en la Nube 2026-2».</figcaption>
+  </figure>
+
+  <h3 id="c2">A2 · Menú Módulos y Entorno de pruebas (Sandbox)</h3>
+  <p>Dentro del curso, abre <b>Módulos</b> en el menú izquierdo y desplázate hasta el bloque final para abrir <b>Entorno de pruebas</b> (así se llama el Sandbox en este curso).</p>
+  <figure class="captura" data-id="C2">
+    <img src="capturas/C2.png" alt="Menú Módulos con Entorno de pruebas (Sandbox)" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C2</b> · Muestra: el menú Módulos del curso. Abre el ítem <b>Entorno de pruebas</b> (Sandbox) ubicado al final.</figcaption>
+  </figure>
+
+  <h3 id="c3">A3 · Iniciar el laboratorio (Start Lab)</h3>
+  <p>En la barra superior del entorno de pruebas verás el indicador <b>AWS</b> con un círculo rojo (apagado). Haz clic en el botón <b>Start Lab</b> (arriba a la derecha) y espera unos minutos mientras se aprovisiona tu cuenta temporal.</p>
+  <figure class="captura" data-id="C3">
+    <img src="capturas/C3.png" alt="Barra del Sandbox con el botón Start Lab y el indicador AWS en rojo" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C3</b> · Muestra: la barra del Sandbox con el indicador <b>AWS</b> en rojo antes de iniciar. Pulsa <b>Start Lab</b> arriba a la derecha.</figcaption>
+  </figure>
+
+  <h3 id="c4">A4 · Indicador AWS en verde</h3>
+  <p>Espera hasta que el punto junto a <b>AWS</b> cambie a color <b>verde</b> y el cronómetro de sesión esté corriendo.</p>
+  <figure class="captura" data-id="C4">
+    <img src="capturas/C4.png" alt="Indicador AWS en verde con el cronómetro en marcha" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C4</b> · Muestra: el indicador <b>AWS</b> ya en verde con el cronómetro activo y el presupuesto disponible.</figcaption>
+  </figure>
+
+  <h3 id="c5">A5 · Descargar tu llave SSH (labsuser.pem) y abrir la consola de AWS</h3>
+  <p>Antes de ir a la consola, haz clic en el botón <b>AWS Details</b> de la barra superior del Sandbox y pulsa el botón <b>Download PEM</b> junto a <i>SSH key</i> para guardar el archivo <code>labsuser.pem</code> en tu carpeta <code>Downloads</code> (Descargas). Luego haz clic directamente en el enlace <b>AWS</b> (junto al punto verde) para abrir la consola de administración en una nueva pestaña.</p>
+  <figure class="captura" data-id="C5">
+    <img src="capturas/C5.png" alt="Enlace AWS y terminal del Sandbox" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C5</b> · Muestra: el entorno del Sandbox listo. Descarga <code>labsuser.pem</code> desde <b>AWS Details</b> y haz clic en el enlace <b>AWS</b> junto al círculo verde para abrir la consola.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="paso">B</span>Crear la instancia EC2 (lab-inferencia)</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Consola de AWS → EC2 → Instancias → Lanzar una instancia</p>
+
+  <h3 id="b1">B1 · Buscar el servicio EC2</h3>
+  <p>En la barra superior de búsqueda de la consola de AWS escribe <code>EC2</code> y selecciona <b>EC2</b> (<i>Servidores virtuales en la nube</i>).</p>
+  <figure class="captura" data-id="A1">
+    <img src="capturas/A1.png" alt="Barra de búsqueda de la consola de AWS con EC2 escrito" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A1</b> · Muestra: la barra de búsqueda superior de la consola de AWS con <code>EC2</code> escrito y el acceso directo al servicio.</figcaption>
+  </figure>
+
+  <h3 id="b2">B2 · Ir a Lanzar la instancia</h3>
+  <p>En el panel principal de EC2 haz clic en el botón naranja <b>Lanzar la instancia</b> (<i>Launch instance</i>).</p>
+  <figure class="captura" data-id="A2">
+    <img src="capturas/A2.png" alt="Panel de EC2 con el botón naranja Lanzar la instancia" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A2</b> · Muestra: el panel de control de EC2 en la región <code>us-east-1</code> con el botón naranja <b>Lanzar la instancia</b>.</figcaption>
+  </figure>
+
+  <h3 id="b3">B3 · Nombre lab-inferencia e imagen Ubuntu Server 24.04 LTS</h3>
+  <p>En el campo <b>Nombre</b> escribe exactamente <code>lab-inferencia</code>. Debajo, en <b>Imágenes de aplicaciones y sistemas operativos (Amazon Machine Image)</b> —donde <b>AMI</b> significa <i>Amazon Machine Image</i> (imagen de máquina de Amazon, la plantilla del sistema operativo)— selecciona <b>Ubuntu</b> y despliega el selector para elegir explícitamente <b>Ubuntu Server 24.04 LTS (HVM), SSD Volume Type</b>, arquitectura de <b>64 bits (x86)</b> (<code>ami-02a9cdd4e98bc3c78</code>). Las siglas <b>LTS</b> significan <i>Long Term Support</i> (soporte a largo plazo), <b>HVM</b> significa <i>Hardware Virtual Machine</i> (máquina virtual asistida por hardware) y <b>SSD</b> significa <i>Solid State Drive</i> (unidad de estado sólido).</p>
+  <div class="warn"><b>Cuidado con la versión por defecto:</b> el catálogo rápido de AWS muestra primero <b>Ubuntu Server 26.04 LTS</b>. Cambia manualmente el desplegable a <b>Ubuntu Server 24.04 LTS (HVM), SSD Volume Type</b>.</div>
+  <figure class="captura" data-id="A3">
+    <img src="capturas/A3.png" alt="Formulario de lanzamiento con nombre lab-inferencia y AMI Ubuntu Server 24.04 LTS seleccionada" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A3</b> · Muestra: el nombre <code>lab-inferencia</code> y la imagen seleccionada <b>Ubuntu Server 24.04 LTS (HVM), SSD Volume Type</b> (<code>ami-02a9cdd4e98bc3c78</code>, 64 bits x86).</figcaption>
+  </figure>
+
+  <h3 id="b4">B4 · Tipo de instancia (t3.large vs. límite del Sandbox t3.medium) y par de claves vockey</h3>
+  <p>En <b>Tipo de instancia</b> puedes buscar <code>t3.large</code> (2 <b>vCPU</b> —<i>virtual Central Processing Unit</i>, procesador virtual— y 8 <b>GiB</b> —<i>Gibibytes</i>, 2<sup>30</sup> bytes— de RAM). Sin embargo, en el Sandbox de AWS Academy Sandbox la política de permisos <b>IAM</b> (<i>Identity and Access Management</i>, gestión de identidades y accesos) aplica un bloqueo explícito (<i>explicit deny</i>) sobre <code>t3.large</code> y solo permite hasta <b><code>t3.medium</code></b> (<b>2 vCPU y 4 GiB de RAM</b>). Selecciona por tanto <b><code>t3.medium</code></b> para que el lanzamiento sea autorizado (o si tu cuenta particular admite <code>t3.large</code>, úsala; con <code>t3.medium</code> el modelo <code>qwen2.5:1.5b</code> de 986 MB cabe holgadamente en los 4 GiB de RAM). En <b>Par de claves (inicio de sesión)</b> selecciona <b><code>vockey</code></b>.</p>
+  <figure class="captura" data-id="A4">
+    <img src="capturas/A4.png" alt="Selección de tipo de instancia y par de claves vockey" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A4</b> · Muestra: el selector de tipo de instancia y el par de claves <code>vockey</code>. En el Sandbox de AWS Academy elige <code>t3.medium</code> (2 vCPU, 4 GiB de RAM), que es el tamaño máximo permitido por la política IAM del Sandbox.</figcaption>
+  </figure>
+
+  <h3 id="b5">B5 · Grupo de seguridad (SSH 22 desde «Mi IP») y almacenamiento de 30 GiB</h3>
+  <p>En <b>Configuración de red</b> (dentro de la <b>VPC</b>, <i>Virtual Private Cloud</i> o nube privada virtual por defecto), marca <b>Crear grupo de seguridad</b>, activa únicamente <b>Permitir el tráfico SSH desde</b> —donde <b>SSH</b> significa <i>Secure Shell</i> (intérprete de comandos seguro por red en el puerto <b>TCP</b> 22, <i>Transmission Control Protocol</i> o protocolo de control de transmisión)— y cambia el desplegable de origen de «Cualquier lugar (0.0.0.0/0)» a <b>Mi IP</b> (tu dirección <b>IP</b> —<i>Internet Protocol</i>, protocolo de internet— pública con máscara <code>/32</code>). Más abajo, en <b>Configurar almacenamiento</b>, cambia el tamaño del disco raíz de <code>8</code> a <b><code>30</code> GiB</b> de tipo <b><code>gp3</code></b> (<i>General Purpose SSD v3</i>, disco de estado sólido de propósito general de tercera generación de <b>EBS</b>, <i>Elastic Block Store</i>).</p>
+  <figure class="captura" data-id="A5">
+    <img src="capturas/A5.png" alt="Grupo de seguridad con SSH desde Mi IP y almacenamiento de 30 GiB gp3" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A5</b> · Muestra: el grupo de seguridad nuevo con la regla <b>SSH (TCP 22)</b> restringida exclusivamente a <b>Mi IP</b> (<code>181.236.134.59/32</code>) y el volumen raíz configurado en <b>30 GiB gp3</b>.</figcaption>
+  </figure>
+
+  <h3 id="b6">B6 · Lanzar la instancia y verificar estado Running</h3>
+  <p>Haz clic en el botón naranja <b>Lanzar instancia</b>. Verás el recuadro verde <b>Correcto</b> con el identificador de tu instancia (en nuestra ejecución: <code>i-0269a0a471d12e979</code>). Haz clic sobre ese identificador para ir a la lista de instancias, espera unos segundos a que el <b>Estado de la instancia</b> diga <b>En ejecución</b> (<i>Running</i>) y copia su <b>Dirección IPv4 pública</b> (en nuestra prueba: <code>52.90.170.176</code>).</p>
+  <figure class="captura" data-id="A6">
+    <img src="capturas/A6.png" alt="Banner verde Correcto al lanzar la instancia lab-inferencia" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A6</b> · Muestra: el mensaje verde <b>Correcto</b> confirmando la creación de la instancia <code>i-0269a0a471d12e979</code>.</figcaption>
+  </figure>
+  <figure class="captura" data-id="A7">
+    <img src="capturas/A7.png" alt="Instancia lab-inferencia en estado En ejecución con su IPv4 pública visible" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A7</b> · Muestra: la instancia <code>lab-inferencia</code> (<code>t3.medium</code>) en estado <b>En ejecución</b> con su dirección IPv4 pública <code>52.90.170.176</code> en el panel inferior de detalles.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="paso">C</span>Conectar a la instancia EC2 (por qué falla EC2 Instance Connect y cómo entrar por SSH)</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Consola EC2 → Conectar → y luego Windows PowerShell en tu PC</p>
+
+  <h3 id="c_eic">C1 · Qué ocurre si intentas usar EC2 Instance Connect en el navegador</h3>
+  <p>Si seleccionas <code>lab-inferencia</code>, pulsas <b>Conectar</b> y pruebas la pestaña <b>Conexión de instancias de EC2</b> (<i>EC2 Instance Connect</i>), verás que la consola intenta abrir una terminal web pero falla con el mensaje rojo: <b>«No se pudo conectar a la instancia — Error al establecer la conexión SSH con la instancia»</b>.</p>
+  <div class="danger"><b>Por qué falla EC2 Instance Connect con «Mi IP»:</b> cuando usas EC2 Instance Connect desde el navegador, la conexión SSH hacia el puerto 22 de tu máquina virtual <b>no sale desde la IP de tu computador</b>, sino desde los servidores puente del servicio EC2 Instance Connect de AWS (en la región <code>us-east-1</code>, el bloque CIDR <code>18.206.107.24/29</code>). Como en el paso B5 configuraste el grupo de seguridad para aceptar SSH <b>únicamente desde «Mi IP»</b> (tu IP pública residencial o universitaria), el firewall de AWS bloquea a los servidores de EC2 Instance Connect.</div>
+  <figure class="captura" data-id="A8">
+    <img src="capturas/A8.png" alt="Error en EC2 Instance Connect por restricción del Security Group a Mi IP" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A8</b> · Muestra: el fallo esperado de <b>EC2 Instance Connect</b> cuando el grupo de seguridad restringe el puerto 22 a «Mi IP», bloqueando los paquetes provenientes del servicio puente de AWS.</figcaption>
+  </figure>
+
+  <h3 id="c_ssh">C2 · Conexión directa por SSH desde PowerShell con labsuser.pem (método que sí funciona)</h3>
+  <p>Como tu grupo de seguridad sí permite el puerto 22 desde la IP de tu PC, la conexión directa desde <b>Windows PowerShell</b> usando la llave privada <code>labsuser.pem</code> (que descargaste en el paso A5 desde <i>AWS Details</i>) entra de inmediato sin necesidad de abrir el firewall al resto de internet. Abre PowerShell en tu computador, ubícate en la carpeta donde guardaste <code>labsuser.pem</code> y reemplaza <code>&lt;IP_PUBLICA&gt;</code> por la IPv4 pública de tu instancia:</p>
+<pre><code>cd $HOME\Downloads
+ssh -i .\labsuser.pem ubuntu@&lt;IP_PUBLICA&gt;</code></pre>
+  <p>La primera vez que te conectes escribe <code>yes</code> para aceptar la huella criptográfica del servidor. Una vez dentro del prompt <code>ubuntu@ip-...:~$</code>, comprueba los recursos de hardware de tu máquina con:</p>
+<pre><code>lscpu | grep -E 'Model name|CPU\(s\):' &amp;&amp; free -h &amp;&amp; df -h /</code></pre>
+  <figure class="captura" data-id="A9">
+    <img src="capturas/A9.png" alt="Conexión SSH exitosa desde Windows PowerShell hacia lab-inferencia usando labsuser.pem" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A9</b> · Muestra: el ingreso exitoso por SSH desde Windows PowerShell usando <code>labsuser.pem</code> hacia <code>ubuntu@52.90.170.176</code> y la verificación de hardware (2 vCPU Intel Xeon Platinum 8259CL @ 2.50 GHz, 3.7 GiB de RAM y 29 GB de disco raíz).</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="paso">D</span>Experimentos de inferencia con Ollama y Qwen 2.5 (1.5B)</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Terminal SSH de tu instancia <code>lab-inferencia</code> (<code>ubuntu@ip-...</code>)</p>
+
+  <h3 id="d1">D1 · Instalación de Ollama y primera prueba del modelo (Experimento A)</h3>
+  <p>Ejecuta en tu sesión SSH los siguientes tres comandos para instalar <b>Ollama</b>, descargar el modelo <b><code>qwen2.5:1.5b</code></b> (1.500 millones de parámetros, 986 MB en disco) y realizar tu primera inferencia desde la línea de comandos:</p>
+<pre><code>curl -fsSL https://ollama.com/install.sh | sh
+ollama pull qwen2.5:1.5b
+ollama run qwen2.5:1.5b "Explica qué es la computación en la nube en dos frases"</code></pre>
+  <p>Observa que durante la instalación aparece el aviso <code>WARNING: No NVIDIA/AMD GPU detected. Ollama will run in CPU-only mode.</code> Porque las instancias de la familia <code>t3</code> no tienen aceleradora gráfica (GPU); toda la multiplicación de matrices ocurre sobre los 2 vCPU y la memoria RAM del sistema.</p>
+  <p>Texto exacto generado por <code>qwen2.5:1.5b</code> en nuestra ejecución:</p>
+  <blockquote>«La computación en la nube permite almacenar y ejecutar programas de software en servidores remotos, lo que ofrece una flexibilidad, escalabilidad y accesibilidad global.»</blockquote>
+  <figure class="captura" data-id="A10">
+    <img src="capturas/A10.png" alt="Instalación de Ollama, descarga de qwen2.5:1.5b y primera respuesta en la terminal" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A10</b> · Muestra: la instalación de Ollama v0.40.16 en modo CPU, la descarga de <code>qwen2.5:1.5b</code> (986 MB) y la respuesta exacta a la primera consulta.</figcaption>
+  </figure>
+
+  <h3 id="d2">D2 · Impuesto de tokenización: Español vs. Inglés (Experimento B)</h3>
+  <p>Los modelos de lenguaje no leen palabras completas ni letras sueltas, sino <b>tokens</b> (fragmentos de palabras generados mediante el algoritmo <b>BPE</b>, <i>Byte-Pair Encoding</i> o codificación por pares de bytes). Como los vocabularios de los LLM se entrenan mayoritariamente con corpus en inglés, las palabras comunes en inglés suelen caber en un solo token, mientras que las palabras equivalentes en español (con tildes, morfología verbal más larga y sufijos) se parten en varios tokens. A este sobrecosto se le conoce como <b>impuesto de tokenización</b>.</p>
+  <p>Para medirlo con precisión, consulta la API local de Ollama en <code>http://localhost:11434/api/generate</code> mediante el protocolo <b>HTTP</b> (<i>Hypertext Transfer Protocol</i>, protocolo de transferencia de hipertexto) enviando cargas útiles en formato <b>JSON</b> (<i>JavaScript Object Notation</i>, notación de objetos de JavaScript) con el mismo párrafo técnico en español y en inglés:</p>
+<pre><code># 1) Párrafo técnico en Español (ES):
+curl -s http://localhost:11434/api/generate -d '{"model":"qwen2.5:1.5b","prompt":"La arquitectura en la nube permite desplegar servidores virtuales elásticos con balanceo de carga automático y alta disponibilidad en múltiples zonas.","stream":false,"options":{"temperature":0,"num_predict":40}}' | python3 -m json.tool | grep -E '"model"|"response"|"prompt_eval_count"|"prompt_eval_duration"|"eval_count"|"eval_duration"'
+
+# 2) Párrafo técnico equivalente en Inglés (EN):
+curl -s http://localhost:11434/api/generate -d '{"model":"qwen2.5:1.5b","prompt":"Cloud architecture allows deploying elastic virtual servers with automatic load balancing and high availability across multiple zones.","stream":false,"options":{"temperature":0,"num_predict":40}}' | python3 -m json.tool | grep -E '"model"|"response"|"prompt_eval_count"|"prompt_eval_duration"|"eval_count"|"eval_duration"'</code></pre>
+
+  <figure class="captura" data-id="A11">
+    <img src="capturas/A11.png" alt="Comparación de prompt_eval_count en español (67 tokens) vs inglés (47 tokens)" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A11</b> · Muestra: las métricas devueltas por la API de Ollama para el mismo enunciado técnico en español (<code>prompt_eval_count: 67</code>) y en inglés (<code>prompt_eval_count: 47</code>).</figcaption>
+  </figure>
+
+  <p>En la respuesta JSON de Ollama, el campo <code>prompt_eval_count</code> incluye tanto los tokens de tu texto como los <b>24 tokens fijos de la plantilla del sistema</b> (<i>chat template</i> de Qwen). Analiza la tabla comparativa con los valores reales medidos:</p>
+
+  <table>
+    <tr>
+      <th>Métrica medida</th>
+      <th>Español (ES)</th>
+      <th>Inglés (EN)</th>
+      <th>Diferencia absoluta y en % (ES vs. EN)</th>
+    </tr>
+    <tr>
+      <td><b>Texto enviado (<code>prompt</code>)</b></td>
+      <td>«La arquitectura en la nube permite desplegar servidores virtuales elásticos con balanceo de carga automático y alta disponibilidad en múltiples zonas.»</td>
+      <td>«Cloud architecture allows deploying elastic virtual servers with automatic load balancing and high availability across multiple zones.»</td>
+      <td>Mismo significado técnico</td>
+    </tr>
+    <tr>
+      <td><b>Palabras / Caracteres</b></td>
+      <td>22 palabras / 148 caracteres</td>
+      <td>17 palabras / 126 caracteres</td>
+      <td>+5 palabras (+29,41 %) / +22 caract. (+17,46 %)</td>
+    </tr>
+    <tr>
+      <td><b><code>prompt_eval_count</code> total (con plantilla de 24 tokens)</b></td>
+      <td><b>67 tokens</b></td>
+      <td><b>47 tokens</b></td>
+      <td><b>+20 tokens (+42,55 % más tokens en ES)</b></td>
+    </tr>
+    <tr>
+      <td><b>Tokens puros del enunciado (restando los 24 del sistema)</b></td>
+      <td><b>43 tokens</b> (67 − 24)</td>
+      <td><b>23 tokens</b> (47 − 24)</td>
+      <td><b>+20 tokens (+86,96 % más tokens en ES)</b></td>
+    </tr>
+    <tr>
+      <td><b>Tiempo de lectura (<code>prompt_eval_duration</code>)</b></td>
+      <td>1.689.848.000 ns (<b>1,690 s</b>)</td>
+      <td>1.083.307.000 ns (<b>1,083 s</b>)</td>
+      <td>+0,607 s (<b>+56,00 % más tiempo de cómputo</b>)</td>
+    </tr>
+    <tr>
+      <td><b>Tokens generados (<code>eval_count</code>, fijado en 40)</b></td>
+      <td>40 tokens (5,220 s)</td>
+      <td>40 tokens (5,206 s)</td>
+      <td>0 tokens (0,00 %)</td>
+    </tr>
+    <tr>
+      <td><b>Total de tokens de la petición (<code>prompt_eval_count + eval_count</code>)</b></td>
+      <td><b>107 tokens</b></td>
+      <td><b>87 tokens</b></td>
+      <td><b>+20 tokens (+22,99 % en el total de la llamada)</b></td>
+    </tr>
+  </table>
+
+  <div class="tip"><b>Fórmula del porcentaje de sobrecosto en tokens de entrada:</b>
+    <p style="font-family:var(--mono);font-size:13.5px;margin:8px 0;"><b>Diferencia % (entrada total)</b> = ((67 − 47) / 47) × 100 = (20 / 47) × 100 = <b>+42,55 %</b></p>
+    Si descontamos los 24 tokens fijos del sistema, el texto puro en español requirió <b>43 tokens</b> frente a solo <b>23</b> en inglés: un sobrecosto del <b>+86,96 %</b> por expresar exactamente la misma idea técnica.
+  </div>
+
+  <h3 id="d3">D3 · Efecto de la Temperatura: 0 vs. 1.2 (Experimento C)</h3>
+  <p>En cada paso de generación, el LLM calcula un vector de puntuaciones (<i>logits</i>) para todo su vocabulario y lo convierte en probabilidades mediante la función <i>softmax</i> escalada por la <b>temperatura (<code>T</code>)</b>. Ejecuta la misma pregunta creativa <b>3 veces con <code>"temperature": 0</code></b> y <b>3 veces con <code>"temperature": 1.2</code></b>:</p>
+<pre><code># 3 intentos con temperature = 0:
+for i in 1 2 3; do
+  echo "--- Temp 0 (Intento $i) ---"
+  curl -s http://localhost:11434/api/generate -d '{"model":"qwen2.5:1.5b","prompt":"Propón un nombre creativo de una sola palabra para una plataforma educativa en la nube y explica en una frase su significado.","stream":false,"options":{"temperature":0}}' | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['response'].replace('\n',' '), '[eval_count='+str(d['eval_count'])+']')"
+done
+
+# 3 intentos con temperature = 1.2:
+for i in 1 2 3; do
+  echo "--- Temp 1.2 (Intento $i) ---"
+  curl -s http://localhost:11434/api/generate -d '{"model":"qwen2.5:1.5b","prompt":"Propón un nombre creativo de una sola palabra para una plataforma educativa en la nube y explica en una frase su significado.","stream":false,"options":{"temperature":1.2}}' | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['response'].replace('\n',' '), '[eval_count='+str(d['eval_count'])+']')"
+done</code></pre>
+
+  <figure class="captura" data-id="A12">
+    <img src="capturas/A12.png" alt="Resultados en terminal de 3 ejecuciones con temperatura 0 y 3 ejecuciones con temperatura 1.2" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A12</b> · Muestra: las 3 ejecuciones con <code>temperature: 0</code> (idénticas palabra por palabra: «EduCloud», 73 tokens) frente a las 3 ejecuciones con <code>temperature: 1.2</code> (tres nombres y textos completamente distintos: «EduAir», «CloudLearn» y «EduGala»).</figcaption>
+  </figure>
+
+  <table>
+    <tr>
+      <th>Configuración</th>
+      <th>Intento</th>
+      <th>Salida real obtenida (<code>response</code>)</th>
+      <th><code>prompt_eval_count</code></th>
+      <th><code>eval_count</code></th>
+    </tr>
+    <tr>
+      <td><b><code>temperature: 0</code></b></td>
+      <td>Intento 1</td>
+      <td><code>Nombre: EduCloud — Significado: "Nube de Educación" - Refleja la idea de que la plataforma se encuentra en la nube, lo que sugiere una conexión inmediata y accesible a través de internet, y también evoca la idea de que la educación es algo que se puede aprender y compartir en cualquier momento y lugar.</code></td>
+      <td>58</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <td><b><code>temperature: 0</code></b></td>
+      <td>Intento 2</td>
+      <td><code>Nombre: EduCloud — Significado: "Nube de Educación" - Refleja la idea de que la plataforma se encuentra en la nube, lo que sugiere una conexión inmediata y accesible a través de internet, y también evoca la idea de que la educación es algo que se puede aprender y compartir en cualquier momento y lugar.</code></td>
+      <td>58</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <td><b><code>temperature: 0</code></b></td>
+      <td>Intento 3</td>
+      <td><code>Nombre: EduCloud — Significado: "Nube de Educación" - Refleja la idea de que la plataforma se encuentra en la nube, lo que sugiere una conexión inmediata y accesible a través de internet, y también evoca la idea de que la educación es algo que se puede aprender y compartir en cualquier momento y lugar.</code></td>
+      <td>58</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <td><b><code>temperature: 1.2</code></b></td>
+      <td>Intento 1</td>
+      <td><code>Nombre: EduAir — Significado: "El viento que te ayudará en el camino del aprendizaje". EduAir proporcionará recursos educativos accesibles y prácticos para que los estudiantes puedan aprender en cualquier momento y lugar...</code></td>
+      <td>58</td>
+      <td>96</td>
+    </tr>
+    <tr>
+      <td><b><code>temperature: 1.2</code></b></td>
+      <td>Intento 2</td>
+      <td><code>"CloudLearn" — "CloudLearn" es un nombre creativo que combina "cloud" (nube en inglés) con "learn" (aprender), sugiriendo que esta plataforma educativa está alineada con el concepto de "nube"...</code></td>
+      <td>58</td>
+      <td>82</td>
+    </tr>
+    <tr>
+      <td><b><code>temperature: 1.2</code></b></td>
+      <td>Intento 3</td>
+      <td><code>Nombre: EduGala — Explicación: "Edu" enriquece y "Gala" evento, sugiriendo un entorno educativo dinámico y conectado para facilitar y celebrar el aprendizaje.</code></td>
+      <td>58</td>
+      <td>50</td>
+    </tr>
+  </table>
+
+  <p><b>¿Por qué ocurre esto matemáticamente?</b> La probabilidad <code>P(w_i)</code> de elegir el token <code>w_i</code> con puntaje <code>z_i</code> se calcula mediante la función <i>softmax</i> con temperatura <code>T</code>: <code>P(w_i) = exp(z_i / T) / Σ_j exp(z_j / T)</code>:</p>
+  <ul>
+    <li><b>Con <code>temperature: 0</code> (decodificación voraz o <i>greedy decoding</i>):</b> el muestreo aleatorio se desactiva y el motor elige siempre el token de máxima probabilidad (<code>argmax</code>). Al partir de los mismos tokens de entrada, la cadena generada es 100 % determinista y se repite de forma idéntica (siempre <code>EduCloud</code> y exactamente <code>73</code> tokens). Ideal para extracción de datos, código, clasificación o consultas SQL (<i>Structured Query Language</i>, lenguaje de consulta estructurado).</li>
+    <li><b>Con <code>temperature: 1.2</code> (muestreo estocástico con distribución aplanada):</b> al dividir los <i>logits</i> <code>z_i</code> entre <code>1,2</code>, las diferencias entre el token más probable y los candidatos secundarios se reducen (la distribución de probabilidad se aplana). Así, en cada intento el muestreo elige rutas distintas desde las primeras sílabas (<code>EduAir</code> con 96 tokens, <code>CloudLearn</code> con 82 tokens y <code>EduGala</code> con 50 tokens). Útil para lluvia de ideas, pero peligroso en tareas técnicas porque incrementa el riesgo de alucinaciones.</li>
+  </ul>
+
+  <h3 id="d4">D4 · Velocidad de lectura (prefill) vs. velocidad de generación (decode) (Experimento D)</h3>
+  <p>Ahora mide cuánto tarda la instancia <code>t3.medium</code> en <b>leer</b> un párrafo extenso de arquitectura frente a cuánto tarda en <b>redactar</b> la respuesta. Ejecuta:</p>
+<pre><code>curl -s http://localhost:11434/api/generate -d '{"model":"qwen2.5:1.5b","prompt":"En una arquitectura empresarial de computación en la nube sobre Amazon Web Services, las instancias EC2 ejecutan contenedores y microservicios distribuidos en varias subredes privadas dentro de una VPC, mientras un balanceador de carga distribuye el tráfico entrante HTTPS y una base de datos relacional gestionada garantiza copias de seguridad automáticas. Resume en dos puntos clave las ventajas operativas de este diseño.","stream":false,"options":{"temperature":0}}' | python3 -m json.tool | grep -E '"model"|"done_reason"|"total_duration"|"load_duration"|"prompt_eval_count"|"prompt_eval_duration"|"eval_count"|"eval_duration"'</code></pre>
+
+  <p>Y calcula directamente en la terminal las velocidades en tokens por segundo recordando que Ollama reporta los tiempos en <b>nanosegundos</b> (<code>1 s = 10<sup>9</sup> ns</code>):</p>
+<pre><code>python3 -c "p_c=125; p_d=3381407000/1e9; e_c=175; e_d=24920180000/1e9; print(f'Lectura (prefill): {p_c} tokens / {p_d:.3f} s = {p_c/p_d:.2f} tokens/s'); print(f'Generacion (decode): {e_c} tokens / {e_d:.3f} s = {e_c/e_d:.2f} tokens/s'); print(f'Ratio prefill/decode: {(p_c/p_d)/(e_c/e_d):.2f}x mas rapido leyendo que generando')"</code></pre>
+
+  <figure class="captura" data-id="A13">
+    <img src="capturas/A13.png" alt="Medición de tiempos en nanosegundos y cálculo de velocidad de lectura vs generación" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A13</b> · Muestra: la salida real de tiempos de la API de Ollama y el cálculo en Python: <b>36,97 tokens/s</b> en lectura (<i>prefill</i>) frente a <b>7,02 tokens/s</b> en generación (<i>decode</i>).</figcaption>
+  </figure>
+
+  <table>
+    <tr>
+      <th>Fase de la inferencia</th>
+      <th>Cantidad de tokens</th>
+      <th>Duración en nanosegundos (API)</th>
+      <th>Duración en segundos (÷ 10<sup>9</sup>)</th>
+      <th>Velocidad medida (tokens/s)</th>
+      <th>Latencia por token (ms/token)</th>
+    </tr>
+    <tr>
+      <td><b>Lectura / Entrada (<i>Prefill</i>)</b></td>
+      <td><code>prompt_eval_count = 125</code></td>
+      <td><code>3.381.407.000 ns</code></td>
+      <td><b>3,3814 s</b> (TTFT)</td>
+      <td><b>36,97 tokens/s</b></td>
+      <td>27,05 ms/token</td>
+    </tr>
+    <tr>
+      <td><b>Generación / Salida (<i>Decode</i>)</b></td>
+      <td><code>eval_count = 175</code></td>
+      <td><code>24.920.180.000 ns</code></td>
+      <td><b>24,9202 s</b></td>
+      <td><b>7,02 tokens/s</b></td>
+      <td>142,40 ms/token (TPOT)</td>
+    </tr>
+    <tr>
+      <td><b>Total de la consulta</b></td>
+      <td>300 tokens totales</td>
+      <td><code>28.310.999.372 ns</code></td>
+      <td><b>28,3110 s</b></td>
+      <td><b>Ratio: 5,26× más rápido leer que generar</b></td>
+      <td>—</td>
+    </tr>
+  </table>
+
+  <p>Cálculo paso a paso con las fórmulas del laboratorio:</p>
+  <p style="font-family:var(--mono);font-size:13.5px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--vino);border-radius:8px;padding:12px 16px;">
+    <b>Velocidad de lectura (prefill)</b> = prompt_eval_count / (prompt_eval_duration / 10<sup>9</sup>) = 125 / 3,381407 s = <b>36,97 tokens/s</b><br>
+    <b>Velocidad de generación (decode)</b> = eval_count / (eval_duration / 10<sup>9</sup>) = 175 / 24,920180 s = <b>7,02 tokens/s</b>
+  </p>
+
+  <div class="warn"><b>¿Por qué generar es 5,26 veces más lento que leer?</b>
+    <ul>
+      <li><b>La lectura (<i>prefill</i>) es intensiva en cómputo (<i>compute-bound</i>) y paralela:</b> como todos los 125 tokens de tu pregunta ya se conocen al inicio, el procesador carga los pesos del modelo una sola vez desde la RAM y multiplica toda la matriz de entrada de golpe en paralelo.</li>
+      <li><b>La generación (<i>decode</i>) es autorregresiva y está limitada por el ancho de banda de memoria (<i>memory-bandwidth-bound</i>):</b> para producir el token <code>k + 1</code>, el modelo necesita haber calculado antes el token <code>k</code>. Eso obliga a generar <b>un solo token a la vez</b> en un bucle secuencial. Para cada uno de los 175 tokens generados, la CPU tiene que volver a leer los 986 MB de pesos del modelo desde la memoria RAM hacia los registros del procesador (leyendo casi <code>175 × 0,986 GB ≈ 172,5 GB</code> de tráfico de memoria a lo largo de la respuesta).</li>
+    </ul>
+  </div>
+
+  <h3 id="d5">D5 · Proyección de costos reales en la nube para 1.000 consultas (Experimento E)</h3>
+  <p>Esa misma asimetría física entre leer (<i>prefill</i> paralelo) y generar (<i>decode</i> secuencial) explica por qué todos los proveedores comerciales de nube cobran entre <b>3 y 5 veces más caro cada token de salida que cada token de entrada</b>.</p>
+  <p>Tomemos como referencia precios de lista publicados por los proveedores (consúltalos el día que hagas el lab: cambian con frecuencia y algunos modelos se retiran) en <b>Amazon Bedrock</b> (región <code>us-east-1</code>, modalidad <i>On-Demand</i> estándar) y en la <b>API oficial de OpenAI</b> para proyectar cuánto cuestan <b>1.000 consultas</b> con el volumen exacto medido en nuestro Experimento D (<b>125 tokens de entrada</b> y <b>175 tokens de salida</b> por consulta, lo que equivale a <b>125.000 tokens de entrada</b> y <b>175.000 tokens de salida</b> en 1.000 consultas):</p>
+
+  <table>
+    <tr>
+      <th>Modelo comercial y fuente oficial (precio de referencia; verifica el actual)</th>
+      <th>Precio Entrada (por 1M tokens)</th>
+      <th>Precio Salida (por 1M tokens)</th>
+      <th>Costo de 1.000 consultas: Entrada (125.000 tok)</th>
+      <th>Costo de 1.000 consultas: Salida (175.000 tok)</th>
+      <th>Costo Total (1.000 consultas)</th>
+      <th>Peso de la Salida en la factura</th>
+    </tr>
+    <tr>
+      <td><b>Claude 3.5 Sonnet</b><br><small>Fuente: <a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener">AWS Bedrock Pricing</a> (us-east-1, consultar precio vigente)</small></td>
+      <td>US$ 3,00 / 1M</td>
+      <td>US$ 15,00 / 1M (<b>5×</b>)</td>
+      <td>(125.000 / 10<sup>6</sup>) × 3,00 = <b>US$ 0,3750</b></td>
+      <td>(125.000 → 175.000 / 10<sup>6</sup>) × 15,00 = <b>US$ 2,6250</b></td>
+      <td><b>US$ 3,0000</b></td>
+      <td><b>87,50 %</b> del costo total</td>
+    </tr>
+    <tr>
+      <td><b>OpenAI GPT-4o</b><br><small>Fuente: <a href="https://openai.com/api/pricing/" target="_blank" rel="noopener">OpenAI API Pricing</a> (consultar precio vigente)</small></td>
+      <td>US$ 2,50 / 1M</td>
+      <td>US$ 10,00 / 1M (<b>4×</b>)</td>
+      <td>(125.000 / 10<sup>6</sup>) × 2,50 = <b>US$ 0,3125</b></td>
+      <td>(175.000 / 10<sup>6</sup>) × 10,00 = <b>US$ 1,7500</b></td>
+      <td><b>US$ 2,0625</b></td>
+      <td><b>84,85 %</b> del costo total</td>
+    </tr>
+    <tr>
+      <td><b>Amazon Nova Micro</b> (modelo ligero comparable)<br><small>Fuente: <a href="https://aws.amazon.com/bedrock/pricing/" target="_blank" rel="noopener">AWS Bedrock Pricing</a> (us-east-1, consultar precio vigente)</small></td>
+      <td>US$ 0,035 / 1M</td>
+      <td>US$ 0,140 / 1M (<b>4×</b>)</td>
+      <td>(125.000 / 10<sup>6</sup>) × 0,035 = <b>US$ 0,004375</b></td>
+      <td>(175.000 / 10<sup>6</sup>) × 0,140 = <b>US$ 0,024500</b></td>
+      <td><b>US$ 0,028875</b></td>
+      <td><b>84,85 %</b> del costo total</td>
+    </tr>
+  </table>
+
+  <div class="tip"><b>Conclusión arquitectónica sobre costos:</b> aunque tu prompt de entrada (125 tokens) y la respuesta del modelo (175 tokens) tienen tamaños parecidos, en la factura de Claude 3.5 Sonnet en Amazon Bedrock <b>el 87,50 % del dinero (US$ 2,625 de US$ 3,00) se va pagando los tokens de salida</b> porque cada token generado mantiene ocupada la memoria y los núcleos del acelerador durante <b>5,26×</b> más tiempo que un token leído. Por eso, limitar la longitud de salida (con instrucciones concisas o con <code>num_predict</code> / <code>max_tokens</code>) ahorra mucho más presupuesto en la nube que recortar el prompt de entrada.</div>
+</section>
+
+<section>
+  <h2><span class="paso">E</span>Terminar tu instancia lab-inferencia (obligatorio)</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Consola de AWS → EC2 → Instancias</p>
+  <div class="danger"><b>Importante:</b> termina tu instancia <code>lab-inferencia</code> en cuanto acabes las mediciones para que deje de consumir presupuesto del Sandbox.</div>
+
+  <h3 id="e1">E1 · Seleccionar lab-inferencia y pulsar Terminar instancia</h3>
+  <p>Cierra tu sesión SSH en PowerShell escribiendo <code>exit</code>. Regresa a la pestaña de la consola de AWS (<b>EC2 → Instancias</b>), marca la casilla de tu instancia <b><code>lab-inferencia</code></b>, despliega el menú superior <b>Estado de la instancia</b> (<i>Instance state</i>) y elige <b>Terminar (eliminar) instancia</b> (<i>Terminate instance</i>). Confirma pulsando el botón <b>Terminar (eliminar)</b>.</p>
+
+  <h3 id="e2">E2 · Verificar el estado Terminada (Terminated)</h3>
+  <p>Refresca la tabla de instancias tras unos 30 segundos y verifica que el <b>Estado de la instancia</b> de <code>lab-inferencia</code> cambie a <b>Terminada</b> (<i>Terminated</i>). Toma captura de pantalla de esta vista: es obligatoria para tu entrega.</p>
+  <figure class="captura" data-id="A14">
+    <img src="capturas/A14.png" alt="Instancia lab-inferencia en estado Terminada (Terminated) en la consola de EC2" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>A14</b> · Muestra: la instancia <code>lab-inferencia</code> (<code>i-0269a0a471d12e979</code>) ya en estado <b>Terminada</b> (<i>Terminated</i>), liberando el volumen EBS y deteniendo el cobro por hora.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Qué entregar y rúbrica de evaluación</h2>
+  <p>Sube al aula virtual un único archivo <b>PDF</b> (modalidad <b>individual</b>, disponible desde su publicación hasta el <b>domingo 29 de noviembre de 2026</b>) que contenga:</p>
+  <ol class="steps">
+    <li><b>Evidencias completas en capturas reales:</b> lanzamiento y ejecución de <code>lab-inferencia</code> en EC2, conexión SSH e instalación de Ollama con la primera respuesta de <code>qwen2.5:1.5b</code>, prueba de tokenización ES vs. EN, prueba de temperaturas <code>0</code> vs. <code>1.2</code>, prueba de velocidades <i>prefill</i> vs. <i>decode</i>, e instancia en estado <code>Terminated</code>.</li>
+    <li><b>Tablas y cálculos con tus propios números medidos:</b> tabla comparativa de tokens ES vs. EN con el cálculo del porcentaje de diferencia, tabla de las 6 ejecuciones de temperatura, cálculo de <code>tokens/s</code> de lectura y generación a partir de los nanosegundos de la API, y cálculo del costo de 1.000 consultas citando la tarifa oficial utilizada.</li>
+    <li><b>Conclusión técnica propia (1 a 2 párrafos):</b> explicando con tus resultados por qué el español consume más tokens en BPE, cuándo usarías temperatura <code>0</code> frente a <code>1.2</code> en un sistema en producción y por qué los tokens de salida dominan la factura de un servicio LLM en la nube.</li>
+  </ol>
+
+  <h3>Rúbrica de calificación (sobre 5,0 puntos · 10 % del curso)</h3>
+  <table>
+    <tr>
+      <th>Criterio</th>
+      <th>Descripción de lo evaluado</th>
+      <th>Calificación</th>
+    </tr>
+    <tr>
+      <td><b>Evidencias completas</b></td>
+      <td>Presenta todas las capturas reales de consola EC2, conexión SSH, ejecución de los experimentos A, B, C y D en la instancia <code>lab-inferencia</code> y captura final en estado <code>Terminated</code>.</td>
+      <td><b>2,0</b></td>
+    </tr>
+    <tr>
+      <td><b>Tablas y cálculos correctos</b></td>
+      <td>Construye las tablas con los datos reales extraídos de sus capturas y calcula correctamente el % de diferencia ES vs. EN, las velocidades en tokens/s (conversión desde nanosegundos 10<sup>9</sup>) y el costo de 1.000 consultas con fuente oficial citada.</td>
+      <td><b>2,0</b></td>
+    </tr>
+    <tr>
+      <td><b>Conclusión</b></td>
+      <td>Explica con rigor técnico el impuesto de tokenización BPE, la diferencia entre decodificación voraz (temp 0) y muestreo estocástico (temp 1.2), el cuello de botella de memoria en el <i>decode</i> autorregresivo y su impacto en el costo de nube.</td>
+      <td><b>1,0</b></td>
+    </tr>
+    <tr>
+      <th colspan="2">Calificación total de la actividad</th>
+      <th><b>5,0 (10 %)</b></th>
+    </tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="paso">F</span>Problemas frecuentes</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Solución rápida de errores comunes durante el laboratorio</p>
+  <table>
+    <tr>
+      <th>Síntoma o mensaje de error</th>
+      <th>Causa y cómo resolverlo</th>
+    </tr>
+    <tr>
+      <td>Al lanzar con <code>t3.large</code> aparece el error rojo <code>You are not authorized to perform this operation ... explicit deny in an identity-based policy</code></td>
+      <td>La política IAM del Sandbox de AWS Academy Sandbox bloquea los tamaños <code>*.large</code> o superiores en ciertas cuentas estudiantiles. Cambia el tipo de instancia a <b><code>t3.medium</code></b> (2 vCPU, 4 GiB RAM) y vuelve a pulsar <b>Lanzar instancia</b>.</td>
+    </tr>
+    <tr>
+      <td>Al crear el grupo de seguridad aparece <code>The security group 'launch-wizard-1' already exists</code></td>
+      <td>Ya existe un grupo con ese nombre en tu VPC. Cambia el nombre del grupo de seguridad a <code>launch-wizard-2</code> o <code>sg-lab-inferencia</code> conservando la regla SSH 22 desde «Mi IP».</td>
+    </tr>
+    <tr>
+      <td><b>EC2 Instance Connect</b> se queda cargando y muestra <code>No se pudo conectar a la instancia</code></td>
+      <td>Es el comportamiento normal cuando el grupo de seguridad solo permite SSH desde <b>«Mi IP»</b>, ya que EC2 Instance Connect entra desde las IPs del servicio de AWS. Conéctate desde <b>Windows PowerShell</b> con <code>ssh -i .\labsuser.pem ubuntu@&lt;IP_PUBLICA&gt;</code> como se explica en el paso C2.</td>
+    </tr>
+    <tr>
+      <td>En PowerShell el comando <code>ssh -i .\labsuser.pem ...</code> falla por <code>UNPROTECTED PRIVATE KEY FILE!</code></td>
+      <td>Windows requiere que solo tu usuario tenga permisos sobre el archivo <code>.pem</code>. Ejecuta en PowerShell:<br><code>icacls .\labsuser.pem /inheritance:r /grant:r "$($env:USERNAME):(R)"</code></td>
+    </tr>
+    <tr>
+      <td><code>curl http://localhost:11434/api/generate</code> devuelve <code>Connection refused</code></td>
+      <td>El servicio de Ollama no está activo. Inicia o verifica el demonio con:<br><code>sudo systemctl status ollama</code> y <code>sudo systemctl restart ollama</code>.</td>
+    </tr>
+  </table>
+</section>
+
+</div>
+<footer class="page">Arquitectura en la Nube · Universidad de la Costa (CUC) · Periodo 2026-2 · Actividad Semana 14</footer>
+
+<script>
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    var wrap = pre.parentNode;
+    if(!(wrap && wrap.classList && wrap.classList.contains('cmd'))){
+      wrap = document.createElement('div'); wrap.className = 'cmd';
+      pre.parentNode.insertBefore(wrap, pre); wrap.appendChild(pre);
+    }
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copiar';
+    b.addEventListener('click', function(){
+      var text = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+      function ok(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1800); }
+      function fallback(){
+        try{
+          var r = document.createRange(); r.selectNodeContents(pre);
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          var okCopy = document.execCommand('copy'); s.removeAllRanges();
+          b.textContent = okCopy ? 'Copiado' : 'Selecciona y copia';
+          if(okCopy) setTimeout(function(){ b.textContent = 'Copiar'; }, 1800);
+        }catch(e){ b.textContent = 'Selecciona y copia'; }
+      }
+      try{
+        if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(ok, fallback); }
+        else { fallback(); }
+      }catch(e){ fallback(); }
+    });
+    wrap.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

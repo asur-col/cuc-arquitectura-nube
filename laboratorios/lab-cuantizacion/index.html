@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad Semana 15: Lab Cuantización: mismo modelo, menos bits · Arquitectura en la Nube · CUC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --bg:#FBF8F3; --surface:#FFFFFF; --surface-2:#F4EEE3;
+    --ink:#2A2A2A; --ink-soft:#6B6259;
+    --vino:#A6192E; --vino-strong:#7E1223; --vino-tint:#FBEBEC;
+    --dorado:#A9791C; --dorado-tint:#FBF3DE;
+    --ok:#2f7d4f; --ok-tint:#e9f5ee;
+    --line:#E5DCCB; --code-bg:#F1EADA; --code-ink:#4A4030;
+    --shadow:0 1px 3px rgba(42,26,20,.05), 0 8px 24px rgba(42,26,20,.08);
+    --mono:'IBM Plex Mono',monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#181411; --surface:#221D18; --surface-2:#2B2520;
+      --ink:#EFE7D9; --ink-soft:#B3A896;
+      --vino:#E2536B; --vino-strong:#F0748A; --vino-tint:#3A1E22;
+      --dorado:#E4BC5C; --dorado-tint:#3B321C;
+      --ok:#5fbf8a; --ok-tint:#1c3327;
+      --line:#3D352A; --code-bg:#1F1914; --code-ink:#E4D9C3;
+      --shadow:0 2px 4px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.5);
+    }
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15.5px;line-height:1.65;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;text-wrap:balance;color:var(--ink);}
+  a{color:var(--vino);}
+  code,.mono{font-family:var(--mono);font-size:.92em;background:var(--code-bg);color:var(--code-ink);padding:1px 5px;border-radius:4px;}
+  pre{font-family:var(--mono);font-size:13.5px;background:var(--code-bg);color:var(--code-ink);padding:14px 16px;border-radius:8px;overflow-x:auto;line-height:1.5;}
+  pre code{background:none;padding:0;}
+
+  .wrap{max-width:820px;margin:0 auto;padding:0 24px 90px;}
+  header.top{background:var(--surface);border-bottom:1px solid var(--line);padding:44px 24px 34px;text-align:center;}
+  header.top img.logo{height:56px;margin:0 auto 20px;display:block;}
+  header.top .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--dorado);font-weight:700;margin:0 0 6px;}
+  header.top h1{color:var(--vino);font-size:clamp(24px,4vw,32px);margin:0 0 8px;}
+  header.top .sub{color:var(--ink-soft);font-size:15px;margin:0 0 14px;}
+  .accent-bar{width:160px;height:4px;margin:0 auto 16px;border-radius:2px;background:linear-gradient(90deg,var(--vino),var(--dorado));}
+  header.top .meta{font-size:13px;color:var(--ink-soft);line-height:1.7;}
+  header.top .meta b{color:var(--ink);}
+
+  section{margin-top:40px;}
+  h2{font-size:22px;border-bottom:2px solid var(--line);padding-bottom:8px;margin-bottom:16px;}
+  h2 .paso{display:inline-block;background:var(--vino);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;margin-right:10px;vertical-align:middle;}
+  h3{font-size:17px;color:var(--vino-strong);margin:22px 0 8px;}
+
+  .tip,.warn,.danger{border-left:4px solid;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14.5px;}
+  .tip{border-color:var(--ok);background:var(--ok-tint);}
+  .tip::before{content:"💡 RECOMENDADO — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ok);}
+  .warn{border-color:var(--dorado);background:var(--dorado-tint);}
+  .warn::before{content:"⚠ ATENCIÓN — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--dorado);}
+  .danger{border-color:var(--vino);background:var(--vino-tint);}
+  .danger::before{content:"☠ CAUSA MÁS FRECUENTE — ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--vino);}
+
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;}
+  th{background:var(--vino);color:#fff;font-weight:600;}
+  tr:nth-child(even) td{background:var(--surface-2);}
+  tr:last-child td{border-bottom:none;}
+
+  ol.steps{padding-left:0;list-style:none;counter-reset:step;}
+  ol.steps>li{counter-increment:step;position:relative;padding:6px 0 6px 42px;margin-bottom:10px;}
+  ol.steps>li::before{content:counter(step);position:absolute;left:0;top:6px;width:28px;height:28px;border-radius:50%;background:var(--vino-tint);color:var(--vino);font-family:var(--mono);font-weight:700;font-size:13px;display:grid;place-items:center;}
+
+  figure.captura{margin:22px 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);}
+  figure.captura img{width:100%;height:auto;display:block;}
+  figure.captura figcaption{padding:10px 16px;font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-top:1px solid var(--line);font-family:var(--mono);line-height:1.4;}
+  figure.captura figcaption b{color:var(--vino);}
+  @media (max-width: 640px) {
+    .wrap{padding:0 14px 60px;}
+    header.top{padding:28px 16px 24px;}
+    table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;}
+  }
+  footer.page{max-width:820px;margin:60px auto 0;padding:20px 24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .donde{font-family:var(--mono);font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--dorado);border-radius:6px;padding:7px 12px;margin:0 0 16px;}
+  .donde b{color:var(--ink);}
+  .cmd{position:relative;margin:14px 0;}
+  .cmd pre{margin:0;padding-top:38px;}
+  .cmd button.copy{position:absolute;top:8px;right:8px;font:600 12px var(--mono);background:var(--surface);color:var(--vino);border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer;}
+  .cmd button.copy:hover{background:var(--vino-tint);}
+  figure.captura.pendiente{border:2px dashed var(--dorado);background:var(--dorado-tint);box-shadow:none;}
+  figure.captura.pendiente img{display:none;}
+  figure.captura.pendiente::before{content:"Captura pendiente: " attr(data-id);display:flex;align-items:center;justify-content:center;min-height:140px;padding:16px;font-family:var(--mono);font-size:14px;font-weight:600;color:var(--dorado);text-align:center;}
+  figure.captura.pendiente figcaption{background:transparent;}
+  .formula-box{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--vino);border-radius:8px;padding:14px 18px;margin:16px 0;font-family:var(--mono);font-size:14px;text-align:center;}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="https://es.wikipedia.org/wiki/Special:FilePath/Logo_cuc.png" alt="Universidad de la Costa" onerror="this.style.display='none'">
+  <p class="eyebrow">Actividad práctica 10 % · Semana 15 · 16–22 nov 2026</p>
+  <h1>Lab Cuantización: mismo modelo, menos bits</h1>
+  <p class="sub">Guía paso a paso: despliega una instancia EC2 en el Sandbox de AWS Academy, instala Ollama y compara tres variantes cuantizadas del mismo modelo (Q8_0, Q4_K_M y Q2_K) en disco, memoria RAM, velocidad y calidad, además de dimensionar la VRAM para un modelo de 70B en AWS</p>
+  <div class="accent-bar"></div>
+  <p class="meta"><b>Arquitectura en la Nube</b> · Universidad de la Costa (CUC) · Ingeniería de Sistemas · 2026-2<br>Modalidad individual · Entrega: PDF con evidencias numeradas subido al aula virtual · <b>Abierta desde su publicación hasta el domingo 29 de noviembre de 2026</b></p>
+</header>
+<div class="wrap">
+
+<section>
+  <p class="intro">Sigue los pasos en orden, de arriba abajo, sin saltarte ninguno. En este laboratorio vas a comprobar de forma experimental cómo la <b>cuantización</b> reduce los bits que ocupa cada parámetro de un <b>LLM</b> (<i>Large Language Model</i>, gran modelo de lenguaje) para que pueda ejecutarse con menos <b>RAM</b> (<i>Random Access Memory</i>, memoria de acceso aleatorio) o <b>VRAM</b> (<i>Video Random Access Memory</i>, memoria de video dedicada en tarjetas gráficas) y a mayor velocidad en <code>tokens/s</code>, analizando en qué punto exacto se degrada la calidad de las respuestas.</p>
+  <div class="warn"><b>Antes de empezar:</b> esta guía incluye desde cero el ingreso a <b>AWS</b> (<i>Amazon Web Services</i>) Academy y la creación de la máquina virtual para que puedas realizarla de forma independiente. Al finalizar (sección E) es <b>obligatorio</b> terminar tu instancia <code>lab-cuantizacion</code> para no agotar el presupuesto del curso.</div>
+</section>
+
+<section>
+  <h2><span class="paso">0</span>Qué vas a construir</h2>
+  <svg viewBox="0 0 800 245" role="img" aria-label="Flujo de arquitectura: Tu PC, AWS Academy Sandbox, Instancia EC2 Ubuntu 24.04, Motor Ollama y tres variantes cuantizadas GGUF (Q8_0, Q4_K_M, Q2_K)" style="width:100%;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px">
+    <defs>
+      <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="var(--vino)"/>
+      </marker>
+    </defs>
+
+    <!-- Nodo 1: Tu PC -->
+    <rect x="14" y="28" width="126" height="186" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+    <text x="77" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vino)">1. Tu PC</text>
+    <image href="../../assets/iconos/onprem/client/client.png" x="49" y="60" width="56" height="56"/>
+    <text x="77" y="134" text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)">Navegador + SSH</text>
+    <text x="77" y="152" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">PowerShell</text>
+    <text x="77" y="168" text-anchor="middle" font-size="10" fill="var(--ink-soft)">labsuser.pem</text>
+    <text x="77" y="184" text-anchor="middle" font-size="10" fill="var(--ok)">Puerto TCP 22</text>
+
+    <!-- Flecha 1 -> 2 -->
+    <line x1="140" y1="115" x2="174" y2="115" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="157" y="106" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">HTTPS</text>
+
+    <!-- Nodo 2: AWS Academy -->
+    <rect x="176" y="28" width="134" height="186" rx="10" fill="var(--surface-2)" stroke="var(--line)"/>
+    <text x="243" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vino)">2. AWS Academy</text>
+    <image href="../../assets/iconos/aws/management/management-console.png" x="215" y="60" width="56" height="56"/>
+    <text x="243" y="134" text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)">Sandbox Vocareum</text>
+    <text x="243" y="152" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">Región us-east-1</text>
+    <text x="243" y="168" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Security Group</text>
+    <text x="243" y="184" text-anchor="middle" font-size="10" fill="var(--dorado)">Solo «My IP»</text>
+
+    <!-- Flecha 2 -> 3 -->
+    <line x1="310" y1="115" x2="344" y2="115" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="327" y="106" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Lanza</text>
+
+    <!-- Contenedor EC2 (Nodos 3, 4 y 5) -->
+    <rect x="346" y="18" width="440" height="206" rx="12" fill="var(--surface-2)" stroke="var(--vino)" stroke-width="2"/>
+    <text x="566" y="38" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vino)">3. Instancia EC2 lab-cuantizacion · Ubuntu 24.04 LTS (t3.medium · 30 GiB gp3)</text>
+
+    <!-- Subnodo EC2 -->
+    <rect x="360" y="50" width="118" height="158" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+    <image href="../../assets/iconos/aws/compute/ec2-instance.png" x="391" y="62" width="56" height="56"/>
+    <text x="419" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">2 vCPU Xeon</text>
+    <text x="419" y="150" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">3,7 GiB RAM</text>
+    <text x="419" y="166" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Sin GPU dedicada</text>
+    <text x="419" y="182" text-anchor="middle" font-size="10" fill="var(--vino)">Inferencia en CPU</text>
+
+    <!-- Flecha EC2 -> Ollama -->
+    <line x1="478" y1="126" x2="504" y2="126" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+
+    <!-- Subnodo 4: Motor Ollama -->
+    <rect x="506" y="50" width="118" height="158" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+    <image href="../../assets/iconos/onprem/compute/server.png" x="537" y="62" width="56" height="56"/>
+    <text x="565" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">4. Motor Ollama</text>
+    <text x="565" y="150" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">API HTTP :11434</text>
+    <text x="565" y="166" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Runner llama.cpp</text>
+    <text x="565" y="182" text-anchor="middle" font-size="10" fill="var(--ok)">temperature: 0</text>
+
+    <!-- Flecha Ollama -> Modelos -->
+    <line x1="624" y1="126" x2="650" y2="126" stroke="var(--vino)" stroke-width="2" marker-end="url(#ar)"/>
+
+    <!-- Subnodo 5: Variantes GGUF -->
+    <rect x="652" y="50" width="122" height="158" rx="8" fill="var(--ok-tint)" stroke="var(--ok)"/>
+    <image href="../../assets/iconos/aws/ml/bedrock.png" x="689" y="56" width="48" height="48"/>
+    <text x="713" y="118" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--ink)">5. Qwen 2.5 (1.5B)</text>
+    <text x="713" y="136" text-anchor="middle" font-size="10" font-weight="600" fill="var(--vino)">Q8_0 (1,6 GB · 8b)</text>
+    <text x="713" y="153" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ok)">Q4_K_M (986 MB · 4b)</text>
+    <text x="713" y="170" text-anchor="middle" font-size="10" font-weight="600" fill="var(--dorado)">Q2_K (676 MB · 2b)</text>
+    <text x="713" y="188" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Formato GGUF</text>
+  </svg>
+  <p>Cuando entrenas un modelo de lenguaje, cada peso sináptico suele almacenarse en punto flotante de 16 bits (<b>FP16</b>, <i>16-bit Floating Point</i>, es decir, 2 bytes por parámetro). La <b>cuantización</b> comprime esos pesos a enteros o bloques de menor precisión como <b>INT8</b> (<i>8-bit Integer</i>, entero de 8 bits), <b>INT4</b> (<i>4-bit Integer</i>, entero de 4 bits) o 2 bits usando el formato <b>GGUF</b> (<i>GPT-Generated Unified Format</i>, formato binario optimizado para cargar modelos rápidamente en <b>CPU</b> —<i>Central Processing Unit</i>, unidad central de procesamiento— y <b>GPU</b> —<i>Graphics Processing Unit</i>, unidad de procesamiento gráfico—). Aquí descargaremos tres cuantizaciones reales del mismo modelo <code>qwen2.5:1.5b-instruct</code>: <b>Q8_0</b> (cuantización uniforme de 8 bits sin punto cero desplazado), <b>Q4_K_M</b> (cuantización de 4 bits con bloques <i>K-quant</i> de tamaño medio, que conserva mayor precisión en las capas más sensibles) y <b>Q2_K</b> (cuantización extrema de 2 bits con bloques <i>K-quant</i>).</p>
+</section>
+
+<section>
+  <h2><span class="paso">A</span>Entrar al Sandbox de AWS Academy</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> AWS Academy → Cursos → Módulos → Entorno de pruebas (Sandbox)</p>
+
+  <h3 id="c1">A1 · Panel de cursos activos</h3>
+  <p>Ingresa a AWS Academy y abre tu curso activo: <b>«AWS Academy Cloud Architecting (Spanish LATAM)»</b>, identificado con el apodo <b>«Arquitectura en la Nube 2026-2»</b>.</p>
+  <figure class="captura" data-id="C1">
+    <img src="capturas/C1.png" alt="Panel de cursos activos de AWS Academy con Arquitectura en la Nube 2026-2" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C1</b> · Muestra: el panel de cursos activos de AWS Academy. <br><b>Qué verificar:</b> entra a «AWS Academy Cloud Architecting (Spanish LATAM)» / «Arquitectura en la Nube 2026-2».</figcaption>
+  </figure>
+
+  <h3 id="c2">A2 · Menú Módulos y Entorno de pruebas (Sandbox)</h3>
+  <p>En el menú izquierdo del curso haz clic en <b>Módulos</b>, desplázate hasta el final y abre <b>Entorno de pruebas</b> (ese es el nombre del Sandbox en este curso).</p>
+  <figure class="captura" data-id="C2">
+    <img src="capturas/C2.png" alt="Menú Módulos con la opción Entorno de pruebas (Sandbox)" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C2</b> · Muestra: la sección final del menú Módulos. <br><b>Qué verificar:</b> haz clic en el ítem <b>Entorno de pruebas</b> para cargar el entorno de laboratorio Vocareum.</figcaption>
+  </figure>
+
+  <h3 id="c3">A3 · Iniciar el laboratorio con Start Lab</h3>
+  <p>Al abrir el Sandbox verás el indicador <b>AWS</b> con un círculo rojo (apagado). Pulsa el botón <b>Start Lab</b> arriba a la derecha.</p>
+  <figure class="captura" data-id="C3">
+    <img src="capturas/C3.png" alt="Barra del Sandbox con el botón Start Lab y el indicador AWS en rojo" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C3</b> · Muestra: la barra superior del Sandbox antes de iniciar, con el indicador AWS en rojo y el botón <b>Start Lab</b>.</figcaption>
+  </figure>
+
+  <h3 id="c4">A4 · Esperar el indicador AWS en verde y descargar labsuser.pem</h3>
+  <p>Espera entre 1 y 2 minutos hasta que el círculo junto a <b>AWS</b> cambie a color <b>verde</b> y el cronómetro esté en marcha. Aprovecha este momento para pulsar el botón <b>AWS Details</b> (arriba a la derecha) y, junto a <b>SSH key</b>, haz clic en <b>Download PEM</b>: se guardará en tu carpeta de descargas el archivo <code>labsuser.pem</code>, que corresponde al par de claves <code>vockey</code> y que usarás para conectarte por <b>SSH</b> (<i>Secure Shell</i>, protocolo de terminal remota cifrada).</p>
+  <figure class="captura" data-id="C4">
+    <img src="capturas/C4.png" alt="Indicador AWS en verde con el cronómetro del Sandbox activo" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C4</b> · Muestra: el indicador <b>AWS</b> en verde con el tiempo restante de sesión activo.</figcaption>
+  </figure>
+
+  <h3 id="c5">A5 · Abrir la consola de AWS</h3>
+  <p>Haz clic directamente sobre el texto <b>AWS</b> (junto al punto verde) para abrir la consola de administración de AWS en una nueva pestaña del navegador.</p>
+  <figure class="captura" data-id="C5">
+    <img src="capturas/C5.png" alt="Consola de AWS abierta desde el enlace AWS del Sandbox" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>C5</b> · Muestra: el enlace <b>AWS</b> del Sandbox y la apertura de la consola de administración en la región <code>us-east-1</code>.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="paso">B</span>Lanzar la instancia EC2 <code>lab-cuantizacion</code> y conectarse por SSH</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Consola de AWS → EC2 → Instancias → Lanzar una instancia → PowerShell (SSH)</p>
+
+  <h3 id="b1">B1 · Buscar el servicio EC2</h3>
+  <p>En la barra superior de búsqueda de la consola de AWS escribe <code>EC2</code> (<b>EC2</b> significa <i>Elastic Compute Cloud</i>, el servicio de máquinas virtuales de AWS) y selecciona <b>EC2</b> en la lista de servicios.</p>
+  <figure class="captura" data-id="B1">
+    <img src="capturas/B1.png" alt="Búsqueda de EC2 en la barra superior de la consola de AWS" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B1</b> · Muestra: la búsqueda de <code>EC2</code> en la barra superior de la consola de AWS.</figcaption>
+  </figure>
+
+  <h3 id="b2">B2 · Ir a Lanzar la instancia</h3>
+  <p>En el panel principal de EC2 pulsa el botón naranja <b>Lanzar la instancia</b> (<i>Launch instance</i>).</p>
+  <figure class="captura" data-id="B2">
+    <img src="capturas/B2.png" alt="Panel de EC2 con el botón naranja Lanzar la instancia" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B2</b> · Muestra: el panel de EC2 con el botón naranja <b>Lanzar la instancia</b>.</figcaption>
+  </figure>
+
+  <h3 id="b3">B3 · Nombre <code>lab-cuantizacion</code> e imagen Ubuntu Server 24.04 LTS</h3>
+  <p>En el campo <b>Nombre</b> escribe exactamente <code>lab-cuantizacion</code>. Más abajo, en <b>Imágenes de aplicaciones y sistemas operativos (AMI)</b> —donde <b>AMI</b> significa <i>Amazon Machine Image</i>, la plantilla del sistema operativo—, selecciona <b>Ubuntu</b> y verifica en la lista desplegable que esté elegida exactamente <b>Ubuntu Server 24.04 LTS (HVM), SSD Volume Type</b>, arquitectura de <b>64 bits (x86)</b> (ID de AMI: <code>ami-02a9cdd4e98bc3c78</code>).</p>
+  <figure class="captura" data-id="B3">
+    <img src="capturas/B3.png" alt="Formulario de lanzamiento con nombre lab-cuantizacion y AMI Ubuntu Server 24.04 LTS" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B3</b> · Muestra: el nombre <code>lab-cuantizacion</code> y la selección de la AMI <b>Ubuntu Server 24.04 LTS (HVM), SSD Volume Type</b> (<code>ami-02a9cdd4e98bc3c78</code>).</figcaption>
+  </figure>
+
+  <h3 id="b4">B4 · Tipo de instancia y par de claves <code>vockey</code></h3>
+  <p>En <b>Tipo de instancia</b>, prueba primero si tu entorno permite <code>t3.large</code> (2 <b>vCPU</b> —<i>virtual Central Processing Unit</i>, procesadores virtuales— y 8 GiB de RAM). En el Sandbox de AWS Academy existe una restricción de permisos (<i>explicit deny</i> en la política de identidad para <code>t3.large</code>), por lo que el mayor tamaño permitido para lanzar con éxito es <b><code>t3.medium</code></b> (2 vCPU y 4 GiB de RAM). Selecciona <code>t3.medium</code> y en <b>Par de claves (inicio de sesión)</b> elige <b><code>vockey</code></b>.</p>
+  <figure class="captura" data-id="B4">
+    <img src="capturas/B4.png" alt="Selección del tipo de instancia t3.medium y par de claves vockey" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B4</b> · Muestra: la selección del tipo de instancia <code>t3.medium</code> (2 vCPU, 4 GiB de memoria) y el par de claves <code>vockey</code>.</figcaption>
+  </figure>
+
+  <h3 id="b5">B5 · Grupo de seguridad (SSH 22 solo desde «Mi IP») y disco de 30 GiB</h3>
+  <p>En <b>Configuración de red → Firewall (grupos de seguridad)</b> deja marcada la opción <b>Crear un grupo de seguridad</b>, mantén activada únicamente la casilla <b>Permitir el tráfico SSH desde</b> y cambia el origen desplegable de <i>Cualquier lugar (0.0.0.0/0)</i> a <b>Mi IP</b> (<i>My IP</i>). Así el puerto TCP 22 solo aceptará conexiones desde tu dirección IP pública actual. Justo debajo, en <b>Configurar almacenamiento</b>, cambia el tamaño del volumen raíz de <code>8</code> a <b><code>30</code> GiB</b> de tipo <b><code>gp3</code></b> (<i>General Purpose SSD v3</i>, unidad de estado sólido de propósito general).</p>
+  <figure class="captura" data-id="B5">
+    <img src="capturas/B5.png" alt="Configuración de grupo de seguridad con SSH desde Mi IP y almacenamiento de 30 GiB gp3" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B5</b> · Muestra: la creación del grupo de seguridad restringiendo SSH al origen <b>Mi IP</b> y el almacenamiento configurado en <b>30 GiB gp3</b>.</figcaption>
+  </figure>
+
+  <h3 id="b6">B6 · Lanzar la instancia</h3>
+  <p>Haz clic en el botón naranja <b>Lanzar la instancia</b> en el panel de resumen derecho. Verás la franja verde confirmando que se inició correctamente el lanzamiento.</p>
+  <figure class="captura" data-id="B6">
+    <img src="capturas/B6.png" alt="Mensaje verde de lanzamiento exitoso de la instancia lab-cuantizacion" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B6</b> · Muestra: el banner verde confirmando el lanzamiento de la instancia <code>lab-cuantizacion</code> (<code>i-0ac4c2b2494b79332</code>).</figcaption>
+  </figure>
+
+  <h3 id="b7">B7 · Verificar estado En ejecución (Running) y copiar la IPv4 pública</h3>
+  <p>Haz clic en <b>Ver todas las instancias</b>, selecciona la casilla de <code>lab-cuantizacion</code> y espera unos segundos hasta que <b>Estado de la instancia</b> diga <b>En ejecución</b> (<i>Running</i>). En el panel de detalles inferior copia la <b>Dirección IPv4 pública</b> (en nuestra ejecución real es <code>54.226.234.148</code>).</p>
+  <figure class="captura" data-id="B7">
+    <img src="capturas/B7.png" alt="Instancia lab-cuantizacion en estado En ejecución mostrando su dirección IPv4 pública" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B7</b> · Muestra: la instancia <code>lab-cuantizacion</code> en estado <b>En ejecución</b> con su dirección IPv4 pública (<code>54.226.234.148</code>) en el panel inferior.</figcaption>
+  </figure>
+
+  <h3 id="b8">B8 y B9 · ¿Por qué falla EC2 Instance Connect cuando el Security Group usa «Mi IP» y cómo conectarse por SSH?</h3>
+  <p>Si seleccionas <code>lab-cuantizacion</code>, pulsas <b>Conectar</b> y en la pestaña <b>EC2 Instance Connect</b> haces clic en el botón naranja <b>Conectar</b>, aparecerá un error rojo: <i>«No se pudo conectar a la instancia: Error al establecer la conexión SSH con la instancia»</i>.</p>
+  <div class="tip"><b>Explicación de arquitectura de red:</b> cuando usas <b>EC2 Instance Connect</b> desde el navegador, quien abre la conexión TCP al puerto 22 de tu instancia <b>no es tu navegador directamente</b>, sino los servidores puente de AWS en la región <code>us-east-1</code> (rango <code>18.206.107.24/29</code>). Como en el paso B5 configuramos el Security Group para permitir el puerto 22 <b>exclusivamente desde «Mi IP»</b> (la IP pública de tu casa o universidad), el firewall de AWS bloquea a los servidores de EC2 Instance Connect pero <b>sí permite</b> la conexión SSH directa desde la terminal de tu propio PC usando la llave <code>labsuser.pem</code>.</div>
+
+  <figure class="captura" data-id="B8">
+    <img src="capturas/B8.png" alt="Pantalla Conectarse a la instancia en la pestaña EC2 Instance Connect" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B8</b> · Muestra: la pestaña <b>EC2 Instance Connect</b> con el usuario <code>ubuntu</code> antes de pulsar Conectar.</figcaption>
+  </figure>
+
+  <figure class="captura" data-id="B9">
+    <img src="capturas/B9.png" alt="Error de conexión en EC2 Instance Connect causado por restringir el puerto 22 a Mi IP" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B9</b> · Muestra: el bloqueo esperado en <b>EC2 Instance Connect</b> debido a que el Security Group solo acepta tráfico SSH desde <b>Mi IP</b>.</figcaption>
+  </figure>
+
+  <p>Por tanto, abre <b>PowerShell</b> en tu computador Windows, ubícate en la carpeta donde descargaste <code>labsuser.pem</code> (en el paso A4) y conéctate directamente por SSH reemplazando <code>&lt;IP_PUBLICA&gt;</code> por la IPv4 pública de tu instancia:</p>
+<pre><code>cd $HOME\Downloads
+ssh -i .\labsuser.pem ubuntu@&lt;IP_PUBLICA&gt;</code></pre>
+  <p>Escribe <code>yes</code> cuando te pregunte si confías en la huella del servidor y entrarás de inmediato al prompt <code>ubuntu@ip-...:~$</code>.</p>
+</section>
+
+<section>
+  <h2><span class="paso">C</span>Experimentos en la EC2: Ollama, 3 variantes cuantizadas y prueba de calidad</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Terminal SSH dentro de la instancia <code>lab-cuantizacion</code> (<code>ubuntu@ip-...</code>)</p>
+
+  <h3 id="c-a">C1 · Instalar Ollama y descargar las 3 variantes del mismo modelo (<code>Q8_0</code>, <code>Q4_K_M</code> y <code>Q2_K</code>)</h3>
+  <p>Una vez dentro de la instancia por SSH, verifica los recursos de hardware, instala <b>Ollama</b> y descarga las tres variantes cuantizadas del mismo modelo <code>qwen2.5:1.5b-instruct</code> desde el catálogo oficial de Ollama:</p>
+<pre><code>lscpu | grep -E "Model name|CPU\(s\):" &amp;&amp; free -h &amp;&amp; df -h /
+curl -fsSL https://ollama.com/install.sh | sh
+ollama --version</code></pre>
+  <p>Ahora descarga las tres etiquetas exactas (<b>8 bits</b>, <b>4 bits</b> y <b>2 bits</b>) y lista el espacio que ocupan en el disco con <code>ollama list</code>:</p>
+<pre><code>ollama pull qwen2.5:1.5b-instruct-q8_0
+ollama pull qwen2.5:1.5b-instruct-q4_K_M
+ollama pull qwen2.5:1.5b-instruct-q2_K
+ollama list</code></pre>
+
+  <figure class="captura" data-id="B10">
+    <img src="capturas/B10.png" alt="Terminal SSH mostrando la instalación de Ollama y la salida de ollama list con las tres variantes" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B10</b> · Muestra: la conexión SSH con <code>labsuser.pem</code>, la instalación de Ollama v0.40.16 y la salida real de <code>ollama list</code> con los tamaños en disco de las tres variantes (<code>1.6 GB</code>, <code>986 MB</code> y <code>676 MB</code>).</figcaption>
+  </figure>
+
+  <h3 id="c-b">C2 · Medir tamaño en disco, uso de RAM y velocidad en <code>tokens/s</code> por variante</h3>
+  <p>Para que la medición de memoria RAM sea limpia y solo haya <b>un modelo cargado a la vez</b>, reiniciaremos el servicio de Ollama antes de probar cada variante, cargaremos el modelo en memoria y consultaremos <code>ollama ps</code> junto con <code>free -h</code>. Luego enviaremos exactamente el mismo prompt a la <b>API</b> (<i>Application Programming Interface</i>, interfaz de programación de aplicaciones) local de Ollama en el puerto <code>11434</code> con formato <b>JSON</b> (<i>JavaScript Object Notation</i>, notación de objetos de JavaScript) y <code>"temperature": 0</code> (muestreo determinista sin aleatoriedad), calculando la velocidad real mediante la fórmula:</p>
+  <div class="formula-box">
+    Velocidad (tokens/s) = <code>eval_count / (eval_duration / 1e9)</code>
+  </div>
+  <p>Ejecuta este bloque en tu terminal SSH para evaluar las tres variantes una por una:</p>
+<pre><code>for MODEL in "qwen2.5:1.5b-instruct-q8_0" "qwen2.5:1.5b-instruct-q4_K_M" "qwen2.5:1.5b-instruct-q2_K"; do
+  echo "=== Evaluando $MODEL ==="
+  sudo systemctl restart ollama &amp;&amp; sleep 2
+  curl -s http://localhost:11434/api/generate -d "{\"model\":\"$MODEL\",\"prompt\":\"Responde solo: OK\",\"stream\":false,\"options\":{\"temperature\":0,\"num_predict\":10}}" &gt; /dev/null
+  ollama ps
+  free -h
+  curl -s http://localhost:11434/api/generate -d "{\"model\":\"$MODEL\",\"prompt\":\"Explica en una oración qué es la cuantización de un modelo de lenguaje.\",\"stream\":false,\"options\":{\"temperature\":0,\"num_predict\":160}}" | python3 -c "import sys,json; d=json.load(sys.stdin); ec=d['eval_count']; ed=d['eval_duration']; print(f'eval_count: {ec} tokens | eval_duration: {ed/1e9:.3f} s | velocidad: {ec/(ed/1e9):.2f} tokens/s\nRespuesta: {d[\"response\"].strip()}')"
+done</code></pre>
+
+  <figure class="captura" data-id="B11">
+    <img src="capturas/B11.png" alt="Terminal mostrando ollama ps, free -h y la velocidad en tokens por segundo de Q8_0, Q4_K_M y Q2_K" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B11</b> · Muestra: los resultados reales de <code>ollama ps</code>, <code>free -h</code> y velocidad de generación (<code>4.95 tokens/s</code> en Q8_0, <code>7.28 tokens/s</code> en Q4_K_M y <code>8.16 tokens/s</code> en Q2_K).</figcaption>
+  </figure>
+
+  <p>Con las mediciones obtenidas en nuestra instancia <code>t3.medium</code> (2 vCPU Intel Xeon Platinum 8259CL @ 2.50 GHz, <code>3.7Gi</code> de RAM total), la tabla comparativa de las tres variantes queda así:</p>
+
+  <table>
+    <tr>
+      <th>Variante (Etiqueta en Ollama)</th>
+      <th>Bits aprox. por peso</th>
+      <th>Tamaño en disco (<code>ollama list</code>)</th>
+      <th>RAM del modelo (<code>ollama ps</code>)</th>
+      <th>RAM usada del sistema (<code>free -h</code>)</th>
+      <th>Velocidad medida (<code>tokens/s</code>)</th>
+    </tr>
+    <tr>
+      <td><code>qwen2.5:1.5b-instruct-q8_0</code></td>
+      <td>8 bits</td>
+      <td><b>1.6 GB</b></td>
+      <td><b>1.8 GB</b> (ctx 4096)</td>
+      <td><b>2.1 Gi</b> usados / 1.6 Gi libres</td>
+      <td><b>4,95 tokens/s</b> (63 tok / 12,727 s)</td>
+    </tr>
+    <tr>
+      <td><code>qwen2.5:1.5b-instruct-q4_K_M</code></td>
+      <td>4 bits</td>
+      <td><b>986 MB</b> (−38,4 %)</td>
+      <td><b>1.2 GB</b> (ctx 4096)</td>
+      <td><b>1.5 Gi</b> usados / 2.2 Gi libres</td>
+      <td><b>7,28 tokens/s</b> (82 tok / 11,267 s)</td>
+    </tr>
+    <tr>
+      <td><code>qwen2.5:1.5b-instruct-q2_K</code></td>
+      <td>2 bits</td>
+      <td><b>676 MB</b> (−57,8 %)</td>
+      <td><b>863 MB</b> (ctx 4096)</td>
+      <td><b>1.2 Gi</b> usados / 2.5 Gi libres</td>
+      <td><b>8,16 tokens/s</b> (160 tok / 19,600 s)</td>
+    </tr>
+  </table>
+
+  <div class="tip"><b>¿Por qué menos bits significa más velocidad en <code>tokens/s</code>?</b> Generar texto token por token está limitado por el ancho de banda de la memoria RAM: para producir cada nuevo token, la CPU debe leer todos los pesos del modelo desde la RAM. Como <code>Q4_K_M</code> pesa casi la mitad que <code>Q8_0</code>, el procesador transfiere muchos menos megabytes por cada token y acelera un <b>47 %</b> (de 4,95 a 7,28 tokens/s) en la misma máquina.</div>
+
+  <h3 id="c-c">C3 · Prueba de calidad con 5 preguntas verificables (<code>temperature: 0</code>)</h3>
+  <p>Más velocidad y menos memoria no sirven si el modelo empieza a alucinar o pierde capacidad lógica. Ahora vas a someter las tres variantes (<code>Q8_0</code>, <code>Q4_K_M</code> y <code>Q2_K</code>) a una batería de <b>5 preguntas con respuesta objetiva y verificable</b>, todas con <code>"temperature": 0</code>:</p>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Categoría evaluada</th>
+      <th>Prompt exacto a enviar con <code>"temperature": 0</code></th>
+    </tr>
+    <tr>
+      <td><b>P1</b></td>
+      <td>Cálculo aritmético paso a paso</td>
+      <td><code>Calcula paso a paso cuánto es (15 * 4) + 25 y escribe el número final.</code></td>
+    </tr>
+    <tr>
+      <td><b>P2</b></td>
+      <td>Protocolos y puertos de red</td>
+      <td><code>En una sola oración: ¿cuál es el número de puerto TCP estándar para HTTPS y cuál para SSH?</code></td>
+    </tr>
+    <tr>
+      <td><b>P3</b></td>
+      <td>Sintaxis exacta de comando Linux</td>
+      <td><code>Escribe en una sola línea el comando exacto de Linux para cambiar los permisos del archivo labsuser.pem a 400.</code></td>
+    </tr>
+    <tr>
+      <td><b>P4</b></td>
+      <td>Razonamiento lógico transitivo</td>
+      <td><code>Si el servidor A tiene más memoria RAM que el servidor B, y el servidor B tiene más memoria RAM que el servidor C, ¿cuál de los tres servidores tiene menos memoria RAM? Responde en una oración.</code></td>
+    </tr>
+    <tr>
+      <td><b>P5</b></td>
+      <td>Formato estructurado JSON estricto</td>
+      <td><code>Devuelve únicamente un objeto JSON válido con las claves "instancia" (valor "t3.medium") y "vcpu" (número entero 2).</code></td>
+    </tr>
+  </table>
+
+  <p>Crea y ejecuta el siguiente script en Python dentro de tu instancia EC2 para correr las 5 preguntas contra las 3 variantes de forma automatizada:</p>
+<pre><code>cat &lt;&lt; 'EOF' &gt; ~/evaluar_calidad.py
+import json, urllib.request
+
+MODELS = ["qwen2.5:1.5b-instruct-q8_0", "qwen2.5:1.5b-instruct-q4_K_M", "qwen2.5:1.5b-instruct-q2_K"]
+QUESTIONS = [
+    ("P1", "Calcula paso a paso cuánto es (15 * 4) + 25 y escribe el número final."),
+    ("P2", "En una sola oración: ¿cuál es el número de puerto TCP estándar para HTTPS y cuál para SSH?"),
+    ("P3", "Escribe en una sola línea el comando exacto de Linux para cambiar los permisos del archivo labsuser.pem a 400."),
+    ("P4", "Si el servidor A tiene más memoria RAM que el servidor B, y el servidor B tiene más memoria RAM que el servidor C, ¿cuál de los tres servidores tiene menos memoria RAM? Responde en una oración."),
+    ("P5", "Devuelve únicamente un objeto JSON válido con las claves \"instancia\" (valor \"t3.medium\") y \"vcpu\" (número entero 2).")
+]
+
+for m in MODELS:
+    print(f"\n==================== {m} ====================")
+    for qid, prompt in QUESTIONS:
+        req = urllib.request.Request(
+            "http://localhost:11434/api/generate",
+            data=json.dumps({"model": m, "prompt": prompt, "stream": False, "options": {"temperature": 0, "num_predict": 160}}).encode(),
+            headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=180) as r:
+            d = json.loads(r.read().decode())
+            tps = d.get("eval_count", 0) / (d.get("eval_duration", 1) / 1e9)
+            print(f"[{qid}] ({tps:.2f} tok/s): {d.get('response', '').strip()}\n")
+EOF
+python3 ~/evaluar_calidad.py</code></pre>
+
+  <figure class="captura" data-id="B12">
+    <img src="capturas/B12.png" alt="Terminal con el comportamiento de las tres variantes en las 5 preguntas verificables" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B12</b> · Muestra: el comportamiento comparado de <code>Q8_0</code>, <code>Q4_K_M</code> y <code>Q2_K</code> al responder las 5 preguntas verificables con <code>temperature=0</code>.</figcaption>
+  </figure>
+
+  <p>En tu informe debes incluir y completar una tabla de registro de aciertos como la siguiente, verificando por ti mismo la respuesta que dio cada variante en cada pregunta (<code>✅ Correcta</code>, <code>⚠️ Parcial / Con bucle</code> o <code>❌ Incorrecta</code>):</p>
+
+  <table>
+    <tr>
+      <th>Variante</th>
+      <th>P1 (Aritmética)</th>
+      <th>P2 (Puertos TCP)</th>
+      <th>P3 (Comando Linux)</th>
+      <th>P4 (Lógica)</th>
+      <th>P5 (JSON estricto)</th>
+      <th>Total aciertos (/ 5)</th>
+    </tr>
+    <tr>
+      <td><code>qwen2.5:1.5b-instruct-q8_0</code></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><b>? / 5</b></td>
+    </tr>
+    <tr>
+      <td><code>qwen2.5:1.5b-instruct-q4_K_M</code></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><b>? / 5</b></td>
+    </tr>
+    <tr>
+      <td><code>qwen2.5:1.5b-instruct-q2_K</code></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><i>Registra tu resultado</i></td>
+      <td><b>? / 5</b></td>
+    </tr>
+  </table>
+
+  <div class="warn"><b>Análisis de degradación al bajar a 2 bits (<code>Q2_K</code>):</b> observa con atención las respuestas de <code>Q2_K</code> en tu terminal. Mientras que <code>Q8_0</code> y <code>Q4_K_M</code> resuelven sin dificultad el cálculo paso a paso (P1), los puertos de red en una sola oración (P2) y la sintaxis de <code>chmod</code> (P3) —diferenciándose apenas en restricciones formales de esquema JSON en P5—, al comprimir un modelo pequeño de 1,5B a solo <b>2 bits por parámetro (<code>Q2_K</code>)</b> ocurre un colapso severo en las matrices de atención:
+  <ul>
+    <li>En <b>aritmética (P1)</b>, pierde la capacidad de sumar y entra en un bucle de igualdades numéricas falsas.</li>
+    <li>En <b>instrucciones acotadas (P2 y P5)</b>, pierde la noción del token de parada (<i>end-of-turn</i>) y repite compulsivamente la misma frase o pregunta hasta agotar el límite de tokens.</li>
+    <li>En <b>comandos técnicos (P3)</b>, alucina banderas inexistentes (como <code>chmod -z ...+0:400</code>) que fallarían en producción.</li>
+  </ul></div>
+</section>
+
+<section>
+  <h2><span class="paso">D</span>Cálculo de memoria VRAM para un modelo de 70B en AWS y conclusión de arquitectura</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Dimensionamiento de infraestructura cloud para producción (sin lanzar instancias con GPU en el Sandbox)</p>
+
+  <h3 id="d1">D1 · Fórmula de memoria VRAM para inferencia de LLMs</h3>
+  <p>En la práctica profesional, el cálculo más frecuente de un arquitecto de nube consiste en determinar cuánta memoria <b>VRAM</b> necesita un modelo grande —por ejemplo, de <b>70 mil millones de parámetros (70B)</b> como Llama 3.3 70B o Qwen 2.5 70B— y qué instancia con GPU de AWS elegir. La memoria total requerida se calcula con la fórmula:</p>
+
+  <div class="formula-box">
+    Memoria Total (GB) = <b>(Parámetros × bits) / 8</b> + <b>Caché de contexto (KV cache)</b>
+  </div>
+
+  <p>Donde:</p>
+  <ul>
+    <li><b><code>(Parámetros × bits) / 8</code></b> es el espacio que ocupan los <b>pesos del modelo</b> en memoria (dividimos entre 8 porque 1 byte tiene 8 bits). Por ejemplo, en 16 bits (FP16) cada parámetro ocupa <code>16 / 8 = 2 bytes</code>; en 8 bits (Q8) ocupa <code>8 / 8 = 1 byte</code>; y en 4 bits (Q4) ocupa <code>4 / 8 = 0,5 bytes</code>.</li>
+    <li><b><code>Caché de contexto (KV cache)</code></b> —<i>Key-Value Cache</i>, caché de claves y valores de los mecanismos de atención— es la memoria adicional que reserva el motor de inferencia para recordar los tokens de la conversación activa sin recalcularlos en cada paso, más los buffers de activación de la GPU. En arquitectura de producción se estima un margen estándar de <b>+20 % adicional sobre el peso del modelo</b> para soportar contextos de trabajo habituales (4.096 a 8.192 tokens).</li>
+  </ul>
+
+  <h3 id="d2">D2 · Calcula la VRAM para 70B en FP16, Q8 y Q4 y elige la instancia de AWS</h3>
+  <p>Aplicando la fórmula anterior con un margen del <b>20 % para el KV cache</b>, verifica y desarrolla en tu entrega el cálculo para un modelo de <b>70B (70 × 10<sup>9</sup> parámetros)</b> en las tres precisiones:</p>
+  <ol class="steps">
+    <li><b>En FP16 (16 bits):</b> calcula cuántos GB ocupan los pesos puros (<code>(70 × 16) / 8</code>), súmale el 20 % de KV cache y obtén la VRAM total requerida.</li>
+    <li><b>En Q8 (8 bits):</b> calcula cuántos GB ocupan los pesos puros (<code>(70 × 8) / 8</code>), súmale el 20 % de KV cache y obtén la VRAM total requerida.</li>
+    <li><b>En Q4 (4 bits):</b> calcula cuántos GB ocupan los pesos puros (<code>(70 × 4) / 8</code>), súmale el 20 % de KV cache y obtén la VRAM total requerida.</li>
+  </ol>
+
+  <p>A continuación tienes el catálogo real de familias de instancias con GPU de AWS en <code>us-east-1</code> para que determines y justifiques en tu informe <b>cuál es la instancia mínima que alcanza para alojar cada una de las tres variantes (FP16, Q8 y Q4)</b> de modo que la VRAM total de la instancia sea mayor o igual a la memoria calculada:</p>
+
+  <table>
+    <tr>
+      <th>Familia y tamaño en AWS</th>
+      <th>Modelo de GPU incluido</th>
+      <th>Cantidad de GPUs</th>
+      <th>VRAM total de la instancia</th>
+      <th>vCPU / RAM de sistema</th>
+      <th>Precio On-Demand aprox. (<code>us-east-1</code>)</th>
+    </tr>
+    <tr>
+      <td><code>g5.xlarge</code> / <code>g5.2xlarge</code></td>
+      <td>NVIDIA A10G (24 GB c/u)</td>
+      <td>1 × A10G</td>
+      <td><b>24 GB VRAM</b></td>
+      <td>4–8 vCPU / 16–32 GiB</td>
+      <td>~$1,01 – $1,21 / hora</td>
+    </tr>
+    <tr>
+      <td><code>g6.xlarge</code> / <code>g6.2xlarge</code></td>
+      <td>NVIDIA L4 (24 GB c/u)</td>
+      <td>1 × L4</td>
+      <td><b>24 GB VRAM</b></td>
+      <td>4–8 vCPU / 16–32 GiB</td>
+      <td>~$0,80 – $0,98 / hora</td>
+    </tr>
+    <tr>
+      <td><code>g6e.xlarge</code> / <code>g6e.2xlarge</code></td>
+      <td>NVIDIA L40S (48 GB c/u)</td>
+      <td>1 × L40S</td>
+      <td><b>48 GB VRAM</b></td>
+      <td>4–8 vCPU / 32–64 GiB</td>
+      <td>~$1,86 – $2,24 / hora</td>
+    </tr>
+    <tr>
+      <td><code>g5.12xlarge</code></td>
+      <td>NVIDIA A10G (24 GB c/u)</td>
+      <td>4 × A10G</td>
+      <td><b>96 GB VRAM</b></td>
+      <td>48 vCPU / 192 GiB</td>
+      <td>~$5,67 / hora</td>
+    </tr>
+    <tr>
+      <td><code>g6.12xlarge</code></td>
+      <td>NVIDIA L4 (24 GB c/u)</td>
+      <td>4 × L4</td>
+      <td><b>96 GB VRAM</b></td>
+      <td>48 vCPU / 192 GiB</td>
+      <td>~$4,60 / hora</td>
+    </tr>
+    <tr>
+      <td><code>g5.48xlarge</code></td>
+      <td>NVIDIA A10G (24 GB c/u)</td>
+      <td>8 × A10G</td>
+      <td><b>192 GB VRAM</b></td>
+      <td>192 vCPU / 768 GiB</td>
+      <td>~$16,29 / hora</td>
+    </tr>
+    <tr>
+      <td><code>p4d.24xlarge</code></td>
+      <td>NVIDIA A100 (40 GB c/u)</td>
+      <td>8 × A100</td>
+      <td><b>320 GB VRAM</b></td>
+      <td>96 vCPU / 1.152 GiB</td>
+      <td>~$32,77 / hora</td>
+    </tr>
+    <tr>
+      <td><code>p5.48xlarge</code></td>
+      <td>NVIDIA H100 (80 GB c/u)</td>
+      <td>8 × H100</td>
+      <td><b>640 GB VRAM</b></td>
+      <td>192 vCPU / 2.048 GiB</td>
+      <td>~$98,32 / hora</td>
+    </tr>
+  </table>
+
+  <h3 id="d3">D3 · Conclusión de arquitectura</h3>
+  <p>Redacta al final de tu documento una <b>conclusión de arquitectura de 1 a 2 párrafos</b> respondiendo con argumentos cuantitativos:</p>
+  <ul>
+    <li>¿Cuál de las tres variantes (<code>Q8_0</code>, <code>Q4_K_M</code> o <code>Q2_K</code>) llevarías a producción como estándar y por qué descartarías <code>Q2_K</code>?</li>
+    <li>¿Cómo se compensa el equilibrio entre <b>calidad de respuesta</b>, <b>consumo de memoria RAM/VRAM</b>, <b>velocidad en <code>tokens/s</code></b> y <b>costo por hora en AWS</b> al pasar de FP16 a 8 bits y 4 bits?</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="paso">E</span>Terminar tu instancia <code>lab-cuantizacion</code> (obligatorio)</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Consola de AWS → EC2 → Instancias → Estado de la instancia → Terminar instancia</p>
+  <div class="danger"><b>¡Cuidado con los recursos del Sandbox!</b> Debes terminar tu instancia <code>lab-cuantizacion</code> en cuanto acabes las pruebas para que deje de consumir saldo del laboratorio. Si tienes otra instancia corriendo en la misma cuenta, asegúrate de seleccionar <b>únicamente</b> la casilla de <code>lab-cuantizacion</code>.</div>
+
+  <h3 id="e1">E1 · Terminar la instancia <code>lab-cuantizacion</code> y capturar el estado <code>Terminated</code></h3>
+  <p>Sal de la sesión SSH en PowerShell escribiendo <code>exit</code>. Vuelve a la pestaña de la consola de AWS (<b>EC2 → Instancias</b>), marca únicamente la casilla de <b><code>lab-cuantizacion</code></b>, abre el menú desplegable <b>Estado de la instancia</b> (<i>Instance state</i>) → <b>Terminar (eliminar) instancia</b> (<i>Terminate instance</i>) y confirma pulsando <b>Terminar</b>. Espera unos 30 segundos y refresca hasta que el estado aparezca como <b>Terminada</b> (<i>Terminated</i>).</p>
+
+  <figure class="captura" data-id="B13">
+    <img src="capturas/B13.png" alt="Instancia lab-cuantizacion en estado Terminada (Terminated) en el panel de EC2" onerror="this.closest('figure').classList.add('pendiente')">
+    <figcaption><b>B13</b> · Muestra: la instancia <code>lab-cuantizacion</code> (<code>i-0ac4c2b2494b79332</code>) ya en estado <b>Terminada</b> (<i>Terminated</i>) al finalizar el laboratorio.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Qué entregar</h2>
+  <p>Un único archivo <b>PDF</b> subido al aula virtual (la actividad permanece <b>abierta desde su publicación hasta el domingo 29 de noviembre de 2026</b>) que contenga:</p>
+  <ol class="steps">
+    <li><b>Evidencias completas numeradas:</b> capturas reales de tu instancia <code>lab-cuantizacion</code> en ejecución, conexión SSH y salida de <code>ollama list</code> con las 3 variantes descargadas, mediciones de <code>ollama ps</code> y <code>free -h</code>, ejecución de velocidad y de las 5 preguntas verificables, y captura final de la instancia en estado <code>Terminated</code>.</li>
+    <li><b>Tablas y cálculos correctos:</b>
+      <ul>
+        <li>Tabla comparativa de las 3 filas (<code>Q8_0</code>, <code>Q4_K_M</code>, <code>Q2_K</code>) con tamaño en disco, RAM en <code>ollama ps</code>, RAM en <code>free -h</code> y velocidad en <code>tokens/s</code>.</li>
+        <li>Tabla de resultados de las 5 preguntas verificables en las 3 variantes y análisis de dónde se degrada la calidad al bajar a 2 bits.</li>
+        <li>Desarrollo completo de la fórmula de VRAM para el modelo de <b>70B</b> en <b>FP16</b>, <b>Q8</b> y <b>Q4</b> (incluyendo el margen de KV cache) y selección justificada de la instancia con GPU de AWS para cada caso.</li>
+      </ul>
+    </li>
+    <li><b>Conclusión de arquitectura:</b> fundamentación técnica de qué variante llevarías a producción equilibrando calidad, RAM/VRAM, velocidad (<code>tokens/s</code>) y costo en la nube.</li>
+  </ol>
+
+  <h3>Rúbrica de evaluación (sobre 5,0 — equivale al 10 % del curso)</h3>
+  <table>
+    <tr>
+      <th>Criterio</th>
+      <th>Descripción de lo evaluado</th>
+      <th>Calificación máxima</th>
+    </tr>
+    <tr>
+      <td><b>1. Evidencias completas</b></td>
+      <td>Capturas propias, nítidas y completas de la instancia <code>lab-cuantizacion</code>, instalación de Ollama, descarga de las 3 variantes (<code>Q8_0</code>, <code>Q4_K_M</code>, <code>Q2_K</code>), mediciones en terminal, prueba de las 5 preguntas e instancia en estado <code>Terminated</code>.</td>
+      <td><b>2,0 puntos</b></td>
+    </tr>
+    <tr>
+      <td><b>2. Tablas y cálculos correctos</b></td>
+      <td>Tabla comparativa de las 3 variantes con métricas reales coherentes con las capturas; matriz de evaluación de las 5 preguntas; y cálculo exacto de memoria VRAM para el modelo de 70B (FP16, Q8 y Q4 con KV cache) junto con la elección correcta de instancia GPU en AWS.</td>
+      <td><b>2,0 puntos</b></td>
+    </tr>
+    <tr>
+      <td><b>3. Conclusión</b></td>
+      <td>Análisis crítico de la degradación en 2 bits (<code>Q2_K</code>) y recomendación argumentada de arquitectura para producción integrando calidad, memoria, <code>tokens/s</code> y costos de instancias en AWS.</td>
+      <td><b>1,0 punto</b></td>
+    </tr>
+    <tr>
+      <th colspan="2">Total</th>
+      <th>5,0 puntos (10 %)</th>
+    </tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="paso">F</span>Problemas frecuentes</h2>
+  <p class="donde"><b>📍 Dónde estás:</b> Solución rápida de errores comunes durante el laboratorio</p>
+  <table>
+    <tr>
+      <th>Síntoma o mensaje de error</th>
+      <th>Causa y cómo resolverlo</th>
+    </tr>
+    <tr>
+      <td>Al lanzar con <code>t3.large</code> aparece error rojo <code>not authorized to perform: ec2:RunInstances</code></td>
+      <td>La política del Sandbox de AWS Academy bloquea instancias mayores a <code>t3.medium</code>. Cambia el tipo de instancia a <b><code>t3.medium</code></b> (2 vCPU, 4 GiB de RAM) y vuelve a pulsar <b>Lanzar la instancia</b>.</td>
+    </tr>
+    <tr>
+      <td><b>EC2 Instance Connect</b> muestra pantalla negra o error al establecer conexión SSH</td>
+      <td>Es el comportamiento normal cuando el Security Group tiene el puerto 22 restringido a <b>Mi IP</b>, ya que EC2 Instance Connect entra desde las IPs internas de AWS. Conéctate desde <b>PowerShell</b> en tu PC usando <code>ssh -i .\labsuser.pem ubuntu@&lt;IP_PUBLICA&gt;</code>.</td>
+    </tr>
+    <tr>
+      <td>PowerShell dice <code>Permissions for 'labsuser.pem' are too open</code></td>
+      <td>Restringe los permisos del archivo <code>labsuser.pem</code> a tu usuario actual en PowerShell ejecutando:<br><code>icacls .\labsuser.pem /inheritance:r /grant:r "$($env:USERNAME):R"</code></td>
+    </tr>
+    <tr>
+      <td><code>ollama pull</code> dice <code>Error: pull model manifest: file does not exist</code></td>
+      <td>Revisa las mayúsculas y guiones bajos de las etiquetas: <code>q8_0</code> va en minúscula, mientras que <code>q4_K_M</code> y <code>q2_K</code> llevan las letras <code>K</code> y <code>M</code> en <b>mayúscula</b>.</td>
+    </tr>
+    <tr>
+      <td><code>ollama ps</code> muestra dos modelos cargados al mismo tiempo y <code>free -h</code> reporta poca RAM</td>
+      <td>Ollama mantiene el modelo en RAM durante 5 minutos por defecto. Ejecuta <code>sudo systemctl restart ollama</code> antes de medir cada variante para vaciar la RAM por completo.</td>
+    </tr>
+    <tr>
+      <td><code>ollama pull</code> falla por falta de espacio en disco (<code>no space left on device</code>)</td>
+      <td>Olvidaste subir el almacenamiento de 8 GiB a <b>30 GiB</b> en el paso B5. Termina la instancia y lanza una nueva configurando <b>30 GiB gp3</b>.</td>
+    </tr>
+  </table>
+</section>
+
+</div>
+<footer class="page">Arquitectura en la Nube · Universidad de la Costa (CUC) · Periodo 2026-2 · Actividad Semana 15</footer>
+
+<script>
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    var wrap = pre.parentNode;
+    if(!(wrap && wrap.classList && wrap.classList.contains('cmd'))){
+      wrap = document.createElement('div'); wrap.className = 'cmd';
+      pre.parentNode.insertBefore(wrap, pre); wrap.appendChild(pre);
+    }
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copiar';
+    b.addEventListener('click', function(){
+      var text = pre.querySelector('code') ? pre.querySelector('code').textContent : pre.textContent;
+      function ok(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1800); }
+      function fallback(){
+        try{
+          var r = document.createRange(); r.selectNodeContents(pre);
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          var okCopy = document.execCommand('copy'); s.removeAllRanges();
+          b.textContent = okCopy ? 'Copiado' : 'Selecciona y copia';
+          if(okCopy) setTimeout(function(){ b.textContent = 'Copiar'; }, 1800);
+        }catch(e){ b.textContent = 'Selecciona y copia'; }
+      }
+      try{
+        if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(ok, fallback); }
+        else { fallback(); }
+      }catch(e){ fallback(); }
+    });
+    wrap.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>
