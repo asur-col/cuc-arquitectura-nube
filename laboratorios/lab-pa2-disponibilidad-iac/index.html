@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>PA2 — Arquitectura disponible y repetible (ALB + ASG + RDS + IaC) — Guía del Proyecto de Aula</title>
+<title>PA2 — Disponibilidad e IaC (ALB + ASG + RDS + CloudFormation) — Guía del Proyecto de Aula</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root{--cuc-azul:#003366;--cuc-azul-claro:#0056a0;--cuc-amarillo:#ffcc00;--bg:#f5f5f5;--card:#fff;--txt:#222;--muted:#666;--border:#ddd}
@@ -28,174 +28,195 @@ th,td{border:1px solid var(--border);padding:.6rem;text-align:left}
 th{background:var(--cuc-azul);color:#fff}
 tr:nth-child(even){background:#fafafa}
 footer{text-align:center;color:var(--muted);font-size:.9rem;padding:2rem;border-top:1px solid var(--border);margin-top:2rem}
+
+.req{background:#fff8e1;border:2px solid var(--cuc-amarillo);border-left:8px solid var(--cuc-amarillo);border-radius:6px;padding:1rem 1.2rem;margin:1rem 0}.req p{margin:.5rem 0}
+.card .nota{background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:.8rem;margin:1rem 0;color:#856404;font-size:.9rem}
+.verif{color:#28a745;font-weight:bold}.error{color:#dc3545;font-weight:bold}.obj{font-weight:bold;color:var(--cuc-azul);display:block;margin-bottom:.5rem}
 </style>
 </head>
 <body>
 <header>
-<h1>Proyecto de Aula 2 — Arquitectura Disponible y Repetible (ALB + ASG + RDS + IaC)</h1>
-<p>Guía de Orientación Metodológica y Proceso de Construcción · Arquitectura en la Nube HEP</p>
+<h1>Proyecto de Aula 2 — Disponibilidad e IaC (ALB + ASG + RDS + CloudFormation)</h1>
+<p>Arquitectura en la Nube HEP · Guía de proceso, requisitos y sintaxis. Esta guía no trae la solución: te dice qué debes construir, qué mira el verificador y cómo comprobarlo.</p>
 </header>
 
 <div class="card">
-<h2>Escenario y Alcance</h2>
-<p><strong>Organización:</strong> CaribeMart — Plataforma de Comercio Electrónico de Alto Tráfico.</p>
-<p>La estación parte de una infraestructura base sembrada con 5 fragilidades operativas (instancia única sin balanceador, RDS pública sin política de retención, ausencia de monitorización activa, balanceador en una única zona y plantilla CloudFormation incompleta). El estudiante debe diseñar e implementar una arquitectura de alta disponibilidad, elástica y repetible:</p>
+<h2>Escenario y alcance</h2>
+<p><strong>CaribeMart</strong> necesita que su sitio y su base de datos sigan en pie si falla una zona y que la red se pueda recrear desde código. En una sola estación (nube simulada con floci, sin Internet y sin cuenta real) construyes con la AWS CLI: una red con balanceador (plantilla CloudFormation), un grupo de instancias elásticas detrás del balanceador, una base de datos privada con respaldo, un snapshot y una alarma. Al final entregas dos documentos.</p>
 <ul>
-<li><strong>Cómputo Elástico:</strong> Application Load Balancer (ALB) desplegado en 2 zonas de disponibilidad (us-east-1a y us-east-1b) con Target Group y health checks, Launch Template con configuración de la aplicación CaribeMart y Auto Scaling Group con capacidad mínima de 2 instancias distribuidas entre las zonas.</li>
-<li><strong>Datos y Resiliencia:</strong> Base de datos RDS PostgreSQL ubicada en subred privada, retención de respaldos automatizados activa (≥ 7 días), snapshot de respaldo generado y validado con prueba de restauración, y alarma de monitorización en CloudWatch por consumo de CPU (&gt; 80 %).</li>
-<li><strong>Infraestructura como Código:</strong> Plantilla CloudFormation reproducible y corrección de las 5 fragilidades base.</li>
-<li><strong>Entregables en /workspace:</strong> <code>plan_operacion.txt</code> e <code>informe_limites.pdf</code>.</li>
+<li><strong>La estación arranca vacía.</strong> No hay stack, balanceador, instancias ni base de datos: construyes todo desde cero. No hay fallas «sembradas» que descubrir.</li>
+<li><strong>Cada intento arranca vacío.</strong> Si cierras la sesión o abres un intento nuevo, la nube simulada empieza de cero y debes volver a crear todo. Guarda tus comandos en un archivo (por ejemplo <code>/workspace/mis-comandos.sh</code>) para repetirlos rápido.</li>
+<li><strong><code>revisar</code> muestra el detalle de cada criterio:</strong> corre el mismo chequeo que el servidor y, bajo cada criterio, escribe en una línea qué encontró o qué le falta. Léelo: casi siempre dice exactamente qué corregir.</li>
+<li>La AWS CLI de la estación ya apunta a floci (<code>aws ec2 ...</code>, sin <code>--endpoint-url</code>) y trae credenciales de prueba.</li>
+<li>Para el estudiante el autocontrol es <code>revisar</code>, dentro de la estación. No uses el verificador del servidor.</li>
 </ul>
-<div class="nota"><strong>Importante:</strong> Esta guía proporciona el marco metodológico y de verificación sin suministrar los scripts de automatización directa que resuelven los criterios.</div>
 </div>
-
 <div class="card">
-<h2>Metodología Paso a Paso (11 Pasos)</h2>
-
-<div class="paso">
-<h3>Paso 1 — Diagnóstico de la Infraestructura Base Frágil <span class="tiempo">≈10 min</span></h3>
-<span class="obj">Objetivo: Auditar los recursos existentes e inventariar las 5 fragilidades sembradas.</span>
-<pre>
-aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 cloudformation describe-stacks
-aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 rds describe-db-instances
-aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 autoscaling describe-auto-scaling-groups
-</pre>
-<p class="verif">Verificación: Identifique la configuración de AZs del balanceador, tamaño del ASG, accesibilidad pública de RDS y ausencia de alarmas.</p>
-<p><strong>Criterio:</strong> Diagnóstico y reconocimiento de fragilidades base.</p>
+<h2>Cómo se califica</h2>
+<p>Son 5 criterios de 20 puntos (100 en total). Cada criterio vale 20 o 0 para la plataforma: cuenta como cumplido solo si el verificador le da el puntaje completo.</p>
+<table><tr><th>Criterio (id)</th><th>Qué comprueba el verificador</th></tr>
+<tr><td><code>computo_elastico</code></td><td>Stack <code>hep-pa2</code> en <code>CREATE_COMPLETE</code>; grupo <code>asg-hep-pa2</code> con mínimo 2, máximo 4 y deseado 2, con al menos 2 instancias <code>running</code>; balanceador <code>alb-hep-pa2</code> en 2 zonas con listener en el puerto 80; target group <code>tg-hep-pa2</code> HTTP:80 con health check HTTP.</td></tr>
+<tr><td><code>datos_repetibles</code></td><td>RDS <code>db-hep-pa2</code> en <code>available</code>, no pública y con retención de respaldo de 7 días o más; snapshot <code>snap-hep-pa2</code> en <code>available</code>; existe la alarma <code>alarma-hep-pa2</code>; el stack <code>hep-pa2</code> sigue en <code>CREATE_COMPLETE</code>.</td></tr>
+<tr><td><code>fragilidades_corregidas</code></td><td>Cinco comprobaciones puntuales sobre lo que construiste: (1) ALB en 2 zonas; (2) ASG con deseado 2 y al menos 2 instancias <code>running</code>; (3) RDS no pública y con retención de 7 días o más; (4) existe la alarma; (5) stack <code>CREATE_COMPLETE</code>.</td></tr>
+<tr><td><code>plan_operacion</code></td><td>Existe un archivo de más de 200 bytes en <code>/workspace</code> (nombres aceptados abajo). El contenido lo califica el docente.</td></tr>
+<tr><td><code>informe_limites</code></td><td>Existe un archivo de más de 100 bytes en <code>/workspace</code> (nombres aceptados abajo). El contenido lo califica el docente.</td></tr>
+</table>
+<p><code>fragilidades_corregidas</code> repite cosas de los dos primeros criterios: si fallan estos, falla también aquel. No se cumple con «no hacer nada».</p>
+<div class="req"><p><strong>Requisitos fijos del verificador.</strong> El verificador busca estos nombres, valores y formas exactos. Si difieren aunque sea en una letra, el criterio queda en rojo aunque «funcione».</p><p><strong>Nombres.</strong> Stack <code>hep-pa2</code>; balanceador <code>alb-hep-pa2</code>; target group <code>tg-hep-pa2</code>; launch template <code>lt-hep-pa2</code>; grupo de Auto Scaling <code>asg-hep-pa2</code>; base de datos <code>db-hep-pa2</code>; snapshot <code>snap-hep-pa2</code>; alarma <code>alarma-hep-pa2</code>.</p><p><strong>Stack.</strong> <code>alb-hep-pa2</code>, <code>tg-hep-pa2</code> y el listener en el puerto 80 los crea la plantilla <code>cloudformation-template.json</code>: no los vuelvas a crear a mano (los nombres chocarían). El stack debe quedar en <code>CREATE_COMPLETE</code>.</p><p><strong>Launch template.</strong> <code>lt-hep-pa2</code> con la imagen <code>ami-hep-app</code> (BusyBox) y el user-data en base64.</p><p><strong>Auto Scaling.</strong> <code>asg-hep-pa2</code> con <code>--min-size 2 --max-size 4 --desired-capacity 2</code>, usando el launch template <code>lt-hep-pa2</code>, en las dos subredes públicas de la plantilla (<code>SubA</code> y <code>SubB</code>) y con <code>--target-group-arns</code> apuntando a <code>tg-hep-pa2</code>. Las instancias deben llegar a <code>running</code> (al menos 2).</p><p><strong>RDS.</strong> <code>db-hep-pa2</code> con <code>--no-publicly-accessible</code> y <code>--backup-retention-period 7</code> (o más), más usuario y clave maestros (<code>--master-username</code>, <code>--master-user-password</code>). Un snapshot llamado exactamente <code>snap-hep-pa2</code> que llegue a <code>available</code>.</p><p><strong>Alarma.</strong> <code>alarma-hep-pa2</code> en CloudWatch. El enunciado pide una alarma de <code>CPUUtilization</code> mayor a 80 %; el verificador comprueba que exista con ese nombre, no lee la métrica ni el umbral. Configúrala bien igualmente: el docente la revisa.</p><p><strong>Lo que NO se evalúa.</strong> La copia restaurada <code>db-hep-pa2-restaurada</code> (créala como práctica de restauración, pero no suma puntos), la marca «CaribeMart» en la página, la respuesta HTTP del ALB, ni el nombre del launch template como tal (el ASG necesita uno para lanzar instancias; usa <code>lt-hep-pa2</code> de todos modos).</p><p><strong>Entregables</strong> (en <code>/workspace</code>). Plan de operación: <code>plan_operacion.txt</code>, de más de 200 bytes (también se aceptan <code>plan_operacion_mantenimiento.txt</code>, <code>pa2-plan.txt</code>, <code>operacion.txt</code>). Informe de límites: <code>informe_limites.txt</code>, de más de 100 bytes (también <code>informe_limites.pdf</code>, <code>pa2-informe.pdf</code>, <code>limites.txt</code>). Usa los nombres principales.</p></div>
 </div>
-
-<div class="paso">
-<h3>Paso 2 — Despliegue de la Base de Red con CloudFormation <span class="tiempo">≈15 min</span></h3>
-<span class="obj">Objetivo: Validar y desplegar la plantilla CloudFormation base asegurando estado CREATE_COMPLETE o UPDATE_COMPLETE.</span>
-<pre>
-# Desplegar o actualizar el stack con la plantilla de red multi-AZ:
-aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 cloudformation deploy     --template-file /workspace/cloudformation-template.json --stack-name stack-caribemart
-</pre>
-<p class="verif">Verificación: <code>describe-stacks</code> reporta <code>CREATE_COMPLETE</code> o <code>UPDATE_COMPLETE</code>.</p>
-<p class="error">Error típico: Plantilla con errores de sintaxis que provoquen ROLLBACK_COMPLETE.</p>
-<p><strong>Criterio:</strong> datos_repetibles (Criterio auto 2).</p>
+<div class="card">
+<h2>Archivos de apoyo en la estación</h2>
+<p>En <code>/workspace/lab-pa2/</code> encuentras (revísalos antes de usarlos):</p>
+<ul>
+<li><code>cloudformation-template.json</code> — plantilla del stack: VPC <code>10.50.0.0/16</code>, subredes públicas <code>SubA</code> (us-east-1a) y <code>SubB</code> (us-east-1b), subred privada <code>SubPrivada</code>, Internet Gateway y ruta, grupos de seguridad <code>SG</code> (80 y 443) y <code>SGRDS</code> (5432 solo desde <code>SG</code>), balanceador <code>alb-hep-pa2</code>, target group <code>tg-hep-pa2</code> y listener 80. Salidas: <code>VPCId</code>, <code>SGId</code>, <code>SGRDSId</code>, <code>SubPrivadaId</code>.</li>
+<li><code>user-data.sh</code> — script de arranque de las instancias. La imagen <code>ami-hep-app</code> es BusyBox: no hay <code>yum</code>, <code>apt</code> ni <code>systemctl</code>; el servidor es <code>httpd -f -p 80 -h /www</code>.</li>
+</ul>
 </div>
-
+<div class="card">
+<h2>Proceso paso a paso</h2>
 <div class="paso">
-<h3>Paso 3 — Configuración del Application Load Balancer Multi-AZ <span class="tiempo">≈15 min</span></h3>
-<span class="obj">Objetivo: Asegurar que el ALB esté asociado a subredes en al menos 2 zonas de disponibilidad distintas.</span>
+<h3>Paso 1 — Comprobar la API <span class="tiempo">≈5 min</span></h3>
+<span class="obj">Objetivo: confirmar que floci responde y que la nube está vacía.</span>
 <pre>
-# Crear/actualizar ALB con subredes en us-east-1a y us-east-1b
-# Configurar Target Group HTTP 80 con health check en /
-# Asociar listener en puerto 80 hacia el Target Group
+aws cloudformation list-stacks
+aws elbv2 describe-load-balancers
+aws rds describe-db-instances
 </pre>
-<p class="verif">Verificación: <code>describe-load-balancers</code> confirma 2 subredes en zonas distintas.</p>
-<p class="error">Error típico: Asociar el balanceador a una sola subred o a dos subredes en la misma zona de disponibilidad.</p>
-<p><strong>Criterio:</strong> computo_elastico (Criterio auto 1) + Corrección de fragilidad 1.</p>
+<p class="verif">Verificación: respuestas sin error y sin recursos tuyos.</p>
 </div>
-
 <div class="paso">
-<h3>Paso 4 — Creación del Launch Template de CaribeMart <span class="tiempo">≈10 min</span></h3>
-<span class="obj">Objetivo: Definir la plantilla de lanzamiento con la imagen oficial y script de inicialización.</span>
+<h3>Paso 2 — Crear el stack desde la plantilla <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: stack <code>hep-pa2</code> en <code>CREATE_COMPLETE</code> (red, ALB, target group y listener).</span>
 <pre>
-# Crear Launch Template con AMI ami-hep-app y user-data de arranque
+aws cloudformation create-stack --stack-name &lt;STACK&gt; --template-body file:///workspace/lab-pa2/cloudformation-template.json
+aws cloudformation describe-stacks --stack-name &lt;STACK&gt; --query 'Stacks[0].StackStatus' --output text
 </pre>
-<p class="verif">Verificación: <code>describe-launch-templates</code> confirma el registro del template.</p>
-<p><strong>Criterio:</strong> computo_elastico.</p>
+<p class="verif">Verificación: repite el segundo comando hasta que diga <code>CREATE_COMPLETE</code>. Si dice <code>ROLLBACK</code> o <code>FAILED</code>, mira <code>aws cloudformation describe-stack-events --stack-name &lt;STACK&gt;</code>, borra el stack con <code>delete-stack</code> y vuelve a crearlo.</p>
+<p class="error">Error típico: escribir la ruta sin <code>file://</code> o con otro stack distinto de <code>hep-pa2</code>; crear a mano <code>alb-hep-pa2</code> o <code>tg-hep-pa2</code> (ya los trae la plantilla).</p>
 </div>
-
 <div class="paso">
-<h3>Paso 5 — Escalabilidad Automática con Auto Scaling Group Multi-AZ <span class="tiempo">≈15 min</span></h3>
-<span class="obj">Objetivo: Desplegar el ASG configurando un mínimo de 2 instancias activas distribuidas en 2 AZs.</span>
+<h3>Paso 3 — Obtener los IDs del stack <span class="tiempo">≈5 min</span></h3>
+<span class="obj">Objetivo: guardar en variables el grupo de seguridad, las subredes y el target group, que usarás en los pasos siguientes.</span>
 <pre>
-# Crear/actualizar ASG con:
-# - min-size: 2, max-size: 4, desired-capacity: 2
-# - subredes en us-east-1a y us-east-1b
-# - Target Group del ALB asociado
+SG=$(aws cloudformation describe-stack-resource --stack-name &lt;STACK&gt; --logical-resource-id SG --query 'StackResourceDetail.PhysicalResourceId' --output text)
+SGRDS=$(aws cloudformation describe-stack-resource --stack-name &lt;STACK&gt; --logical-resource-id SGRDS --query 'StackResourceDetail.PhysicalResourceId' --output text)
+SUBA=$(aws cloudformation describe-stack-resource --stack-name &lt;STACK&gt; --logical-resource-id SubA --query 'StackResourceDetail.PhysicalResourceId' --output text)
+SUBB=$(aws cloudformation describe-stack-resource --stack-name &lt;STACK&gt; --logical-resource-id SubB --query 'StackResourceDetail.PhysicalResourceId' --output text)
+TGARN=$(aws cloudformation describe-stack-resource --stack-name &lt;STACK&gt; --logical-resource-id TG --query 'StackResourceDetail.PhysicalResourceId' --output text)
+echo "$SG $SGRDS $SUBA $SUBB $TGARN"
 </pre>
-<p class="verif">Verificación: <code>describe-auto-scaling-groups</code> confirma <code>DesiredCapacity: 2</code> y 2 instancias en estado InService.</p>
-<p class="error">Error típico: DesiredCapacity configurada en 1 (punto único de fallo).</p>
-<p><strong>Criterio:</strong> computo_elastico + Corrección de fragilidad 2.</p>
+<p class="verif">Verificación: el <code>echo</code> muestra IDs (<code>sg-...</code>, <code>subnet-...</code>) y un ARN que contiene <code>tg-hep-pa2</code>. Si algo sale vacío, el stack no terminó o el nombre lógico está mal. Las variables se pierden si cierras la terminal: vuelve a ejecutar estas líneas.</p>
 </div>
-
 <div class="paso">
-<h3>Paso 6 — Hardening y Confinamiento de la Base de Datos RDS <span class="tiempo">≈10 min</span></h3>
-<span class="obj">Objetivo: Asegurar que la instancia RDS sea privada y no accesible desde Internet.</span>
+<h3>Paso 4 — Launch template <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: <code>lt-hep-pa2</code> con la AMI <code>ami-hep-app</code>, el grupo de seguridad <code>SG</code> y el user-data en base64.</span>
 <pre>
-# Modificar la instancia RDS para eliminar el acceso público:
-aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 rds modify-db-instance     --db-instance-identifier caribemart-db-prod --no-publicly-accessible
+UD=$(base64 -w0 /workspace/lab-pa2/user-data.sh)
+cat &gt; /workspace/lt-pa2.json &lt;&lt;JSON
+{"ImageId":"&lt;AMI&gt;","InstanceType":"t3.micro","SecurityGroupIds":["$SG"],"UserData":"$UD"}
+JSON
+aws ec2 create-launch-template --launch-template-name &lt;LT&gt; --launch-template-data file:///workspace/lt-pa2.json
+LTID=$(aws ec2 describe-launch-templates --launch-template-names &lt;LT&gt; --query 'LaunchTemplates[0].LaunchTemplateId' --output text)
 </pre>
-<p class="verif">Verificación: <code>describe-db-instances</code> confirma <code>PubliclyAccessible: false</code>.</p>
-<p class="error">Error típico: Mantener la base de datos con acceso público directo.</p>
-<p><strong>Criterio:</strong> fragilidades_corregidas (Criterio auto 3).</p>
+<p class="verif">Verificación: <code>echo "$LTID"</code> muestra un ID <code>lt-...</code>. El campo <code>UserData</code> de un launch template va en base64 (a diferencia de <code>run-instances --user-data file://</code>, que codifica solo).</p>
+<p class="error">Error típico: poner el <code>user-data.sh</code> en texto plano dentro de <code>UserData</code>, o dejar un script que use <code>yum</code>/<code>systemctl</code> (la AMI es BusyBox).</p>
 </div>
-
 <div class="paso">
-<h3>Paso 7 — Política de Respaldos Automatizados en RDS <span class="tiempo">≈10 min</span></h3>
-<span class="obj">Objetivo: Habilitar retención de respaldos de al menos 7 días.</span>
+<h3>Paso 5 — Auto Scaling Group <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: <code>asg-hep-pa2</code> con 2/4/2, en las dos subredes públicas y registrado en <code>tg-hep-pa2</code>.</span>
 <pre>
-# Configurar backup retention period:
-aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 rds modify-db-instance     --db-instance-identifier caribemart-db-prod --backup-retention-period 7
+aws autoscaling create-auto-scaling-group --auto-scaling-group-name &lt;ASG&gt; \
+  --launch-template LaunchTemplateId="$LTID",Version='$Latest' \
+  --min-size &lt;MIN&gt; --max-size &lt;MAX&gt; --desired-capacity &lt;DESEADO&gt; \
+  --vpc-zone-identifier "$SUBA,$SUBB" --target-group-arns "$TGARN"
+aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names &lt;ASG&gt; \
+  --query 'AutoScalingGroups[0].{Min:MinSize,Max:MaxSize,Deseado:DesiredCapacity,Instancias:Instances[].InstanceId}' --output json
 </pre>
-<p class="verif">Verificación: <code>BackupRetentionPeriod: 7</code> en la descripción de la instancia.</p>
-<p><strong>Criterio:</strong> datos_repetibles + Corrección de fragilidad 3.</p>
+<p class="verif">Verificación: mínimo 2, máximo 4, deseado 2 y dos IDs en <code>Instancias</code>. Comprueba que estén <code>running</code> con <code>aws ec2 describe-instances --instance-ids &lt;ID_INSTANCIA&gt; --query 'Reservations[].Instances[].State.Name'</code>; puede tardar unos segundos.</p>
+<p class="error">Error típico: olvidar <code>--target-group-arns</code> (el balanceador no ve instancias) o usar una sola subred.</p>
 </div>
-
 <div class="paso">
-<h3>Paso 8 — Generación de Snapshot y Prueba de Restauración <span class="tiempo">≈15 min</span></h3>
-<span class="obj">Objetivo: Validar el procedimiento de recuperación ante desastres generando un snapshot manual y restaurándolo.</span>
+<h3>Paso 6 — Comprobar el balanceador <span class="tiempo">≈5 min</span></h3>
+<span class="obj">Objetivo: confirmar que <code>alb-hep-pa2</code> está activo en 2 zonas.</span>
 <pre>
-# Crear snapshot manual:
-aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 rds create-db-snapshot     --db-instance-identifier caribemart-db-prod --db-snapshot-identifier caribemart-snap-prod
-# Restaurar snapshot a una instancia de prueba para validar integridad
+aws elbv2 describe-load-balancers --names alb-hep-pa2 --query 'LoadBalancers[0].{Estado:State.Code,Zonas:AvailabilityZones[].ZoneName}' --output json
+aws elbv2 describe-target-health --target-group-arn "$TGARN"
 </pre>
-<p class="verif">Verificación: Snapshot creado en estado available e instancia restaurada operativa.</p>
-<p><strong>Criterio:</strong> datos_repetibles.</p>
+<p class="verif">Verificación: dos zonas (<code>us-east-1a</code> y <code>us-east-1b</code>). El estado de salud de los destinos es informativo: el verificador no lo lee.</p>
 </div>
-
 <div class="paso">
-<h3>Paso 9 — Monitorización Activa y Alarmas CloudWatch <span class="tiempo">≈10 min</span></h3>
-<span class="obj">Objetivo: Configurar alarma de consumo de CPU sobre la base de datos de producción.</span>
+<h3>Paso 7 — Base de datos RDS privada <span class="tiempo">≈10 min</span></h3>
+<span class="obj">Objetivo: <code>db-hep-pa2</code> no pública, con retención de respaldo de 7 días.</span>
 <pre>
-# Crear métrica y alarma CloudWatch:
-aws --endpoint-url http://127.0.0.1:4566 --region us-east-1 cloudwatch put-metric-alarm     --alarm-name Alarma-RDS-CPU-Alta --metric-name CPUUtilization --namespace AWS/RDS     --threshold 80 --comparison-operator GreaterThanThreshold ...
+aws rds create-db-instance --db-instance-identifier &lt;DB&gt; --db-instance-class db.t3.micro --engine postgres --allocated-storage 20 \
+  --master-username &lt;USUARIO_ADMIN&gt; --master-user-password '&lt;CLAVE&gt;' \
+  --backup-retention-period &lt;DIAS&gt; --no-publicly-accessible --vpc-security-group-ids "$SGRDS"
+aws rds wait db-instance-available --db-instance-identifier &lt;DB&gt;
+aws rds describe-db-instances --db-instance-identifier &lt;DB&gt; --query 'DBInstances[0].{Estado:DBInstanceStatus,Publica:PubliclyAccessible,Retencion:BackupRetentionPeriod}' --output json
 </pre>
-<p class="verif">Verificación: <code>describe-alarms</code> confirma la alarma registrada.</p>
-<p class="error">Error típico: Nombre de alarma incorrecto o métrica no vinculada a la instancia.</p>
-<p><strong>Criterio:</strong> datos_repetibles + Corrección de fragilidad 4.</p>
+<p class="verif">Verificación: <code>available</code>, <code>Publica: false</code>, <code>Retencion: 7</code>. La clave es de laboratorio; en una cuenta real iría en un gestor de secretos.</p>
+<p class="error">Error típico: omitir <code>--no-publicly-accessible</code> o <code>--backup-retention-period</code> (el valor por defecto no cumple).</p>
 </div>
-
 <div class="paso">
-<h3>Paso 10 — Autocontrol con el Verificador Local <span class="tiempo">≈10 min</span></h3>
-<span class="obj">Objetivo: Comprobar el cumplimiento de los 3 criterios automáticos.</span>
+<h3>Paso 8 — Snapshot <span class="tiempo">≈5 min</span></h3>
+<span class="obj">Objetivo: <code>snap-hep-pa2</code> en <code>available</code>.</span>
+<pre>
+aws rds create-db-snapshot --db-instance-identifier &lt;DB&gt; --db-snapshot-identifier &lt;SNAPSHOT&gt;
+aws rds describe-db-snapshots --db-snapshot-identifier &lt;SNAPSHOT&gt; --query 'DBSnapshots[0].Status' --output text
+</pre>
+<p class="verif">Verificación: repite el segundo comando hasta que diga <code>available</code>.</p>
+</div>
+<div class="paso">
+<h3>Paso 9 — Alarma CloudWatch <span class="tiempo">≈5 min</span></h3>
+<span class="obj">Objetivo: <code>alarma-hep-pa2</code> sobre <code>CPUUtilization</code> mayor a 80 %.</span>
+<pre>
+aws cloudwatch put-metric-alarm --alarm-name &lt;ALARMA&gt; --namespace AWS/RDS --metric-name CPUUtilization \
+  --dimensions Name=DBInstanceIdentifier,Value=&lt;DB&gt; \
+  --statistic Average --period 60 --evaluation-periods 1 --threshold &lt;UMBRAL&gt; --comparison-operator GreaterThanThreshold
+aws cloudwatch describe-alarms --alarm-names &lt;ALARMA&gt;
+</pre>
+<p class="verif">Verificación: la alarma aparece con el nombre exacto. El verificador solo mira que exista; el docente revisa que la métrica y el umbral tengan sentido (puedes usar <code>AWS/EC2</code> si la alarma vigila las instancias del ASG).</p>
+</div>
+<div class="paso">
+<h3>Paso 10 — Copia restaurada (opcional, ≈5 min)</h3>
+<span class="obj">Objetivo: practicar la restauración. No suma puntos, pero demuestra que el respaldo sirve y alimenta tu plan de operación.</span>
+<pre>
+aws rds restore-db-instance-from-db-snapshot --db-instance-identifier db-hep-pa2-restaurada --db-snapshot-identifier &lt;SNAPSHOT&gt;
+</pre>
+<p class="verif">Verificación: <code>aws rds describe-db-instances --db-instance-identifier db-hep-pa2-restaurada</code> termina en <code>available</code>.</p>
+</div>
+<div class="paso">
+<h3>Paso 11 — Autocontrol con <code>revisar</code> <span class="tiempo">≈5 min</span></h3>
+<p>Corre <code>revisar</code> dentro de la estación (no el verificador del servidor).</p>
 <pre>
 revisar
 </pre>
-<p class="verif">Verificación: Cómputo elástico, datos repetibles y fragilidades corregidas en verde (60 pts).</p>
-<p><strong>Criterio:</strong> 60 % automático.</p>
+<p class="verif">Verificación: cada criterio muestra <code>[OK]</code> o <code>[NO]</code> y, debajo, el detalle de qué encontró. Corrige lo que diga y repite. La nota oficial la calcula el servidor desde fuera de tu sesión.</p>
 </div>
-
 <div class="paso">
-<h3>Paso 11 — Entregables Operativos y de Límites en /workspace <span class="tiempo">≈15 min</span></h3>
-<span class="obj">Objetivo: Documentar la operación continua y el cálculo cuantitativo de límites.</span>
-<p>Cree en <code>/workspace</code>:</p>
+<h3>Paso 12 — Entregables en /workspace <span class="tiempo">≈30 min</span></h3>
+<p>Crea <code>/workspace/plan_operacion.txt</code> y <code>/workspace/informe_limites.txt</code> (puedes usar <code>nano</code>).</p>
+<p>El verificador solo comprueba que cada archivo exista y pese más de 200 bytes (plan) o más de 100 bytes (informe); el contenido lo califica el docente con la rúbrica:</p>
 <ul>
-<li><code>/workspace/plan_operacion.txt</code>: Plan de operación continua que detalle procedimiento de despliegue, rutina de respaldo diario, protocolo ante fallos de zona de disponibilidad y matriz de escalabilidad.</li>
-<li><code>/workspace/informe_limites.pdf</code> (≤ 4 páginas): Diagrama multi-AZ, cálculo de carga máxima soportada (solicitudes/segundo), límites de escalado del ASG, umbrales de coste mensual estimado y justificación de decisiones técnicas.</li>
+<li><strong>Plan de operación y mantenimiento:</strong> indicadores de salud (latencia, errores, CPU), frecuencia de respaldos y prueba de restauración, ventana de mantenimiento, presupuesto y alertas de costo, reglas de escalado y a quién se escala un incidente.</li>
+<li><strong>Informe de límites:</strong> qué cambió respecto a una arquitectura de una sola instancia, y límites cuantificados: carga máxima, fallo tolerado (por ejemplo una zona), RPO/RTO, coste mensual estimado y qué NO tolera tu diseño.</li>
 </ul>
+<p class="verif">Verificación:</p>
 <pre>
-ls -la /workspace/plan_operacion.txt /workspace/informe_limites.pdf
+ls -la /workspace/plan_operacion.txt /workspace/informe_limites.txt
 revisar
 </pre>
-<p class="verif">Verificación: <code>revisar</code> confirma 5 de 5 criterios en verde (100 pts).</p>
-<p><strong>Criterio:</strong> 40 % manual.</p>
 </div>
-
 </div>
-
 <div class="card">
-<h2>Si algo falla — Diagnóstico Rápido</h2>
-<table>
-<tr><th>Problema</th><th>Causa Probable</th><th>Solución</th></tr>
-<tr><td>Cómputo elástico en rojo</td><td>ALB en una sola AZ o ASG con capacidad 1</td><td>Asocie subredes de us-east-1a y us-east-1b al ALB y ajuste el ASG a min=2, desired=2.</td></tr>
-<tr><td>Datos repetibles en rojo</td><td>Falta retención en RDS o alarma ausente</td><td>Configure <code>--backup-retention-period 7</code> y cree la alarma <code>Alarma-RDS-CPU-Alta</code>.</td></tr>
-<tr><td>Fragilidades en rojo</td><td>RDS continúa siendo pública</td><td>Ejecute <code>modify-db-instance --no-publicly-accessible</code>.</td></tr>
-<tr><td>Entregables en rojo</td><td>Archivos manuales ausentes en /workspace</td><td>Genere <code>plan_operacion.txt</code> e <code>informe_limites.pdf</code>.</td></tr>
+<h2>Si algo falla — diagnóstico rápido</h2>
+<table><tr><th>Problema</th><th>Causa probable</th><th>Qué hacer</th></tr>
+<tr><td><code>computo_elastico</code> en rojo</td><td>Stack no en <code>CREATE_COMPLETE</code>, ASG con otros valores, menos de 2 instancias <code>running</code> o ALB en 1 zona</td><td>Lee el detalle de <code>revisar</code>; repite los pasos 2 a 6.</td></tr>
+<tr><td><code>datos_repetibles</code> en rojo</td><td>RDS pública, retención menor a 7, snapshot con otro nombre o sin terminar, sin alarma</td><td>Repite los pasos 7 a 9.</td></tr>
+<tr><td><code>fragilidades_corregidas</code> en rojo</td><td>Falla alguna de las cinco comprobaciones (ALB 2 zonas, ASG 2 running, RDS, alarma, stack)</td><td>El detalle lista cuáles; corrige esas.</td></tr>
+<tr><td><code>plan_operacion</code> / <code>informe_limites</code> en rojo</td><td>Archivo ausente, nombre distinto o demasiado pequeño</td><td><code>ls -la /workspace</code> y revisa el nombre exacto y el tamaño.</td></tr>
+<tr><td>El stack da <code>ROLLBACK</code></td><td>Plantilla alterada o nombres repetidos</td><td><code>delete-stack</code> y crear de nuevo.</td></tr>
+<tr><td>Empiezo y no hay nada</td><td>Cada intento arranca vacío</td><td>Vuelve a ejecutar tus comandos guardados.</td></tr>
 </table>
 </div>
 
