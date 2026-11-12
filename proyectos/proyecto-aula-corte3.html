@@ -331,6 +331,8 @@
     <li>Envíe <b>las 300 predicciones juntas</b> a <code>POST /api/clinica/priorizacion</code>, con los tokens de entrada y salida que gastaron. Hay un máximo de 20 envíos al día por equipo.</li>
   </ol>
   <p>La API responde precisión, recall y F1 de «revisar», sin decir cuáles historias fallaron. En el documento reporten el mejor resultado, comparen los tokens reales con los estimados en el Capítulo 2 y expliquen al menos dos tipos de error de su prototipo.</p>
+  <p>Cada envío devuelve un <b>código de verificación</b> (por ejemplo <code>CLX-57-2221-ACB3</code>), firmado por el servidor con el equipo, el envío y el F1. En el informe escriban el <b>código del mejor envío</b>, junto con su <code>envio_id</code> y <code>recibido_en</code>, y la captura de esa respuesta.</p>
+  <div class="danger"><p style="margin:0">El docente valida cada código contra la API. Si el código no existe, no corresponde al equipo o sus métricas no coinciden con las del informe, el criterio 5 se califica como Insuficiente (0). La captura sola no basta.</p></div>
   <div class="tip">Las historias de hospitalización de la API son una muestra de unas 5.000 palabras. Para los cálculos de los capítulos 2, 3 y 5 usen los datos del caso (≈ 15.000 palabras). La tarifa del contrato no está en la historia: se consulta en <code>GET /api/clinica/tarifas</code>.</div>
   <div class="warn">Un equipo por pareja. Crear equipos extra para saltarse el límite de envíos anula el criterio 5.</div>
 </section>
@@ -376,10 +378,10 @@
     <tr>
       <td>5</td><td class="crit">Prototipo contra la API (Cap. 6) · 1.0</td>
       <td>Que el flujo diseñado funciona sobre historias del caso</td>
-      <td>Envío completo de las 300 historias con OCR en las escaneadas, F1 de «revisar» ≥ 0.70, tokens declarados y análisis de sus errores</td>
+      <td>Código de verificación válido; envío completo de las 300 historias con OCR en las escaneadas, F1 de «revisar» ≥ 0.70, tokens declarados y análisis de sus errores</td>
       <td>Envío completo y F1 ≥ 0.55, pero sin OCR en las escaneadas o sin tokens declarados</td>
       <td>Envío completo con F1 menor a 0.55, o código sin relación con el flujo del Cap. 1</td>
-      <td>Sin envío válido en el tablero, o código que no corre</td>
+      <td>Sin código de verificación válido, métricas que no coinciden con la API, o código que no corre</td>
     </tr>
   </table></div>
   <div class="warn">Regla: sin Capítulo 0, el criterio «Tokens, memoria y costo» no puede calificarse por encima de Insuficiente (máximo 0.25 puntos).</div>
@@ -393,7 +395,7 @@
     <li><b>Diagramas propios</b>: el flujo del Capítulo 1 (con OCR y porcentajes por etapa) y la arquitectura del Capítulo 4, incluidos dentro del documento, no solo mencionados.</li>
     <li><b>Tabla de cálculos</b> de los capítulos 2, 3 y 5: tokens, memoria, costo, ahorro, supuestos y escenario pesimista.</li>
     <li><b>Fuentes</b>: precios de API o de instancias, con la fecha de consulta.</li>
-    <li><b>Prototipo (Capítulo 6)</b>: enlace al repositorio o carpeta con el código que consume la API, captura del resultado del mejor envío (métricas) y el nombre del equipo registrado en la API.</li>
+    <li><b>Prototipo (Capítulo 6)</b>: enlace al repositorio o carpeta con el código que consume la API, nombre del equipo registrado en la API, y del mejor envío: <b>código de verificación</b>, <code>envio_id</code>, <code>recibido_en</code> y captura de las métricas.</li>
     <li><b>Declaración de uso de IA</b>: se permite usar IA como apoyo, pero debe declararse cómo se usó. Los números y las observaciones deben ser propios y verificables.</li>
   </ol>
 </section>
