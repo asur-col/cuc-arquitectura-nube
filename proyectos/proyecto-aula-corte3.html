@@ -332,65 +332,57 @@
   </ol>
   <p>La API responde precisión, recall y F1 de «revisar», sin decir cuáles historias fallaron. En el documento reporten el mejor resultado, comparen los tokens reales con los estimados en el Capítulo 2 y expliquen al menos dos tipos de error de su prototipo.</p>
   <div class="tip">Las historias de hospitalización de la API son una muestra de unas 5.000 palabras. Para los cálculos de los capítulos 2, 3 y 5 usen los datos del caso (≈ 15.000 palabras). La tarifa del contrato no está en la historia: se consulta en <code>GET /api/clinica/tarifas</code>.</div>
-  <div class="warn">Un equipo por pareja. Crear equipos extra para saltarse el límite de envíos anula el criterio 6.</div>
+  <div class="warn">Un equipo por pareja. Crear equipos extra para saltarse el límite de envíos anula el criterio 5.</div>
 </section>
 
 <!-- ============ 5. RUBRICA ============ -->
 <section id="s5">
-  <h2><span class="paso">5</span> Rúbrica de evaluación — 6 criterios, nota final 0.0 a 5.0</h2>
-  <p class="lead">Cada criterio tiene un <b>peso</b> y se califica en uno de cuatro niveles: <b>Excelente</b> (100 % del peso), <b>Bueno</b> (75 %), <b>Básico</b> (50 %) e <b>Insuficiente</b> (0 a 25 % del peso). La nota final es la suma de los puntos obtenidos, con un decimal. Suma de pesos: 0.7 + 0.8 + 0.8 + 0.8 + 0.9 + 1.0 = <b>5.0</b>.</p>
+  <h2><span class="paso">5</span> Rúbrica de evaluación — 5 criterios, nota final 0.0 a 5.0</h2>
+  <p class="lead">Cada criterio vale <b>1.0</b> y se califica en uno de cuatro niveles: <b>Excelente</b> (1.0), <b>Bueno</b> (0.75), <b>Básico</b> (0.5) e <b>Insuficiente</b> (0 a 0.25). La nota final es la suma de los cinco criterios, con un decimal.</p>
   <div class="tbl-wrap"><table class="rubrica">
-    <tr><th>#</th><th>Criterio y peso</th><th>Qué mide</th><th>Excelente (100 %)</th><th>Bueno (75 %)</th><th>Básico (50 %)</th><th>Insuficiente (0–25 %)</th></tr>
+    <tr><th>#</th><th>Criterio y peso</th><th>Qué mide</th><th>Excelente (1.0)</th><th>Bueno (0.75)</th><th>Básico (0.5)</th><th>Insuficiente (0–0.25)</th></tr>
     <tr>
-      <td>1</td><td class="crit">Análisis propio (Cap. 0) · 0.7</td>
-      <td>Que las observaciones son propias y cambian el diseño</td>
-      <td><b>0.7</b> — 4 o más observaciones propias que cambian el diseño</td>
-      <td><b>0.5</b> — 3 observaciones propias con consecuencia para el diseño; una queda a medio desarrollar</td>
-      <td><b>0.35</b> — 1 o 2 observaciones propias, o generales, que no cambian el diseño</td>
-      <td><b>0 – 0.15</b> — repite el enunciado o no hay Capítulo 0</td>
+      <td>1</td><td class="crit">Análisis propio y flujo (Cap. 0 y 1) · 1.0</td>
+      <td>Observaciones propias que cambian el diseño y criterio para repartir el trabajo entre modelos y el control humano</td>
+      <td>4 o más observaciones propias que cambian el diseño; flujo con OCR, modelo pequeño y grande con criterio, humano al final y porcentajes por etapa</td>
+      <td>3 observaciones propias, o un criterio de reparto del flujo sin justificar</td>
+      <td>1 o 2 observaciones generales; flujo con OCR o revisión humana poco claros, o sin porcentajes</td>
+      <td>Sin Capítulo 0 o repite el enunciado; un solo modelo grande para todo, o la IA factura sola</td>
     </tr>
     <tr>
-      <td>2</td><td class="crit">Diseño del flujo (Cap. 1) · 0.8</td>
-      <td>Criterio para repartir el trabajo entre modelos y el control humano</td>
-      <td><b>0.8</b> — modelo pequeño y grande con criterio, OCR incluido, humano al final y porcentajes por etapa</td>
-      <td><b>0.6</b> — etapas completas, pero un criterio de reparto no está justificado</td>
-      <td><b>0.4</b> — flujo con dos etapas útiles; OCR o revisión humana poco claros, o sin porcentajes</td>
-      <td><b>0 – 0.2</b> — un solo modelo grande para todo, o la IA factura sola</td>
-    </tr>
-    <tr>
-      <td>3</td><td class="crit">Tokens, memoria y costo (Cap. 2 y 3) · 0.8</td>
+      <td>2</td><td class="crit">Tokens, memoria y costo (Cap. 2 y 3) · 1.0</td>
       <td>Que cada cifra se pueda rastrear hasta los datos</td>
-      <td><b>0.8</b> — cada número rastreable, con promedio y pico, y entrada y salida separadas</td>
-      <td><b>0.6</b> — cálculos completos, pero una cifra sin fuente o sin supuesto explícito</td>
-      <td><b>0.4</b> — solo promedio o solo entrada, con supuestos implícitos</td>
-      <td><b>0 – 0.2</b> — cifras sin cálculo o copiadas</td>
+      <td>Cada número rastreable, con promedio y pico, y entrada y salida separadas</td>
+      <td>Cálculos completos, pero una cifra sin fuente o sin supuesto explícito</td>
+      <td>Solo promedio o solo entrada, con supuestos implícitos</td>
+      <td>Cifras sin cálculo o copiadas</td>
     </tr>
     <tr>
-      <td>4</td><td class="crit">Despliegue y ley (Cap. 4) · 0.8</td>
+      <td>3</td><td class="crit">Despliegue y ley (Cap. 4) · 1.0</td>
       <td>Decisión AWS u OpenStack, con su postura legal</td>
-      <td><b>0.8</b> — decisión justificada en costo, operación y ley</td>
-      <td><b>0.6</b> — justificada en dos de los tres ejes; el tercero solo se menciona</td>
-      <td><b>0.4</b> — argumentos de un solo eje, o postura legal genérica</td>
-      <td><b>0 – 0.2</b> — elige sin justificar o ignora la ley</td>
+      <td>Decisión justificada en costo, operación y ley</td>
+      <td>Justificada en dos de los tres ejes; el tercero solo se menciona</td>
+      <td>Argumentos de un solo eje, o postura legal genérica</td>
+      <td>Elige sin justificar o ignora la ley</td>
     </tr>
     <tr>
-      <td>5</td><td class="crit">Retorno de la inversión (Cap. 5) · 0.9</td>
+      <td>4</td><td class="crit">Retorno de la inversión (Cap. 5) · 1.0</td>
       <td>Ahorro atacable acotado y supuestos explícitos</td>
-      <td><b>0.9</b> — ahorro atacable bien acotado, supuestos explícitos y escenario pesimista</td>
-      <td><b>0.7</b> — supuestos explícitos y pesimista, pero el ahorro atacable está poco acotado</td>
-      <td><b>0.45</b> — ROI con supuestos poco explícitos o sin escenario pesimista</td>
-      <td><b>0 – 0.2</b> — promete eliminar todas las glosas, o el ahorro sale de despedir auditores</td>
+      <td>Ahorro atacable bien acotado, supuestos explícitos y escenario pesimista</td>
+      <td>Supuestos explícitos y pesimista, pero el ahorro atacable está poco acotado</td>
+      <td>ROI con supuestos poco explícitos o sin escenario pesimista</td>
+      <td>Promete eliminar todas las glosas, o el ahorro sale de despedir auditores</td>
     </tr>
     <tr>
-      <td>6</td><td class="crit">Prototipo contra la API (Cap. 6) · 1.0</td>
-      <td>Que el flujo diseñado funciona sobre historias reales del caso</td>
-      <td><b>1.0</b> — envío completo de las 300 historias con OCR en las escaneadas, F1 de «revisar» ≥ 0.70, tokens declarados y análisis de sus errores</td>
-      <td><b>0.75</b> — envío completo y F1 ≥ 0.55, pero sin OCR en las escaneadas o sin tokens declarados</td>
-      <td><b>0.5</b> — envío completo con F1 menor a 0.55, o código y métricas sin relación con el flujo del Cap. 1</td>
-      <td><b>0 – 0.25</b> — sin envío válido en el tablero, o código que no corre</td>
+      <td>5</td><td class="crit">Prototipo contra la API (Cap. 6) · 1.0</td>
+      <td>Que el flujo diseñado funciona sobre historias del caso</td>
+      <td>Envío completo de las 300 historias con OCR en las escaneadas, F1 de «revisar» ≥ 0.70, tokens declarados y análisis de sus errores</td>
+      <td>Envío completo y F1 ≥ 0.55, pero sin OCR en las escaneadas o sin tokens declarados</td>
+      <td>Envío completo con F1 menor a 0.55, o código sin relación con el flujo del Cap. 1</td>
+      <td>Sin envío válido en el tablero, o código que no corre</td>
     </tr>
   </table></div>
-  <div class="warn">Regla: sin Capítulo 0, el criterio «Tokens, memoria y costo» no puede calificarse por encima de Insuficiente (máximo 0.2 puntos).</div>
+  <div class="warn">Regla: sin Capítulo 0, el criterio «Tokens, memoria y costo» no puede calificarse por encima de Insuficiente (máximo 0.25 puntos).</div>
 </section>
 
 <!-- ============ 6. ENTREGABLES ============ -->
